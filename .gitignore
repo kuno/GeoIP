@@ -1,0 +1,30 @@
+# Uncomment beneth line, when in mercurial.
+# syntax: glob
+
+# python virtual env default dir
+bin/*
+lib/*
+lib64
+include/*
+
+# vi/vim temprary files
+*~
+*.swp
+*.swc
+
+# python binary files
+*.pyc
+
+# database files
+*.db
+database
+*.database
+
+# binary image files
+*.jpg
+*.jpeg
+*.png
+*.gif
+
+# fabfiles
+fabfile.*
