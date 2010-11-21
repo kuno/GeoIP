@@ -1,3 +1,3 @@
-exports.GeoIP = require('./gi.js');
-exports.country = require('./country.js');
-exports.city = require('./city.js');
+exports.GeoIP = require('./lib/geobj.js');
+exports.country = require('./lib/country.js');
+exports.city = require('./lib/city.js');
