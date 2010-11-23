@@ -1,6 +1,6 @@
 var fs = require('fs'),
     path = require('path'), 
-    GEOIPDATA = require('lib/geoipdata.js').GEOIPDATA;
+    GEOIPDATA = require('./lib/geoipdata.js').GEOIPDATA;
 
 /******************************************************************************
   * Constans
@@ -91,7 +91,7 @@ var _setup_segments = function(data) {
      }
      // pos = 0;
 
-     return gi;
+     return data;
  };
 
 
@@ -99,7 +99,7 @@ var _setup_segments = function(data) {
   * Exprots Functions
   *****************************************************************************/
   exports.open = function(file) {
-      var f = file || path.join(__dirname, '../data/GeoIP.dat');
+      var f = file || path.join(__dirname, 'data/GeoIP.dat');
 
       var data = new GEOIPDATA();
 
@@ -127,5 +127,5 @@ var _setup_segments = function(data) {
        return fs.close(data.fileDescriptor);
    };
 
-   exports.COUNTRY = require('./lib/country.js').COUNTRY;
-   exports.CITY = require('./lib/city.js').CITY;
+   exports.country = require('./country.js');
+   exports.city = require('./city.js');

@@ -1,0 +1,29 @@
+{
+    "name":"geoip",
+    "description":"GeoIP client for node",
+    "version":"0.0.1alpha",
+    "homepage":"",
+    "author":"Guan 'kuno' Qing <neokuno at Gmail dot com",
+    "contributors":
+    [
+    ],
+    "repository":
+    {
+        "type":"git",
+        "url":""
+    },
+    "bugs":
+    {
+        "mail":"",
+        "web":""
+    },
+    "directory": {"data": "./data", "lib":"./lib"},
+    "engine":{"node": ">=0.2.0"},
+    "licences":
+    [
+        {
+            "type":"MIT",
+            "url": ""
+        }
+    ]
+}
