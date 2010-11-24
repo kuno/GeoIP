@@ -1,9 +1,10 @@
 var fs = require('fs'),
-    path = require('path'), 
-    GEOIPDATA = require('./lib/geoipdata.js').GEOIPDATA;
+path = require('path'),
+buf2long = require('./lib/utils.js').buf2long;
+GEOIPDATA = require('./lib/geoipdata.js').GEOIPDATA;
 
 /******************************************************************************
-  * Constans
+ * Constans
  *****************************************************************************/
  var GEOIP_COUNTRY_BEGIN = 16776960;
  var GEOIP_STATE_BEGIN_REV0 = 16700000;
@@ -28,7 +29,6 @@ var fs = require('fs'),
  var ORG_RECORD_LENGTH = 4;
  var MAX_RECORD_LENGTH = 4;
  var MAX_ORG_RECORD_LENGTH = 300;
- var GEOIP_SHM_KEY = 0x4f415401;
  var US_OFFSET = 1;
  var CANADA_OFFSET = 677;
  var WORLD_OFFSET = 1353;
@@ -42,19 +42,21 @@ var fs = require('fs'),
  var GEOIP_ACCURACYRADIUS_EDITION = 14;
  var GEOIP_CITYCOMBINED_EDITION = 15;
  var CITYCOMBINED_FIXED_RECORD = 7;
- var D = String.fromCharCode(255);
- var DS = D.concat(D).concat(D); 
+ var Delimter_NUMBER = 16777215;
 
-var _setup_segments = function(data) {
+
+ var _setup_segments = function(data) {
      var offset;
      data.databaseType = GEOIP_COUNTRY_EDITION;
      data.record_length = STANDARD_RECORD_LENGTH;
      var buf = data.buffer;
      offset = buf.length - 3;
      for (var i = 0; i < STRUCTURE_INFO_MAX_SIZE; i++) {
-         var delim = buf.slice(offset, offset + 3);
-         if (delim.toString('ascii', 0, delim.length) === DS) {
-             data.databaseType = parseInt(buf[0], 10);
+         var delim = buf2long(buf.slice(offset, offset + 3));
+         offset += 3;
+         if (delim === Delimter_NUMBER) {
+             data.databaseType = parseInt(buf[offset], 10);
+             offset++;
              if (data.databaseType === GEOIP_REGION_EDITION_REV0) {
                  data.databaseSegments = GEOIP_STATE_BEGIN_REV0;
              } else if (data.databaseType === GEOIP_REGION_EDITION_REV1) {
@@ -68,9 +70,9 @@ var _setup_segments = function(data) {
              data.databaseType === GEOIP_ACCURACYRADIUS_EDITION ||
              data.databaseType === GEIOP_ASNUM_EDITION) {
                  data.databaseSegments = 0;
-                 var seg = buf.slice(0, SEGMENT_RECORD_LENGTH);
+                 var seg = buf.slice(offset, offset+SEGMENT_RECORD_LENGTH);
                  for (var j = 0; j < SEGMENT_RECORD_LENGTH; j++) {
-                     data.databaseSegments += parseInt((seg[j] << (j * 8)), 10);
+                     data.databaseSegments += (parseInt(seg[j], 10) << (j * 8));
                  }
                  if (data.databaseType === GEOIP_ORG_EDITION ||
                  data.databaseType === GEOIP_DOMAIN_EDITION ||
@@ -89,7 +91,6 @@ var _setup_segments = function(data) {
      data.databaseType === GEOIP_NETSPEED_EDITION) {
          data.databaseSegments = GEOIP_COUNTRY_BEGIN;
      }
-     // pos = 0;
 
      return data;
  };

@@ -1,29 +1,30 @@
 var dns = require('dns'),
-ctiy = require('./city.js'),
+city = require('./city.js'),
 ip2long = require('./lib/utils.js').ip2long,
 seek_country = require('./lib/utils.js').seek_country,
 GEOIP_COUNTRY_BEGIN = require('./lib/constants.js').GEOIP_COUNTRY_BEGIN,
 GEOIP_CITY_EDITION_REV1 = require('./lib/constants.js').GEOIP_CITY_EDITION_REV1;
 
+var _return_id = (function(err, id) {
+    if (err) { throw err;}
+    return id;
+});
+
 exports.id_by_addr = function(data, addr) {
     var ipnum = ip2long(addr);
-    console.log(ipnum);
     var country_id = seek_country(data, ipnum) - GEOIP_COUNTRY_BEGIN;
-    console.log(country_id);
     return country_id;
 };   
 
 exports.id_by_name = function(data, name) {
     var country_id;
-    dns.resolve(name, rrtype='A', function(err, addresses) {
-        if (err) {throw err;}
-        (function(addrs) {
-            addr = addrs[0];
-            console.log(addr);
-            country_id = exports.id_by_addr(data, addr);
-            console.log('result is ' + country_id);
-            return country_id;
-        })(addresses);
+    dns.resolve(name, rrtype='A', function(err, addresses, cb) {
+        cb = _return_id;
+        if (err) {
+            _return_id(err);
+            return;
+        }
+        _return_id(null, exports.id_by_addr(data, addresses[0]));
     });
 
 };
@@ -48,6 +49,7 @@ exports.code_by_addr = function(data, addr) {
     var country_id, record;
     if (data.databaseType === GEOIP_CITY_EDITION_REV1) {
         record = city.record_by_addr(data, addr);
+        return record.country_code;
     } else {
         country_id = exports.id_by_addr(data, addr);
         if (country_id !== false) {

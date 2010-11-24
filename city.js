@@ -59,95 +59,91 @@ exports.getrecordwithdnsservice = function(data, str) {
 }
 
 exports.get_record = function(data, ipnum) {
-    var start, end;
-    var see_country = seek_country(data, ipnum);
-    if (seek_country === data.databaseSegments) {
+    var start, end, index;
+    var sec;
+    var countries = seek_country(data, ipnum);
+    if (countries === data.databaseSegments) {
         return null;
     }
 
-    var record_pointer = seek_country + (2 * data.record_length - 1) * data.databaseSegments;
-    var record_buf = data.buffer.slice(record_pointer, record_pointer + FULL_RECORD_LENGTH);
+    var record_pointer = countries + (2 * data.record_length - 1) * data.databaseSegments;
+    start = record_pointer;
+    end = start + FULL_RECORD_LENGTH;
+    var record_buf = data.buffer.slice(start, end);
 
-    var record = Object.create(geoiprecord);
+    var record = Object.create(RECORD);
     var record_buf_pos = 0;
-    start = record_buf_pos;
-    end = start + 1;
-    var char = parseInt(record_buf.slice(start, end), 10);
+    var char = parseInt(record_buf[record_buf_pos], 10);
 
-    record.country_code = data.GEOIP_COUNTRY_CODES[char];
-    record.country_code3 = data.GEOIP_COUNTRY_CODES3[char];
-    record.country_name = data.GEOIP_COUNTRY_NAMES[char];
-    record.continet_code = data.GEOIP_CONTINENT_CODES[char];
+    record.country_code = data.COUNTRY_CODES[char];
+    record.country_code3 = data.COUNTRY_CODES3[char];
+    record.country_name = data.COUNTRY_NAMES[char];
+    record.continet_code = data.CONTINENT_CODES[char];
 
-    record_bu_pos++;
-    str_length = 0;
+    record_buf_pos++;
+    var str_length = 0;
 
     // Get region
-    start = record_buf_pos + str_length;
-    end = start + 1;
-    char = parseInt(record_buf.slice(start, end), 10);
+    index = record_buf_pos + str_length;
+    char = parseInt(record_buf[index], 10);
     while (char !== 0) {
         str_length++;
-        start =   record_buf_pos + str_length;
-        end = start + 1;
-        char = parseInt(record_buf.slice(start, end), 10);
+        index = record_buf_pos + str_length;
+        char = parseInt(record_buf[index], 10);
     }
     if (str_length > 0) {
         start = record_buf_pos;
         end = record_buf_pos + str_length;
-        record.region =  record_buf.slice(start, end);
+        sec = record_buf.slice(start, end);
+        record.region = sec.toString('ascii', 0, sec.length);
     }
-    record_buf_pos += str_length + 1;
+    record_buf_pos += (str_length + 1);
     str_length = 0;
     // Get city
-    start = record_buf_pos + str_length;
-    end = start + 1;
-    char = parseInt(record_buf.slice(start, end), 10);
+    index = record_buf_pos + str_length;
+    char = parseInt(record_buf[index], 10);
     while (char !== 0) {
         str_length++;
-        start =   record_buf_pos + str_length;
-        end = start + 1;
-        char = parseInt(record_buf.slice(start, end), 10);
+        index = record_buf_pos + str_length;
+        char = parseInt(record_buf[index], 10);
     }
     if (str_length > 0) {
         start = record_buf_pos;
         end = record_buf_pos + str_length;
-        record.city =  record_buf.slice(start, end);
+        sec = record_buf.slice(start, end);
+        record.city = sec.toString('ascii', 0, sec.length);
     }
-    record_buf_pos += str_length + 1;
+    record_buf_pos += (str_length + 1);
     str_length = 0;
     // Get postal coce
-    start = record_buf_pos + str_length;
-    end = start + 1;
-    char = parseInt(record_buf.slice(start, end), 10);
+    index = record_buf_pos + str_length;
+    char = parseInt(record_buf[index], 10);
     while (char !== 0) {
         str_length++;
-        start =   record_buf_pos + str_length;
-        end = start + 1;
-        char = parseInt(record_buf.slice(start, end), 10);
+        index = record_buf_pos + str_length;
+        char = parseInt(record_buf[index], 10);
     }
     if (str_length > 0) {
         start = record_buf_pos;
         end = record_buf_pos + str_length;
-        record.postal_code =  record_buf.slice(start, end);
+        sec = record_buf.slice(start, end);
+        record.postal_code = sec.toString('ascii', 0, sec.length);
     }
-    record_buf_pos += str_length + 1;
+    record_buf_pos += (str_length + 1);
     str_length = 0;
     // GEt latitude and longitude
     var latitude = 0;
-    var longtitude = 0;
+    var longitude = 0;
     for (var j = 0; j < 3; ++j) {
-        start = ++record_buf_pos;
-        end = start + 1;
-        char = parseInt(record_buf.slice(start, end), 10);
+        index = record_buf_pos++;
+        char = parseInt(record_buf[index], 10);
         latitude += (char << (j * 8));
     }
     record.latitude = (latitude / 10000) - 180;
 
     for (j = 0; j < 3; ++j) {
-        start = ++record_buf_pos;
-        end = start + 1;
-        char = parseInt(record_buf.slice(start, end), 10);
+        index = record_buf_pos++;
+        char = parseInt(record_buf[index], 10);
         longitude += (char << (j * 8));
     }
     record.longitude = (longitude / 10000) - 180;
@@ -156,9 +152,8 @@ exports.get_record = function(data, ipnum) {
         var metroarea_combo = 0;
         if (record.country_code === 'US') {
             for (j = 0; j < 3; ++j) {
-                start = ++record_buf_pos;
-                end = start + 1;
-                char = parseInt(record_buf.slice(start, end), 10);
+                index = record_buf_pos++;
+                char = parseInt(record_buf[index], 10);
                 metroarea_combo += (char << (j * 8));
             }
             record.metro_code = record.dma_code = Math.floor(metroarea_combo / 1000);
