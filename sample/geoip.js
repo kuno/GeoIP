@@ -2,10 +2,12 @@ var geoip = requires('geoip');
 
 /*
  * Country geo infomation
- * You can always get the latest versioin of GeoIP.dat by:
+ * The module has the GeoIP country data file within it,
+ * so you don't need to download.
+ * However you can always get the latest versioin by:
  * wget http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz
  */
-var data = geoip.open('/path/to/GeoIP.dat');
+var data = geoip.open();
 
 geoip.country.code_by_addr(data, '8.8.8.8'); // prints 'US'
 geoip.country.name_by_addr(data, '8.8.8.8'); // prints  'USA'
@@ -45,3 +47,4 @@ geoip.city.record_by_addr(data, '8.8.8.8');
     //area_code: 650 
     //}
 
+GeoIP api for node.js, ported from GeoIP php api.

@@ -32,3 +32,6 @@ fabfile.*
 # no php file
 *.php
 *.inc
+
+# binary file
+*.dat

@@ -3,8 +3,12 @@
 ###Data###
 
 Befor you can use this package, you need to download or buy some data from www.maxmind.com.
-There are two free versions data among with some commercial versions.
-For convenience, this package includes a free version of GeoIP country data file.
+There are two free versions data among with some commercial version.
+GeoIP.dat for country information and GeoLiteCity.dat for City information.
+They are free for download.
+You can get the detail from http://www.maxmind.com/app/geolitecountry
+and http://www.maxmind.com/app/geolitecity.
+        
 
 ###Install###
 
@@ -15,7 +19,7 @@ For convenience, this package includes a free version of GeoIP country data file
 ####Country Information#####
 
 * Open the country data file
-    var data = geoip.open();
+    var data = geoip.open('/path/to/GeoIP.dat');
 
 * Synchronous methods, network independence.
     geoip.country.code_by_addr(data, '8.8.8.8'); // prints 'US'
