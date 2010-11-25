@@ -1,19 +1,19 @@
-##GeoIP API for node, ported from GeoIP php API.##
+GeoIP API for node, ported from GeoIP php API.
 
-###Data###
+###Data
 
 Befor you can use this package, you need to download or buy some data from www.maxmind.com.
 There are two free versions data among with some commercial versions.
 For convenience, this package includes a free version of GeoIP country data file.
 You can get more detail about this on http://www.maxmind.com.
 
-###Install###
+###Install
 
     npm install geoip
 
-###Usage###
+###Usage
 
-####Country Information#####
+####Country Information
 
 * Open the country data file
 
@@ -39,7 +39,7 @@ You can get more detail about this on http://www.maxmind.com.
         console.log(name);  // prints 'United States'
     });
 
-####City Information#####
+####City Information
 
 * Dont forget to download free version GeoLiteCity.dat file first.
 
