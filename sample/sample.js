@@ -10,7 +10,7 @@ var geoip = require('geoip');
 var country_data = geoip.open();
 
 geoip.country.code_by_addr(country_data, '8.8.8.8'); // prints 'US'
-geoip.country.name_by_addr(country_data, '8.8.8.8'); // prints  'USA'
+geoip.country.name_by_addr(country_data, '8.8.8.8'); // prints  'United States'
 
 geoip.country.code_by_domain(data, 'www.google.com', function(err, code) {
     if (err) {throw err;}
