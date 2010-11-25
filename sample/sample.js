@@ -1,4 +1,4 @@
-var geoip = requires('geoip');
+var geoip = require('geoip');
 
 /*
  * Country geo infomation
