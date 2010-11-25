@@ -17,47 +17,47 @@ You can get more detail about this on http://www.maxmind.com.
 
 * Open the country data file
 
-    var country_data = geoip.open();
+      var country_data = geoip.open();
 
 * Synchronous methods, network independence.
 
-    geoip.country.code_by_addr(country_data, '8.8.8.8'); // prints 'US'
+      geoip.country.code_by_addr(country_data, '8.8.8.8'); // prints 'US'
 
-    geoip.country.name_by_addr(country_data, '8.8.8.8'); // prints  'United States'
+      geoip.country.name_by_addr(country_data, '8.8.8.8'); // prints  'United States'
 
 * Asynchronous methods, depends on node's async-style dns module.
 
-    geoip.country.code_by_domain(data, 'www.google.com', function(err, code) {
+      geoip.country.code_by_domain(data, 'www.google.com', function(err, code) {
 
-        if (err) {throw err;}
-        console.log(code);  // prints 'US'
-    });
+            if (err) {throw err;}
+            console.log(code);  // prints 'US'
+      });
 
-    geoip.country.name_by_domain(data, 'www.google.com', function(err, name) {
+      geoip.country.name_by_domain(data, 'www.google.com', function(err, name) {
 
-        if (err) {throw err;}
-        console.log(name);  // prints 'United States'
-    });
+            if (err) {throw err;}
+            console.log(name);  // prints 'United States'
+      });
 
 ####City Information
 
 * Dont forget to download free version GeoLiteCity.dat file first.
 
-    var city_data = geoip.open('/path/to/GeoLiteCity.dat');
+      var city_data = geoip.open('/path/to/GeoLiteCity.dat');
 
-    geoip.city.record_by_addr(city_data, '8.8.8.8');
+      geoip.city.record_by_addr(city_data, '8.8.8.8');
 
-    //{ 
-    //country_code: 'US',
-    //country_code3: 'USA',
-    //country_name: 'United States',
-    //continet_code: 'NA',
-    //region: 'CA',
-    //city: 'Mountain View',
-    //postal_code: '94043',
-    //latitude: 37.41919999999999,
-    //longitude: -122.0574,
-    //dma_code: 807,
-    //metro_code: 807,
-    //area_code: 650 
-    //}   
+      //{ 
+      //country_code: 'US',
+      //country_code3: 'USA',
+      //country_name: 'United States',
+      //continet_code: 'NA',
+      //region: 'CA',
+      //city: 'Mountain View',
+      //postal_code: '94043',
+      //latitude: 37.41919999999999,
+      //longitude: -122.0574,
+      //dma_code: 807,
+      //metro_code: 807,
+      //area_code: 650 
+      //}   
