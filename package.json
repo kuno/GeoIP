@@ -1,30 +1,33 @@
 {
     "name":"geoip",
-    "description":"GeoIP client for node",
-    "version":"0.1.0",
-    "homepage":"",
-    "author":"Guan 'kuno' Qing <neokuno at Gmail dot com",
-    "contributors":
-    [
-    ],
-    "repository":
-    {
-        "type":"git",
-        "url":"https://kuno@github.com/kuno/GeoIP.git"
-    },
-    "bugs":
-    {
-        "mail":"neokuno@gmail.com",
-        "web":""
-    },
-    "directory": {"data": "./data", "lib":"./lib", "sample":"./sample"},
-    "main":"geoip",
-    "engine":{"node": ">=0.2.0"},
-    "licences":
-    [
+        "description":"GeoIP client for node",
+        "version":"0.1.0",
+        "homepage":"",
+        "author":"Guan 'kuno' Qing <neokuno at Gmail dot com",
+        "contributors":
+            [
+            ],
+        "repository":
         {
-            "type":"GPL",
-            "url": ""
-        }
+            "type":"git",
+            "url":"https://kuno@github.com/kuno/GeoIP.git"
+        },
+        "bugs":
+        {
+            "mail":"neokuno@gmail.com",
+            "web":""
+        },
+        "directory": {"data": "./data", "lib":"./lib", "sample":"./sample"},
+        "main":"geoip",
+        "engine":{"node": ">=0.2.0"},
+        "licences":
+            [
+            {
+                "code":"LGPL",
+                "url": "http://www.gnu.org/licenses/lgpl.html"
+            },
+            {   "data":"Open Data Licence":
+                "url":"http://www.opendatacommons.org/licenses/odbl/"
+            }
     ]
 }

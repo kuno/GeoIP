@@ -1,9 +1,9 @@
-There are two licenses, one for the C library software, and one for
+There are two licenses, one for the nodejs library software, and one for
 the database.
 
-SOFTWARE LICENSE (C library)
+SOFTWARE LICENSE (nodejs library)
 
-The GeoIP C Library is licensed under the LGPL.  For details see
+The GeoIP nodejs Library is licensed under the LGPL.  For details see
 the COPYING file.
 
 OPEN DATA LICENSE (GeoLite Country and GeoLite City databases)
