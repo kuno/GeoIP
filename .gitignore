@@ -33,5 +33,3 @@ fabfile.*
 *.php
 *.inc
 
-# binary file
-*.dat
