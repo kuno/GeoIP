@@ -1,4 +1,4 @@
-######GeoIP API for node.
+GeoIP API for node.
 
 ###Data
 
