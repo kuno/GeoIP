@@ -9,9 +9,11 @@ var geoip = require('geoip');
  */
 var country_data = geoip.open();
 
+// Synchronous methods, network independence.
 geoip.country.code_by_addr(country_data, '8.8.8.8'); // prints 'US'
 geoip.country.name_by_addr(country_data, '8.8.8.8'); // prints  'United States'
 
+// Asynchronous methods, depends on node's async-style dns module.
 geoip.country.code_by_domain(data, 'www.google.com', function(err, code) {
     if (err) {throw err;}
     console.log(code);  // prints 'US'

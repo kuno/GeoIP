@@ -2,13 +2,11 @@
 
 ###Data
 
-Befor you can use this package, you need to download or buy some data from [www.maxmind.com](http://www.maxmind.com).
+Befor you can use this package, you need to download or buy some data from [www.maxmind.com](http://www.maxmind.com/app/ip-location).
 
 There are two free versions data among with some commercial versions.
 
 For convenience, this package includes a free version of GeoIP country data file.
-
-You can get more detail about this on http://www.maxmind.com.
 
 ###Install
 
