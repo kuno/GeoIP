@@ -1,12 +1,6 @@
 # Uncomment beneth line, when in mercurial.
 # syntax: glob
 
-# python virtual env default dir
-bin/*
-lib/*
-lib64
-include/*
-
 # vi/vim temprary files
 *~
 *.swp
