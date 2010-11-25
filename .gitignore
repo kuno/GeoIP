@@ -29,5 +29,6 @@ database
 # fabfiles
 fabfile.*
 
-# binary data file
-*.dat
+# no php file
+*.php
+*.inc
