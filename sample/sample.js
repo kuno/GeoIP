@@ -7,10 +7,10 @@ var geoip = requires('geoip');
  * However you can always get the latest versioin by:
  * wget http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz
  */
-var data = geoip.open();
+var country_data = geoip.open();
 
-geoip.country.code_by_addr(data, '8.8.8.8'); // prints 'US'
-geoip.country.name_by_addr(data, '8.8.8.8'); // prints  'USA'
+geoip.country.code_by_addr(country_data, '8.8.8.8'); // prints 'US'
+geoip.country.name_by_addr(country_data, '8.8.8.8'); // prints  'USA'
 
 geoip.country.code_by_domain(data, 'www.google.com', function(err, code) {
     if (err) {throw err;}
@@ -18,7 +18,7 @@ geoip.country.code_by_domain(data, 'www.google.com', function(err, code) {
 });
 geoip.country.name_by_domain(data, 'www.google.com', function(err, name) {
     if (err) {throw err;}
-    console.log(name);  // prints 'USA'
+    console.log(name);  // prints 'United States'
 });
 
 /*
@@ -29,9 +29,9 @@ geoip.country.name_by_domain(data, 'www.google.com', function(err, name) {
  * wget http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz
  */
 
-var data = geoip.open('/path/to/GeoLiteCity.dat');
+var city_data = geoip.open('/path/to/GeoLiteCity.dat');
 
-geoip.city.record_by_addr(data, '8.8.8.8');
+geoip.city.record_by_addr(city_data, '8.8.8.8');
     //{ 
     //country_code: 'US',
     //country_code3: 'USA',

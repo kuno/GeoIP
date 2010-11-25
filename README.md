@@ -5,7 +5,7 @@
 Befor you can use this package, you need to download or buy some data from www.maxmind.com.
 There are two free versions data among with some commercial versions.
 For convenience, this package includes a free version of GeoIP country data file.
-You can get more detail about this on http://www.maxmind.com
+You can get more detail about this on http://www.maxmind.com.
 
 ###Install###
 
@@ -17,12 +17,13 @@ You can get more detail about this on http://www.maxmind.com
 
 * Open the country data file
 
-    var data = geoip.open();
+    var country_data = geoip.open();
 
 * Synchronous methods, network independence.
 
-    geoip.country.code_by_addr(data, '8.8.8.8'); // prints 'US'
-    geoip.country.name_by_addr(data, '8.8.8.8'); // prints  'USA'
+    geoip.country.code_by_addr(country_data, '8.8.8.8'); // prints 'US'
+
+    geoip.country.name_by_addr(country_data, '8.8.8.8'); // prints  'United States'
 
 * Asynchronous methods, depends on node's async-style dns module.
 
@@ -33,16 +34,16 @@ You can get more detail about this on http://www.maxmind.com
 
     geoip.country.name_by_domain(data, 'www.google.com', function(err, name) {
         if (err) {throw err;}
-        console.log(name);  // prints 'USA'
+        console.log(name);  // prints 'United States'
     });
 
 ####City Information#####
 
 * Dont forget to download free version GeoLiteCity.dat file first.
 
-    var data = geoip.open('/path/to/GeoLiteCity.dat');
+    var city_data = geoip.open('/path/to/GeoLiteCity.dat');
 
-    geoip.city.record_by_addr(data, '8.8.8.8');
+    geoip.city.record_by_addr(city_data, '8.8.8.8');
 
     //{ 
     //country_code: 'US',

@@ -14,15 +14,16 @@
     },
     "bugs":
     {
-        "mail":"",
+        "mail":"neokuno@gmail.com",
         "web":""
     },
     "directory": {"data": "./data", "lib":"./lib", "sample":"./sample"},
+    "main":"geoip",
     "engine":{"node": ">=0.2.0"},
     "licences":
     [
         {
-            "type":"MIT",
+            "type":"GPL",
             "url": ""
         }
     ]
