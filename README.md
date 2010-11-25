@@ -28,11 +28,13 @@ You can get more detail about this on http://www.maxmind.com.
 * Asynchronous methods, depends on node's async-style dns module.
 
     geoip.country.code_by_domain(data, 'www.google.com', function(err, code) {
+
         if (err) {throw err;}
         console.log(code);  // prints 'US'
     });
 
     geoip.country.name_by_domain(data, 'www.google.com', function(err, name) {
+
         if (err) {throw err;}
         console.log(name);  // prints 'United States'
     });
