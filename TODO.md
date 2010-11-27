@@ -8,5 +8,5 @@ strong {
 color: #ff80b2;
 }
 </style>
-###20101125###
-*   make geoip.close better
+###2010-11-25###
+*   _make geoip.close better_
