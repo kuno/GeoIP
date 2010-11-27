@@ -1,0 +1,7 @@
+v0.1.0, 2010-11-25
+1, Initial release;
+
+v0.1.1, 2010-11-27:
+1, Removed GeoIP.dat, due to licence(or money) problem.
+2, renamed city property to City, renamed country property to Country.
+3, Allow close method to set all properties of an exsiting obj to undefined.

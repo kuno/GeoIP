@@ -22,33 +22,36 @@ There are two free versions data among with some commercial versions.
 
 * Open the country data file
 
-      var country_data = geoip.open('/path/to/GeoIP.dat');
+      var data = geoip.open('/path/to/GeoIP.dat');
 
 * Synchronous methods, network independence.
 
-      geoip.country.code_by_addr(country_data, '8.8.8.8'); // prints 'US'
+      geoip.Country.code_by_addr(data, '8.8.8.8'); // prints 'US'
 
-      geoip.country.name_by_addr(country_data, '8.8.8.8'); // prints  'United States'
+      geoip.Country.name_by_addr(data, '8.8.8.8'); // prints  'United States'
 
 * Asynchronous methods, depends on node's async-style dns module.
 
-      geoip.country.code_by_domain(data, 'www.google.com', function(err, code) {
+      geoip.Country.code_by_domain(data, 'www.google.com', function(err, code) {
             if (err) {throw err;}
             console.log(code);  // prints 'US'
       });
 
-      geoip.country.name_by_domain(data, 'www.google.com', function(err, name) {
+      geoip.Country.name_by_domain(data, 'www.google.com', function(err, name) {
             if (err) {throw err;}
             console.log(name);  // prints 'United States'
       });
+* set the all properties of an exsiting data object to undefined.
+      geoip.close(data);
 
 ####City Information
 
 * Open the GeoLiteCity.dat file first.
 
-      var city_data = geoip.open('/path/to/GeoLiteCity.dat');
+      var data = geoip.open('/path/to/GeoLiteCity.dat');
 
-      geoip.city.record_by_addr(city_data, '8.8.8.8');  // You will get something like this:
+      geoip.City.record_by_addr(data, '8.8.8.8');  // You will get something like this:
+
                                                         //{ 
                                                         //country_code: 'US',
                                                         //country_code3: 'USA',
