@@ -23,11 +23,8 @@
         "licences":
             [
             {
-                "code":"LGPL",
-                "url": "http://www.gnu.org/licenses/lgpl.html"
-            },
-            {   "data":"Open Data Licence":
-                "url":"http://www.opendatacommons.org/licenses/odbl/"
+                "type":"LGPL",
+                "url": "http://www.gnu.org/licenses/lgpl-2.1.txt"
             }
     ]
 }

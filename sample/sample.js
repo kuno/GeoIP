@@ -3,12 +3,11 @@ var geoip = require('geoip');
 /*
  * Country geo infomation
  *
- * This package has the GeoIP country data file within it,
- * so you don't need to download.
- * However you can always get the latest versioin by:
+ * Befor you can use geoip country information,
+ * you need download GeoIP.dat file first. 
  * wget http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz
  */
-var country_data = geoip.open();
+var country_data = geoip.open('/path/to/GeoIP.dat');
 
 // Synchronous methods, network independence.
 geoip.country.code_by_addr(country_data, '8.8.8.8'); // prints 'US'

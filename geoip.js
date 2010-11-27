@@ -100,7 +100,7 @@ GEOIPDATA = require('./lib/geoipdata.js').GEOIPDATA;
   * Exprots Functions
   *****************************************************************************/
   exports.open = function(file) {
-      var f = file || path.join(__dirname, 'data/GeoIP.dat');
+      var f = file;
 
       var data = new GEOIPDATA();
 
@@ -118,15 +118,19 @@ GEOIPDATA = require('./lib/geoipdata.js').GEOIPDATA;
           );
       }
   );
-   });
+  });
 
-   return data;
+  return data;
 
    };
 
    exports.close = function(data) {
-       return fs.close(data.fileDescriptor);
+       return fs.close(data.fileDescriptor, function(err) {
+           if (err) {throw err;}
+           data.buffer = 0;
+           data = null;
+       });
    };
 
-   exports.country = require('./country.js');
-   exports.city = require('./city.js');
+   exports.Country = require('./country.js');
+   exports.City = require('./city.js');

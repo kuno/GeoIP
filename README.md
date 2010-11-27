@@ -1,12 +1,16 @@
 ##GeoIP API for node.
 
+###Description
+
+Get geolocation information based on domain or IP address
+
 ###Data
 
 Befor you can use this package, you need to download or buy some data from [www.maxmind.com](http://www.maxmind.com/app/ip-location).
 
 There are two free versions data among with some commercial versions.
-
-For convenience, this package includes a free version of GeoIP country data file.
+[GeoIP Country Lite Edition](http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz).
+[GeoIP City Lite Edition](http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz)
 
 ###Install
 
@@ -18,7 +22,7 @@ For convenience, this package includes a free version of GeoIP country data file
 
 * Open the country data file
 
-      var country_data = geoip.open();
+      var country_data = geoip.open('/path/to/GeoIP.dat');
 
 * Synchronous methods, network independence.
 
@@ -40,7 +44,7 @@ For convenience, this package includes a free version of GeoIP country data file
 
 ####City Information
 
-* Dont forget to download free version GeoLiteCity.dat file first.
+* Open the GeoLiteCity.dat file first.
 
       var city_data = geoip.open('/path/to/GeoLiteCity.dat');
 
