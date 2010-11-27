@@ -23,7 +23,7 @@ geoip.Country.name_by_domain(data, 'www.google.com', function(err, name) {
     console.log(name);  // prints 'United States'
 });
 
-// Set the all properties of an existing data object to undefined
+// Set all properties of an existing data object to undefined
 geoip.close(data);
 /*
  * City geo infomation

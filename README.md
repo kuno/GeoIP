@@ -2,15 +2,17 @@
 
 ###Description
 
-Get geolocation information based on domain or IP address
+Get geolocation information based on domain or IP address.
 
 ###Data
 
 Befor you can use this package, you need to download or buy some data from [www.maxmind.com](http://www.maxmind.com/app/ip-location).
 
 There are two free versions data among with some commercial versions.
-[GeoIP Country Lite Edition](http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz).
-[GeoIP City Lite Edition](http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz)
+
+GeoIP Country Lite Edition [Download](http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz).
+
+GeoIP City Lite Edition [Download](http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz)
 
 ###Install
 
@@ -41,7 +43,7 @@ There are two free versions data among with some commercial versions.
             if (err) {throw err;}
             console.log(name);  // prints 'United States'
       });
-* set the all properties of an exsiting data object to undefined.
+* Set all properties of an existing data object to undefined.
       geoip.close(data);
 
 ####City Information
