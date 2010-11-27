@@ -9,4 +9,4 @@ color: #ff80b2;
 }
 </style>
 ###2010-11-25###
-* __make geoip.close better__
+_make geoip.close better_
