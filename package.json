@@ -23,7 +23,7 @@
         "licences":
             [
             {
-                "type":"LGPL",
+                "type":"LGPL2.1",
                 "url": "http://www.gnu.org/licenses/lgpl-2.1.txt"
             }
     ]

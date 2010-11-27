@@ -127,8 +127,9 @@ GEOIPDATA = require('./lib/geoipdata.js').GEOIPDATA;
    exports.close = function(data) {
        return fs.close(data.fileDescriptor, function(err) {
            if (err) {throw err;}
-           data.buffer = 0;
-           data = null;
+           Object.keys(data).forEach(function(key) {
+               data[key] = undefined;
+           });
        });
    };
 
