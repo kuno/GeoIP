@@ -10,7 +10,7 @@ Befor you can use this package, you need to download or buy some data from [www.
 
 There are two free versions data among with some commercial versions.
 
-Note: This package only support binary data, not any other formats.
+__Note: This package only support binary data, not any other formats.__
 
 GeoIP Country Lite Edition [Download](http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz).
 
