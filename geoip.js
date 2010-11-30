@@ -1,7 +1,8 @@
-var fs = require('fs'),
-path = require('path'),
-buf2long = require('./lib/utils.js').buf2long;
-GEOIPDATA = require('./lib/geoipdata.js').GEOIPDATA;
+var fs        = require('fs'),
+    path      = require('path'),
+    buf2long  = require('./lib/utils.js').buf2long,
+    CONST     = require('./include/constant.js'),
+    GEOIPDATA = require('./include/geoipdata.js').GEOIPDATA;
 
 /******************************************************************************
  * Constans
