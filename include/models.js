@@ -181,7 +181,7 @@ function DATA() {
     ];
 }
 
-exports.DATABASE = DATA;
+exports.DATA = DATA;
 
 exports.RECORD = {
     country_code:undefined,
