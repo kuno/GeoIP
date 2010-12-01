@@ -1,8 +1,8 @@
 var fs        = require('fs'),
 path      = require('path'),
 buf2long  = require('./lib/utils.js').buf2long,
-CONST     = require('./include/constant.js'),
-DATA = require('./include/model.js').DATA;
+CONST     = require('./include/constants.js'),
+DATA = require('./include/models.js').DATA;
 
 /******************************************************************************
  * Inner Functions
@@ -64,7 +64,6 @@ DATA = require('./include/model.js').DATA;
   *****************************************************************************/
   exports.open = function(file) {
       var f = file;
-
       var data = new DATA();
 
       fs.open(f, 'r', function(err, fd) {
@@ -96,5 +95,7 @@ DATA = require('./include/model.js').DATA;
        });
    };
 
+
    exports.Country = require('./lib/country.js');
    exports.City = require('./lib/city.js');
+   exports.Org = require('./lib/org.js');
