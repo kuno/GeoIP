@@ -2,7 +2,7 @@ var fs        = require('fs'),
 path      = require('path'),
 buf2long  = require('./lib/utils.js').buf2long,
 CONST     = require('./include/constants.js'),
-DATA = require('../include/models.js').DATA;
+DATA = require('./include/models.js').DATA;
 
 /******************************************************************************
  * Inner Functions
