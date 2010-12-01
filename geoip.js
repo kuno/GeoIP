@@ -33,7 +33,7 @@ DATA = require('./include/models.js').DATA;
              data.db_type === CONST.ACCURACYRADIUS_EDITION ||
              data.db_type === CONST.GEIOP_ASNUM_EDITION) {
                  data.db_segments = 0;
-                 var seg = buf.slice(offset, offset+SEGMENT_RECORD_LENGTH);
+                 var seg = buf.slice(offset, offset + CONST.SEGMENT_RECORD_LENGTH);
                  for (var j = 0; j < CONST.SEGMENT_RECORD_LENGTH; j++) {
                      data.db_segments += (parseInt(seg[j], 10) << (j * 8));
                  }
@@ -95,7 +95,8 @@ DATA = require('./include/models.js').DATA;
        });
    };
 
-
+   exports.NetSpeed = require('./lib/netspeed.js');
    exports.Country = require('./lib/country.js');
-   exports.City = require('./lib/city.js');
-   exports.Org = require('./lib/org.js');
+   exports.Region  = require('./lib/region.js');
+   exports.City    = require('./lib/city.js');
+   exports.Org     = require('./lib/org.js');
