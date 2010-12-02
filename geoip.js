@@ -69,7 +69,7 @@ DATA = require('./include/models.js').DATA;
       data.file_descriptor = fs.openSync(f, 'r');
       var stats = fs.fstatSync(data.file_descriptor);
       data.buffer = new Buffer(stats.size);
-      var bytesRead = fs.readSyc(fd, data.buffer, 0, stats.size, 0);
+      var bytesRead = fs.readSyc(data.file_descriptor, data.buffer, 0, stats.size, 0);
       data = _setup_segments(data);
 
       return data;
