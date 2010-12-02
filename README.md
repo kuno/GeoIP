@@ -1,7 +1,11 @@
 ##GeoIP API for node.
 
+####Emergent Update####
+
 __Warning: Due to the Asynchronous programming problome,__
+
 __Any version that below the 0.1.3 dosen't work in any real script.__
+
 __I highly recommond that every user should update to at least v0.1.3!__
 
 ###Description
