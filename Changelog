@@ -6,6 +6,10 @@ v0.1.1, 2010-11-27:
 2, renamed city property to City, renamed country property to Country.
 3, Allow close method to set all properties of an exsiting obj to undefined.
 
-v0.1.2, 2010-12-02
+v0.1.2, 2010-12-02:
 1, Fixed missing of isIP method in node 0.2.x series.
 2, Hidden some unsafe an useless funcions.
+
+v0.1.3, 2010-12-02:
+1. Fixed that open and close methos dosen't works in real script.
+
