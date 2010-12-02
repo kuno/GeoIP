@@ -99,39 +99,26 @@ GEOIPDATA = require('./lib/geoipdata.js').GEOIPDATA;
  /******************************************************************************
   * Exprots Functions
   *****************************************************************************/
+
   exports.open = function(file) {
-      var f = file;
+      var stats, bytesRead;
+      var data = new GEIPDATA();
+      data.fileDescriptor = fs.openSync(file, 'r');
+      stats = fs.fstatSync(data.fileDescriptor);
+      data.buffer = new Buffer(stats.size);
+      bytesRead = fs.readSync(data.fileDescriptor, data.buffer, 0, stats.size, 0);
 
-      var data = new GEOIPDATA();
-
-      fs.open(f, 'r', function(err, fd) {
-          if (err) { throw err;}
-          fs.fstat(fd, function(err, stats) {
-              if (err) { throw err;}
-              data.fileDescriptor = fd;
-              var buf = new Buffer(stats.size);
-              fs.read(fd, buf, 0, stats.size, 0, function(err, bytesRead) {
-                  if (err) { throw err; }
-                  data.buffer = buf;
-                  data = _setup_segments(data);
-              }
-          );
+      if (bytesRead >= 0) {
+          return  _setup_segments(data);
+      } else {
+          return false;
       }
-  );
-  });
 
-  return data;
+  };
 
-   };
-
-   exports.close = function(data) {
-       return fs.close(data.fileDescriptor, function(err) {
-           if (err) {throw err;}
-           Object.keys(data).forEach(function(key) {
-               data[key] = undefined;
-           });
-       });
-   };
+  exports.close = function(data) {
+      return fs.closeSync(data.fileDescriptor);
+  };
 
    exports.Country = require('./country.js');
    exports.City = require('./city.js');
