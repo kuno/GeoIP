@@ -63,25 +63,28 @@ DATA = require('./include/models.js').DATA;
   * Exprots Functions
   *****************************************************************************/
   exports.open = function(file) {
-      var f = file;
+      var stats, bytesRead;
       var data = new DATA();
-
-      data.file_descriptor = fs.openSync(f, 'r');
-      var stats = fs.fstatSync(data.file_descriptor);
+      data.file_descriptor = fs.openSync(file, 'r');
+      stats = fs.fstatSync(data.file_descriptor);
       data.buffer = new Buffer(stats.size);
-      var bytesRead = fs.readSync(data.file_descriptor, data.buffer, 0, stats.size, 0);
-      data = _setup_segments(data);
+      bytesRead = fs.readSync(data.file_descriptor, data.buffer, 0, stats.size, 0);
 
-      return data;
+      if (bytesRead >= 0) {
+         return _setup_segments(data);
+      } else {
+          return false;
+      }
 
-   };
+  };
 
-   exports.close = function(data) {
-       return fs.close(data.file_descriptor);
-   };
+  exports.close = function(data) {
+      return fs.close(data.file_descriptor);
+  };
 
-   exports.NetSpeed = require('./lib/netspeed.js');
-   exports.Country = require('./lib/country.js');
-   exports.Region  = require('./lib/region.js');
-   exports.City    = require('./lib/city.js');
-   exports.Org     = require('./lib/org.js');
+
+  exports.NetSpeed = require('./lib/netspeed.js');
+  exports.Country = require('./lib/country.js');
+  exports.Region  = require('./lib/region.js');
+  exports.City    = require('./lib/city.js');
+  exports.Org     = require('./lib/org.js');
