@@ -66,32 +66,18 @@ DATA = require('./include/models.js').DATA;
       var f = file;
       var data = new DATA();
 
-      fs.open(f, 'r', function(err, fd) {
-          if (err) { throw err;}
-          fs.fstat(fd, function(err, stats) {
-              if (err) { throw err;}
-              data.file_descriptor = fd;
-              data.buffer = new Buffer(stats.size);
-              fs.read(fd, data.buffer, 0, stats.size, 0, function(err, bytesRead) {
-                  if (err) {throw err;}
-                  data = _setup_segments(data);
-              }
-          );
-      }
-  );
-  });
+      data.file_descriptor = fs.openSync(f, 'r');
+      var stats = fs.fstatSync(data.file_descriptor);
+      data.buffer = new Buffer(stats.size);
+      var bytesRead = fs.readSyc(fd, data.buffer, 0, stats.size, 0);
+      data = _setup_segments(data);
 
-  return data;
+      return data;
 
    };
 
    exports.close = function(data) {
-       return fs.close(data.file_descriptor, function(err) {
-           if (err) {throw err;}
-           Object.keys(data).forEach(function(key) {
-               data[key] = undefined;
-           });
-       });
+       return fs.close(data.file_descriptor);
    };
 
    exports.NetSpeed = require('./lib/netspeed.js');
