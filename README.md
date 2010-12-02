@@ -45,7 +45,7 @@ GeoIP City Lite Edition [Download](http://geolite.maxmind.com/download/geoip/dat
             if (err) {throw err;}
             console.log(name);  // prints 'United States'
       });
-* Set all properties of an existing data object to undefined.
+* Close the opened file.
       geoip.close(data);
 
 ####City Information
