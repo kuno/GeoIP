@@ -71,10 +71,9 @@ DATA = require('./include/models.js').DATA;
           fs.fstat(fd, function(err, stats) {
               if (err) { throw err;}
               data.file_descriptor = fd;
-              var buf = new Buffer(stats.size);
-              fs.read(fd, buf, 0, stats.size, 0, function(err, bytesRead) {
-                  if (err) { throw err; }
-                  data.buffer = buf;
+              data.buffer = new Buffer(stats.size);
+              fs.read(fd, data.buffer, 0, stats.size, 0, function(err, bytesRead) {
+                  if (err) {throw err;}
                   data = _setup_segments(data);
               }
           );
