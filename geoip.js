@@ -102,7 +102,7 @@ GEOIPDATA = require('./lib/geoipdata.js').GEOIPDATA;
 
   exports.open = function(file) {
       var stats, bytesRead;
-      var data = new GEIPDATA();
+      var data = new GEOIPDATA();
       data.fileDescriptor = fs.openSync(file, 'r');
       stats = fs.fstatSync(data.fileDescriptor);
       data.buffer = new Buffer(stats.size);
