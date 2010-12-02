@@ -5,7 +5,7 @@ RECORD = require('./lib/geoipdata.js').RECORD,
 DNSRECORD = require('./lib/geoipdata.js').DNSRECORD,
 GEOIP_CITY_EDITION_REV1 = require('./lib/constants.js').GEOIP_CITY_EDITION_REV1;
 
-exports.getrecordwithdnsservice = function(data, str) {
+function _getrecordwithdnsservice(data, str) {
     var record = Object.create(DNSRECORD);
     if (typeof str === 'string') {
         var substrarray = str.splite(';');
@@ -58,7 +58,7 @@ exports.getrecordwithdnsservice = function(data, str) {
     return record;
 }
 
-exports.get_record = function(data, ipnum) {
+function _get_record(data, ipnum) {
     var start, end, index;
     var sec;
     var countries = seek_country(data, ipnum);
@@ -162,12 +162,12 @@ exports.get_record = function(data, ipnum) {
     }
 
     return record;
-};
+}
 
 exports.record_by_addr = function(data, addr) {
     if (addr === null) {
         return 0;
     }
     var ipnum = ip2long(addr);
-    return exports.get_record(data, ipnum);
+    return _get_record(data, ipnum);
 };
