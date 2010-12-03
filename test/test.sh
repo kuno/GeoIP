@@ -4,7 +4,7 @@ GEOIP='http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.d
 GEOLITECITY='http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz'
 
 
-if [ ! -e /tmp/GeoIP.dat ] || [! -e /tmp/GeoLiteCity.dat ]; then
+if [ ! -e /tmp/GeoIP.dat ] || [ ! -e /tmp/GeoLiteCity.dat ]; then
     curl $GEOIP | gzip -d -c > /tmp/GeoIP.dat
     curl $GEOLITECITY | gzip -d -c > /tmp/GeoLiteCity.dat
 fi
