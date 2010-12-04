@@ -1,6 +1,6 @@
 ##GeoIP API for node.
 
-![architecture](./architecture.svg)
+![architecture](./architecture.png)
 
 ####Emergent Update####
 
