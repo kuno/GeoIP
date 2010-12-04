@@ -18,7 +18,7 @@
             "web":""
         },
         "directory": {"data":"./data", "docs":"./docs", "include":"./include", 
-                      "lib":"./lib", "sample":"./sample", "test":"./test"},
+                      "lib":"./lib", "misc":"./misc", "sample":"./sample", "test":"./test"},
         "main":"geoip",
         "engine":{"node": ">=0.2.0"},
         "licences":
