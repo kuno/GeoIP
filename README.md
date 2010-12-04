@@ -1,6 +1,6 @@
 ##GeoIP API for node.
 
-![architecture](https://github.com/kuno/GeoIP/raw/master/architecture.png)
+![architecture](https://github.com/kuno/GeoIP/raw/master/misc/architecture.png)
 
 ####Emergent Update####
 
