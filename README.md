@@ -1,5 +1,7 @@
 ##GeoIP API for node.
 
+![architecture](architecture.svg)
+
 ####Emergent Update####
 
 __Warning: Due to the Asynchronous programming problome,__
