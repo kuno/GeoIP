@@ -1,7 +1,5 @@
 ##GeoIP API for node.
 
-![architecture](https://github.com/kuno/GeoIP/raw/master/misc/architecture.png)
-
 ####Emergent Update####
 
 __Warning: Due to the Asynchronous programming problome,__
@@ -13,6 +11,10 @@ __I highly recommond that every user should update to at least v0.1.3!__
 ###Description
 
 Get geolocation information based on domain or IP address.
+
+###Architecture
+
+![architecture](https://github.com/kuno/GeoIP/raw/master/misc/architecture.png)  
 
 ###Data
 
