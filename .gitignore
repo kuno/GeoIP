@@ -17,7 +17,7 @@ database
 # binary image files
 *.jpg
 *.jpeg
-*.png
+#*.png
 *.gif
 
 # fabfiles
@@ -29,4 +29,3 @@ fabfile.*
 # no php file
 *.php
 *.inc
-
