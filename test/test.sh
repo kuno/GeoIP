@@ -39,4 +39,18 @@ node ./org.js
 echo "============================================================"
 echo "Org module test is finished!"
 
+echo ""
 
+echo "Start to test Region module......"
+echo "============================================================"
+node ./region.js
+echo "============================================================"
+echo "Region module test is finished!"
+
+echo ""
+
+echo "Start to test NetSpeed module......"
+echo "============================================================"
+node ./netspeed.js
+echo "============================================================"
+echo "NetSpeed module test is finished!"
