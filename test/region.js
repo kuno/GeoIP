@@ -8,5 +8,5 @@ setTimeout(function() {
   console.log('The result of ');
   console.log('Region.region_by_addr(data, \'8.8.8.8\')');
   console.log('is \'' + Region.region_by_addr(data, '8.8.8.8') + '\'');
-  console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
+  console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
 }, 1000);
