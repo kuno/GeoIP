@@ -18,3 +18,4 @@ color: #ff80b2;
 * re-factory the whole direcoty
 * add more module other then country and City
 * make all methods asynchronous
+* add db_type check in every module
