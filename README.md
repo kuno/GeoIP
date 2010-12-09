@@ -18,11 +18,11 @@ Get geolocation information based on domain or IP address.
 
 ###Changelog
 
-__v0.1.0, 2010-11-25
+__v0.1.0, 2010-11-25__
 
 1, Initial release;
 
-__v0.1.1, 2010-11-27:
+__v0.1.1, 2010-11-27:__
 
 1, Removed GeoIP.dat, due to licence(or money) problem.
 
@@ -30,13 +30,13 @@ __v0.1.1, 2010-11-27:
 
 3, Allow close method to set all properties of an exsiting obj to undefined.
 
-__v0.1.2, 2010-12-02
+__v0.1.2, 2010-12-02:__
 
 1, Fixed missing of isIP method in node 0.2.x series.
 
 2, Hidden some unsafe an useless funcions.  
 
-__v0.2.0, 2010-12-09:
+__v0.2.0, 2010-12-09:__
 
 1, added org, region, netspeed submodule.
 
