@@ -14,7 +14,27 @@ Get geolocation information based on domain or IP address.
 
 ###Architecture
 
-![architecture](https://github.com/kuno/GeoIP/raw/master/misc/architecture.png)  
+![architecture](https://github.com/kuno/GeoIP/raw/master/misc/architecture.png)
+
+###Changelog
+
+####v0.1.0, 2010-11-25
+
+1, Initial release;
+
+####v0.1.1, 2010-11-27:
+
+1, Removed GeoIP.dat, due to licence(or money) problem.
+
+2, renamed city property to City, renamed country property to Country.
+
+3, Allow close method to set all properties of an exsiting obj to undefined.
+
+####v0.1.2, 2010-12-02
+
+1, Fixed missing of isIP method in node 0.2.x series.
+
+2, Hidden some unsafe an useless funcions.  
 
 ###Data
 
@@ -38,7 +58,7 @@ GeoIP City Lite Edition [Download](http://geolite.maxmind.com/download/geoip/dat
 
 * Open the country data file
 
-      var data = geoip.open('/path/to/GeoIP.dat');
+      var country_data = geoip.open('/path/to/GeoIP.dat');
 
 * Synchronous methods, network independence.
 
@@ -57,6 +77,7 @@ GeoIP City Lite Edition [Download](http://geolite.maxmind.com/download/geoip/dat
             if (err) {throw err;}
             console.log(name);  // prints 'United States'
       });
+
 * Close the opened file.
       geoip.close(data);
 
@@ -64,7 +85,7 @@ GeoIP City Lite Edition [Download](http://geolite.maxmind.com/download/geoip/dat
 
 * Open the GeoLiteCity.dat file first.
 
-      var data = geoip.open('/path/to/GeoLiteCity.dat');
+      var city_data = geoip.open('/path/to/GeoLiteCity.dat');
 
       geoip.City.record_by_addr(data, '8.8.8.8');  // You will get something like this:
 
@@ -81,4 +102,41 @@ GeoIP City Lite Edition [Download](http://geolite.maxmind.com/download/geoip/dat
                                                         //dma_code: 807,
                                                         //metro_code: 807,
                                                         //area_code: 650 
-                                                        //}   
+                                                        //}
+
+     geoip.close(city_data);
+
+####Organization Information
+
+* Open the GeoIPOrg.dat first.
+      var org_data = geoip.open('/path/to/GeoIPOrg.dat');
+
+      geoip.Org.org_by_addr(data, '8.8.8.8');
+      // You wikk get something like below:
+      // 'GenuityThe United WayEducation Management CorporationInternational Generating Co. 
+      // (Intergen)GoldK.com LLCCisco Systems, 
+      // Inc.Verizon/SixContinents HotelsDrug Enforcement AdmFloors IncUS Dept of Treasury - TIGTAHTS Engineering, 
+      // LTDITS Caleb BrettAutomated Power Exchange, 
+      // Inc.Neuberger Ber'
+
+      geoip.close(org_data);
+
+
+####Region Information
+
+* Open the GeoIPRegion.dat first.
+      var region_data = geoip.open('/path/to/GeoIPRegion.dat');
+
+      geoip.Region.region_by_addr(region_data, '8.8.8.8');  // prints 'US,CO'
+
+      geoip.close(region_data);
+
+
+####NetSpeed Information
+
+* Open the GeoIPNetSpeed.dat first
+      var netspeed_data = geoip.open('/path/go/GeoIPNetSpeed.dat');
+
+      geoip.NetSpeed.speed_by_addr(netspeed_data, '8.8.8.8');  // prints 'Dailup'
+
+      geoip.close(netspeed_data);

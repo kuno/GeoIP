@@ -1,11 +1,10 @@
-function GEOIPDATA() {
+function DATA() {
     var self = this;
-    self.fileDescriptor = undefined;
+    self.file_descriptor = undefined;
     self.buffer = undefined;
-    self.databaseType = undefined;
-    self.databaseSegments = undefined;
+    self.db_type = undefined;
+    self.db_segments = undefined;
     self.record_length = undefined;
-    self.shmid = undefined;
     self.COUNTRY_CODE_TO_NUMBER = [
         {"":0}, {"AP":1}, {"EU":2}, {"AD":3}, {"AE":4}, {"AF":5}, 
         {"AG":6}, {"AI":7}, {"AL":8}, {"AM":9}, {"AN":10}, {"AO":11}, 
@@ -182,7 +181,7 @@ function GEOIPDATA() {
     ];
 }
 
-exports.GEOIPDATA = GEOIPDATA;
+exports.DATA = DATA;
 
 exports.RECORD = {
     country_code:undefined,
