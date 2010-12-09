@@ -19,5 +19,10 @@ color: #ff80b2;
 * add more module other then country and City
 * add db_type check in every module
 
+###v0.2.1###
+* Try in added 
+* Make org_by_add method return an arrary of string rather than a strang object
+
+
 ###v0.3.0###
 * make all methods asynchronous  
