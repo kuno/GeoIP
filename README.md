@@ -36,6 +36,14 @@ Get geolocation information based on domain or IP address.
 
 2, Hidden some unsafe an useless funcions.  
 
+####v0.2.0, 2010-12-09:
+
+1, added org, region, netspeed submodule.
+
+2, added data type check in every submodule
+
+3, re-factoring whloe project.
+
 ###Data
 
 Befor you can use this package, you need to download or buy some data from [www.maxmind.com](http://www.maxmind.com/app/ip-location).
@@ -79,6 +87,7 @@ GeoIP City Lite Edition [Download](http://geolite.maxmind.com/download/geoip/dat
       });
 
 * Close the opened file.
+
       geoip.close(data);
 
 ####City Information
@@ -109,6 +118,7 @@ GeoIP City Lite Edition [Download](http://geolite.maxmind.com/download/geoip/dat
 ####Organization Information
 
 * Open the GeoIPOrg.dat first.
+
       var org_data = geoip.open('/path/to/GeoIPOrg.dat');
 
       geoip.Org.org_by_addr(data, '8.8.8.8');
@@ -125,6 +135,7 @@ GeoIP City Lite Edition [Download](http://geolite.maxmind.com/download/geoip/dat
 ####Region Information
 
 * Open the GeoIPRegion.dat first.
+
       var region_data = geoip.open('/path/to/GeoIPRegion.dat');
 
       geoip.Region.region_by_addr(region_data, '8.8.8.8');  // prints 'US,CO'
@@ -134,7 +145,8 @@ GeoIP City Lite Edition [Download](http://geolite.maxmind.com/download/geoip/dat
 
 ####NetSpeed Information
 
-* Open the GeoIPNetSpeed.dat first
+* Open the GeoIPNetSpeed.dat first.
+
       var netspeed_data = geoip.open('/path/go/GeoIPNetSpeed.dat');
 
       geoip.NetSpeed.speed_by_addr(netspeed_data, '8.8.8.8');  // prints 'Dailup'
