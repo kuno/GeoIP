@@ -18,11 +18,11 @@ Get geolocation information based on domain or IP address.
 
 ###Changelog
 
-####v0.1.0, 2010-11-25
+__v0.1.0, 2010-11-25__
 
 1, Initial release;
 
-####v0.1.1, 2010-11-27:
+__v0.1.1, 2010-11-27:__
 
 1, Removed GeoIP.dat, due to licence(or money) problem.
 
@@ -30,13 +30,13 @@ Get geolocation information based on domain or IP address.
 
 3, Allow close method to set all properties of an exsiting obj to undefined.
 
-####v0.1.2, 2010-12-02
+__v0.1.2, 2010-12-02:__
 
 1, Fixed missing of isIP method in node 0.2.x series.
 
 2, Hidden some unsafe an useless funcions.  
 
-####v0.2.0, 2010-12-09:
+__v0.2.0, 2010-12-09:__
 
 1, added org, region, netspeed submodule.
 
@@ -86,8 +86,7 @@ GeoIP City Lite Edition [Download](http://geolite.maxmind.com/download/geoip/dat
             console.log(name);  // prints 'United States'
       });
 
-* Close the opened file.
-
+      //Close the opened file.
       geoip.close(data);
 
 ####City Information
@@ -147,7 +146,7 @@ GeoIP City Lite Edition [Download](http://geolite.maxmind.com/download/geoip/dat
 
 * Open the GeoIPNetSpeed.dat first.
 
-      var netspeed_data = geoip.open('/path/go/GeoIPNetSpeed.dat');
+      var netspeed_data = geoip.open('/path/to/GeoIPNetSpeed.dat');
 
       geoip.NetSpeed.speed_by_addr(netspeed_data, '8.8.8.8');  // prints 'Dailup'
 
