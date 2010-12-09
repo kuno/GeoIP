@@ -2,7 +2,7 @@
 li {
 }
 em {
-text-decoration: line-through;
+  text-decoration: line-through;
 }
 strong {
 color: #ff80b2;
@@ -17,5 +17,7 @@ color: #ff80b2;
 ###v0.2.0###
 * re-factory the whole direcoty
 * add more module other then country and City
-* make all methods asynchronous
 * add db_type check in every module
+
+###v0.3.0###
+* make all methods asynchronous  
