@@ -1,41 +1,42 @@
 var geoip = require('geoip');
 
 /*
- * Country geo infomation
+ * Country geographic infomation
  *
  * Befor you can use geoip country information,
  * you need download GeoIP.dat file first. 
- * wget http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz
+ * wget http://geolite.maxmind.com/download/geoip/country_database/GeoLiteCountry/GeoIP.dat.gz
  */
-var data = geoip.open('/path/to/GeoIP.dat');
+var country_data = geoip.open('/path/to/GeoIP.dat');
 
 // Synchronous methods, network independence.
-geoip.Country.code_by_addr(data, '8.8.8.8'); // prints 'US'
-geoip.Country.name_by_addr(data, '8.8.8.8'); // prints  'United States'
+geoip.Country.code_by_addr(country_data, '8.8.8.8'); // prints 'US'
+geoip.Country.name_by_addr(country_data, '8.8.8.8'); // prints  'United States'
 
 // Asynchronous methods, depends on node's async-style dns module.
-geoip.Country.code_by_domain(data, 'www.google.com', function(err, code) {
+geoip.Country.code_by_domain(country_data, 'www.google.com', function(err, code) {
     if (err) {throw err;}
     console.log(code);  // prints 'US'
 });
-geoip.Country.name_by_domain(data, 'www.google.com', function(err, name) {
+geoip.Country.name_by_domain(country_data, 'www.google.com', function(err, name) {
     if (err) {throw err;}
     console.log(name);  // prints 'United States'
 });
 
-// Set all properties of an existing data object to undefined
-geoip.close(data);
+// Close the opened file
+geoip.close(country_data);
+
 /*
- * City geo infomation
+ * City geographic infomation
  *
- * Befor you can use city geo information,
+ * Befor you can use city geographic information,
  * you need download GeoLiteCity.dat file first.
- * wget http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz
+ * wget http://geolite.maxmind.com/download/geoip/country_database/GeoLiteCity.dat.gz
  */
 
-var data = geoip.open('/path/to/GeoLiteCity.dat');
+var city_country_data = geoip.open('/path/to/GeoLiteCity.dat');
 
-geoip.City.record_by_addr(data, '8.8.8.8');  // output this;
+geoip.City.record_by_addr(city_country_data, '8.8.8.8');  // output this;
                                                   //{ 
                                                   //country_code: 'US',
                                                   //country_code3: 'USA',
@@ -50,4 +51,47 @@ geoip.City.record_by_addr(data, '8.8.8.8');  // output this;
                                                   //metro_code: 807,
                                                   //area_code: 650 
                                                   //}
+geoip.close(city_data);
 
+/*
+ * Region geographic information
+ *
+ * Before you can use region geographic information,
+ * you need buy GeoIPRegion.dat from maxmind.com
+ */
+
+var region_country_data = geoip.open('/path/to/GeoIPRegion.dat');
+
+geoip.Region.region_by_addr(region_country_data, '8.8.8.8');  // prints 'US,CO'
+
+geoip.close(region_country_data);
+
+/*
+ * Organization geographic information
+ * Before you can use Organization geographic information,
+ * you need but GeoIPOrg.dat data file from maxmind.com
+ */
+
+var org_data = geoip.open('/path/to/GeoIPOrg.dat');
+
+geoip.Org.org_by_addr(org_data, '8.8.8.8');   
+// prints 
+// 'GenuityThe United WayEducation Management CorporationInternational Generating Co. 
+// (Intergen)GoldK.com LLCCisco Systems, 
+// Inc.Verizon/SixContinents HotelsDrug Enforcement AdmFloors IncUS Dept of Treasury - TIGTAHTS Engineering, 
+// LTDITS Caleb BrettAutomated Power Exchange, 
+// Inc.Neuberger Ber'
+
+geoip.close(org_data);
+
+/*
+ * NetSpeed information
+ * Before you can use NetSpeed information,
+ * you need to by netspeed data from maxmind.com
+ */
+
+var netspeed_data = geoip.open('/path/to/netspeed.dat');
+
+geoip.Netspeed.speed_by_addr(netspeed_data, '8.8.8.8'); // prints 'Dailup'
+
+geoip.close(netspeed_data);

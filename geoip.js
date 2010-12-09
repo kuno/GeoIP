@@ -1,124 +1,92 @@
-var fs = require('fs'),
-path = require('path'),
-buf2long = require('./lib/utils.js').buf2long;
-GEOIPDATA = require('./lib/geoipdata.js').GEOIPDATA;
+var fs        = require('fs'),
+path      = require('path'),
+buf2long  = require('./lib/utils.js').buf2long,
+CONST     = require('./include/constants.js'),
+DATA = require('./include/models.js').DATA;
 
 /******************************************************************************
- * Constans
+ * Inner Functions
  *****************************************************************************/
- var GEOIP_COUNTRY_BEGIN = 16776960;
- var GEOIP_STATE_BEGIN_REV0 = 16700000;
- var GEOIP_STATE_BEGIN_REV1 = 16000000;
- var GEOIP_STANDARD = 0;
- var GEOIP_MEMORY_CACHE = 1;
- var GEOIP_SHARED_MEMORY = 2;
- var STRUCTURE_INFO_MAX_SIZE = 20;
- var DATABASE_INFO_MAX_SIZE = 100;
- var GEOIP_COUNTRY_EDITION = 106;
- var GEOIP_PROXY_EDITION = 8;
- var GEOIP_ASNUM_EDITION = 9;
- var GEOIP_NETSPEED_EDITION = 10;
- var GEOIP_REGION_EDITION_REV0 = 112;
- var GEOIP_REGION_EDITION_REV1 = 3;
- var GEOIP_CITY_EDITION_REV0 = 111;
- var GEOIP_CITY_EDITION_REV1 = 2;
- var GEOIP_ORG_EDITION = 110;
- var GEOIP_ISP_EDITION = 4;
- var SEGMENT_RECORD_LENGTH = 3;
- var STANDARD_RECORD_LENGTH = 3;
- var ORG_RECORD_LENGTH = 4;
- var MAX_RECORD_LENGTH = 4;
- var MAX_ORG_RECORD_LENGTH = 300;
- var US_OFFSET = 1;
- var CANADA_OFFSET = 677;
- var WORLD_OFFSET = 1353;
- var FIPS_RANGE = 360;
- var GEOIP_UNKNOWN_SPEED = 0;
- var GEOIP_DIALUP_SPEED = 1;
- var GEOIP_CABLEDSL_SPEED = 2;
- var GEOIP_CORPORATE_SPEED = 3;
- var GEOIP_DOMAIN_EDITION = 11;
- var GEOIP_LOCATIONA_EDITION = 13;
- var GEOIP_ACCURACYRADIUS_EDITION = 14;
- var GEOIP_CITYCOMBINED_EDITION = 15;
- var CITYCOMBINED_FIXED_RECORD = 7;
- var Delimter_NUMBER = 16777215;
 
-
- var _setup_segments = function(data) {
-     var offset;
-     data.databaseType = GEOIP_COUNTRY_EDITION;
-     data.record_length = STANDARD_RECORD_LENGTH;
-     var buf = data.buffer;
-     offset = buf.length - 3;
-     for (var i = 0; i < STRUCTURE_INFO_MAX_SIZE; i++) {
-         var delim = buf2long(buf.slice(offset, offset + 3));
-         offset += 3;
-         if (delim === Delimter_NUMBER) {
-             data.databaseType = parseInt(buf[offset], 10);
-             offset++;
-             if (data.databaseType === GEOIP_REGION_EDITION_REV0) {
-                 data.databaseSegments = GEOIP_STATE_BEGIN_REV0;
-             } else if (data.databaseType === GEOIP_REGION_EDITION_REV1) {
-                 data.databaseSegments = GEOIP_STATE_BEGIN_REV1;
-             } else if (data.databaseType === GEOIP_CITY_EDITION_REV0 ||
-             data.databaseType === GEOIP_CITY_EDITION_REV1 ||
-             data.databaseType === GEOIP_CITY_ORG_EDITION  ||
-             data.databaseType === GEOIP_CITY_DOMAIN_EDITION ||
-             data.databaseType === GEOIP_CITY_ISP_EDITION    ||
-             data.databaseType === GEOIP_LOCATIONA_EDITION   ||
-             data.databaseType === GEOIP_ACCURACYRADIUS_EDITION ||
-             data.databaseType === GEIOP_ASNUM_EDITION) {
-                 data.databaseSegments = 0;
-                 var seg = buf.slice(offset, offset+SEGMENT_RECORD_LENGTH);
-                 for (var j = 0; j < SEGMENT_RECORD_LENGTH; j++) {
-                     data.databaseSegments += (parseInt(seg[j], 10) << (j * 8));
-                 }
-                 if (data.databaseType === GEOIP_ORG_EDITION ||
-                 data.databaseType === GEOIP_DOMAIN_EDITION ||
-                 data.databaseType === GEOIP_ISP_EDITION) {
-                     data.record_length = ORG_RECORD_LENGTH;
-                 }
-             }
-             break;
-         } else {
-             offset -= 4;
-         }
+ function _setup_segments(data) {
+   var offset;
+   data.db_type = CONST.COUNTRY_EDITION;
+   data.record_length = CONST.STANDARD_RECORD_LENGTH;
+   var buf = data.buffer;
+   offset = buf.length - 3;
+   for (var i = 0; i < CONST.STRUCTURE_INFO_MAX_SIZE; i++) {
+     var delim = buf2long(buf.slice(offset, offset + 3));
+     offset += 3;
+     if (delim === CONST.DELIMETER_NUMBER) {
+       data.db_type = parseInt(buf[offset], 10);
+       offset++;
+       if (data.db_type === CONST.REGION_EDITION_REV0) {
+         data.db_segments = CONST.STATE_BEGIN_REV0;
+       } else if (data.db_type === CONST.REGION_EDITION_REV1) {
+         data.db_segments = CONST.STATE_BEGIN_REV1;
+       } else if (data.db_type === CONST.CITY_EDITION_REV0 ||
+       data.db_type === CONST.CITY_EDITION_REV1 ||
+       data.db_type === CONST.ORG_EDITION  ||
+       data.db_type === CONST.DOMAIN_EDITION ||
+       data.db_type === CONST.ISP_EDITION    ||
+       data.db_type === CONST.LOCATIONA_EDITION   ||
+       data.db_type === CONST.ACCURACYRADIUS_EDITION ||
+       data.db_type === CONST.ASNUM_EDITION
+     ) {
+       data.db_segments = 0;
+       var seg = buf.slice(offset, offset + CONST.SEGMENT_RECORD_LENGTH);
+       for (var j = 0; j < CONST.SEGMENT_RECORD_LENGTH; j++) {
+         data.db_segments += (parseInt(seg[j], 10) << (j * 8));
+       }
+       if (data.db_type === CONST.ORG_EDITION ||
+       data.db_type === CONST.DOMAIN_EDITION ||
+       data.db_type === CONST.ISP_EDITION
+     ) {
+       data.record_length = CONST.ORG_RECORD_LENGTH;
      }
+   }
+   break;
+ } else {
+   offset -= 4;
+ }
+   }
 
-     if (data.databaseType === GEOIP_COUNTRY_EDITION ||
-     data.databaseType === GEOIP_PROXY_EDITION   ||
-     data.databaseType === GEOIP_NETSPEED_EDITION) {
-         data.databaseSegments = GEOIP_COUNTRY_BEGIN;
-     }
+   if (data.db_type === CONST.COUNTRY_EDITION ||
+   data.db_type === CONST.PROXY_EDITION   ||
+   data.db_type === CONST.NETSPEED_EDITION) {
+     data.db_segments = CONST.COUNTRY_BEGIN;
+   }
 
-     return data;
- };
+   return data;
+ }
 
 
  /******************************************************************************
   * Exprots Functions
   *****************************************************************************/
-
   exports.open = function(file) {
-      var stats, bytesRead;
-      var data = new GEOIPDATA();
-      data.fileDescriptor = fs.openSync(file, 'r');
-      stats = fs.fstatSync(data.fileDescriptor);
-      data.buffer = new Buffer(stats.size);
-      bytesRead = fs.readSync(data.fileDescriptor, data.buffer, 0, stats.size, 0);
+    var stats, bytesRead;
+    var data = new DATA();
+    data.file_descriptor = fs.openSync(file, 'r');
+    stats = fs.fstatSync(data.file_descriptor);
+    data.buffer = new Buffer(stats.size);
+    bytesRead = fs.readSync(data.file_descriptor, data.buffer, 0, stats.size, 0);
 
-      if (bytesRead >= 0) {
-          return  _setup_segments(data);
-      } else {
-          return false;
-      }
+    if (bytesRead >= 0) {
+      return _setup_segments(data);
+    } else {
+      return false;
+    }
 
   };
 
   exports.close = function(data) {
-      return fs.closeSync(data.fileDescriptor);
+    return fs.close(data.file_descriptor);
   };
 
-   exports.Country = require('./country.js');
-   exports.City = require('./city.js');
+
+  exports.NetSpeed = require('./lib/netspeed.js');
+  exports.Country = require('./lib/country.js');
+  exports.Region  = require('./lib/region.js');
+  exports.City    = require('./lib/city.js');
+  exports.Org     = require('./lib/org.js');
