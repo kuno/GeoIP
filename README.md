@@ -48,7 +48,7 @@ __v0.2.1, 2010-12-10:__
 
 1, added support for GeoIPASNum.dat binary data.
 
-2, make org_by_addr return an array of org name string.
+2, make org_by_addr method return an array of org name string.
 
 ###Data
 
@@ -79,24 +79,24 @@ GeoIP ASN Edition [download](http://geolite.maxmind.com/download/geoip/database/
 
 * Synchronous methods, network independence.
 
-      geoip.Country.code_by_addr(data, '8.8.8.8'); // prints 'US'
+      geoip.Country.code_by_addr(country_data, '8.8.8.8'); // Return 'US'
 
-      geoip.Country.name_by_addr(data, '8.8.8.8'); // prints  'United States'
+      geoip.Country.name_by_addr(country_data, '8.8.8.8'); // Return  'United States'
 
 * Asynchronous methods, depends on node's async-style dns module.
 
-      geoip.Country.code_by_domain(data, 'www.google.com', function(err, code) {
+      geoip.Country.code_by_domain(country_data, 'www.google.com', function(err, code) {
             if (err) {throw err;}
             console.log(code);  // prints 'US'
       });
 
-      geoip.Country.name_by_domain(data, 'www.google.com', function(err, name) {
+      geoip.Country.name_by_domain(country_data, 'www.google.com', function(err, name) {
             if (err) {throw err;}
             console.log(name);  // prints 'United States'
       });
 
       //Close the opened file.
-      geoip.close(data);
+      geoip.close(country_data);
 
 ####City Information
 
@@ -106,7 +106,7 @@ GeoIP ASN Edition [download](http://geolite.maxmind.com/download/geoip/database/
 
       geoip.City.record_by_addr(data, '8.8.8.8');
       // Return an object of city information
-      //'{
+      // {
       //  "country_code":"US",
       //  "country_code3":"USA",
       //  "country_name":"United States",
@@ -119,10 +119,9 @@ GeoIP ASN Edition [download](http://geolite.maxmind.com/download/geoip/database/
       //  "dma_code":807,
       //  "metro_code":807,
       //  "area_code":650
-      //  }'    
+      //  }    
 
-
-     geoip.close(city_data);
+      geoip.close(city_data);
 
 ####Organization Information
 
@@ -161,21 +160,19 @@ GeoIP ASN Edition [download](http://geolite.maxmind.com/download/geoip/database/
       
 ####Region Information
 
-* Open the GeoIPRegion.dat first.
-
+      //Open the GeoIPRegion.dat first.
       var region_data = geoip.open('/path/to/GeoIPRegion.dat');
 
-      geoip.Region.region_by_addr(region_data, '8.8.8.8');  // prints 'US,CO'
+      geoip.Region.region_by_addr(region_data, '8.8.8.8');  // Return 'US,CO'
 
       geoip.close(region_data);
 
 
 ####NetSpeed Information
 
-* Open the GeoIPNetSpeed.dat first.
-
+      //Open the GeoIPNetSpeed.dat first.
       var netspeed_data = geoip.open('/path/to/GeoIPNetSpeed.dat');
 
-      geoip.NetSpeed.speed_by_addr(netspeed_data, '8.8.8.8');  // prints 'Dailup'
+      geoip.NetSpeed.speed_by_addr(netspeed_data, '8.8.8.8');  // Return 'Dailup'
 
       geoip.close(netspeed_data);
