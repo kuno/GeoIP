@@ -73,8 +73,7 @@ GeoIP ASN Edition [download](http://geolite.maxmind.com/download/geoip/database/
 
 ####Country Information
 
-* Open the country data file
-
+      // Open the country data file
       var country_data = geoip.open('/path/to/GeoIP.dat');
 
 * Synchronous methods, network independence.
@@ -100,8 +99,7 @@ GeoIP ASN Edition [download](http://geolite.maxmind.com/download/geoip/database/
 
 ####City Information
 
-* Open the GeoLiteCity.dat file first.
-
+      // Open the GeoLiteCity.dat file first.
       var city_data = geoip.open('/path/to/GeoLiteCity.dat');
 
       geoip.City.record_by_addr(data, '8.8.8.8');
@@ -127,7 +125,7 @@ GeoIP ASN Edition [download](http://geolite.maxmind.com/download/geoip/database/
 
 * Get Organization Information
 
-      //Open the GeoIPOrg.dat first.
+      // Open the GeoIPOrg.dat first.
       var org_data = geoip.open('/path/to/GeoIPOrg.dat');
 
       geoip.Org.org_by_addr(org_data, '8.8.8.8');
@@ -143,7 +141,7 @@ GeoIP ASN Edition [download](http://geolite.maxmind.com/download/geoip/database/
 
 * Get ASN informatioin
 
-      //Open the GeoIPASNum.dat first.
+      // Open the GeoIPASNum.dat first.
 
       var asn_data = geoip.open('/path/to/GeoIPASNum.dat');
 
@@ -160,7 +158,7 @@ GeoIP ASN Edition [download](http://geolite.maxmind.com/download/geoip/database/
       
 ####Region Information
 
-      //Open the GeoIPRegion.dat first.
+      // Open the GeoIPRegion.dat first.
       var region_data = geoip.open('/path/to/GeoIPRegion.dat');
 
       geoip.Region.region_by_addr(region_data, '8.8.8.8');  // Return 'US,CO'
@@ -170,7 +168,7 @@ GeoIP ASN Edition [download](http://geolite.maxmind.com/download/geoip/database/
 
 ####NetSpeed Information
 
-      //Open the GeoIPNetSpeed.dat first.
+      // Open the GeoIPNetSpeed.dat first.
       var netspeed_data = geoip.open('/path/to/GeoIPNetSpeed.dat');
 
       geoip.NetSpeed.speed_by_addr(netspeed_data, '8.8.8.8');  // Return 'Dailup'
