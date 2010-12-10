@@ -153,7 +153,9 @@ GeoIP ASN Edition [download](http://geolite.maxmind.com/download/geoip/database/
       //    description: 'OmniTI Computer Consulting Inc.' },
       //  { number: 'AS26471',
       //    description: 'Smart City Networks' } 
-      //]       
+      //]
+
+      geoip.close(asn_data);
 
       
 ####Region Information
