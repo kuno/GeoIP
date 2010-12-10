@@ -5,6 +5,8 @@ GEOLITECITY='http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.
 REGION='http://www.maxmind.com/sample/GeoIPRegion-515_20050401.tar.gz'
 NETSPEED='http://www.maxmind.com/sample/GeoIP-171_20040418.tar.gz'
 ORG='http://www.maxmind.com/sample/GeoIP-111_20030603.tar.gz'
+ASN='http://geolite.maxmind.com/download/geoip/database/asnum/GeoIPASNum.dat.gz'
+
 
 if [ ! -e /tmp/GeoIP.dat ]; then
   curl $GEOIP | gzip -d -c > /tmp/GeoIP.dat
@@ -16,6 +18,10 @@ fi
 
 if [ ! -e /tmp/GeoIP-111_20030603/GeoIPOrg-111.dat ]; then
   curl $ORG | tar zxv -C /tmp/  
+fi
+
+if [ ! -e /tmp/GeoIPASNum.dat ]; then
+  curl $ASN | gzip -d -c > /tmp/GeoIPASNum.dat
 fi
 
 if [ ! -e /tmp/GeoIP-171_20040418/GeoIP-171_20040418.dat ]; then
