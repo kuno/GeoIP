@@ -13,3 +13,7 @@ v0.1.2, 2010-12-02:
 v0.1.3, 2010-12-02:
 1. Fixed that open and close methos dosen't works in real script.
 
+v0.2.1, 1010-12-03:
+1, added support for GeoIPASNum.dat binary data.
+2, make org_by_addr return an array of org name string.
+

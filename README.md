@@ -44,17 +44,26 @@ __v0.2.0, 2010-12-09:__
 
 3, re-factoring whloe project.
 
+__v0.2.1, 2010-12-10:__
+
+1, added support for GeoIPASNum.dat binary data.
+
+2, make org_by_addr return an array of org name string.
+
 ###Data
 
 Befor you can use this package, you need to download or buy some data from [www.maxmind.com](http://www.maxmind.com/app/ip-location).
 
-There are two free versions data among with some commercial versions.
+There are three free versions data among with some commercial versions.
 
 __Note: This package only support binary data, not any other formats.__
 
 GeoIP Country Lite Edition [Download](http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz).
 
 GeoIP City Lite Edition [Download](http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz)
+
+GeoIP ASN Edition [download](http://geolite.maxmind.com/download/geoip/database/asnum/GeoIPASNum.dat.gz)
+
 
 ###Install
 
@@ -95,42 +104,61 @@ GeoIP City Lite Edition [Download](http://geolite.maxmind.com/download/geoip/dat
 
       var city_data = geoip.open('/path/to/GeoLiteCity.dat');
 
-      geoip.City.record_by_addr(data, '8.8.8.8');  // You will get something like this:
+      geoip.City.record_by_addr(data, '8.8.8.8');
+      // Return an object of city information
+      //'{
+      //  "country_code":"US",
+      //  "country_code3":"USA",
+      //  "country_name":"United States",
+      //  "continet_code":"NA",
+      //  "region":"CA",
+      //  "city":"Mountain View",
+      //  "postal_code":"94043",
+      //  "latitude":37.41919999999999,
+      //  "longitude":-122.0574,
+      //  "dma_code":807,
+      //  "metro_code":807,
+      //  "area_code":650
+      //  }'    
 
-                                                        //{ 
-                                                        //country_code: 'US',
-                                                        //country_code3: 'USA',
-                                                        //country_name: 'United States',
-                                                        //continet_code: 'NA',
-                                                        //region: 'CA',
-                                                        //city: 'Mountain View',
-                                                        //postal_code: '94043',
-                                                        //latitude: 37.41919999999999,
-                                                        //longitude: -122.0574,
-                                                        //dma_code: 807,
-                                                        //metro_code: 807,
-                                                        //area_code: 650 
-                                                        //}
 
      geoip.close(city_data);
 
 ####Organization Information
 
-* Open the GeoIPOrg.dat first.
+* Get Organization Information
 
+      //Open the GeoIPOrg.dat first.
       var org_data = geoip.open('/path/to/GeoIPOrg.dat');
 
-      geoip.Org.org_by_addr(data, '8.8.8.8');
-      // You wikk get something like below:
-      // 'GenuityThe United WayEducation Management CorporationInternational Generating Co. 
-      // (Intergen)GoldK.com LLCCisco Systems, 
-      // Inc.Verizon/SixContinents HotelsDrug Enforcement AdmFloors IncUS Dept of Treasury - TIGTAHTS Engineering, 
-      // LTDITS Caleb BrettAutomated Power Exchange, 
-      // Inc.Neuberger Ber'
+      geoip.Org.org_by_addr(org_data, '8.8.8.8');
+      // Return an array of the names of organization
+      // [
+      // 'Genuity',
+      // 'The United Way',
+      // 'Education Management Corporation,
+      // 'International Generating Co. (Intergen)'
+      // ]    
 
       geoip.close(org_data);
 
+* Get ASN informatioin
 
+      //Open the GeoIPASNum.dat first.
+
+      var asn_data = geoip.open('/path/to/GeoIPASNum.dat');
+
+      geoip.Org.asn_by_addr(asn_data, '8.8.8.8');
+      // Return an array of asn objects
+      //[ 
+      //  { number: 'AS15169', description: 'Google Inc.' },
+      //  { number: 'AS36597',
+      //    description: 'OmniTI Computer Consulting Inc.' },
+      //  { number: 'AS26471',
+      //    description: 'Smart City Networks' } 
+      //]       
+
+      
 ####Region Information
 
 * Open the GeoIPRegion.dat first.
