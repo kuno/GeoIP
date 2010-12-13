@@ -24,4 +24,5 @@ color: #ff80b2;
 * Make org_by_add method return an arrary of string rather than a strang object
 
 ###v0.3.0###
+* use javasript Error type as err
 * add all asynchronous methods 
