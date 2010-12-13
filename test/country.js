@@ -6,7 +6,7 @@ var Country = geoip.Country;
 
 // Test name_by_addr method
 setTimeout(function() {
-    console.log('The result of ');
+    console.log('The result of synchronized method');
     console.log('Country.name_by_addr(data, \'8.8.8.8\')');
     console.log('is \'' + Country.name_by_addr(data, '8.8.8.8') + '\'');
     console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
@@ -14,7 +14,7 @@ setTimeout(function() {
 
 // Test code_by_addr method
 setTimeout(function() {
-    console.log('The result of ');
+    console.log('The result of synchronized method');
     console.log('Country.code_by_addr(data, \'8.8.8.8\')');
     console.log('is \'' + Country.code_by_addr(data, '8.8.8.8') + '\'');
     console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
@@ -22,7 +22,7 @@ setTimeout(function() {
 
 // Test name_by_domain method
 setTimeout(function() {
-    console.log('The result of ');
+    console.log('The result of asynchronized method');
     console.log('Country.name_by_domain(data, \'www.google.com\', callback())');
     Country.name_by_domain(data, 'www.google.com', function(err, name) {
         if (err) {throw err;}
@@ -33,7 +33,7 @@ setTimeout(function() {
 
 // Test code_by_domain method
 setTimeout(function() {
-    console.log('The result of ');
+    console.log('The result of asynchronized method');
     console.log('Country.code_by_domain(data, \'www.google.com\', callback())');
     Country.code_by_domain(data, 'www.google.com', function(err, code) {
         if (err) {throw err;}
