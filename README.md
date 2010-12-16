@@ -91,14 +91,17 @@ GeoIP ASN Edition [download](http://geolite.maxmind.com/download/geoip/database/
 
       geoip.City.record_by_domain(city_data, 'www.google.com', function(err, reord) {
             if (err) {throw err;}
-            console.log(JSON.stringify(record);
+            var keys = Object.keys(record);
+            keys.forEach(function(k) {  // Same as record_by_addr
+                console.log(k + ':' + record[k]);
+            });   
       });
 
       geoip.close(city_data);
 
 ####Organization Information
 
-* Get Organization Information
+#####Get Organization Information#####
 
       // Open the GeoIPOrg.dat first.
       var org_data = geoip.open('/path/to/GeoIPOrg.dat');
@@ -123,15 +126,15 @@ GeoIP ASN Edition [download](http://geolite.maxmind.com/download/geoip/database/
           if (err) {throw err;}
           if (typeof org === 'string') {
               console.log(org);  // Organization Not Found
-          } else {
+          } else {  // Same as org_by_addr
               org.foreach(function(o) {
-              console.log(o[0] + ':' + o[1]); // Same as org_by_addr
+              console.log(o[0] + ':' + o[1]);
           });
           }
       });
 
         
-* Get ASN informatioin
+#####Get ASN informatioin######
 
       // Open the GeoIPASNum.dat first.
 
@@ -179,7 +182,7 @@ GeoIP ASN Edition [download](http://geolite.maxmind.com/download/geoip/database/
 
       geoip.Region.region_by_domain(region_data, 'www.google.com', function(err, region) {
           if (err) {throw err;}
-          console.log(region);  // Maybe difference from region_by_addr
+          console.log(region);  // Maybe different from region_by_addr
       });
 
       geoip.close(region_data);
@@ -198,7 +201,7 @@ GeoIP ASN Edition [download](http://geolite.maxmind.com/download/geoip/database/
       
       NetSpeed.speed_by_domain(data, 'www.google.com', function(err, speed) {
           if (err) {throw err;}
-          console.log(speed);  // Maybe difference from speed_by_addr
+          console.log(speed);  // Maybe different from speed_by_addr
       });
 
       geoip.close(netspeed_data);
