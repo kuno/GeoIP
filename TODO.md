@@ -26,4 +26,9 @@ color: #ff80b2;
 ###v0.3.0###
 * make clear why org_by_domain method dose not works
 * use javasript Error type as err
-* add all asynchronous methods 
+* add all asynchronous methods
+
+###Future####
+* make clear why org_by_domain method dose not works?
+* Support IPv6?
+

@@ -10,16 +10,19 @@ var geoip = require('geoip');
  */
 var country_data = geoip.open('/path/to/GeoIP.dat');
 
+var Country = geoip.Country;
+
 // Synchronous methods, network independence.
-geoip.Country.code_by_addr(country_data, '8.8.8.8'); // prints 'US'
-geoip.Country.name_by_addr(country_data, '8.8.8.8'); // prints  'United States'
+var code = Country.code_by_addr(country_data, '8.8.8.8'); // prints 'US'
+var name = Country.name_by_addr(country_data, '8.8.8.8'); // prints  'United States'
 
 // Asynchronous methods, depends on node's async-style dns module.
-geoip.Country.code_by_domain(country_data, 'www.google.com', function(err, code) {
+Country.code_by_domain(country_data, 'www.google.com', function(err, code) {
   if (err) {throw err;}
   console.log(code);  // prints 'US'
 });
-geoip.Country.name_by_domain(country_data, 'www.google.com', function(err, name) {
+
+Country.name_by_domain(country_data, 'www.google.com', function(err, name) {
   if (err) {throw err;}
   console.log(name);  // prints 'United States'
 });
@@ -38,7 +41,10 @@ geoip.close(country_data);
 
 var city_country_data = geoip.open('/path/to/GeoLiteCity.dat');
 
-geoip.City.record_by_addr(city_country_data, '8.8.8.8');
+var City = geoip.City;
+
+// Synchronous method
+var record = City.record_by_addr(city_country_data, '8.8.8.8');
 // Return a Object of city information
 //'{
   //"country_code":"US",
@@ -55,6 +61,16 @@ geoip.City.record_by_addr(city_country_data, '8.8.8.8');
   //  "area_code":650
   //  }'
 
+  // Asynchronous method
+  City.record_by_domain(city_country_data, 'www.google.com', function(err, record) {
+    if (err) {throw err;}
+    console.log('is \'' + JSON.stringify(record) + '\'');
+    var keys = Object.keys(record);
+    keys.forEach(function(k) {
+      console.log(k + ':' + record[k]);
+    });
+  });
+
   geoip.close(city_data);
 
 
@@ -67,7 +83,16 @@ geoip.City.record_by_addr(city_country_data, '8.8.8.8');
 
   var region_country_data = geoip.open('/path/to/GeoIPRegion.dat');
 
-  geoip.Region.region_by_addr(region_country_data, '8.8.8.8');  // prints 'US,CO'
+  var Region = geoip.Region;
+
+  // Synchronous method
+  var reg = geoip.Region.region_by_addr(region_country_data, '8.8.8.8');  // prints 'US,CO'
+
+  // Asynchronous method
+  Region.region_by_domain(data, 'www.google.com', function(err, region) {
+    if (err) {throw err;}
+    console.log('is ' + region);
+  });
 
   geoip.close(region_country_data);
 
@@ -77,11 +102,13 @@ geoip.City.record_by_addr(city_country_data, '8.8.8.8');
    * Before you can use Organization geographic information,
    * you need but GeoIPOrg.dat data file from maxmind.com
    */
-
+  // Get Organization    
   var org_data = geoip.open('/path/to/GeoIPOrg.dat');
 
-  // Get Organization
-  geoip.Org.org_by_addr(org_data, '8.8.8.8');   
+  var Org = geoip.Org;
+
+  // Synchronous method
+  var org = Org.org_by_addr(org_data, '8.8.8.8');   
   // Return an array of the name of organization
   // [
   // 'Genuity',
@@ -90,20 +117,44 @@ geoip.City.record_by_addr(city_country_data, '8.8.8.8');
   // 'International Generating Co. (Intergen)'
   // ]
 
-
+  // Synchronous methos
+  Org.org_by_domain(org_data, 'www.google.com', function(err, org) {
+    if (err) {throw err;}
+    if (typeof org === 'string') {
+      console.log(org);  // Organization Not Found
+    } else {  // Same as org_by_addr
+      org.forEach(function(o) {
+        console.log(o[0] + ' : ' + o[1]);
+      });
+    }
+  });
 
   geoip.close(org_data);
 
   // Get ASNumber
   var asn_data = geoip.open('/path/to/GeoIPASNum.dat');
 
-  geoip.Org.asn_by_addr(org_data, '8.8.8.8');
+  // Synchronous method
+  var asn = Org.asn_by_addr(org_data, '8.8.8.8');
   // Return an array of asn objects
   //[ { number: 'AS15169', description: 'Google Inc.' },
   //  { number: 'AS36597',
   //    description: 'OmniTI Computer Consulting Inc.' },
   //  { number: 'AS26471',
   //    description: 'Smart City Networks' } ]
+
+  // Asynchronous method
+  Org.asn_by_domain(asn_data, 'www.google.com', function(err, asn) {
+    if (err) {throw err;}
+    if (typeof asn === 'string') { 
+      console.log(asn); // ASNumber Not Found
+    } else {  // Same as asn_by_addr
+    asn.forEach(function(a) {
+      var keys = Object.keys(a);
+      console.log(a[keys[0]] + ' : ' + a[keys[1]]);
+    });
+  }
+  });
 
   geoip.close(asn_data);
 
@@ -113,9 +164,17 @@ geoip.City.record_by_addr(city_country_data, '8.8.8.8');
    * Before you can use NetSpeed information,
    * you need to by netspeed data from maxmind.com
    */
+  var NetSpeed = geoip.NetSpeed;
 
   var netspeed_data = geoip.open('/path/to/netspeed.dat');
 
-  geoip.Netspeed.speed_by_addr(netspeed_data, '8.8.8.8'); // prints 'Dailup'
+  // Synchronous method
+  var speed = Netspeed.speed_by_addr(netspeed_data, '8.8.8.8'); // prints 'Dailup'
+
+  // Asynchronous method
+  NetSpeed.speed_by_domain(data, 'www.google.com', function(err, speed) {
+    if (err) {throw err;}
+    console.log(speed);  // Maybe difference from speed_by_addr
+  });
 
   geoip.close(netspeed_data);
