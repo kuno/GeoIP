@@ -15,7 +15,7 @@ setTimeout(function() {
 // Test record_by_domain method
 setTimeout(function() {
   console.log('The result of asynchronous method');
-  console.log('City.record_by_domain(data, \'www.google.com\', callback)');
+  console.log('City.record_by_domain(data, \'www.google.com\', callback())');
   City.record_by_domain(data, 'www.google.com', function(err, record) {
     if (err) {throw err;}
     console.log('is \'' + JSON.stringify(record) + '\'');
