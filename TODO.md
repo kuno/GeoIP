@@ -28,7 +28,9 @@ color: #ff80b2;
 * use javasript Error type as err
 * add all asynchronous methods
 
-###Future####
+###Future###
+* Make open and close method better
+* Stick 0.3.* for ever?
 * make clear why org_by_domain method dose not works?
 * Support IPv6?
 
