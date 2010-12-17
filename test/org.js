@@ -16,7 +16,7 @@ setTimeout(function() {
 
 setTimeout(function() {
   console.log('The result of asynchronous method');
-  console.log('Org.org_by_domain(data, \'www.google.com\', callback)');
+  console.log('Org.org_by_domain(data, \'www.google.com\', callback())');
   Org.org_by_domain(org_data, 'www.google.com', function(err, org) {
     if (err) {throw err;}
     console.log(org);
@@ -36,7 +36,7 @@ setTimeout(function() {
 
 setTimeout(function() {
   console.log('The result of asynchronous method');
-  console.log('Org.asn_by_domain(data, \'www.google.com\', callback)');
+  console.log('Org.asn_by_domain(data, \'www.google.com\', callback())');
   Org.asn_by_domain(asn_data, 'www.google.com', function(err, asn) {
     if (err) {throw err;}
     asn.forEach(function(a) {
