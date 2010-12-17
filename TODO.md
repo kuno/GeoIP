@@ -28,6 +28,9 @@ color: #ff80b2;
 * use javasript Error type as err
 * add all asynchronous methods
 
+###v0.3.1###
+* Precise latitude and langitude to 7 digit
+
 ###Future###
 * Make open and close method better
 * Stick 0.3.* for ever?
