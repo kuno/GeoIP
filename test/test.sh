@@ -17,7 +17,7 @@ if [ ! -e /media/d5fc189b-3c6b-4947-bda3-b7d0890fe6ca/Archive/GeoIP/GeoLiteCity.
 fi
 
 if [ ! -e /media/d5fc189b-3c6b-4947-bda3-b7d0890fe6ca/Archive/GeoIP/GeoIP-111_20030603/GeoIPOrg-111.dat ]; then
-  curl $ORG | tar zxv -C /media/d5fc189b-3c6b-4947-bda3-b7d0890fe6ca/Archive/GeoIP  
+  curl $ORG | tar zxv -C /media/d5fc189b-3c6b-4947-bda3-b7d0890fe6ca/Archive/GeoIP/  
 fi
 
 if [ ! -e /media/d5fc189b-3c6b-4947-bda3-b7d0890fe6ca/Archive/GeoIP/GeoIPASNum.dat ]; then
@@ -25,11 +25,11 @@ if [ ! -e /media/d5fc189b-3c6b-4947-bda3-b7d0890fe6ca/Archive/GeoIP/GeoIPASNum.d
 fi
 
 if [ ! -e /media/d5fc189b-3c6b-4947-bda3-b7d0890fe6ca/Archive/GeoIP/GeoIP-171_20040418/GeoIP-171_20040418.dat ]; then
-  curl $NETSPEED | tar zxv -C /media/d5fc189b-3c6b-4947-bda3-b7d0890fe6ca/Archive/GeoIP  
+  curl $NETSPEED | tar zxv -C /media/d5fc189b-3c6b-4947-bda3-b7d0890fe6ca/Archive/GeoIP/  
 fi
 
 if [ ! -e /media/d5fc189b-3c6b-4947-bda3-b7d0890fe6ca/Archive/GeoIP/GeoIPRegion-515_20050401/GeoIPRegion-515.dat ]; then
-  curl $REGION | tar zxv -C /media/d5fc189b-3c6b-4947-bda3-b7d0890fe6ca/Archive/GeoIP
+  curl $REGION | tar zxv -C /media/d5fc189b-3c6b-4947-bda3-b7d0890fe6ca/Archive/GeoIP/
 fi
 
 echo "Start to test Country module......"
