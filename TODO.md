@@ -32,6 +32,7 @@ color: #ff80b2;
 * Precise latitude and langitude to 7 digit
 
 ###Future###
+* add document to npm package(use npm doc command?)
 * Make open and close method better
 * Stick 0.3.* for ever?
 * make clear why org_by_domain method dose not works?

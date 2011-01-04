@@ -8,28 +8,28 @@ ORG='http://www.maxmind.com/sample/GeoIP-111_20030603.tar.gz'
 ASN='http://geolite.maxmind.com/download/geoip/database/asnum/GeoIPASNum.dat.gz'
 
 
-if [ ! -e /tmp/GeoIP.dat ]; then
-  curl $GEOIP | gzip -d -c > /tmp/GeoIP.dat
+if [ ! -e /media/d5fc189b-3c6b-4947-bda3-b7d0890fe6ca/Archive/GeoIP/GeoIP.dat ]; then
+  curl $GEOIP | gzip -d -c > /media/d5fc189b-3c6b-4947-bda3-b7d0890fe6ca/Archive/GeoIP/GeoIP.dat
 fi
 
-if [ ! -e /tmp/GeoLiteCity.dat ]; then
-  curl $GEOLITECITY | gzip -d -c > /tmp/GeoLiteCity.dat  
+if [ ! -e /media/d5fc189b-3c6b-4947-bda3-b7d0890fe6ca/Archive/GeoIP/GeoLiteCity.dat ]; then
+  curl $GEOLITECITY | gzip -d -c > /media/d5fc189b-3c6b-4947-bda3-b7d0890fe6ca/Archive/GeoIP/GeoLiteCity.dat  
 fi
 
-if [ ! -e /tmp/GeoIP-111_20030603/GeoIPOrg-111.dat ]; then
-  curl $ORG | tar zxv -C /tmp/  
+if [ ! -e /media/d5fc189b-3c6b-4947-bda3-b7d0890fe6ca/Archive/GeoIP/GeoIP-111_20030603/GeoIPOrg-111.dat ]; then
+  curl $ORG | tar zxv -C /media/d5fc189b-3c6b-4947-bda3-b7d0890fe6ca/Archive/GeoIP  
 fi
 
-if [ ! -e /tmp/GeoIPASNum.dat ]; then
-  curl $ASN | gzip -d -c > /tmp/GeoIPASNum.dat
+if [ ! -e /media/d5fc189b-3c6b-4947-bda3-b7d0890fe6ca/Archive/GeoIP/GeoIPASNum.dat ]; then
+  curl $ASN | gzip -d -c > /media/d5fc189b-3c6b-4947-bda3-b7d0890fe6ca/Archive/GeoIP/GeoIPASNum.dat
 fi
 
-if [ ! -e /tmp/GeoIP-171_20040418/GeoIP-171_20040418.dat ]; then
-  curl $NETSPEED | tar zxv -C /tmp/  
+if [ ! -e /media/d5fc189b-3c6b-4947-bda3-b7d0890fe6ca/Archive/GeoIP/GeoIP-171_20040418/GeoIP-171_20040418.dat ]; then
+  curl $NETSPEED | tar zxv -C /media/d5fc189b-3c6b-4947-bda3-b7d0890fe6ca/Archive/GeoIP  
 fi
 
-if [ ! -e /tmp/GeoIPRegion-515_20050401/GeoIPRegion-515.dat ]; then
-  curl $REGION | tar zxv -C /tmp/
+if [ ! -e /media/d5fc189b-3c6b-4947-bda3-b7d0890fe6ca/Archive/GeoIP/GeoIPRegion-515_20050401/GeoIPRegion-515.dat ]; then
+  curl $REGION | tar zxv -C /media/d5fc189b-3c6b-4947-bda3-b7d0890fe6ca/Archive/GeoIP
 fi
 
 echo "Start to test Country module......"

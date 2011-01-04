@@ -1,6 +1,6 @@
 var geoip = require('../geoip.js');
 
-var data = geoip.open('/tmp/GeoIP-171_20040418/GeoIP-171_20040418.dat');
+var data = geoip.open('/media/d5fc189b-3c6b-4947-bda3-b7d0890fe6ca/Archive/GeoIP/GeoIP-171_20040418/GeoIP-171_20040418.dat');
 
 var NetSpeed = geoip.NetSpeed;
 
