@@ -12,6 +12,10 @@ __I highly recommond that every user should update to at least v0.1.3!__
 
 Get geolocation information based on domain or IP address.
 
+###Compatibility###
+
+v0.3.1-1, Passed test on nodejs v0.2.0 ~ 0.2.6, v0.3.0 ~ 0.3.3.
+
 ###Architecture
 
 ![architecture](https://github.com/kuno/GeoIP/raw/master/misc/architecture.png)
