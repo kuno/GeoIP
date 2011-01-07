@@ -1,9 +1,9 @@
-#!/usrbin/env sh
+#!/usr/bin/env sh
 
 # Note: In order to use this testing script,
 # You need install neco first,
 # See detials at https://github.com/kuno/neco
-source $HOME/utopia/.neco/activate.sh
+source $NECO_ROOT/.neco/activate.sh
 
 report=./report.txt
 
