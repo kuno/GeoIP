@@ -29,3 +29,6 @@ fabfile.*
 # no php file
 *.php
 *.inc
+
+# neco test report file
+test/report.txt
