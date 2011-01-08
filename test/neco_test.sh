@@ -12,7 +12,7 @@ if [ -e $report ]; then
 fi
 
 # Tesing no nodejs 0.2.x stable branch
-for neco_id in 'test0' 'test1' 'test2' 'test3' 'test4' 'test5' 'test6'; do
+for neco_id in 'test0.2.0' 'test0.2.1' 'test0.2.2' 'test0.2.3' 'test0.2.4' 'test0.2.5' 'test0.2.6'; do
   neco_activate $neco_id &>/dev/null
   version=$(node -v)
   echo '#############################################################' >> $report
@@ -27,7 +27,7 @@ for neco_id in 'test0' 'test1' 'test2' 'test3' 'test4' 'test5' 'test6'; do
 done
 
 # Tesing no nodejs 0.3.x unstalbe branch
-for neco_id in 'test10' 'test11' 'test12'; do
+for neco_id in 'test0.3.0' 'test0.3.1' 'test0.3.2' 'test0.3.3'; do
   neco_activate $neco_id &>/dev/null
   version=$(node -v)
   echo '#############################################################' >> $report
@@ -40,14 +40,3 @@ for neco_id in 'test10' 'test11' 'test12'; do
   echo '' >> $report
   neco_deactivate
 done
-
-# Tesing on latest version of nodejs
-version=$(node -v)
-echo '#############################################################' >> $report
-echo '################# Testing on nodejs '$version' ##################' >> $report
-echo '#############################################################' >> $report
-sh test.sh >> $report
-echo '#############################################################' >> $report
-echo '############## Finished tests on nodejs '$version' ##############' >> $report
-echo '#############################################################' >> $report
-echo '' >> $report  
