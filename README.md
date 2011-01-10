@@ -1,27 +1,23 @@
-##GeoIP API for node.
+GeoIP API for node.
+===================
 
-####Emergent Update####
 
-__Warning: Due to the Asynchronous programming problome,__
-
-__Any version that below the 0.1.3 dosen't work in any real script.__
-
-__I highly recommond that every user should update to at least v0.1.3!__
-
-###Description
+##Description
 
 Get geolocation information based on domain or IP address.
 
-###Compatibility###
+
+##Compatibility
 
 v0.3.1-1, Passed test on nodejs v0.2.0 ~ 0.2.6, v0.3.0 ~ 0.3.4.
 
-###Architecture
+
+##Architecture
 
 ![architecture](https://github.com/kuno/GeoIP/raw/master/misc/architecture.png)
 
 
-###Data
+##Data
 
 Befor you can use this package, you need to download or buy some data from [www.maxmind.com](http://www.maxmind.com/app/ip-location).
 
@@ -36,13 +32,14 @@ GeoIP City Lite Edition [Download](http://geolite.maxmind.com/download/geoip/dat
 GeoIP ASN Edition [download](http://geolite.maxmind.com/download/geoip/database/asnum/GeoIPASNum.dat.gz)
 
 
-###Install
+##Install
 
     npm install geoip
 
-###Usage
 
-####Country Information
+##Usage
+
+###Country Information
 
       // Open the country data file
       var country_data = geoip.open('/path/to/GeoIP.dat');
@@ -68,7 +65,9 @@ GeoIP ASN Edition [download](http://geolite.maxmind.com/download/geoip/database/
       //Close the opened file.
       geoip.close(country_data);
 
-####City Information
+
+
+###City Information
 
       // Open the GeoLiteCity.dat file first.
       var city_data = geoip.open('/path/to/GeoLiteCity.dat');
@@ -103,9 +102,10 @@ GeoIP ASN Edition [download](http://geolite.maxmind.com/download/geoip/database/
 
       geoip.close(city_data);
 
-####Organization Information
 
-#####Get Organization Information#####
+###Organization Information
+
+#####Get Organization Information
 
       // Open the GeoIPOrg.dat first.
       var org_data = geoip.open('/path/to/GeoIPOrg.dat');
@@ -138,7 +138,7 @@ GeoIP ASN Edition [download](http://geolite.maxmind.com/download/geoip/database/
       });
 
         
-#####Get ASN informatioin######
+#####Get ASN informatioin
 
       // Open the GeoIPASNum.dat first.
 
