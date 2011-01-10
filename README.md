@@ -29,7 +29,7 @@ GeoIP Country Lite Edition [Download](http://geolite.maxmind.com/download/geoip/
 
 GeoIP City Lite Edition [Download](http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz)
 
-GeoIP ASN Edition [download](http://geolite.maxmind.com/download/geoip/database/asnum/GeoIPASNum.dat.gz)
+GeoIP ASN Edition [Download](http://geolite.maxmind.com/download/geoip/database/asnum/GeoIPASNum.dat.gz)
 
 
 ##Install
@@ -44,13 +44,13 @@ GeoIP ASN Edition [download](http://geolite.maxmind.com/download/geoip/database/
       // Open the country data file
       var country_data = geoip.open('/path/to/GeoIP.dat');
 
-1, Synchronous methods, network independence.
+ - Synchronous methods, network independence.
 
       geoip.Country.code_by_addr(country_data, '8.8.8.8'); // Return 'US'
 
       geoip.Country.name_by_addr(country_data, '8.8.8.8'); // Return  'United States'
 
-2, Asynchronous methods, depends on node's async-style dns module.
+ - Asynchronous methods, depends on node's async-style dns module.
 
       geoip.Country.code_by_domain(country_data, 'www.google.com', function(err, code) {
             if (err) {throw err;}
@@ -72,7 +72,7 @@ GeoIP ASN Edition [download](http://geolite.maxmind.com/download/geoip/database/
       // Open the GeoLiteCity.dat file first.
       var city_data = geoip.open('/path/to/GeoLiteCity.dat');
 
-1, Synchronous method
+ - Synchronous method
       geoip.City.record_by_addr(city_data, '8.8.8.8');
       // Return an object of city information
       // {
@@ -90,7 +90,7 @@ GeoIP ASN Edition [download](http://geolite.maxmind.com/download/geoip/database/
       //  "area_code":650
       //  }    
 
-2, Asynchronous method
+ - Asynchronous method
 
       geoip.City.record_by_domain(city_data, 'www.google.com', function(err, reord) {
             if (err) {throw err;}
@@ -105,12 +105,12 @@ GeoIP ASN Edition [download](http://geolite.maxmind.com/download/geoip/database/
 
 ###Organization Information
 
-#####Get Organization Information
+####Get Organization Information
 
       // Open the GeoIPOrg.dat first.
       var org_data = geoip.open('/path/to/GeoIPOrg.dat');
 
-1, Synchronous method
+- Synchronous method
 
       geoip.Org.org_by_addr(org_data, '8.8.8.8');
       // Return an array of the names of organization
@@ -123,7 +123,7 @@ GeoIP ASN Edition [download](http://geolite.maxmind.com/download/geoip/database/
 
       geoip.close(org_data);
 
-2, Asynchronous method
+ - Asynchronous method
 
       // This method has a small bug that not resovled yet, not recommend use it.
       geoip.Org.org_by_domain(org_data, 'www.google.com', function(err, org) {
@@ -138,13 +138,13 @@ GeoIP ASN Edition [download](http://geolite.maxmind.com/download/geoip/database/
       });
 
         
-#####Get ASN informatioin
+####Get ASN informatioin
 
       // Open the GeoIPASNum.dat first.
 
       var asn_data = geoip.open('/path/to/GeoIPASNum.dat');
 
-1, Synchronous method
+ - Synchronous method
 
       geoip.Org.asn_by_addr(asn_data, '8.8.8.8');
       // Return an array of asn objects
@@ -156,7 +156,7 @@ GeoIP ASN Edition [download](http://geolite.maxmind.com/download/geoip/database/
       //    description: 'Smart City Networks' } 
       //]
 
-2, Asynchronous method
+ - Asynchronous method
       
       geoip.Org.asn_by_domain(asn_data, 'www.google.com', function(err, asn) {
           if (err) {throw err;}
@@ -178,11 +178,11 @@ GeoIP ASN Edition [download](http://geolite.maxmind.com/download/geoip/database/
       // Open the GeoIPRegion.dat first.
       var region_data = geoip.open('/path/to/GeoIPRegion.dat');
 
-1, Synchronous method
+ - Synchronous method
 
       geoip.Region.region_by_addr(region_data, '8.8.8.8');  // Return 'US,CO'
 
-2, Asynchronous method
+ - Asynchronous method
 
       geoip.Region.region_by_domain(region_data, 'www.google.com', function(err, region) {
           if (err) {throw err;}
@@ -197,11 +197,11 @@ GeoIP ASN Edition [download](http://geolite.maxmind.com/download/geoip/database/
       // Open the GeoIPNetSpeed.dat first.
       var netspeed_data = geoip.open('/path/to/GeoIPNetSpeed.dat');
 
-1, Synchronous method
+ - Synchronous method
 
       geoip.NetSpeed.speed_by_addr(netspeed_data, '8.8.8.8');  // Return 'Dailup'
 
-2, Asynchronous method
+ - Asynchronous method
       
       NetSpeed.speed_by_domain(data, 'www.google.com', function(err, speed) {
           if (err) {throw err;}
