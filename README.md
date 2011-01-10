@@ -141,7 +141,6 @@ GeoIP ASN Edition [Download](http://geolite.maxmind.com/download/geoip/database/
 ####Get [ASN](http://www.apnic.net/services/services-apnic-provides/helpdesk/faqs/asn-faqs) informatioin
 
       // Open the GeoIPASNum.dat first.
-
       var asn_data = geoip.open('/path/to/GeoIPASNum.dat');
 
  - Synchronous method
