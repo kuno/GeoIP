@@ -138,7 +138,7 @@ GeoIP ASN Edition [Download](http://geolite.maxmind.com/download/geoip/database/
        });
 
         
-####Get [ASN](http://en.wikipedia.org/wiki/Autonomous_system_(Internet)) informatioin
+####Get [ASN](http://www.apnic.net/services/services-apnic-provides/helpdesk/faqs/asn-faqs) informatioin
 
       // Open the GeoIPASNum.dat first.
 
@@ -150,10 +150,8 @@ GeoIP ASN Edition [Download](http://geolite.maxmind.com/download/geoip/database/
        // Return an array of asn objects
        //[ 
        //  { number: 'AS15169', description: 'Google Inc.' },
-       //  { number: 'AS36597',
-       //    description: 'OmniTI Computer Consulting Inc.' },
-       //  { number: 'AS26471',
-       //    description: 'Smart City Networks' } 
+       //  { number: 'AS36597', description: 'OmniTI Computer Consulting Inc.' },
+       //  { number: 'AS26471', description: 'Smart City Networks' } 
        //]
 
  - Asynchronous method
