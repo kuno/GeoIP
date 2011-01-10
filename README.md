@@ -138,7 +138,7 @@ GeoIP ASN Edition [Download](http://geolite.maxmind.com/download/geoip/database/
        });
 
         
-####Get ASN informatioin
+####Get [ASN](http://en.wikipedia.org/wiki/Autonomous_system_(Internet)) informatioin
 
       // Open the GeoIPASNum.dat first.
 
@@ -158,7 +158,7 @@ GeoIP ASN Edition [Download](http://geolite.maxmind.com/download/geoip/database/
 
  - Asynchronous method
       
-      geoip.Org.asn_by_domain(asn_data, 'www.google.com', function(err, asn) {
+       geoip.Org.asn_by_domain(asn_data, 'www.google.com', function(err, asn) {
           if (err) {throw err;}
           if (typeof ans === 'string') {
               console.log(asn)  // ASNumber Not Found
@@ -168,9 +168,9 @@ GeoIP ASN Edition [Download](http://geolite.maxmind.com/download/geoip/database/
                   console.log(a[keys[0]] + ' : ' + a[keys[1]]);
               });
           }
-      });
+       });
 
-      geoip.close(asn_data);
+       geoip.close(asn_data);
 
       
 ####Region Information
