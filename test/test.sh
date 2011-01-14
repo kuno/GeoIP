@@ -1,36 +1,41 @@
 #!/usr/bin/env sh
 
-GEOIP='http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz'
-GEOLITECITY='http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz'
-REGION='http://www.maxmind.com/sample/GeoIPRegion-515_20050401.tar.gz'
-NETSPEED='http://www.maxmind.com/sample/GeoIP-171_20040418.tar.gz'
-ORG='http://www.maxmind.com/sample/GeoIP-111_20030603.tar.gz'
-ASN='http://geolite.maxmind.com/download/geoip/database/asnum/GeoIPASNum.dat.gz'
+TEST_DIR=$PWD
 
+GEOIP='http://archive/geoip/GeoIP.dat'
+GEOLITECITY='http://archive/geoip/GeoLiteCity.dat'
+REGION='http://archive/geoip/GeoIPRegion.dat'
+NETSPEED='http://archive/geoip/GeoIPNetSpeed.dat'
+ORG='http://archive/geoip/GeoIPOrg.dat'
+ASN='http://archive/geoip/GeoIPASNum.dat'
 
-if [ ! -e /media/d5fc189b-3c6b-4947-bda3-b7d0890fe6ca/Archive/GeoIP/GeoIP.dat ]; then
-  curl $GEOIP | gzip -d -c > /media/d5fc189b-3c6b-4947-bda3-b7d0890fe6ca/Archive/GeoIP/GeoIP.dat
+cd /tmp || return 1
+
+if [ ! -e /tmp/GeoIP.dat ]; then
+  wget $GEOIP
 fi
 
-if [ ! -e /media/d5fc189b-3c6b-4947-bda3-b7d0890fe6ca/Archive/GeoIP/GeoLiteCity.dat ]; then
-  curl $GEOLITECITY | gzip -d -c > /media/d5fc189b-3c6b-4947-bda3-b7d0890fe6ca/Archive/GeoIP/GeoLiteCity.dat  
+if [ ! -e /tmp/GeoLiteCity.dat ]; then
+  wget $GEOLITECITY
 fi
 
-if [ ! -e /media/d5fc189b-3c6b-4947-bda3-b7d0890fe6ca/Archive/GeoIP/GeoIP-111_20030603/GeoIPOrg-111.dat ]; then
-  curl $ORG | tar zxv -C /media/d5fc189b-3c6b-4947-bda3-b7d0890fe6ca/Archive/GeoIP/  
+if [ ! -e /tmp/GeoIPOrg.dat ]; then
+  wget $ORG  
 fi
 
-if [ ! -e /media/d5fc189b-3c6b-4947-bda3-b7d0890fe6ca/Archive/GeoIP/GeoIPASNum.dat ]; then
-  curl $ASN | gzip -d -c > /media/d5fc189b-3c6b-4947-bda3-b7d0890fe6ca/Archive/GeoIP/GeoIPASNum.dat
+if [ ! -e /tmp/GeoIPASNum.dat ]; then
+  wget $ASN
 fi
 
-if [ ! -e /media/d5fc189b-3c6b-4947-bda3-b7d0890fe6ca/Archive/GeoIP/GeoIP-171_20040418/GeoIP-171_20040418.dat ]; then
-  curl $NETSPEED | tar zxv -C /media/d5fc189b-3c6b-4947-bda3-b7d0890fe6ca/Archive/GeoIP/  
+if [ ! -e /tmp/GeoIPNetSpeed.dat ]; then
+  wget $NETSPEED
 fi
 
-if [ ! -e /media/d5fc189b-3c6b-4947-bda3-b7d0890fe6ca/Archive/GeoIP/GeoIPRegion-515_20050401/GeoIPRegion-515.dat ]; then
-  curl $REGION | tar zxv -C /media/d5fc189b-3c6b-4947-bda3-b7d0890fe6ca/Archive/GeoIP/
+if [ ! -e /tmp/GeoIPRegion.dat ]; then
+  wget $REGION
 fi
+
+cd $TEST_DIR || return 1
 
 echo "Start to test Country module......"
 echo "============================================================"
