@@ -31,6 +31,9 @@ color: #ff80b2;
 ###v0.3.1###
 * Precise latitude and langitude to 7 digit
 
+###v0.3.2###
+* add data type checking method
+
 ###Future###
 * add document to npm package(use npm doc command?)
 * Make open and close method better
