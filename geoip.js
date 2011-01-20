@@ -134,7 +134,7 @@ DATA = require('./include/models.js').DATA;
             break;
 
             default:
-            err = new Error('Unkown data type');
+            error = new Error('Unkown data type');
             break;
           }
           callback(error, type, data);
