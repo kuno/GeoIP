@@ -7,7 +7,6 @@ DATA = require('./include/models.js').DATA;
 /******************************************************************************
  * Inner Functions
  *****************************************************************************/
-
  function _setup_segments(data) {
    var offset;
    data.db_type = CONST.COUNTRY_EDITION;
@@ -73,6 +72,7 @@ DATA = require('./include/models.js').DATA;
     bytesRead = fs.readSync(data.file_descriptor, data.buffer, 0, stats.size, 0);
 
     if (bytesRead >= 0) {
+      //console.log(_setup_segments(data).db_type);   
       return _setup_segments(data);
     } else {
       return false;
@@ -84,9 +84,67 @@ DATA = require('./include/models.js').DATA;
     return fs.close(data.file_descriptor);
   };
 
+  exports.check = function(file, callback) {
+    var error, code, type, data = new DATA();
+    fs.open(file, 'r', function(err, fd) {
+      if (err) {throw err;}
+      data.file_descriptor = fd;
+      fs.fstat(data.file_descriptor, function(err, stats) {
+        if (err) {throw err;}
+        data.buffer = new Buffer(stats.size);
+        fs.read(data.file_descriptor, data.buffer, 0, stats.size, 0, function(err, bytesRead) {
+          if (err) {throw err;}
+          code = _setup_segments(data).db_type;
+          switch(code)
+          {
+            case CONST.COUNTRY_EDITION:
+            type = 'country';
+            break;
+
+            case CONST.CITY_EDITION_REV0:
+            type = 'city';
+            break;
+
+            case CONST.CITY_EDITION_REV1:
+            type = 'city';
+            break;
+
+            case CONST.REGION_EDITION_REV0:
+            type = 'region';
+            break;
+
+            case CONST.REGION_EDITION_REV1:
+            type = 'region';
+            break;
+
+            case CONST.ORG_EDITION:
+            type = 'organization';
+            break;
+
+            case CONST.ASNUM_EDITION:
+            type = 'anumber';
+            break;
+
+            case CONST.ISP_EDITION:
+            type = 'isp';
+            break;
+
+            case CONST.NETSPEED_EDITION:
+            type = 'netspeed';
+            break;
+
+            default:
+            err = new Error('Unkown data type');
+            break;
+          }
+          callback(error, type, data);
+        });
+      });
+    });
+  };
 
   exports.NetSpeed = require('./lib/netspeed.js');
-  exports.Country = require('./lib/country.js');
-  exports.Region  = require('./lib/region.js');
-  exports.City    = require('./lib/city.js');
-  exports.Org     = require('./lib/org.js');
+  exports.Country  = require('./lib/country.js');
+  exports.Region   = require('./lib/region.js');
+  exports.City     = require('./lib/city.js');
+  exports.Org      = require('./lib/org.js');
