@@ -1,6 +1,7 @@
 var fs    = require('fs'),
 path      = require('path'),
 buf2long  = require('./lib/utils.js').buf2long,
+matchFingerPrint = require('./lib/utils.js').matchFingerPrint,
 DATA      = require('./include/models.js').DATA, 
 CONST     = Object.freeze(require('./include/constants.js'));
 
@@ -8,7 +9,8 @@ CONST     = Object.freeze(require('./include/constants.js'));
  * Inner Functions
  *****************************************************************************/
  function _setup_segments(data) {
-   var seg, delim, i, j, buf = data.buffer, offset = buf.length - 3;
+   var seg, delim, i, j, 
+   buf = data.buffer, offset = buf.length - 3;
 
    // Set data type and segments
    for (i = 0; i < CONST.STRUCTURE_INFO_MAX_SIZE; i++) {
@@ -35,7 +37,7 @@ CONST     = Object.freeze(require('./include/constants.js'));
            data.db_segments += (parseInt(seg[j], 10) << (j * 8));
          }
        } else if (data.db_type === CONST.PROXY_EDITION ||
-                  data.db_type === CONST.NETSPEED_EDITION) {
+       data.db_type === CONST.NETSPEED_EDITION) {
          data.db_segments = CONST.COUNTRY_BEGIN;
        }   
        break;
@@ -45,8 +47,10 @@ CONST     = Object.freeze(require('./include/constants.js'));
 
      // Set default data type to country edition
      if (data.db_type === undefined) {
-       data.db_type = CONST.COUNTRY_EDITION;
-       data.db_segments = CONST.COUNTRY_BEGIN;
+       if (matchFingerPrint(data)) {
+         data.db_type = CONST.COUNTRY_EDITION;
+         data.db_segments = CONST.COUNTRY_BEGIN;
+       }
      }
    }
 
@@ -82,17 +86,52 @@ CONST     = Object.freeze(require('./include/constants.js'));
 
   };
 
-  exports.close = function(data) {
-    var keys;
-    fs.close(data.file_descriptor, function(err) {
-      keys = Object.keys(data);
-      keys.forEach(function(k) {
-        delete data[k];
-      });
-    });
+  exports.check = function(data) {
+    var code, type;
+    code = data.db_type;
+    switch(code)
+    {
+      case CONST.COUNTRY_EDITION:
+      type = 'country';
+      break;
+
+      case CONST.CITY_EDITION_REV0:
+      type = 'city';
+      break;
+
+      case CONST.CITY_EDITION_REV1:
+      type = 'city';
+      break;
+
+      case CONST.REGION_EDITION_REV0:
+      type = 'region';
+      break;
+
+      case CONST.REGION_EDITION_REV1:
+      type = 'region';
+      break;
+
+      case CONST.ORG_EDITION:
+      type = 'org';
+      break;
+
+      case CONST.ASNUM_EDITION:
+      type = 'asnumber';
+      break;
+
+      case CONST.NETSPEED_EDITION:
+      type = 'netspeed';
+      break;
+
+      default:
+      type = null;
+      break;
+    }  
+
+    return type;
   };
 
-  exports.check = function(file, callback) {
+  exports.filter = function(file, callback) {
     var error, code, type, data = new DATA();
     fs.open(file, 'r', function(err, fd) {
       if (err) {throw err;}
@@ -102,7 +141,8 @@ CONST     = Object.freeze(require('./include/constants.js'));
         data.buffer = new Buffer(stats.size);
         fs.read(data.file_descriptor, data.buffer, 0, stats.size, 0, function(err, bytesRead) {
           if (err) {throw err;}
-          code = _setup_segments(data).db_type;
+          data = _setup_segments(data);
+          code = data.db_type;
           switch(code)
           {
             case CONST.COUNTRY_EDITION:
@@ -146,6 +186,16 @@ CONST     = Object.freeze(require('./include/constants.js'));
       });
     });
   };
+
+  exports.close = function(data) {
+    var keys;
+    fs.close(data.file_descriptor, function(err) {
+      keys = Object.keys(data);
+      keys.forEach(function(k) {
+        delete data[k];
+      });
+    });
+  };    
 
   exports.NetSpeed = require('./lib/netspeed.js');
   exports.Country  = require('./lib/country.js');

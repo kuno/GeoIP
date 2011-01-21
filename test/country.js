@@ -1,15 +1,17 @@
 var geoip = require('../geoip.js');
 
-var Country = geoip.Country; 
+var Country = geoip.Country;
+
 // Test name_by_addr method
 setTimeout(function() {
   console.log('The result of synchronized method');
-  console.log('geoip.check(\'/tmp/GeoIP.dat\')');
-  geoip.check('/tmp/GeoIP.dat', function(err, type, data) {
+  console.log('geoip.filter(\'/tmp/GeoIP.dat\', callback(err, type, data)');
+  console.log('is ');
+  geoip.filter('/tmp/GeoIP.dat', function(err, type, data) {
     if (err) {throw err;}
+                              
     console.log('The type of data is '+type);
     console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
-
 
     // Test name_by_domain method
     setTimeout(function() {
@@ -35,7 +37,12 @@ setTimeout(function() {
 }, 1000);
 
 
-var data = geoip.open('/tmp/GeoIP.dat');  
+var data = geoip.open('/tmp/GeoIP.dat');
+
+var type = geoip.check(data);
+
+console.log('The type of data is '+type);
+
 // Test name_by_addr method
 setTimeout(function() {
   console.log('The result of synchronized method');
