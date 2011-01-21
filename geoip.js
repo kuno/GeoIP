@@ -1,8 +1,8 @@
-var fs        = require('fs'),
+var fs    = require('fs'),
 path      = require('path'),
 buf2long  = require('./lib/utils.js').buf2long,
-CONST     = Object.freeze(require('./include/constants.js')),
-DATA = require('./include/models.js').DATA;
+DATA      = require('./include/models.js').DATA, 
+CONST     = Object.freeze(require('./include/constants.js'));
 
 /******************************************************************************
  * Inner Functions
