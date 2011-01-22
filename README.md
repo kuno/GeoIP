@@ -11,7 +11,7 @@ Get geolocation information based on domain or IP address.
 
 v0.3.1-1, Passed test on nodejs v0.2.0 ~ 0.2.6, v0.3.0 ~ 0.3.6.
 
-__Note: next release(0.3.3)  will drop the support to 0.2.0.
+__Note: next release(0.3.3)  will drop the support to 0.2.0.__
 
 
 ##Architecture
@@ -41,17 +41,17 @@ GeoIP ASN Edition [Download](http://geolite.maxmind.com/download/geoip/database/
 
 ##Usage
 
-__Open the binary data file
+__Open the binary data file__
 
     var data = geoip.open('/path/to/file');
 
-__Check the type of opened data
+__Check the type of opened data__
     
     var type = geoip.check(data);
     // Return one of these: 'country', 'city', 'org', 'netspeed', 'region';
     // Or return false, if not a valid data
 
-__Close the opened data
+__Close the opened data__
 
     geoip.close(data);
 
