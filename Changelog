@@ -24,3 +24,9 @@ v0.3.0, 2010-12-15:
 
 v0.3.1, 2010-12-16:
 1, Limit the length of the floating part of latitude and langitude to 6 digits.
+
+v0.3.2, 2011-01-21:
+1, add geoip.check(data) method
+2, validate country binary data based on 8-types fingerprint.
+3, support nodejs v0.3.6
+4, make geoip.close(data) method sync style

@@ -24,6 +24,10 @@ setTimeout(function() {
   });
 }, 2000);
 
+setTimeout(function() {
+  geoip.close(org_data);
+}, 3000);
+
 var asn_data = geoip.open('/tmp/GeoIPASNum.dat');
 
 setTimeout(function() {
@@ -32,7 +36,7 @@ setTimeout(function() {
   console.log('Org.asn_by_addr(asn_data, \'8.8.8.8\')');
   console.log(result);
   console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
-}, 3000);
+}, 4000);
 
 setTimeout(function() {
   console.log('The result of asynchronous method');
@@ -45,4 +49,8 @@ setTimeout(function() {
     });
     console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
   });
-}, 4000);     
+}, 5000);
+
+setTimeout(function() {
+  geoip.close(asn_data);
+}, 6000);  

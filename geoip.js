@@ -131,74 +131,74 @@ CONST     = Object.freeze(require('./include/constants.js'));
     return type;
   };
 
-  exports.filter = function(file, callback) {
-    var error, code, type, data = new DATA();
-    fs.open(file, 'r', function(err, fd) {
-      if (err) {throw err;}
-      data.file_descriptor = fd;
-      fs.fstat(data.file_descriptor, function(err, stats) {
-        if (err) {throw err;}
-        data.buffer = new Buffer(stats.size);
-        fs.read(data.file_descriptor, data.buffer, 0, stats.size, 0, function(err, bytesRead) {
-          if (err) {throw err;}
-          data = _setup_segments(data);
-          code = data.db_type;
-          switch(code)
-          {
-            case CONST.COUNTRY_EDITION:
-            type = 'country';
-            break;
+  /*
+   exports.filter = function(file, callback) {
+     var error, code, type, data = new DATA();
+     fs.open(file, 'r', function(err, fd) {
+       if (err) {throw err;}
+       data.file_descriptor = fd;
+       fs.fstat(data.file_descriptor, function(err, stats) {
+         if (err) {throw err;}
+         data.buffer = new Buffer(stats.size);
+         fs.read(data.file_descriptor, data.buffer, 0, stats.size, 0, function(err, bytesRead) {
+           if (err) {throw err;}
+           data = _setup_segments(data);
+           code = data.db_type;
+           switch(code)
+           {
+             case CONST.COUNTRY_EDITION:
+             type = 'country';
+             break;
 
-            case CONST.CITY_EDITION_REV0:
-            type = 'city';
-            break;
+             case CONST.CITY_EDITION_REV0:
+             type = 'city';
+             break;
 
-            case CONST.CITY_EDITION_REV1:
-            type = 'city';
-            break;
+             case CONST.CITY_EDITION_REV1:
+             type = 'city';
+             break;
 
-            case CONST.REGION_EDITION_REV0:
-            type = 'region';
-            break;
+             case CONST.REGION_EDITION_REV0:
+             type = 'region';
+             break;
 
-            case CONST.REGION_EDITION_REV1:
-            type = 'region';
-            break;
+             case CONST.REGION_EDITION_REV1:
+             type = 'region';
+             break;
 
-            case CONST.ORG_EDITION:
-            type = 'org';
-            break;
+             case CONST.ORG_EDITION:
+             type = 'org';
+             break;
 
-            case CONST.ASNUM_EDITION:
-            type = 'asnumber';
-            break;
+             case CONST.ASNUM_EDITION:
+             type = 'asnumber';
+             break;
 
-            case CONST.NETSPEED_EDITION:
-            type = 'netspeed';
-            break;
+             case CONST.NETSPEED_EDITION:
+             type = 'netspeed';
+             break;
 
-            default:
-            error = new Error('Unkown data type');
-            break;
-          }
-          callback(error, type, data);
-        });
-      });
-    });
-  };
+             default:
+             error = new Error('Unkown data type');
+             break;
+           }
+           callback(error, type, data);
+         });
+       });
+     });
+   };*/
 
-  exports.close = function(data) {
-    var keys;
-    fs.close(data.file_descriptor, function(err) {
-      keys = Object.keys(data);
-      keys.forEach(function(k) {
-        delete data[k];
-      });
-    });
-  };    
+   exports.close = function(data) {
+     var keys;
+     fs.closeSync(data.file_descriptor);
+     keys = Object.keys(data);
+     keys.forEach(function(k) {
+       delete data[k];
+     });
+   };    
 
-  exports.NetSpeed = require('./lib/netspeed.js');
-  exports.Country  = require('./lib/country.js');
-  exports.Region   = require('./lib/region.js');
-  exports.City     = require('./lib/city.js');
-  exports.Org      = require('./lib/org.js');
+   exports.NetSpeed = require('./lib/netspeed.js');
+   exports.Country  = require('./lib/country.js');
+   exports.Region   = require('./lib/region.js');
+   exports.City     = require('./lib/city.js');
+   exports.Org      = require('./lib/org.js');

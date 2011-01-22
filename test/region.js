@@ -15,10 +15,12 @@ setTimeout(function() {
   console.log('The result of asynchronous method');
   console.log('Region.region_by_domain(data, \'www.google.com\', callback())');
   Region.region_by_domain(data, 'www.google.com', function(err, region) {
-      if (err) {throw err;}
+    if (err) {throw err;}
     console.log('is ' + region);
   });
 }, 2000);
-  
 
+setTimeout(function() {
+  geoip.close(data);
+}, 3000);  
 
