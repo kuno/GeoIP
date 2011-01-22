@@ -40,20 +40,21 @@ GeoIP ASN Edition [Download](http://geolite.maxmind.com/download/geoip/database/
 
 ##Usage
 
-###Open the binary data file
+__Open the binary data file
 
     var data = geoip.open('/path/to/file');
 
-###Check the type of opened data
+__Check the type of opened data
     
     var type = geoip.check(data);
     // Return one of these: 'country', 'city', 'org', 'netspeed', 'region';
     // Or return false, if not a valid data
 
-###Close the opened data
+__Close the opened data
 
     geoip.close(data);
 
+##Examples
 
 ###Country Information
 
