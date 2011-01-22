@@ -10,6 +10,7 @@ Get geolocation information based on domain or IP address.
 ##Compatibility
 
 v0.3.1-1, Passed test on nodejs v0.2.0 ~ 0.2.6, v0.3.0 ~ 0.3.6.
+
 __Note: next release(0.3.3)  will drop the support to 0.2.0.
 
 
