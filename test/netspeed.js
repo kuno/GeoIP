@@ -1,6 +1,6 @@
 var geoip = require('../geoip.js');
 
-var data = geoip.open('/media/d5fc189b-3c6b-4947-bda3-b7d0890fe6ca/Archive/GeoIP/GeoIP-171_20040418/GeoIP-171_20040418.dat');
+var data = geoip.open('/tmp/GeoIPNetSpeed.dat');
 
 var NetSpeed = geoip.NetSpeed;
 
@@ -14,9 +14,13 @@ setTimeout(function() {
 setTimeout(function() {
   console.log('The result of asynchronous method');
   console.log('NetSpee.speed_by_domain(data, \'www.google.com\', callback())');
-    NetSpeed.speed_by_domain(data, 'www.google.com', function(err, speed) {
+  NetSpeed.speed_by_domain(data, 'www.google.com', function(err, speed) {
     if (err) {throw err;}
     console.log(speed);
   });
-  console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
-}, 2000);     
+  console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
+}, 2000);
+
+setTimeout(function() {
+  geoip.close(data);
+}, 3000);  

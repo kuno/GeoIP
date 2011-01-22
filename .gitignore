@@ -31,5 +31,5 @@ fabfile.*
 *.php
 *.inc
 
-# markdown file
-*.md
+# neco test report file
+test/report.txt

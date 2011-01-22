@@ -1,6 +1,6 @@
 var geoip = require('../geoip.js');
 
-var org_data = geoip.open('/media/d5fc189b-3c6b-4947-bda3-b7d0890fe6ca/Archive/GeoIP/GeoIP-111_20030603/GeoIPOrg-111.dat');
+var org_data = geoip.open('/tmp/GeoIPOrg.dat');
 
 var Org = geoip.Org;
 
@@ -24,7 +24,11 @@ setTimeout(function() {
   });
 }, 2000);
 
-var asn_data = geoip.open('/media/d5fc189b-3c6b-4947-bda3-b7d0890fe6ca/Archive/GeoIP/GeoIPASNum.dat');
+setTimeout(function() {
+  geoip.close(org_data);
+}, 3000);
+
+var asn_data = geoip.open('/tmp/GeoIPASNum.dat');
 
 setTimeout(function() {
   var result = Org.asn_by_addr(asn_data, '8.8.8.8');
@@ -32,7 +36,7 @@ setTimeout(function() {
   console.log('Org.asn_by_addr(asn_data, \'8.8.8.8\')');
   console.log(result);
   console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
-}, 3000);
+}, 4000);
 
 setTimeout(function() {
   console.log('The result of asynchronous method');
@@ -45,4 +49,8 @@ setTimeout(function() {
     });
     console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
   });
-}, 4000);     
+}, 5000);
+
+setTimeout(function() {
+  geoip.close(asn_data);
+}, 6000);  

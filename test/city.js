@@ -1,6 +1,6 @@
 var geoip = require('../geoip.js');
 
-var data = geoip.open('/media/d5fc189b-3c6b-4947-bda3-b7d0890fe6ca/Archive/GeoIP/GeoLiteCity.dat');
+var data = geoip.open('/tmp/GeoLiteCity.dat');
 
 var City = geoip.City;
 
@@ -26,4 +26,8 @@ setTimeout(function() {
     console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
   });
 }, 2000);
+
+setTimeout(function() {
+  geoip.close(data);
+}, 3000);  
 
