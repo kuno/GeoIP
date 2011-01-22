@@ -9,8 +9,8 @@ setTimeout(function() {
   console.log('is ');
   geoip.filter('/tmp/GeoIP.dat', function(err, type, data) {
     if (err) {throw err;}
-                              
-    console.log('The type of data is '+type);
+
+    console.log('The type of data is '+ type);
     console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
 
     // Test name_by_domain method
@@ -22,7 +22,7 @@ setTimeout(function() {
         console.log('is \'' + name + '\'');
         console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
       });
-    }, 2000);
+    }, 4000);
 
     // Test code_by_domain method
     setTimeout(function() {
@@ -32,10 +32,11 @@ setTimeout(function() {
         if (err) {throw err;}
         console.log('is \'' + code + '\'');
       });
-    }, 3000);
+    }, 5000);
   });
-}, 1000);
 
+  geoip.close(data);
+}, 3000);
 
 var data = geoip.open('/tmp/GeoIP.dat');
 
@@ -49,7 +50,7 @@ setTimeout(function() {
   console.log('Country.name_by_addr(data, \'8.8.8.8\')');
   console.log('is \'' + Country.name_by_addr(data, '8.8.8.8') + '\'');
   console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
-}, 4000);
+}, 1000);
 
 // Test code_by_addr method
 setTimeout(function() {
@@ -57,5 +58,4 @@ setTimeout(function() {
   console.log('Country.code_by_addr(data, \'8.8.8.8\')');
   console.log('is \'' + Country.code_by_addr(data, '8.8.8.8') + '\'');
   console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
-}, 5000);
-
+}, 2000);
