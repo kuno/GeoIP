@@ -49,7 +49,7 @@ __Check the type of opened data__
     
     var type = geoip.check(data);
     // Return one of these: 'country', 'city', 'org', 'netspeed', 'region';
-    // Or return false, if not a valid data
+    // Or return null, if not a valid data
 
 __Close the opened data__
 
