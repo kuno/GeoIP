@@ -27,11 +27,12 @@ There are three free versions data among with some commercial versions.
 
 __Note: This package only support binary data, not any other formats.__
 
+ GeoIP ASN Edition [Download](http://geolite.maxmind.com/download/geoip/database/asnum/GeoIPASNum.dat.gz)  
+
+ GeoIP City Lite Edition [Download](http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz)  
+
 GeoIP Country Lite Edition [Download](http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz).
 
-GeoIP City Lite Edition [Download](http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz)
-
-GeoIP ASN Edition [Download](http://geolite.maxmind.com/download/geoip/database/asnum/GeoIPASNum.dat.gz)
 
 
 ##Install
