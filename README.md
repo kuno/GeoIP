@@ -6,6 +6,10 @@ GeoIP API for node.
 
 Get geolocation information based on domain or IP address.
 
+__Live Demo__
+
+http://64.30.136.194/
+
 
 ##Compatibility
 
@@ -27,9 +31,9 @@ There are three free versions data among with some commercial versions.
 
 __Note: This package only support binary data, not any other formats.__
 
- GeoIP ASN Edition [Download](http://geolite.maxmind.com/download/geoip/database/asnum/GeoIPASNum.dat.gz)  
+GeoIP ASN Edition [Download](http://geolite.maxmind.com/download/geoip/database/asnum/GeoIPASNum.dat.gz)  
 
- GeoIP City Lite Edition [Download](http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz)  
+GeoIP City Lite Edition [Download](http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz)  
 
 GeoIP Country Lite Edition [Download](http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz).
 
@@ -37,191 +41,191 @@ GeoIP Country Lite Edition [Download](http://geolite.maxmind.com/download/geoip/
 
 ##Install
 
-    npm install geoip
+npm install geoip
 
 
 ##Usage
 
 __Open the binary data file__
 
-    var data = geoip.open('/path/to/file');
+var data = geoip.open('/path/to/file');
 
 __Check the type of opened data__
-    
-    var type = geoip.check(data);
-    // Return one of these: 'country', 'city', 'org', 'netspeed', 'region';
-    // Or return null, if not a valid data
+
+var type = geoip.check(data);
+// Return one of these: 'country', 'city', 'org', 'netspeed', 'region';
+// Or return null, if not a valid data
 
 __Close the opened data__
 
-    geoip.close(data);
+geoip.close(data);
 
 ##Examples
 
 ###Country Information
 
-      // Open the country data file
-      var country_data = geoip.open('/path/to/GeoIP.dat');
+// Open the country data file
+var country_data = geoip.open('/path/to/GeoIP.dat');
 
- - Synchronous methods, network independence.
+- Synchronous methods, network independence.
 
-       geoip.Country.code_by_addr(country_data, '8.8.8.8'); // Return 'US'
+geoip.Country.code_by_addr(country_data, '8.8.8.8'); // Return 'US'
 
-       geoip.Country.name_by_addr(country_data, '8.8.8.8'); // Return  'United States'
+geoip.Country.name_by_addr(country_data, '8.8.8.8'); // Return  'United States'
 
- - Asynchronous methods, depends on node's async-style dns module.
+- Asynchronous methods, depends on node's async-style dns module.
 
-       geoip.Country.code_by_domain(country_data, 'www.google.com', function(err, code) {
-            if (err) {throw err;}
-            console.log(code);  // prints 'US'
-       });
+geoip.Country.code_by_domain(country_data, 'www.google.com', function(err, code) {
+    if (err) {throw err;}
+    console.log(code);  // prints 'US'
+    });
 
-       geoip.Country.name_by_domain(country_data, 'www.google.com', function(err, name) {
-            if (err) {throw err;}
-            console.log(name);  // prints 'United States'
-       });
+geoip.Country.name_by_domain(country_data, 'www.google.com', function(err, name) {
+    if (err) {throw err;}
+    console.log(name);  // prints 'United States'
+    });
 
-       //Close the opened file.
-       geoip.close(country_data);
+//Close the opened file.
+geoip.close(country_data);
 
 
 
 ###City Information
 
-      // Open the GeoLiteCity.dat file first.
-      var city_data = geoip.open('/path/to/GeoLiteCity.dat');
+// Open the GeoLiteCity.dat file first.
+var city_data = geoip.open('/path/to/GeoLiteCity.dat');
 
- - Synchronous method
-       geoip.City.record_by_addr(city_data, '8.8.8.8');
-       // Return an object of city information
-       // {
-       //  "country_code":"US",
-       //  "country_code3":"USA",
-       //  "country_name":"United States",
-       //  "continet_code":"NA",
-       //  "region":"CA",
-       //  "city":"Mountain View",
-       //  "postal_code":"94043",
-       //  "latitude":37.41919999999999,
-       //  "longitude":-122.0574,
-       //  "dma_code":807,
-       //  "metro_code":807,
-       //  "area_code":650
-       //  }    
+- Synchronous method
+geoip.City.record_by_addr(city_data, '8.8.8.8');
+// Return an object of city information
+// {
+//  "country_code":"US",
+//  "country_code3":"USA",
+//  "country_name":"United States",
+//  "continet_code":"NA",
+//  "region":"CA",
+//  "city":"Mountain View",
+//  "postal_code":"94043",
+//  "latitude":37.41919999999999,
+//  "longitude":-122.0574,
+//  "dma_code":807,
+//  "metro_code":807,
+//  "area_code":650
+//  }    
 
- - Asynchronous method
+- Asynchronous method
 
-       geoip.City.record_by_domain(city_data, 'www.google.com', function(err, reord) {
-            if (err) {throw err;}
-            var keys = Object.keys(record);
-            keys.forEach(function(k) {  // Same as record_by_addr
-                console.log(k + ':' + record[k]);
-            });   
-       });
+geoip.City.record_by_domain(city_data, 'www.google.com', function(err, reord) {
+    if (err) {throw err;}
+    var keys = Object.keys(record);
+    keys.forEach(function(k) {  // Same as record_by_addr
+      console.log(k + ':' + record[k]);
+      });   
+    });
 
-       geoip.close(city_data);
+geoip.close(city_data);
 
 
 ###Organization Information
 
 ####Get Organization Information
 
-      // Open the GeoIPOrg.dat first.
-      var org_data = geoip.open('/path/to/GeoIPOrg.dat');
+// Open the GeoIPOrg.dat first.
+var org_data = geoip.open('/path/to/GeoIPOrg.dat');
 
 - Synchronous method
 
-      geoip.Org.org_by_addr(org_data, '8.8.8.8');
-      // Return an array of the names of organization
-      // [
-      // 'Genuity',
-      // 'The United Way',
-      // 'Education Management Corporation,
-      // 'International Generating Co. (Intergen)'
-      // ]    
+geoip.Org.org_by_addr(org_data, '8.8.8.8');
+// Return an array of the names of organization
+// [
+// 'Genuity',
+// 'The United Way',
+// 'Education Management Corporation,
+// 'International Generating Co. (Intergen)'
+// ]    
 
-      geoip.close(org_data);
+geoip.close(org_data);
 
- - Asynchronous method
+- Asynchronous method
 
-       // This method has a small bug that not resovled yet, not recommend use it.
-       geoip.Org.org_by_domain(org_data, 'www.google.com', function(err, org) {
-          if (err) {throw err;}
-          if (typeof org === 'string') {
-              console.log(org);  // Organization Not Found
-          } else {  // Same as org_by_addr
-              org.foreach(function(o) {
-              console.log(o[0] + ':' + o[1]);
-          });
-          }
-       });
+// This method has a small bug that not resovled yet, not recommend use it.
+geoip.Org.org_by_domain(org_data, 'www.google.com', function(err, org) {
+    if (err) {throw err;}
+    if (typeof org === 'string') {
+    console.log(org);  // Organization Not Found
+    } else {  // Same as org_by_addr
+    org.foreach(function(o) {
+      console.log(o[0] + ':' + o[1]);
+      });
+    }
+    });
 
-        
+
 ####Get [ASN](http://www.apnic.net/services/services-apnic-provides/helpdesk/faqs/asn-faqs) informatioin
 
-      // Open the GeoIPASNum.dat first.
-      var asn_data = geoip.open('/path/to/GeoIPASNum.dat');
+// Open the GeoIPASNum.dat first.
+var asn_data = geoip.open('/path/to/GeoIPASNum.dat');
 
- - Synchronous method
+- Synchronous method
 
-       geoip.Org.asn_by_addr(asn_data, '8.8.8.8');
-       // Return an array of asn objects
-       //[ 
-       //  { number: 'AS15169', description: 'Google Inc.' },
-       //  { number: 'AS36597', description: 'OmniTI Computer Consulting Inc.' },
-       //  { number: 'AS26471', description: 'Smart City Networks' } 
-       //]
+geoip.Org.asn_by_addr(asn_data, '8.8.8.8');
+// Return an array of asn objects
+//[ 
+//  { number: 'AS15169', description: 'Google Inc.' },
+//  { number: 'AS36597', description: 'OmniTI Computer Consulting Inc.' },
+//  { number: 'AS26471', description: 'Smart City Networks' } 
+//]
 
- - Asynchronous method
-      
-       geoip.Org.asn_by_domain(asn_data, 'www.google.com', function(err, asn) {
-          if (err) {throw err;}
-          if (typeof ans === 'string') {
-              console.log(asn)  // ASNumber Not Found
-          } else {  // Same as asn_by_addr
-              asn.forEach(function(a) {
-                  var keys = object.keys(a);
-                  console.log(a[keys[0]] + ' : ' + a[keys[1]]);
-              });
-          }
-       });
+- Asynchronous method
 
-       geoip.close(asn_data);
+geoip.Org.asn_by_domain(asn_data, 'www.google.com', function(err, asn) {
+    if (err) {throw err;}
+    if (typeof ans === 'string') {
+    console.log(asn)  // ASNumber Not Found
+    } else {  // Same as asn_by_addr
+    asn.forEach(function(a) {
+      var keys = object.keys(a);
+      console.log(a[keys[0]] + ' : ' + a[keys[1]]);
+      });
+    }
+    });
 
-      
+geoip.close(asn_data);
+
+
 ####Region Information
 
-      // Open the GeoIPRegion.dat first.
-      var region_data = geoip.open('/path/to/GeoIPRegion.dat');
+// Open the GeoIPRegion.dat first.
+var region_data = geoip.open('/path/to/GeoIPRegion.dat');
 
- - Synchronous method
+- Synchronous method
 
-       geoip.Region.region_by_addr(region_data, '8.8.8.8');  // Return 'US,CO'
+geoip.Region.region_by_addr(region_data, '8.8.8.8');  // Return 'US,CO'
 
- - Asynchronous method
+- Asynchronous method
 
-       geoip.Region.region_by_domain(region_data, 'www.google.com', function(err, region) {
-          if (err) {throw err;}
-          console.log(region);  // Maybe different from region_by_addr
-       });
+geoip.Region.region_by_domain(region_data, 'www.google.com', function(err, region) {
+    if (err) {throw err;}
+    console.log(region);  // Maybe different from region_by_addr
+    });
 
-       geoip.close(region_data);
+geoip.close(region_data);
 
 
 ####NetSpeed Information
 
-      // Open the GeoIPNetSpeed.dat first.
-      var netspeed_data = geoip.open('/path/to/GeoIPNetSpeed.dat');
+// Open the GeoIPNetSpeed.dat first.
+var netspeed_data = geoip.open('/path/to/GeoIPNetSpeed.dat');
 
- - Synchronous method
+- Synchronous method
 
-       geoip.NetSpeed.speed_by_addr(netspeed_data, '8.8.8.8');  // Return 'Dailup'
+geoip.NetSpeed.speed_by_addr(netspeed_data, '8.8.8.8');  // Return 'Dailup'
 
- - Asynchronous method
-      
-       NetSpeed.speed_by_domain(data, 'www.google.com', function(err, speed) {
-          if (err) {throw err;}
-          console.log(speed);  // Maybe different from speed_by_addr
-       });
+- Asynchronous method
 
-       geoip.close(netspeed_data);
+NetSpeed.speed_by_domain(data, 'www.google.com', function(err, speed) {
+    if (err) {throw err;}
+    console.log(speed);  // Maybe different from speed_by_addr
+    });
+
+geoip.close(netspeed_data);
