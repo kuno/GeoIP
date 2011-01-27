@@ -8,7 +8,7 @@ Get geolocation information based on domain or IP address.
 
 __Live Demo__
 
-http://64.30.136.194/
+[http://64.30.136.194:8124/](http://64.30.136.194:8124)
 
 
 ##Compatibility
