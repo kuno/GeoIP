@@ -67,7 +67,7 @@ __Close the opened data__
     // Open the country data file
     var country_data = geoip.open('/path/to/GeoIP.dat');
 
-- Synchronous methods, network independence.
+__Synchronous methods, network independence__
 
      geoip.Country.code_by_addr(country_data, '8.8.8.8'); // Return 'US'
 
