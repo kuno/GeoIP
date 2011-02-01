@@ -136,16 +136,16 @@ __Asynchronous method__
 
 __Synchronous method__
 
-   geoip.Org.org_by_addr(org_data, '8.8.8.8');
-   // Return an array of the names of organization
-   // [
-   // 'Genuity',
-   // 'The United Way',
-   // 'Education Management Corporation,
-   // 'International Generating Co. (Intergen)'
-   // ]    
+    geoip.Org.org_by_addr(org_data, '8.8.8.8');
+    // Return an array of the names of organization
+    // [
+    // 'Genuity',
+    // 'The United Way',
+    // 'Education Management Corporation,
+    // 'International Generating Co. (Intergen)'
+    // ]    
 
-   geoip.close(org_data);
+    geoip.close(org_data);
 
 __Asynchronous method__
 
