@@ -96,6 +96,7 @@ __Close the opened data__
     var city_data = geoip.open('/path/to/GeoLiteCity.dat');
 
 - Synchronous method
+
     geoip.City.record_by_addr(city_data, '8.8.8.8');
     // Return an object of city information
     // {
