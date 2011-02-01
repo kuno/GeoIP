@@ -69,9 +69,9 @@ __Close the opened data__
 
 - Synchronous methods, network independence.
 
-    geoip.Country.code_by_addr(country_data, '8.8.8.8'); // Return 'US'
+     geoip.Country.code_by_addr(country_data, '8.8.8.8'); // Return 'US'
 
-    geoip.Country.name_by_addr(country_data, '8.8.8.8'); // Return  'United States'
+     geoip.Country.name_by_addr(country_data, '8.8.8.8'); // Return  'United States'
 
 - Asynchronous methods, depends on node's async-style dns module.
 
