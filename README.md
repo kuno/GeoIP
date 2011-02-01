@@ -64,7 +64,7 @@ __Close the opened data__
 
 ###Country Information
 
-// Open the country data file
+    // Open the country data file
     var country_data = geoip.open('/path/to/GeoIP.dat');
 
 - Synchronous methods, network independence.
