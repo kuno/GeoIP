@@ -73,7 +73,7 @@ __Synchronous methods, network independence__
 
      geoip.Country.name_by_addr(country_data, '8.8.8.8'); // Return  'United States'
 
-- Asynchronous methods, depends on node's async-style dns module.
+__Asynchronous methods, depends on node's async-style dns module.__
 
      geoip.Country.code_by_domain(country_data, 'www.google.com', function(err, code) {
          if (err) {throw err;}
@@ -95,7 +95,7 @@ __Synchronous methods, network independence__
     // Open the GeoLiteCity.dat file first.
     var city_data = geoip.open('/path/to/GeoLiteCity.dat');
 
-- Synchronous method
+__Synchronous method__
 
     geoip.City.record_by_addr(city_data, '8.8.8.8');
     // Return an object of city information
@@ -114,7 +114,7 @@ __Synchronous methods, network independence__
     //  "area_code":650
     //  }    
 
-- Asynchronous method
+__Asynchronous method__
 
     geoip.City.record_by_domain(city_data, 'www.google.com', function(err, reord) {
     if (err) {throw err;}
@@ -134,7 +134,7 @@ __Synchronous methods, network independence__
     // Open the GeoIPOrg.dat first.
     var org_data = geoip.open('/path/to/GeoIPOrg.dat');
 
-- Synchronous method
+__Synchronous method__
 
    geoip.Org.org_by_addr(org_data, '8.8.8.8');
    // Return an array of the names of organization
@@ -147,7 +147,7 @@ __Synchronous methods, network independence__
 
    geoip.close(org_data);
 
-- Asynchronous method
+__Asynchronous method__
 
     // This method has a small bug that not resovled yet, not recommend use it.
     geoip.Org.org_by_domain(org_data, 'www.google.com', function(err, org) {
@@ -167,7 +167,7 @@ __Synchronous methods, network independence__
     // Open the GeoIPASNum.dat first.
     var asn_data = geoip.open('/path/to/GeoIPASNum.dat');
 
-- Synchronous method
+__Synchronous method__
 
     geoip.Org.asn_by_addr(asn_data, '8.8.8.8');
     // Return an array of asn objects
@@ -177,7 +177,7 @@ __Synchronous methods, network independence__
     //  { number: 'AS26471', description: 'Smart City Networks' } 
     //]
 
-- Asynchronous method
+__Asynchronous method__
 
     geoip.Org.asn_by_domain(asn_data, 'www.google.com', function(err, asn) {
     if (err) {throw err;}
@@ -199,11 +199,11 @@ __Synchronous methods, network independence__
     // Open the GeoIPRegion.dat first.
     var region_data = geoip.open('/path/to/GeoIPRegion.dat');
 
-- Synchronous method
+__Synchronous method__
 
     geoip.Region.region_by_addr(region_data, '8.8.8.8');  // Return 'US,CO'
 
-- Asynchronous method
+__Asynchronous method__
 
     geoip.Region.region_by_domain(region_data, 'www.google.com', function(err, region) {
     if (err) {throw err;}
@@ -218,11 +218,11 @@ __Synchronous methods, network independence__
     // Open the GeoIPNetSpeed.dat first.
     var netspeed_data = geoip.open('/path/to/GeoIPNetSpeed.dat');
 
-- Synchronous method
+__Synchronous method__
 
     geoip.NetSpeed.speed_by_addr(netspeed_data, '8.8.8.8');  // Return 'Dailup'
 
-- Asynchronous method
+__Asynchronous method__
 
     NetSpeed.speed_by_domain(data, 'www.google.com', function(err, speed) {
     if (err) {throw err;}
