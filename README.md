@@ -76,13 +76,13 @@ __Close the opened data__
 - Asynchronous methods, depends on node's async-style dns module.
 
     geoip.Country.code_by_domain(country_data, 'www.google.com', function(err, code) {
-    if (err) {throw err;}
-    console.log(code);  // prints 'US'
+        if (err) {throw err;}
+        console.log(code);  // prints 'US'
     });
 
     geoip.Country.name_by_domain(country_data, 'www.google.com', function(err, name) {
-    if (err) {throw err;}
-    console.log(name);  // prints 'United States'
+        if (err) {throw err;}
+        console.log(name);  // prints 'United States'
     });
 
     //Close the opened file.
