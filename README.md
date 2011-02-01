@@ -171,11 +171,11 @@ __Synchronous method__
 
     geoip.Org.asn_by_addr(asn_data, '8.8.8.8');
     // Return an array of asn objects
-    //[ 
+    // [ 
     //  { number: 'AS15169', description: 'Google Inc.' },
     //  { number: 'AS36597', description: 'OmniTI Computer Consulting Inc.' },
     //  { number: 'AS26471', description: 'Smart City Networks' } 
-    //]
+    // ]
 
 __Asynchronous method__
 
