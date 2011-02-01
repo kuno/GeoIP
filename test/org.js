@@ -1,4 +1,4 @@
-var geoip = require('../geoip.js');
+var geoip = require('../index.js');
 
 var org_data = geoip.open('/tmp/GeoIPOrg.dat');
 

@@ -21,7 +21,6 @@
       "data":"./data", "include":"./include", "lib":"./lib", 
       "misc":"./misc", "sample":"./sample", "test":"./test"
     },
-    "main":"index.js",
     "engine":{"node": ">=0.2.1"},
     "licences":
       [
