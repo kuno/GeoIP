@@ -119,8 +119,8 @@ __Asynchronous method__
     geoip.City.record_by_domain(city_data, 'www.google.com', function(err, reord) {
         if (err) {throw err;}
         var keys = Object.keys(record);
-        keys.forEach(function(k) {  // Same as record_by_addr
-            console.log(k + ':' + record[k]);
+        keys.forEach(function(k) {
+            console.log(k + ':' + record[k]); // Same as record_by_addr
         });   
     });
 
@@ -149,11 +149,10 @@ __Synchronous method__
 
 __Asynchronous method__
 
-    // This method has a small bug that not resovled yet, not recommend use it.
     geoip.Org.org_by_domain(org_data, 'www.google.com', function(err, org) {
         if (err) {throw err;}
         if (typeof org === 'string') {
-            console.log(org);  // Organization Not Found
+            console.log(org);  // Organization may NOT be Found
         } else {  // Same as org_by_addr
             org.foreach(function(o) {
                 console.log(o[0] + ':' + o[1]);

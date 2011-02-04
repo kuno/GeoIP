@@ -16,7 +16,7 @@ setTimeout(function() {
 
 setTimeout(function() {
   console.log('The result of asynchronous method');
-  console.log('Org.org_by_domain(data, \'www.google.com\', callback())');
+  console.log('Org.org_by_domain(org_data, \'www.google.com\', callback())');
   Org.org_by_domain(org_data, 'www.google.com', function(err, org) {
     if (err) {throw err;}
     console.log(org);
