@@ -46,19 +46,29 @@ GeoIP Country Lite Edition [Download](http://geolite.maxmind.com/download/geoip/
 
 ##Usage
 
-__Open the binary data file__
+###Open the binary data file
+
+__The synchronous way:__
 
     var data = geoip.open('/path/to/file');
-
-__Check the type of opened data__
 
     var type = geoip.check(data);
     // Return one of these: 'country', 'city', 'org', 'netspeed', 'region';
     // Or return null, if not a valid data
 
-__Close the opened data__
+__The asynchronous way:__
+
+    geoip.filter('/path/to/file', function(err, type, data) {
+        if (err) {throw err;}  // The given path is not a valid data file.
+        if (type === 'country') {
+            console.log(geoip.Country.code_by_addr(data, '8.8.8.8')); // prints 'US'
+        }
+    });
+
+###Close the opened data object
 
     geoip.close(data);
+
 
 ##Examples
 
