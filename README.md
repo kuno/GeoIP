@@ -150,14 +150,10 @@ __Synchronous method__
 __Asynchronous method__
 
     geoip.Org.org_by_domain(org_data, 'www.google.com', function(err, org) {
-        if (err) {throw err;}
-        if (typeof org === 'string') {
-            console.log(org);  // Organization may NOT be Found
-        } else {  // Same as org_by_addr
-            org.foreach(function(o) {
+        if (err) {throw err;} // Organization may NOT be Found
+        org.foreach(function(o) {
                 console.log(o[0] + ':' + o[1]);
-            });
-        }
+        });
     });
 
 
@@ -179,15 +175,11 @@ __Synchronous method__
 __Asynchronous method__
 
     geoip.Org.asn_by_domain(asn_data, 'www.google.com', function(err, asn) {
-        if (err) {throw err;}
-        if (typeof ans === 'string') {
-            console.log(asn)  // ASNumber Not Found
-        } else {  // Same as asn_by_addr
-            asn.forEach(function(a) {
-                var keys = object.keys(a);
-                console.log(a[keys[0]] + ' : ' + a[keys[1]]);
-            });
-        }
+        if (err) {throw err;} // ASNumber Not Found
+        asn.forEach(function(a) {
+            var keys = object.keys(a);
+            console.log(a[keys[0]] + ' : ' + a[keys[1]]);
+        });
     });
 
     geoip.close(asn_data);
@@ -225,7 +217,7 @@ __Asynchronous method__
 
     NetSpeed.speed_by_domain(data, 'www.google.com', function(err, speed) {
         if (err) {throw err;}
-        console.log(speed);  // Maybe different from speed_by_addr
+        console.log(speed);  // Maybe return unknow or different from speed_by_addr
     });
 
     geoip.close(netspeed_data);
