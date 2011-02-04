@@ -41,7 +41,7 @@ GeoIP Country Lite Edition [Download](http://geolite.maxmind.com/download/geoip/
 
 ##Install
 
-npm install geoip
+    npm install geoip
 
 
 ##Usage
@@ -152,7 +152,7 @@ __Asynchronous method__
     geoip.Org.org_by_domain(org_data, 'www.google.com', function(err, org) {
         if (err) {throw err;} // Organization may NOT be Found
         org.foreach(function(o) {
-                console.log(o[0] + ':' + o[1]);
+            console.log(o); // Same result as org_by_addr, if returns
         });
     });
 
