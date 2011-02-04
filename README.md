@@ -29,7 +29,7 @@ Befor you can use this package, you need to download or buy some data from [www.
 
 There are three free versions data among with some commercial versions.
 
-__Note: This package only support binary data, not any other formats.__
+__Note: This package only support binary data and IP address version 4, not any other formats.__
 
 GeoIP ASN Edition [Download](http://geolite.maxmind.com/download/geoip/database/asnum/GeoIPASNum.dat.gz)  
 
