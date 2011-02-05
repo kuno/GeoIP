@@ -42,7 +42,3 @@ setTimeout(function() {
   });
 
 }, 4000);
-
-setTimeout(function() {
-  geoip.close(data);
-}, 5000);

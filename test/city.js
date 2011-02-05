@@ -26,8 +26,3 @@ setTimeout(function() {
     console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
   });
 }, 2000);
-
-setTimeout(function() {
-  geoip.close(data);
-}, 3000);  
-

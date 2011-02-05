@@ -24,10 +24,6 @@ setTimeout(function() {
   });
 }, 2000);
 
-setTimeout(function() {
-  geoip.close(org_data);
-}, 3000);
-
 var asn_data = geoip.open('/tmp/GeoIPASNum.dat');
 
 setTimeout(function() {
@@ -50,7 +46,3 @@ setTimeout(function() {
     console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
   });
 }, 5000);
-
-setTimeout(function() {
-  geoip.close(asn_data);
-}, 6000);  

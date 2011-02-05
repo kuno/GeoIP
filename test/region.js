@@ -20,7 +20,3 @@ setTimeout(function() {
   });
 }, 2000);
 
-setTimeout(function() {
-  geoip.close(data);
-}, 3000);  
-
