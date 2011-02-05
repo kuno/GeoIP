@@ -13,8 +13,8 @@ setTimeout(function() {
 
 setTimeout(function() {
   console.log('The result of asynchronous method');
-  console.log('NetSpee.speed_by_domain(data, \'www.google.com\', callback())');
-  NetSpeed.speed_by_domain(data, 'www.google.com', function(err, speed) {
+  console.log('NetSpee.speed_by_domain(data, \'www.sina.com\', callback())');
+  NetSpeed.speed_by_domain(data, 'www.sina.com', function(err, speed) {
     if (err) {throw err;}
     console.log(speed);
   });

@@ -24,8 +24,8 @@ setTimeout(function() {
 // Test name_by_domain method
 setTimeout(function() {
   console.log('The result of asynchronous method');
-  console.log('Country.name_by_domain(data, \'www.google.com\', callback())');
-  Country.name_by_domain(data, 'www.google.com', function(err, name) {
+  console.log('Country.name_by_domain(data, \'www.sina.com\', callback())');
+  Country.name_by_domain(data, 'www.sina.com', function(err, name) {
     if (err) {throw err;}
     console.log('is \'' + name + '\'');
     console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
@@ -35,8 +35,8 @@ setTimeout(function() {
 // Test code_by_domain method
 setTimeout(function() {
   console.log('The result of asynchronous method');
-  console.log('Country.code_by_domain(data, \'www.google.com\', callback())');
-  Country.code_by_domain(data, 'www.google.com', function(err, code) {
+  console.log('Country.code_by_domain(data, \'www.sina.com\', callback())');
+  Country.code_by_domain(data, 'www.sina.com', function(err, code) {
     if (err) {throw err;}
     console.log('is \'' + code + '\'');
   });

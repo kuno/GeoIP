@@ -13,8 +13,8 @@ setTimeout(function() {
 
 setTimeout(function() {
   console.log('The result of asynchronous method');
-  console.log('Region.region_by_domain(data, \'www.google.com\', callback())');
-  Region.region_by_domain(data, 'www.google.com', function(err, region) {
+  console.log('Region.region_by_domain(data, \'www.sina.com\', callback())');
+  Region.region_by_domain(data, 'www.sina.com', function(err, region) {
     if (err) {throw err;}
     console.log('is ' + region);
   });

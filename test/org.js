@@ -16,8 +16,8 @@ setTimeout(function() {
 
 setTimeout(function() {
   console.log('The result of asynchronous method');
-  console.log('Org.org_by_domain(org_data, \'www.google.com\', callback())');
-  Org.org_by_domain(org_data, 'www.google.com', function(err, org) {
+  console.log('Org.org_by_domain(org_data, \'www.sina.com\', callback())');
+  Org.org_by_domain(org_data, 'www.sina.com', function(err, org) {
     if (err) {throw err;}
     console.log(org);
     console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
@@ -40,8 +40,8 @@ setTimeout(function() {
 
 setTimeout(function() {
   console.log('The result of asynchronous method');
-  console.log('Org.asn_by_domain(data, \'www.google.com\', callback())');
-  Org.asn_by_domain(asn_data, 'www.google.com', function(err, asn) {
+  console.log('Org.asn_by_domain(data, \'www.sina.com\', callback())');
+  Org.asn_by_domain(asn_data, 'www.sina.com', function(err, asn) {
     if (err) {throw err;}
     asn.forEach(function(a) {
       var keys = Object.keys(a);
