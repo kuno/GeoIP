@@ -1,16 +1,22 @@
 var geoip = require('../index.js');
 
-var data = geoip.open('/tmp/GeoLiteCity.dat');
-
 var City = geoip.City;
+geoip.filter('/tmp/GeoLiteCity.dat', function(err, type, data) {
 
-// Test record_by_addr method
-setTimeout(function() {
-  console.log('The result of synchronized method');
-  console.log('City.record_by_addr(data, \'8.8.8.8\')');
-  console.log('is \'' + JSON.stringify(City.record_by_addr(data, '8.8.8.8')) + '\'');
-  console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
-}, 1000);
+  if (type === 'city') {
+    // Test record_by_addr method
+    setTimeout(function() {
+      console.log('The result of synchronized method');
+      console.log('City.record_by_addr(data, \'8.8.8.8\')');
+      console.log('is \'' + JSON.stringify(City.record_by_addr(data, '8.8.8.8')) + '\'');
+      console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
+    }, 1000);
+  } else {
+    console.log('Not city data');
+  }
+});
+
+var data = geoip.open('/tmp/GeoLiteCity.dat');
 
 // Test record_by_domain method
 setTimeout(function() {

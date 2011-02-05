@@ -1,25 +1,34 @@
 var geoip = require('../index.js');
 
-var data = geoip.open('/tmp/GeoIP.dat');
 
 // Test name_by_addr method
 var Country = geoip.Country;
 
-// Test name_by_addr method
-setTimeout(function() {
-  console.log('The result of synchronized method');
-  console.log('Country.name_by_addr(data, \'8.8.8.8\')');
-  console.log('is \'' + Country.name_by_addr(data, '8.8.8.8') + '\'');
-  console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
-}, 1000);
+geoip.filter('/tmp/GeoIP.dat', function(err, type, data) {
 
-// Test code_by_addr method
-setTimeout(function() {
-  console.log('The result of synchronized method');
-  console.log('Country.code_by_addr(data, \'8.8.8.8\')');
-  console.log('is \'' + Country.code_by_addr(data, '8.8.8.8') + '\'');
-  console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
-}, 2000);
+  if (type === 'country') {
+    // Test name_by_addr method
+    setTimeout(function() {
+      console.log('The result of synchronized method');
+      console.log('Country.name_by_addr(data, \'8.8.8.8\')');
+      console.log('is \'' + Country.name_by_addr(data, '8.8.8.8') + '\'');
+      console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
+    }, 1000);
+
+    // Test code_by_addr method
+    setTimeout(function() {
+      console.log('The result of synchronized method');
+      console.log('Country.code_by_addr(data, \'8.8.8.8\')');
+      console.log('is \'' + Country.code_by_addr(data, '8.8.8.8') + '\'');
+      console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
+    }, 2000);
+  } else {
+    console.log('Not Country data');
+  }
+});
+
+
+var data = geoip.open('/tmp/GeoIP.dat');
 
 // Test name_by_domain method
 setTimeout(function() {
