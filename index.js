@@ -196,8 +196,12 @@ CONST     = Object.freeze(require('./include/constants.js'));
     });
   };    
 
+  // MOdules
   exports.NetSpeed = require('./lib/netspeed.js');
   exports.Country  = require('./lib/country.js');
   exports.Region   = require('./lib/region.js');
   exports.City     = require('./lib/city.js');
   exports.Org      = require('./lib/org.js');
+
+  // Meta
+  exports.meta = require('./lib/meta.js');
