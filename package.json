@@ -10,12 +10,12 @@
     "repository":
     {
       "type":"git",
-      "url":"https://kuno@github.com/kuno/GeoIP.git"
+      "url" :"https://kuno@github.com/kuno/GeoIP.git"
     },
     "bugs":
     {
       "mail":"neokuno@gmail.com",
-      "web":"http://github.com/kuno/GeoIP/issues"
+      "web" :"http://github.com/kuno/GeoIP/issues"
     },
     "directory": {
       "data":"./data", "include":"./include", "lib":"./lib", 
