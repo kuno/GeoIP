@@ -30,3 +30,11 @@ v0.3.2, 2011-01-21:
 2, validate country binary data based on 8-types fingerprint.
 3, support nodejs v0.3.6
 4, make geoip.close(data) method sync style
+
+v0.3.3, 2011-02-06:
+1, drop support for nodejs 0.2.1, pass testing up to nodejs 0.3.8.
+2, add geoip.filter method.
+3, re-writed testing shell script.
+4, If not found matched data, alway return null.
+5, use index.js as default main module.
+6, added github bug reporting address.

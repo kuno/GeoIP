@@ -13,9 +13,7 @@ __Live Demo__
 
 ##Compatibility
 
-v0.3.2, Passed test on nodejs v0.2.0 ~ 0.2.6, v0.3.0 ~ 0.3.6.
-
-__Note: next release(0.3.3)  will drop the support for 0.2.0.__
+Current version, v0.3.3, passed test on nodejs v0.2.1 ~ 0.2.6, v0.3.0 ~ 0.3.8.
 
 
 ##Architecture
