@@ -1,7 +1,7 @@
 {
   "name":"geoip",
     "description":"GeoIP client for node",
-    "version":"0.3.4pre",
+    "version":"0.3.4",
     "homepage":"",
     "author":"Guan 'kuno' Qing <neokuno at Gmail dot com>",
     "contributors":
