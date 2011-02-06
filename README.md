@@ -56,17 +56,28 @@ __The synchronous way:__
     // Return one of these: 'country', 'city', 'org', 'netspeed', 'region';
     // Or return null, if not a valid data
 
+    if (type === 'country') {
+        var name = geoip.Country.name_by_addr(data, '8.8.8.8');
+        if (!name) { // If not fount, return null
+            console.log('Not found');
+        } else {
+            console.log(name);  // prints 'United States'
+        }
+    }
+
 __The asynchronous way:__
 
     geoip.filter('/path/to/file', function(err, type, data) {
         if (err) {throw err;}  // The given path is not a valid data file.
         if (type === 'country') { // The data type, in this case it's country
-            var code = geoip.Country.code_by_addr(data, '8.8.8.8');
-            if (!code) { // If not found matched data, geoip always return null!
-                console.log('Not found.');
-            } else {  // Found matched data
-                console.log(geoip.Country.code_by_addr(code); // prints 'US'
-            }
+            geoip.Country.code_by_domain(data, 'www.sina.com', function(err, code) {
+                if (err) {throw err;}
+                if (!code) { // If not found, geoip always return null!
+                    console.log('Not found.');
+                } else {  // Found!
+                    console.log(code); // prints 'CN'
+                }
+            });
         }
     });
 

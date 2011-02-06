@@ -15,6 +15,7 @@ fi
 for neco_id in 'test0.2.1' 'test0.2.2' 'test0.2.3' 'test0.2.4' 'test0.2.5' 'test0.2.6'; do
   neco_activate $neco_id &>/dev/null
   version=$(node -v)
+  echo "Testing on nodejs $version"
   echo '#############################################################' >> $report
   echo '################# Testing on nodejs '$version' ##################' >> $report
   echo '#############################################################' >> $report
@@ -30,6 +31,7 @@ done
 for neco_id in 'test0.3.0' 'test0.3.1' 'test0.3.2' 'test0.3.3' 'test0.3.4' 'test0.3.5' 'test0.3.6' 'test0.3.7' 'test0.3.8'; do
   neco_activate $neco_id &>/dev/null
   version=$(node -v)
+  echo "Testing on nodejs $version"
   echo '#############################################################' >> $report
   echo '################## Testing on nodejs '$version' #################' >> $report
   echo '#############################################################' >> $report
