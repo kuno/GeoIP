@@ -8,7 +8,7 @@ CONST     = Object.freeze(require('./include/constants.js'));
 /******************************************************************************
 * Inner Functions
 *****************************************************************************/
-function _setup_segments(data) {
+function __setupSegments__(data) {
   var seg, delim, i, j, 
   buf = data.buffer, offset = buf.length - 3;
 
@@ -79,13 +79,13 @@ var open = function(file) {
   bytesRead = fs.readSync(data.file_descriptor, data.buffer, 0, stats.size, 0);
 
   if (bytesRead >= 0) {
-    return _setup_segments(data);
+    return __setupSegments__(data);
   } else {
     return false;
   }
 };
 
-open.__help__ = 'synchronous open method';
+open._help = 'Synchronous open method';
 
 var check = function(data) {
   var code, type;
@@ -131,7 +131,7 @@ var check = function(data) {
   return type;
 };
 
-check.__help__ = 'Return the type of opened data object';
+check._help = 'Return the type of the opened data object';
 
 var filter = function(file, callback) {
   var error, code, type, data = new DATA();
@@ -188,7 +188,7 @@ var filter = function(file, callback) {
   });
 };
 
-filter.__help__ = 'Asynchnous open method.';
+filter._help = 'Asynchnous open method.';
 
 var close = function(data) {
   var keys;
@@ -199,7 +199,7 @@ var close = function(data) {
   });
 };    
 
-close.__help__ = 'Delete all properties of opened data object.';
+close._help = 'Delete all properties of the opened data object.';
 
 // GeoIP module method
 exports.open = open;
