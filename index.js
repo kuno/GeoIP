@@ -70,7 +70,7 @@ function _setup_segments(data) {
 /******************************************************************************
 * Exprots Functions
 *****************************************************************************/
-exports.open = function(file) {
+var open = function(file) {
   var stats, bytesRead;
   var data = new DATA();
   data.file_descriptor = fs.openSync(file, 'r');
@@ -83,10 +83,11 @@ exports.open = function(file) {
   } else {
     return false;
   }
-
 };
 
-exports.check = function(data) {
+open.__help__ = 'synchronous open method';
+
+var check = function(data) {
   var code, type;
   code = data.db_type;
   switch(code) {
@@ -130,7 +131,9 @@ exports.check = function(data) {
   return type;
 };
 
-exports.filter = function(file, callback) {
+check.__help__ = 'Return the type of opened data object';
+
+var filter = function(file, callback) {
   var error, code, type, data = new DATA();
   fs.open(file, 'r', function(err, fd) {
     if (err) {throw err;}
@@ -185,7 +188,9 @@ exports.filter = function(file, callback) {
   });
 };
 
-exports.close = function(data) {
+filter.__help__ = 'Asynchnous open method.';
+
+var close = function(data) {
   var keys;
   fs.closeSync(data.file_descriptor);
   keys = Object.keys(data);
@@ -193,6 +198,14 @@ exports.close = function(data) {
     delete data[k];
   });
 };    
+
+close.__help__ = 'Delete all properties of opened data object.';
+
+// GeoIP module method
+exports.open = open;
+exports.check = check;
+exports.filter = filter;
+exports.close = close;
 
 // MOdules
 exports.NetSpeed = require('./lib/netspeed.js');
