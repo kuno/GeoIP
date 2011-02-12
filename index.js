@@ -1,6 +1,6 @@
 var fs    = require('fs'),
 path      = require('path'),
-buf2long  = require('./lib/utils.js').buf2long,
+bufToLong  = require('./lib/utils.js').bufToLong,
 matchFingerPrint = require('./lib/utils.js').matchFingerPrint,
 DATA      = require('./include/models.js').DATA, 
 CONST     = Object.freeze(require('./include/constants.js'));
@@ -14,7 +14,7 @@ function __setupSegments__(data) {
 
   // Set data type and segments
   for (i = 0; i < CONST.STRUCTURE_INFO_MAX_SIZE; i++) {
-    delim = buf2long(buf.slice(offset, offset + 3));
+    delim = bufToLong(buf.slice(offset, offset + 3));
     offset += 3;
     if (delim === CONST.DELIMETER_NUMBER) {
       data.db_type = parseInt(buf[offset], 10);
@@ -143,7 +143,7 @@ var filter = function(file, callback) {
       data.buffer = new Buffer(stats.size);
       fs.read(data.file_descriptor, data.buffer, 0, stats.size, 0, function(err, bytesRead) {
         if (err) {throw err;}
-        data = _setup_segments(data);
+        data = __setupSegments__(data);
         code = data.db_type;
         switch(code) {
         case CONST.COUNTRY_EDITION:
