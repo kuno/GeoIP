@@ -1,5 +1,6 @@
 {
   "name":"geoip",
+<<<<<<< HEAD
     "description":"GeoIP client for node",
     "version":"0.3.3-1",
     "homepage":"",
@@ -8,25 +9,37 @@
       [
       ],
     "repository":
+=======
+  "description":"GeoIP client for node",
+  "version":"0.3.4pre",
+  "homepage":"",
+  "author":"Guan 'kuno' Qing <neokuno at Gmail dot com>",
+  "contributors":
+    [
+    ],
+  "repository":
+>>>>>>> v0.3.4
     {
       "type":"git",
-      "url":"https://kuno@github.com/kuno/GeoIP.git"
+      "url":"http://kuno@github.com/kuno/GeoIP.git"
     },
-    "bugs":
+  "bugs":
     {
       "mail":"neokuno@gmail.com",
       "web":"http://github.com/kuno/GeoIP/issues"
     },
-    "directory": {
+  "main":"./index.js",
+  "directory": 
+    {
       "data":"./data", "include":"./include", "lib":"./lib", 
       "misc":"./misc", "sample":"./sample", "test":"./test"
     },
-    "engine":{"node": ">=0.2.1"},
-    "licences":
-      [
+  "engine":{"node": ">=0.2.1"},
+  "licences":
+    [
       {
         "type":"LGPL2.1",
         "url": "http://www.gnu.org/licenses/lgpl-2.1.txt"
       }
-  ]
+    ]
 }
