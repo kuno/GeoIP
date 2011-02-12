@@ -38,3 +38,6 @@ v0.3.3, 2011-02-06:
 4, If not found matched data, alway return null.
 5, use index.js as default main module.
 6, added github bug reporting address.
+
+v0.3.3-1, 2011-02-12
+1, make compatibility with nodejs v0.4.0 stable branch.

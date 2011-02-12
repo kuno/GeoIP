@@ -13,7 +13,7 @@ __Live Demo__
 
 ##Compatibility
 
-Current version, v0.3.3, passed test on nodejs v0.2.1 ~ 0.2.6, v0.3.0 ~ 0.3.8.
+Current version, v0.3.3-1, passed test on nodejs v0.2.1 ~ 0.2.6, v0.3.0 ~ 0.3.8, v0.4.0.
 
 
 ##Architecture
