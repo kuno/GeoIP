@@ -135,7 +135,7 @@ check._help = 'Return the type of the opened data object';
 
 var filter = function(file, callback) {
   var error, code, type, data = new DATA();
-  fs.open(file, 'r', function(err, fd) {
+  fs.open(file, 'r', mode=0666, function(err, fd) {
     if (err) {throw err;}
     data.file_descriptor = fd;
     fs.fstat(data.file_descriptor, function(err, stats) {
