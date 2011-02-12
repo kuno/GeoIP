@@ -33,3 +33,4 @@ fabfile.*
 
 # neco test report file
 test/report.txt
+*.report
