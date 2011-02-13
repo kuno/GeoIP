@@ -1,6 +1,5 @@
 function DATA() {
     var self = this;
-    self.begin = undefined;
     self.buffer = undefined;
     self.db_type = undefined;
     self.db_segments = undefined;
