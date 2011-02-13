@@ -6,12 +6,12 @@
   "author":"Guan 'kuno' Qing <neokuno at Gmail dot com>",
   "contributors":
     [
-    "Vladimir Dronnikov <dronnikov@gmail.com>"
+      "Vladimir Dronnikov <dronnikov@gmail.com>"
     ],
   "repository":
     {
       "type":"git",
-      "url":"http://kuno@github.com/kuno/GeoIP.git"
+      "url":"git://github.com/kuno/GeoIP.git"
     },
   "bugs":
     {
