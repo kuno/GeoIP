@@ -67,11 +67,6 @@ function __setupSegments__(data) {
 }
 
 
-<<<<<<< HEAD
-  exports.filter = function(file, callback) {
-    var error, code, type, data = new DATA();
-    fs.open(file, 'r', mode=0666, function(err, fd) {
-=======
 /******************************************************************************
 * Exprots Functions
 *****************************************************************************/
@@ -144,7 +139,6 @@ var filter = function(file, callback) {
     if (err) {throw err;}
     data.file_descriptor = fd;
     fs.fstat(data.file_descriptor, function(err, stats) {
->>>>>>> v0.3.4
       if (err) {throw err;}
       data.buffer = new Buffer(stats.size);
       fs.read(data.file_descriptor, data.buffer, 0, stats.size, 0, function(err, bytesRead) {
