@@ -66,30 +66,7 @@ function __setupSegments__(data) {
   return data;
 }
 
-
-/******************************************************************************
-* Exprots Functions
-*****************************************************************************/
-var open = function(file) {
-  var stats, bytesRead;
-  var data = new DATA();
-  data.file_descriptor = fs.openSync(file, 'r');
-  stats = fs.fstatSync(data.file_descriptor);
-  data.buffer = new Buffer(stats.size);
-  bytesRead = fs.readSync(data.file_descriptor, data.buffer, 0, stats.size, 0);
-
-  if (bytesRead >= 0) {
-    return __setupSegments__(data);
-  } else {
-    return false;
-  }
-};
-
-open._help = 'Synchronous open method';
-
-var check = function(data) {
-  var code, type;
-  code = data.db_type;
+function __getType__(code) {
   switch(code) {
   case CONST.COUNTRY_EDITION:
     type = 'country';
@@ -124,14 +101,38 @@ var check = function(data) {
     break;
 
   default:
-    type = false;
+    type = null;
     break;
   }  
 
   return type;
+}
+
+/******************************************************************************
+* Exprots Functions
+*****************************************************************************/
+var open = function(file) {
+  var stats, bytesRead;
+  var data = new DATA();
+  data.file_descriptor = fs.openSync(file, 'r');
+  stats = fs.fstatSync(data.file_descriptor);
+  data.buffer = new Buffer(stats.size);
+  bytesRead = fs.readSync(data.file_descriptor, data.buffer, 0, stats.size, 0);
+
+  if (bytesRead >= 0) {
+    return __setupSegments__(data);
+  } else {
+    return false;
+  }
 };
 
-check._help = 'Return the type of the opened data object';
+var check = function(data) {
+  var code, type;
+  code = data.db_type;
+
+
+  return __getType__(code);
+};
 
 var filter = function(file, callback) {
   var error, code, type, data = new DATA();
@@ -145,50 +146,15 @@ var filter = function(file, callback) {
         if (err) {throw err;}
         data = __setupSegments__(data);
         code = data.db_type;
-        switch(code) {
-        case CONST.COUNTRY_EDITION:
-          type = 'country';
-          break;
-
-        case CONST.CITY_EDITION_REV0:
-          type = 'city';
-          break;
-
-        case CONST.CITY_EDITION_REV1:
-          type = 'city';
-          break;
-
-        case CONST.REGION_EDITION_REV0:
-          type = 'region';
-          break;
-
-        case CONST.REGION_EDITION_REV1:
-          type = 'region';
-          break;
-
-        case CONST.ORG_EDITION:
-          type = 'org';
-          break;
-
-        case CONST.ASNUM_EDITION:
-          type = 'asnumber';
-          break;
-
-        case CONST.NETSPEED_EDITION:
-          type = 'netspeed';
-          break;
-
-        default:
-          error = new Error('Unkown data type');
-          break;
+        type = __getType__(code);
+        if (!type) {
+          error = new Error('Uknow Data Type');
         }
         callback(error, type, data);
       });
     });
   });
 };
-
-filter._help = 'Asynchnous open method.';
 
 var close = function(data) {
   var keys;
@@ -199,12 +165,17 @@ var close = function(data) {
   });
 };    
 
-close._help = 'Delete all properties of the opened data object.';
-
 // GeoIP module method
+open._usage = 'geoip.open(\'/path/to/file\')';
 exports.open = open;
+
+check._usage = 'geoip.check(data)';
 exports.check = check;
+
+filter._usage = 'geoip.filter(\'/path/to/file\', <CALLBACK>)';
 exports.filter = filter;
+
+close._usage = 'geoip.close(data)';
 exports.close = close;
 
 // MOdules
@@ -214,5 +185,5 @@ exports.Region   = require('./lib/region.js');
 exports.City     = require('./lib/city.js');
 exports.Org      = require('./lib/org.js');
 
-// Meta
-exports.meta     = require('./lib/meta.js');
+// Meta data
+module.exports.meta   = require('./lib/meta.js');
