@@ -18,7 +18,7 @@ for neco_id in 'test0.2.1' 'test0.2.2' 'test0.2.3' 'test0.2.4' 'test0.2.5' 'test
   echo '#############################################################' >> $report
   echo '################# Testing on nodejs '$version' ##################' >> $report
   echo '#############################################################' >> $report
-  sh test.sh >> $report
+  time sh test.sh >> $report
   echo '#############################################################' >> $report
   echo '############## Finished tests on nodejs '$version' ##############' >> $report
   echo '#############################################################' >> $report
@@ -35,7 +35,7 @@ for neco_id in 'test0.3.0' 'test0.3.1' 'test0.3.2' 'test0.3.3' 'test0.3.4' 'test
   echo '#############################################################' >> $report
   echo '################## Testing on nodejs '$version' #################' >> $report
   echo '#############################################################' >> $report
-  sh test.sh >> $report
+  time sh test.sh >> $report
   echo '#############################################################' >> $report
   echo '############## Finished tests on nodejs '$version' ##############' >> $report
   echo '#############################################################' >> $report
@@ -52,7 +52,7 @@ for neco_id in 'test0.4.0'; do
   echo '#############################################################' >> $report
   echo '################## Testing on nodejs '$version' #################' >> $report
   echo '#############################################################' >> $report
-  sh test.sh >> $report
+  time sh test.sh >> $report
   echo '#############################################################' >> $report
   echo '############## Finished tests on nodejs '$version' ##############' >> $report
   echo '#############################################################' >> $report

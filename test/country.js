@@ -5,7 +5,7 @@ var geoip = require('../index.js');
 var Country = geoip.Country;
 
 geoip.filter('/tmp/GeoIP.dat', function(err, type, data) {
-
+  if (err) {throw err;}
   if (type === 'country') {
     // Test name_by_addr method
     setTimeout(function() {
