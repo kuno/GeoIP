@@ -166,13 +166,13 @@ var close = function(data) {
 };    
 
 // GeoIP module method
-open._usage = 'geoip.open(\'/path/to/file\')';
+open._usage = "geoip.open('/path/to/file')";
 exports.open = open;
 
 check._usage = 'geoip.check(data)';
 exports.check = check;
 
-filter._usage = 'geoip.filter(\'/path/to/file\', <CALLBACK>)';
+filter._usage = "geoip.filter('/path/to/file', <CALLBACK>)";
 exports.filter = filter;
 
 close._usage = 'geoip.close(data)';
