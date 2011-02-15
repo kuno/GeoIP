@@ -13,7 +13,7 @@ __Live Demo__
 
 ##Compatibility
 
-Current version, v0.3.3-1, passed test on nodejs v0.2.1 ~ 0.2.6, v0.3.0 ~ 0.3.8, v0.4.0.
+Current version, v0.3.4, passed test on nodejs v0.2.1 ~ 0.2.6, v0.3.0 ~ 0.3.8, v0.4.0.
 
 
 ##Architecture
@@ -203,7 +203,7 @@ __Asynchronous method__
 
     Org.asn_by_domain(asn_data, 'www.google.com', function(err, asn) {
         if (err) {throw err;} // ASNumber Not Found
-        asn.forEach(function(a) {
+        asn.forEach(function(a) {  // Same as asn_by_addr
             var keys = object.keys(a);
             console.log(a[keys[0]] + ' : ' + a[keys[1]]);
         });

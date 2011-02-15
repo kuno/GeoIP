@@ -18,11 +18,17 @@
       "mail":"neokuno@gmail.com",
       "web":"http://github.com/kuno/GeoIP/issues"
     },
-  "main":"./index.js",
+  "main":"index.js",
   "directory": 
     {
-      "data":"./data", "include":"./include", "lib":"./lib", 
-      "misc":"./misc", "sample":"./sample", "test":"./test"
+      "doc":"./doc", 
+      "data":"./data", 
+      "lib":"./lib",
+      "test":"./test",   
+      "misc":"./misc", 
+      "sample":"./sample", 
+      "include":"./include",  
+      "benchmark":"./benchmark"
     },
   "engine":{"node": ">=0.2.1"},
   "licences":
