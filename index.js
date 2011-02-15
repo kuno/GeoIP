@@ -129,8 +129,6 @@ var open = function(file) {
 var check = function(data) {
   var code, type;
   code = data.db_type;
-
-
   return __getType__(code);
 };
 
