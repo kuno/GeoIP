@@ -46,3 +46,6 @@ v0.3.4, 2011-02-15
 1, new seekCountry algorithm, speedup to about 3x faster (Vladimir Dronnikov) 
 2, added simple usage property
 3, improve org_by_domain method output
+
+v0.3.4-1, 2011-03-07
+1, fixed cotinent typo
