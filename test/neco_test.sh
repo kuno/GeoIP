@@ -44,7 +44,7 @@ for neco_id in 'test0.3.0' 'test0.3.1' 'test0.3.2' 'test0.3.3' 'test0.3.4' 'test
 done
 
 # Tesing no nodejs 0.3.x unstalbe branch
-for neco_id in 'test0.4.0'; do
+for neco_id in 'test0.4.0' 'test0.4.1' 'test0.4.2'; do
   neco_activate $neco_id &>/dev/null
   version=$(node -v)
   report=$version.report
