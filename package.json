@@ -1,12 +1,13 @@
 {
   "name":"geoip",
   "description":"GeoIP client for node",
-  "version":"0.3.4",
+  "version":"0.3.4-1",
   "homepage":"",
   "author":"Guan 'kuno' Qing <neokuno at Gmail dot com>",
   "contributors":
     [
-      "Vladimir Dronnikov <dronnikov@gmail.com>"
+      "Vladimir Dronnikov <dronnikov@gmail.com>",
+      "Konstantin Käfer"
     ],
   "repository":
     {
