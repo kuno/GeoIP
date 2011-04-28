@@ -2,7 +2,8 @@
 
 var geoip = require('../index.js');
 var util = require('util');
-var data = geoip.open('/tmp/GeoLiteCity.dat');
+var city = geoip.City;
+city.open(true, '/tmp/GeoLiteCity.dat');
 
 var ip32 = function() {
   var ip = '';
@@ -16,8 +17,9 @@ var ip32 = function() {
 }
 
 var start = new Date().getTime();
-for (var i = 0; i < 10000; ++i) {
-  geoip.City.record_by_addr(data, ip32());
+for (var i = 0; i < 3; ++i) {
+  var ip4 = ip32();
+  console.log(city.lookup((''+ip4)));
 }
 var end = new Date().getTime();
 

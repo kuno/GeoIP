@@ -1,4 +1,5 @@
-#!/usr/local/bin/coffee
+#!/usr/bin/env coffee
+
 util = require 'util'
 getLocation = require('./index') '/tmp/GeoLiteCity.dat'
 n255 = -> Math.floor Math.random()*256

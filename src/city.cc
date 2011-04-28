@@ -17,8 +17,7 @@ int db_edition;
 
 // For some reason this useful method is "private"!
 extern "C" GEOIP_API unsigned long _GeoIP_lookupaddress(const char *host);
-// open
-extern "C" GEOIP_API GeoIP* GeoIP_open(const char * filename, int flags);  
+
 namespace geoip {
 	// Pass this method an IP Address string and it will spit back coordinates
 	Handle<Value> GeoIPLookup(const Arguments &args) {
@@ -57,7 +56,7 @@ namespace geoip {
 		char path_cstr[path_str->Length()];
 		path_str->WriteAscii(path_cstr);
 		
-		bool cache_on = args[1]->ToBoolean()->Value();
+		bool cache_on = args[0]->ToBoolean()->Value();
 		
 		gi = GeoIP_open(path_cstr, cache_on?GEOIP_MEMORY_CACHE:GEOIP_STANDARD);
 		if (gi != NULL) {

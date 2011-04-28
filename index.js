@@ -1,3 +1,8 @@
-var geoip = require('./build/default/open.node');
+var fs    = require('fs'),
+    path  = require('path');
 
-exports = geoip;
+var City = require('./lib/city.js');
+
+exports.City  = City;
+
+exports.version = JSON.parse(fs.readFileSync(path.join(__dirname, 'package.json'))).version;
