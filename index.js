@@ -1,8 +1,8 @@
-var fs    = require('fs'),
-    path  = require('path');
+var read  = require('fs').readFileSync,
+    join  = require('path').join;
 
 var City = require('./lib/city.js');
 
 exports.City  = City;
 
-exports.version = JSON.parse(fs.readFileSync(path.join(__dirname, 'package.json'))).version;
+exports.version = JSON.parse(read(join(__dirname, 'package.json'))).version;
