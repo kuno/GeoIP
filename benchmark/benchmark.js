@@ -17,10 +17,11 @@ var ip32 = function() {
 }
 
 var start = new Date().getTime();
-for (var i = 0; i < 3; ++i) {
+for (var i = 0; i < 2; ++i) {
   var addr = ip32();
   console.log(addr);
-  city.lookup(addr);
+  var l = city.lookup(addr);
+  console.log(l);
 }
 var end = new Date().getTime();
 

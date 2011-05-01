@@ -42,9 +42,9 @@ namespace geoip {
 		// If you want to pull out city information, etc,
 		//   this is the place to do it.
 		GeoIPRecord *gir = GeoIP_record_by_ipnum(gi, ipnum);
-		Local<Array> coords = Array::New(2);
-		coords->Set(Number::New(0), Number::New(gir->latitude));
-		coords->Set(Number::New(1), Number::New(gir->longitude));
+		Local<Object> coords = Object::New();
+		coords->Set(String::New("latitude"), Number::New(gir->latitude));
+		coords->Set(String::New("longitude"), Number::New(gir->longitude));
 		return coords;
 	}
 	
