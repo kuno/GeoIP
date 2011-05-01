@@ -1,4 +1,5 @@
-var geoip = require('../index.js');
+var assert = require('assert'), 
+    geoip  = require('../index.js');
 
 var City = geoip.City;
 geoip.filter('/tmp/GeoLiteCity.dat', function(err, type, data) {
