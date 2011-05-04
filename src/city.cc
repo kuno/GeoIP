@@ -16,7 +16,7 @@ GeoIP *gi;
 int db_edition;
 
 // For some reason this useful method is "private"!
-extern "C" GEOIP_API unsigned long _GeoIP_lookupaddress(const char *host);
+extern "C" GEOIP_API unsigned long _GeoIP_addr_to_num(const char *addr);
 
 namespace geoip {
 	// Pass this method an IP Address string and it will spit back coordinates
@@ -29,7 +29,7 @@ namespace geoip {
 		Local<String> ip_str = args[0]->ToString();
 		char ip_cstr[ip_str->Length()];
 		ip_str->WriteAscii(ip_cstr);		
-		uint32_t ipnum = _GeoIP_lookupaddress(ip_cstr);
+		uint32_t ipnum = _GeoIP_addr_to_num(ip_cstr);
 		if (ipnum == 0) {
 			// On IP address error, return [0,0]
 			Local<Array> coords = Array::New(2);
