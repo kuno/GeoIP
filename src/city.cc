@@ -29,7 +29,7 @@ namespace geoip {
 		Local<String> ip_str = args[0]->ToString();
 		char ip_cstr[ip_str->Length()];
 		ip_str->WriteAscii(ip_cstr);		
-		uint32_t ipnum = _GeoIP_addr_to_num(ip_cstr);
+		uint64_t ipnum = _GeoIP_addr_to_num(ip_cstr);
 		if (ipnum == 0) {
 			// On IP address error, return [0,0]
 			Local<Array> coords = Array::New(2);
