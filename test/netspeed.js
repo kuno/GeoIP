@@ -2,6 +2,7 @@ var assert = require('assert'),
     geoip  = require('../index.js');
 
 var NetSpeed = geoip.NetSpeed,
+    // Speed classes
     classes = ['Unknown', 'Dailup', 'Cable', 'Corporate'],
     data, speed;
 
