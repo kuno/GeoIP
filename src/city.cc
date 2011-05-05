@@ -108,7 +108,7 @@ class City: ObjectWrap
 
       struct city_baton_t_v6 {
         City *c;
-        char ip_cstr[41]; // standard length of ipv6
+        char ip_cstr[39]; // standard length of ipv6
         GeoIPRecord *r;
         int increment_by;
         int sleep_for;
