@@ -18,10 +18,9 @@ var ip32 = function() {
 
 var start = new Date().getTime();
 for (var i = 0; i < 1; ++i) {
-  // var addr = ip32();
-  var addr = '255.255.255.255';
+  var addr = ip32();
   console.log(addr);
-  var l = c.lookup(addr);
+  var l = c.lookupSync(addr);
   console.log(l);
 }
 var end = new Date().getTime();

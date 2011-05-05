@@ -75,7 +75,7 @@ class City: ObjectWrap
             c->Wrap(args.This());
             return args.This();
           } else {
-            // Error! return 0 (false)
+            return ThrowException(v8::String::New("Error when open the database"));
           }
       }
 
@@ -83,6 +83,7 @@ class City: ObjectWrap
         HandleScope scope;
 
         Local<String> ip_str = args[0]->ToString();
+        Local<Object> coords = Object::New();
         char ip_cstr[ip_str->Length()];
         ip_str->WriteAscii(ip_cstr);
         City* c = ObjectWrap::Unwrap<City>(args.This());
@@ -91,10 +92,14 @@ class City: ObjectWrap
         // If you want to pull out city information, etc,
         //   this is the place to do it.
         GeoIPRecord *gir = GeoIP_record_by_addr(c->db, ip_cstr);
-        Local<Object> coords = Object::New();
-        coords->Set(String::NewSymbol("latitude"), Number::New(gir->latitude));
-        coords->Set(String::NewSymbol("longitude"), Number::New(gir->longitude));
-        return scope.Close(coords);
+
+        if (gir != NULL) {
+          coords->Set(String::NewSymbol("latitude"), Number::New(gir->latitude));
+          coords->Set(String::NewSymbol("longitude"), Number::New(gir->longitude));
+          return scope.Close(coords);
+        } else {
+          return ThrowException(v8::String::New("Can not find out match data."));
+        }
       }
 
       struct city_baton_t {
@@ -148,7 +153,11 @@ class City: ObjectWrap
 
         baton->r = GeoIP_record_by_addr(baton->c->db, baton->ip_cstr);
 
-        return 0;
+        if (baton->r == NULL) {
+           return 1;
+        } else {
+           return 0;
+        }
       }
 
       static int EIO_AfterCity(eio_req *req)
