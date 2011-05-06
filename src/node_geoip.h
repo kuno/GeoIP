@@ -19,6 +19,8 @@
 #include <GeoIP.h>
 #include <GeoIPCity.h>
 
+#include <unistd.h>
+
 #ifndef NODE_GEOIP_H
 #define NODE_GEOIP_H
 

@@ -18,7 +18,7 @@ var ip32 = function() {
 
 var start = new Date().getTime();
 for (var i = 0; i < 10000; ++i) {
-  var addr = '8.8.8.8';
+  var addr = '0.0.0.0';
   //console.log(addr);
   var l = c.lookupSync(addr);
   //console.log(l);
