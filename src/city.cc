@@ -13,19 +13,19 @@
 
 #include <unistd.h>
 
+#include "node_geoip.h"
+
 using namespace v8;
 using namespace node;
 
-#define REQ_FUN_ARG(I, VAR)                                             \
-  if ((args.Length() + 1) <= (I) || !args[I]->IsFunction())                   \
-    return ThrowException(Exception::TypeError(                         \
-                  String::New("Argument " #I " must be a function")));  \
-  Local<Function> VAR = Local<Function>::Cast(args[I]);    
 
-extern "C" GeoIPRecord * GeoIP_record_by_addr (GeoIP* gi, const char *addr);
-extern "C" GEOIP_API unsigned char GeoIP_database_edition (GeoIP* gi); 
-extern "C" GEOIP_API GeoIP* GeoIP_open(const char * filename, int flags); 
-extern "C" GEOIP_API unsigned long _GeoIP_addr_to_num(const char *addr);
+extern "C" GEOIP_API GeoIP* GeoIP_open(const char * filename, int flags);
+extern "C" GEOIP_AIP void GeoIP_delete(GeoIP * gi); 
+extern "C" GEOIP_API unsigned char GeoIP_database_edition (GeoIP * gi); 
+//extern "C" GEOIP_API unsigned long _GeoIP_addr_to_num(const char *addr);
+
+extern "C" GeoIPRecord * GeoIP_record_by_addr (GeoIP * gi, const char * addr);
+extern "C" GeoIPRecord * GeoIP_record_by_name (GeoIP * gi, const char * host);
 
 class City: ObjectWrap
 {
@@ -45,6 +45,7 @@ class City: ObjectWrap
 
       NODE_SET_PROTOTYPE_METHOD(s_ct, "lookup", lookup);
       NODE_SET_PROTOTYPE_METHOD(s_ct, "lookupSync", lookupSync);
+      NODE_SET_PROTOTYPE_METHOD(s_ct, "close", close);
       target->Set(String::NewSymbol("City"), s_ct->GetFunction());
     }
 
@@ -104,13 +105,14 @@ class City: ObjectWrap
 
       struct city_baton_t {
         City *c;
-        char ip_cstr[17];  // standard length of ipv4
+        char ip_cstr[256];  // standard length of ipv4
         GeoIPRecord *r;
         int increment_by;
         int sleep_for;
         Persistent<Function> cb;
       };
 
+      /* Special data struct for ipv6?
       struct city_baton_t_v6 {
         City *c;
         char ip_cstr[39]; // standard length of ipv6
@@ -118,7 +120,7 @@ class City: ObjectWrap
         int increment_by;
         int sleep_for;
         Persistent<Function> cb;
-      };                        
+      };*/                        
 
       static Handle<Value> lookup(const Arguments& args)
       {
@@ -151,7 +153,7 @@ class City: ObjectWrap
 
         sleep(baton->sleep_for);
 
-        baton->r = GeoIP_record_by_addr(baton->c->db, baton->ip_cstr);
+        baton->r = GeoIP_record_by_name(baton->c->db, baton->ip_cstr);
 
         if (baton->r == NULL) {
            return 1;
@@ -189,14 +191,13 @@ class City: ObjectWrap
         return 0;
       }
 
-      /*
       // Destroy the GeoIP* reference we're holding on to
-      Handle<Value> GeoIPClose(const Arguments &args) {
-      GeoIP_delete(gi);	// free()'s the gi reference & closes its fd
-      gi = NULL;
-      HandleScope scope;	// Stick this down here since it seems to segfault when on top?
+      static Handle<Value> close(const Arguments &args) {
+        City* c = ObjectWrap::Unwrap<City>(args.This()); 
+        GeoIP_delete(c->db);	// free()'s the gi reference & closes its fd
+        c->db = NULL;
+        HandleScope scope;	// Stick this down here since it seems to segfault when on top?
       }
-      */
 };
 
 Persistent<FunctionTemplate> City::s_ct;

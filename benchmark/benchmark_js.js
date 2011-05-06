@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
-var geoip = require('../build/default/city.node');
+var geoip = require('geoip');
 var util = require('util');
 var City = geoip.City;
-var c = new City('/tmp/GeoLiteCity.dat', true);
+var data = geoip.open('/tmp/GeoLiteCity.dat');
 
 var ip32 = function() {
   var ip = '';
@@ -17,11 +17,13 @@ var ip32 = function() {
 }
 
 var start = new Date().getTime();
-for (var i = 0; i < 1; ++i) {
-  var addr = ip32();
-  console.log(addr);
-  var l = c.lookupSync(addr);
-  console.log(l);
+for (var i = 0; i < 10000; ++i) {
+  var domain = 'www.google.com';
+  //console.log(addr);
+  var l = City.record_by_domain(data, domain, function(err, data) {
+      if (err) {throw err;}
+    });
+  //console.log(l);
 }
 var end = new Date().getTime();
 
