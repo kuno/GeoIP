@@ -16,7 +16,7 @@ def configure(conf):
 
 def build(bld):
   obj = bld.new_task_gen("cxx", "shlib", "node_addon")
-  obj.target = "city"
+  obj.target = "geoip"
   obj.find_sources_in_dirs("src")
   obj.lib = ["GeoIP"]
 
