@@ -40,3 +40,7 @@ test/report.txt
 
 # c/c++ core dump
 core
+
+# binary file
+*.node
+build/*
