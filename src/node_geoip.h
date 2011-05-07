@@ -37,9 +37,19 @@ extern "C" {
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////// GeoIP Internal //////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-extern "C" double in6_to_num(in6_addr *addr);
-extern "C" GEOIP_API unsigned long _GeoIP_addr_to_num(const char *addr);
-extern "C" GEOIP_API geoipv6_t _GeoIP_addr_to_num_v6 (const char *addr);    
+extern "C" GEOIP_API unsigned int _GeoIP_seek_record (GeoIP *gi, unsigned long ipnum);
+extern "C" GEOIP_API unsigned long _GeoIP_addr_to_num (const char *addr);
+
+extern "C" GEOIP_API unsigned int _GeoIP_seek_record_v6 (GeoIP *gi, geoipv6_t ipnum);
+extern "C" GEOIP_API geoipv6_t _GeoIP_addr_to_num_v6 (const char *addr);
+
+extern "C" GEOIP_API unsigned long _GeoIP_lookupaddress (const char *host);
+extern "C" GEOIP_API geoipv6_t _GeoIP_lookupaddress_v6 (const char *host);
+extern "C" GEOIP_API int __GEOIP_V6_IS_NULL(geoipv6_t v6);
+
+extern "C" GEOIP_API void _GeoIP_setup_dbfilename();
+extern "C" GEOIP_API char *_GeoIP_full_path_to(const char *file_name);  
+
 
 ////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////// GeoIP Country //////////////////////////////////

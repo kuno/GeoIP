@@ -20,8 +20,10 @@ namespace geoip {
   {
     private:
       GeoIP *db;
+
       int db_edition;
-      static Persistent<FunctionTemplate> s_ct;
+
+      static Persistent<FunctionTemplate> constructor_template;
 
     protected:
       static Handle<Value> New(const Arguments& args);
@@ -29,20 +31,26 @@ namespace geoip {
     public:
       static void Init(Handle<Object> target);
 
-      //static Handle<Value> New(const Arguments& args);
 
       static Handle<Value> lookupSync(const Arguments &args);
-      /*
-         static Handle<Value> lookup(const Arguments& args);
 
-         static int EIO_Country(eio_req *req);
+      static Handle<Value> lookup(const Arguments& args);
 
-         static int EIO_AfterCountry(eio_req *req);
-         */
+      static int EIO_Country(eio_req *req);
 
-      // Destroy the GeoIP* reference we're holding on to
+      static int EIO_AfterCountry(eio_req *req);
+
       static Handle<Value> close(const Arguments &args);
   };
 }
+
+struct country_baton_t {
+  geoip::Country * c;
+  char host_cstr[256];
+  int country_id;
+  int increment_by;
+  int sleep_for;
+  Persistent<Function> cb;
+};
 
 #endif /* NODE_GEOIP_COUNTRY_H */

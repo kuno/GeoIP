@@ -1,12 +1,14 @@
 #include "country.h"
 #include "city.h"
 #include "ipnum.h"
+#include "region.h"
 
 extern "C" {
   static void init(Handle<Object> target)
   {
     geoip::Country::Init(target);
     geoip::City::Init(target);
+    geoip::Region::Init(target);
 
     HandleScope scope;
 

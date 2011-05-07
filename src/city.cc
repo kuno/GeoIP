@@ -23,14 +23,14 @@ void geoip::City::Init(Handle<Object> target)
 }
 
 /*
-City() :
-  db_edition(0)
-{
-}
+   City() :
+   db_edition(0)
+   {
+   }
 
-~City()
-{
-} */
+   ~City()
+   {
+   } */
 
 Handle<Value> geoip::City::New(const Arguments& args)
 {
@@ -64,30 +64,32 @@ Handle<Value> geoip::City::New(const Arguments& args)
 Handle<Value> geoip::City::lookupSync(const Arguments &args) {
   HandleScope scope;
 
-  Local<String> ip_str = args[0]->ToString();
-  Local<Object> r = Object::New();
-  char ip_cstr[ip_str->Length()];
-  ip_str->WriteAscii(ip_cstr);
+  Local<String> host_str = args[0]->ToString();
+  Local<Object> data = Object::New();
+  char host_cstr[host_str->Length()];
+  host_str->WriteAscii(host_cstr);
   City* c = ObjectWrap::Unwrap<City>(args.This());
 
-  // Here I'm just returning the latitude, longitude
-  // If you want to pull out city information, etc,
-  //   this is the place to do it.
-  GeoIPRecord *gir = GeoIP_record_by_addr(c->db, ip_cstr);
+  uint32_t ipnum = _GeoIP_lookupaddress(host_cstr);
+  if (ipnum <= 0) {
+    return Null();
+  }
 
-  if (gir != NULL) {
-    r->Set(String::NewSymbol("country_code"), String::New(gir->country_code));
-    r->Set(String::NewSymbol("country_code3"), String::New(gir->country_code3));
-    r->Set(String::NewSymbol("country_name"), String::New(gir->country_name));
-    r->Set(String::NewSymbol("region"), String::New(gir->region));
-    r->Set(String::NewSymbol("postal_code"), String::New(gir->postal_code));
-    r->Set(String::NewSymbol("latitude"), Number::New(gir->latitude));
-    r->Set(String::NewSymbol("longitude"), Number::New(gir->longitude));
-    r->Set(String::NewSymbol("metro_code"), Number::New(gir->metro_code));
-    r->Set(String::NewSymbol("dma_code"), Number::New(gir->dma_code));
-    r->Set(String::NewSymbol("area_code"), Number::New(gir->area_code));
-    r->Set(String::NewSymbol("continent_code"), String::New(gir->continent_code));
-    return scope.Close(r);
+  GeoIPRecord *record = GeoIP_record_by_addr(c->db, host_cstr);
+
+  if (record != NULL) {
+    data->Set(String::NewSymbol("country_code"), String::New(record->country_code));
+    data->Set(String::NewSymbol("country_code3"), String::New(record->country_code3));
+    data->Set(String::NewSymbol("country_name"), String::New(record->country_name));
+    data->Set(String::NewSymbol("region"), String::New(record->region));
+    data->Set(String::NewSymbol("postal_code"), String::New(record->postal_code));
+    data->Set(String::NewSymbol("latitude"), Number::New(record->latitude));
+    data->Set(String::NewSymbol("longitude"), Number::New(record->longitude));
+    data->Set(String::NewSymbol("metro_code"), Number::New(record->metro_code));
+    data->Set(String::NewSymbol("dma_code"), Number::New(record->dma_code));
+    data->Set(String::NewSymbol("area_code"), Number::New(record->area_code));
+    data->Set(String::NewSymbol("continent_code"), String::New(record->continent_code));
+    return scope.Close(data);
   } else {
     return ThrowException(String::New("Error: Can not find match data"));
   }
@@ -100,12 +102,12 @@ Handle<Value> geoip::City::lookup(const Arguments& args)
   REQ_FUN_ARG(1, cb);
 
   City *c = ObjectWrap::Unwrap<City>(args.This());
-  Local<String> ip_str = args[0]->ToString();
+  Local<String> host_str = args[0]->ToString();
 
   city_baton_t *baton = new city_baton_t();
 
   baton->c = c;
-  ip_str->WriteAscii(baton->ip_cstr);
+  host_str->WriteAscii(baton->host_cstr);
   baton->increment_by = 2;
   baton->sleep_for = 1;
   baton->cb = Persistent<Function>::New(cb);
@@ -124,13 +126,14 @@ int geoip::City::EIO_City(eio_req *req)
 
   sleep(baton->sleep_for);
 
-  baton->record = GeoIP_record_by_name(baton->c->db, baton->ip_cstr);
-
-  if (baton->record == NULL) {
+  uint32_t ipnum = _GeoIP_lookupaddress(baton->host_cstr);
+  if (ipnum <= 0) {
     return 1;
-  } else {
-    return 0;
   }
+
+  baton->record = GeoIP_record_by_ipnum(baton->c->db, ipnum);
+
+  return 0;
 }
 
 int geoip::City::EIO_AfterCity(eio_req *req)
@@ -142,20 +145,21 @@ int geoip::City::EIO_AfterCity(eio_req *req)
   baton->c->Unref();
 
   Local<Value> argv[1];
-  Local<Object> r = Object::New();
-  r->Set(String::NewSymbol("country_code"), String::New(baton->record->country_code));
-  r->Set(String::NewSymbol("country_code3"), String::New(baton->record->country_code3));
-  r->Set(String::NewSymbol("country_name"), String::New(baton->record->country_name));
-  r->Set(String::NewSymbol("region"), String::New(baton->record->region));
-  r->Set(String::NewSymbol("postal_code"), String::New(baton->record->postal_code));
-  r->Set(String::NewSymbol("latitude"), Number::New(baton->record->latitude));
-  r->Set(String::NewSymbol("longitude"), Number::New(baton->record->longitude));
-  r->Set(String::NewSymbol("metro_code"), Number::New(baton->record->metro_code));
-  r->Set(String::NewSymbol("dma_code"), Number::New(baton->record->dma_code));
-  r->Set(String::NewSymbol("area_code"), Number::New(baton->record->area_code));
-  r->Set(String::NewSymbol("continent_code"), String::New(baton->record->continent_code));     
-
-  argv[0] = r;
+  if (baton->record != NULL) {
+    Local<Object> data = Object::New();
+    data->Set(String::NewSymbol("country_code"), String::New(baton->record->country_code));
+    data->Set(String::NewSymbol("country_code3"), String::New(baton->record->country_code3));
+    data->Set(String::NewSymbol("country_name"), String::New(baton->record->country_name));
+    data->Set(String::NewSymbol("region"), String::New(baton->record->region));
+    data->Set(String::NewSymbol("postal_code"), String::New(baton->record->postal_code));
+    data->Set(String::NewSymbol("latitude"), Number::New(baton->record->latitude));
+    data->Set(String::NewSymbol("longitude"), Number::New(baton->record->longitude));
+    data->Set(String::NewSymbol("metro_code"), Number::New(baton->record->metro_code));
+    data->Set(String::NewSymbol("dma_code"), Number::New(baton->record->dma_code));
+    data->Set(String::NewSymbol("area_code"), Number::New(baton->record->area_code));
+    data->Set(String::NewSymbol("continent_code"), String::New(baton->record->continent_code));     
+    argv[0] = data;
+  }
 
   TryCatch try_catch;
 

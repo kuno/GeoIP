@@ -9,34 +9,34 @@
 
 //GeoIP *db;
 //int db_edition;
-//static Persistent<FunctionTemplate> s_ct;
+//static Persistent<FunctionTemplate> constructor_template;
 
 void geoip::Country::Init(Handle<Object> target)
 {
   HandleScope scope;
 
   Local<FunctionTemplate> t = FunctionTemplate::New(New);
-  s_ct = Persistent<FunctionTemplate>::New(t);
-  s_ct->InstanceTemplate()->SetInternalFieldCount(2);
-  s_ct->SetClassName(String::NewSymbol("geoip"));
+  constructor_template = Persistent<FunctionTemplate>::New(t);
+  constructor_template->InstanceTemplate()->SetInternalFieldCount(2);
+  constructor_template->SetClassName(String::NewSymbol("geoip"));
 
-  //NODE_SET_PROTOTYPE_METHOD(s_ct, "lookup", lookup);
-  //NODE_SET_PROTOTYPE_METHOD(s_ct, "lookup6", lookup6);
-  NODE_SET_PROTOTYPE_METHOD(s_ct, "lookupSync", lookupSync);
-  //NODE_SET_PROTOTYPE_METHOD(s_ct, "lookupSync6", lookupSync6);
-  NODE_SET_PROTOTYPE_METHOD(s_ct, "close", close);
-  target->Set(String::NewSymbol("Country"), s_ct->GetFunction());
+  //NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookup", lookup);
+  //NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookup6", lookup6);
+  NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookupSync", lookupSync);
+  //NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookupSync6", lookupSync6);
+  NODE_SET_PROTOTYPE_METHOD(constructor_template, "close", close);
+  target->Set(String::NewSymbol("Country"), constructor_template->GetFunction());
 }
 
 /*
-Country() :
-  db_edition(0)
-{
-}
+   Country() :
+   db_edition(0)
+   {
+   }
 
-~Country()
-{
-}*/
+   ~Country()
+   {
+   }*/
 
 Handle<Value> geoip::Country::New(const Arguments& args)
 {
@@ -72,39 +72,30 @@ Handle<Value> geoip::Country::New(const Arguments& args)
 Handle<Value> geoip::Country::lookupSync(const Arguments &args) {
   HandleScope scope;
 
-  Local<String> ip_str = args[0]->ToString();
+  Local<String> host_str = args[0]->ToString();
   Local<Object> r = Object::New();
-  char ip_cstr[ip_str->Length()];
-  ip_str->WriteAscii(ip_cstr);
+  char host_cstr[host_str->Length()];
+  host_str->WriteAscii(host_cstr);
   Country* c = ObjectWrap::Unwrap<Country>(args.This());
 
-  r->Set(String::NewSymbol("country_code"), String::New(GeoIP_country_code_by_addr(c->db, ip_cstr)));
-  r->Set(String::NewSymbol("country_code3"), String::New(GeoIP_country_code3_by_addr(c->db, ip_cstr)));
-  r->Set(String::NewSymbol("country_name"), String::New(GeoIP_country_name_by_addr(c->db, ip_cstr)));
+  uint32_t ipnum = _GeoIP_lookupaddress(host_cstr);
+  if (ipnum <= 0) {
+    return Null();
+  }
+
+  int country_id = GeoIP_id_by_ipnum(c->db, ipnum);
+  if (country_id <= 0) {
+    return Null();
+  }
+
+  r->Set(String::NewSymbol("country_code"), String::New(GeoIP_country_code[country_id]));
+  r->Set(String::NewSymbol("country_code3"), String::New(GeoIP_country_code3[country_id]));
+  r->Set(String::NewSymbol("country_name"), String::New(GeoIP_country_name[country_id]));
   //r->Set(String::NewSymbol("continent_code"), String::New(gir->continent_code));
   return scope.Close(r);
 }
 
 /*  
-    struct city_baton_t {
-    Country *c;
-    char ip_cstr[256];  // standard length of ipv4
-    GeoIPRecord *r;
-    int increment_by;
-    int sleep_for;
-    Persistent<Function> cb;
-    };*/
-
-/* Special data struct for ipv6?
-   struct city_baton_t_v6 {
-   Country *c;
-   char ip_cstr[39]; // standard length of ipv6
-   GeoIPRecord *r;
-   int increment_by;
-   int sleep_for;
-   Persistent<Function> cb;
-   };*/                        
-/*
    static Handle<Value> Country::lookup(const Arguments& args)
    {
    HandleScope scope;
@@ -112,12 +103,12 @@ Handle<Value> geoip::Country::lookupSync(const Arguments &args) {
    REQ_FUN_ARG(1, cb);
 
    Country *c = ObjectWrap::Unwrap<City>(args.This());
-   Local<String> ip_str = args[0]->ToString();
+   Local<String> host_str = args[0]->ToString();
 
    city_baton_t *baton = new city_baton_t();
 
    baton->c = c;
-   ip_str->WriteAscii(baton->ip_cstr);
+   host_str->WriteAscii(baton->host_cstr);
    baton->increment_by = 2;
    baton->sleep_for = 1;
    baton->cb = Persistent<Function>::New(cb);
@@ -136,7 +127,7 @@ Handle<Value> geoip::Country::lookupSync(const Arguments &args) {
 
    sleep(baton->sleep_for);
 
-   baton->r = GeoIP_record_by_name(baton->c->db, baton->ip_cstr);
+   baton->r = GeoIP_record_by_name(baton->c->db, baton->host_cstr);
 
    if (baton->r == NULL) {
    return 1;
@@ -191,4 +182,4 @@ Handle<Value> geoip::Country::close(const Arguments &args) {
   HandleScope scope;	// Stick this down here since it seems to segfault when on top?
 }
 
-Persistent<FunctionTemplate> geoip::Country::s_ct;
+Persistent<FunctionTemplate> geoip::Country::constructor_template;
