@@ -5,11 +5,14 @@ var City = geoip.City;
 var city = new City('/tmp/GeoLiteCity.dat', true);
 
 // Test record_by_domain method
-var record = city.lookupSync('8.8.8.8');
-console.log(record);
-assert.strictEqual(record.country_code, 'US', 'Google is not in US?');
+var sync_data = city.lookupSync('8.8.8.8');
+assert.ok(sync_data, 'Can not find google?');
 
 city.lookup('www.google.com', function(data) {
-    assert.strictEqual(record.country_id, data.country_id, 'oops! async not equal to sync!');
+    if (data) {
+      assert.deepEqual(sync_data, data, 'oops! Async and sync city data not equal');
+    } else {
+      console.log('Data not found');
+    }
     assert.ok(city.close(), 'oops! err when closing city object!');
 });

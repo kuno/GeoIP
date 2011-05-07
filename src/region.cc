@@ -53,8 +53,9 @@ Handle<Value> geoip::Region::New(const Arguments& args)
       return args.This();
     } else {
       GeoIP_delete(r->db);	// free()'s the gi reference & closes its fd
-      r->db = NULL;                                                       
-      return ThrowException(String::New("Error: Not region database"));
+      r->db = NULL;
+      printf("edition is %d", r->db_edition);
+      return ThrowException(String::New("Error: Not valid region database"));
     }
   } else {
     return ThrowException(String::New("Error: Cao not open database"));

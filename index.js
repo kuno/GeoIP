@@ -1,10 +1,12 @@
 var read  = require('fs').readFileSync,
     join  = require('path').join;
 
-var binding = require('./geoip.node'),
-    City    = require('./lib/city.js');
+var binding = require('./geoip.node');
 
-exports.Country = binding.Country;
-exports.City    = City;
+exports.NetSpeed = binding.NetSpeed;
+exports.Country  = binding.Country;
+exports.Region   = binding.Region;
+exports.City     = binding.City;
+exports.Org      = binding.Org;
 
-exports.version = JSON.parse(read(join(__dirname, 'package.json'))).version;
+exports.version  = JSON.parse(read(join(__dirname, 'package.json'))).version;

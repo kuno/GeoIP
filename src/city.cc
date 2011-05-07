@@ -54,7 +54,7 @@ Handle<Value> geoip::City::New(const Arguments& args)
     } else {
       GeoIP_delete(c->db);	// free()'s the gi reference & closes its fd
       c->db = NULL;                                                       
-      return ThrowException(String::New("Error: Not city database"));
+      return ThrowException(String::New("Error: Not valid city database"));
     }
   } else {
     return ThrowException(String::New("Error: Cao not open database"));
