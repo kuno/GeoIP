@@ -37,3 +37,7 @@ test/report.txt
 
 # coffee script
 *.coffee
+
+core
+
+build/*
