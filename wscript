@@ -20,7 +20,7 @@ def build(bld):
   obj.find_sources_in_dirs("src")
   obj.lib = ["GeoIP"]
 
-def shutdown(bld):
+def link(bld):
   # HACK to get binding.node out of build directory.
   # better way to do this?
   if Options.commands['clean']:

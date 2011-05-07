@@ -35,6 +35,13 @@ extern "C" {
   Local<Function> VAR = Local<Function>::Cast(args[I]);
 
 ////////////////////////////////////////////////////////////////////////////////
+////////////////////////////// GeoIP Internal //////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+extern "C" double in6_to_num(in6_addr *addr);
+extern "C" GEOIP_API unsigned long _GeoIP_addr_to_num(const char *addr);
+extern "C" GEOIP_API geoipv6_t _GeoIP_addr_to_num_v6 (const char *addr);    
+
+////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////// GeoIP Country //////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 extern "C" GEOIP_API void GeoIP_setup_custom_directory(char *dir);
@@ -161,26 +168,7 @@ extern "C" GEOIP_API int GeoIP_cleanup(void);
 extern "C" GeoIPRecord * GeoIP_record_by_addr (GeoIP * gi, const char * addr);
 extern "C" GeoIPRecord * GeoIP_record_by_name (GeoIP * gi, const char * host);    
 
-/*
-struct city_baton_t {
-  City *c;
-  char ip_cstr[256];  // standard length of ipv4
-  GeoIPRecord *r;
-  int increment_by;
-  int sleep_for;
-  Persistent<Function> cb;
-};
 
-struct city_baton_t_v6 {
-  City *c;
-  char ip_cstr[256]; // standard length of ipv6
-  GeoIPRecord *r;
-  int increment_by;
-  int sleep_for;
-  Persistent<Function> cb;
-};
-
-*/
 #ifdef __cplusplus
 }
 #endif

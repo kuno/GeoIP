@@ -14,33 +14,36 @@
 using namespace v8;
 using namespace node;
 
-class City: ObjectWrap
-{
-  private:
-    GeoIP *db;
-    int db_edition;
-  public:
-    static Persistent<FunctionTemplate> s_ct;
-    static void Init(Handle<Object> target);
+namespace geoip {
+  class City: ObjectWrap
+  {
+    private:
+      GeoIP *db;
+      int db_edition;
+    public:
+      static Persistent<FunctionTemplate> constructor_template;
 
-    static Handle<Value> New(const Arguments& args);
+      static void Init(Handle<Object> target);
 
-    static Handle<Value> lookupSync(const Arguments &args);
+      static Handle<Value> New(const Arguments& args);
 
-    static Handle<Value> lookup(const Arguments& args);
+      static Handle<Value> lookupSync(const Arguments &args);
 
-    static int EIO_City(eio_req *req);
+      static Handle<Value> lookup(const Arguments& args);
 
-    static int EIO_AfterCity(eio_req *req);
+      static int EIO_City(eio_req *req);
 
-    // Destroy the GeoIP* reference we're holding on to
-    static Handle<Value> close(const Arguments &args);
-};
+      static int EIO_AfterCity(eio_req *req);
 
+      // Destroy the GeoIP* reference we're holding on to
+      static Handle<Value> close(const Arguments &args);
+  };
+
+}
 struct city_baton_t {
-  City *c;
+  geoip::City *c;
   char ip_cstr[256];  // standard length of ipv4
-  GeoIPRecord *r;
+  GeoIPRecord *record;
   int increment_by;
   int sleep_for;
   Persistent<Function> cb;

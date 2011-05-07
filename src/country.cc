@@ -11,7 +11,7 @@
 //int db_edition;
 //static Persistent<FunctionTemplate> s_ct;
 
-void Country::Init(Handle<Object> target)
+void geoip::Country::Init(Handle<Object> target)
 {
   HandleScope scope;
 
@@ -38,7 +38,7 @@ Country() :
 {
 }*/
 
-Handle<Value> Country::New(const Arguments& args)
+Handle<Value> geoip::Country::New(const Arguments& args)
 {
   HandleScope scope;
   Country *c = new Country();
@@ -69,7 +69,7 @@ Handle<Value> Country::New(const Arguments& args)
   }
 }
 
-Handle<Value> Country::lookupSync(const Arguments &args) {
+Handle<Value> geoip::Country::lookupSync(const Arguments &args) {
   HandleScope scope;
 
   Local<String> ip_str = args[0]->ToString();
@@ -184,11 +184,11 @@ return 0;
 }*/
 
 // Destroy the GeoIP* reference we're holding on to
-Handle<Value> Country::close(const Arguments &args) {
-  Country* c = ObjectWrap::Unwrap<Country>(args.This()); 
+Handle<Value> geoip::Country::close(const Arguments &args) {
+  Country* c = ObjectWrap::Unwrap<geoip::Country>(args.This()); 
   GeoIP_delete(c->db);	// free()'s the gi reference & closes its fd
   c->db = NULL;
   HandleScope scope;	// Stick this down here since it seems to segfault when on top?
 }
 
-Persistent<FunctionTemplate> Country::s_ct;
+Persistent<FunctionTemplate> geoip::Country::s_ct;

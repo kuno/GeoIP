@@ -7,24 +7,19 @@
 
 #include "city.h"
 
-
-//GeoIP *db;
-//int db_edition;
-//Persistent<FunctionTemplate> City::s_ct;
-
-void City::Init(Handle<Object> target)
+void geoip::City::Init(Handle<Object> target)
 {
   HandleScope scope;
 
   Local<FunctionTemplate> t = FunctionTemplate::New(New);
-  s_ct = Persistent<FunctionTemplate>::New(t);
-  s_ct->InstanceTemplate()->SetInternalFieldCount(2);
-  s_ct->SetClassName(String::NewSymbol("geoip"));
+  constructor_template = Persistent<FunctionTemplate>::New(t);
+  constructor_template->InstanceTemplate()->SetInternalFieldCount(2);
+  constructor_template->SetClassName(String::NewSymbol("geoip"));
 
-  NODE_SET_PROTOTYPE_METHOD(s_ct, "lookup", lookup);
-  NODE_SET_PROTOTYPE_METHOD(s_ct, "lookupSync", lookupSync);
-  NODE_SET_PROTOTYPE_METHOD(s_ct, "close", close);
-  target->Set(String::NewSymbol("City"), s_ct->GetFunction());
+  NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookup", lookup);
+  NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookupSync", lookupSync);
+  NODE_SET_PROTOTYPE_METHOD(constructor_template, "close", close);
+  target->Set(String::NewSymbol("City"), constructor_template->GetFunction());
 }
 
 /*
@@ -37,7 +32,7 @@ City() :
 {
 } */
 
-Handle<Value> City::New(const Arguments& args)
+Handle<Value> geoip::City::New(const Arguments& args)
 {
   HandleScope scope;
   City *c = new City();
@@ -66,7 +61,7 @@ Handle<Value> City::New(const Arguments& args)
   }
 }
 
-Handle<Value> City::lookupSync(const Arguments &args) {
+Handle<Value> geoip::City::lookupSync(const Arguments &args) {
   HandleScope scope;
 
   Local<String> ip_str = args[0]->ToString();
@@ -98,18 +93,7 @@ Handle<Value> City::lookupSync(const Arguments &args) {
   }
 }
 
-
-/* Special data struct for ipv6?
-   struct city_baton_t_v6 {
-   City *c;
-   char ip_cstr[39]; // standard length of ipv6
-   GeoIPRecord *r;
-   int increment_by;
-   int sleep_for;
-   Persistent<Function> cb;
-   };*/                        
-
-Handle<Value> City::lookup(const Arguments& args)
+Handle<Value> geoip::City::lookup(const Arguments& args)
 {
   HandleScope scope;
 
@@ -134,22 +118,22 @@ Handle<Value> City::lookup(const Arguments& args)
   return Undefined();
 }
 
-int City::EIO_City(eio_req *req)
+int geoip::City::EIO_City(eio_req *req)
 {
   city_baton_t *baton = static_cast<city_baton_t *>(req->data);
 
   sleep(baton->sleep_for);
 
-  baton->r = GeoIP_record_by_name(baton->c->db, baton->ip_cstr);
+  baton->record = GeoIP_record_by_name(baton->c->db, baton->ip_cstr);
 
-  if (baton->r == NULL) {
+  if (baton->record == NULL) {
     return 1;
   } else {
     return 0;
   }
 }
 
-int City::EIO_AfterCity(eio_req *req)
+int geoip::City::EIO_AfterCity(eio_req *req)
 {
   HandleScope scope;
 
@@ -159,17 +143,17 @@ int City::EIO_AfterCity(eio_req *req)
 
   Local<Value> argv[1];
   Local<Object> r = Object::New();
-  r->Set(String::NewSymbol("country_code"), String::New(baton->r->country_code));
-  r->Set(String::NewSymbol("country_code3"), String::New(baton->r->country_code3));
-  r->Set(String::NewSymbol("country_name"), String::New(baton->r->country_name));
-  r->Set(String::NewSymbol("region"), String::New(baton->r->region));
-  r->Set(String::NewSymbol("postal_code"), String::New(baton->r->postal_code));
-  r->Set(String::NewSymbol("latitude"), Number::New(baton->r->latitude));
-  r->Set(String::NewSymbol("longitude"), Number::New(baton->r->longitude));
-  r->Set(String::NewSymbol("metro_code"), Number::New(baton->r->metro_code));
-  r->Set(String::NewSymbol("dma_code"), Number::New(baton->r->dma_code));
-  r->Set(String::NewSymbol("area_code"), Number::New(baton->r->area_code));
-  r->Set(String::NewSymbol("continent_code"), String::New(baton->r->continent_code));     
+  r->Set(String::NewSymbol("country_code"), String::New(baton->record->country_code));
+  r->Set(String::NewSymbol("country_code3"), String::New(baton->record->country_code3));
+  r->Set(String::NewSymbol("country_name"), String::New(baton->record->country_name));
+  r->Set(String::NewSymbol("region"), String::New(baton->record->region));
+  r->Set(String::NewSymbol("postal_code"), String::New(baton->record->postal_code));
+  r->Set(String::NewSymbol("latitude"), Number::New(baton->record->latitude));
+  r->Set(String::NewSymbol("longitude"), Number::New(baton->record->longitude));
+  r->Set(String::NewSymbol("metro_code"), Number::New(baton->record->metro_code));
+  r->Set(String::NewSymbol("dma_code"), Number::New(baton->record->dma_code));
+  r->Set(String::NewSymbol("area_code"), Number::New(baton->record->area_code));
+  r->Set(String::NewSymbol("continent_code"), String::New(baton->record->continent_code));     
 
   argv[0] = r;
 
@@ -188,11 +172,11 @@ int City::EIO_AfterCity(eio_req *req)
 }
 
 // Destroy the GeoIP* reference we're holding on to
-Handle<Value> City::close(const Arguments &args) {
+Handle<Value> geoip::City::close(const Arguments &args) {
   City* c = ObjectWrap::Unwrap<City>(args.This()); 
   GeoIP_delete(c->db);	// free()'s the gi reference & closes its fd
   c->db = NULL;
   HandleScope scope;	// Stick this down here since it seems to segfault when on top?
 }
 
-Persistent<FunctionTemplate> City::s_ct;
+Persistent<FunctionTemplate> geoip::City::constructor_template;

@@ -1,6 +1,6 @@
-# project noname (0.1) configured on Fri May  6 11:08:33 2011 by
+# project noname (0.1) configured on Sat May  7 13:49:01 2011 by
 # waf 1.5.16 (abi 7, python 20701f0 on linux2)
-# using /usr/bin/node-waf configure build shutdown
+# using /usr/bin/node-waf configure build link
 #
 
 ----------------------------------------

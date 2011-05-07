@@ -15,33 +15,34 @@
 using namespace v8;
 using namespace node;
 
+namespace geoip {
+  class Country: ObjectWrap
+  {
+    private:
+      GeoIP *db;
+      int db_edition;
+      static Persistent<FunctionTemplate> s_ct;
 
-class Country: ObjectWrap
-{
-  private:
-    GeoIP *db;
-    int db_edition;
-    static Persistent<FunctionTemplate> s_ct;
+    protected:
+      static Handle<Value> New(const Arguments& args);
 
-  protected:
-    static Handle<Value> New(const Arguments& args);
+    public:
+      static void Init(Handle<Object> target);
 
-  public:
-    static void Init(Handle<Object> target);
+      //static Handle<Value> New(const Arguments& args);
 
-    //static Handle<Value> New(const Arguments& args);
+      static Handle<Value> lookupSync(const Arguments &args);
+      /*
+         static Handle<Value> lookup(const Arguments& args);
 
-    static Handle<Value> lookupSync(const Arguments &args);
-    /*
-    static Handle<Value> lookup(const Arguments& args);
+         static int EIO_Country(eio_req *req);
 
-    static int EIO_Country(eio_req *req);
+         static int EIO_AfterCountry(eio_req *req);
+         */
 
-    static int EIO_AfterCountry(eio_req *req);
-    */
-
-    // Destroy the GeoIP* reference we're holding on to
-    static Handle<Value> close(const Arguments &args);
-};
+      // Destroy the GeoIP* reference we're holding on to
+      static Handle<Value> close(const Arguments &args);
+  };
+}
 
 #endif /* NODE_GEOIP_COUNTRY_H */
