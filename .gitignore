@@ -38,6 +38,9 @@ test/report.txt
 # coffee script
 *.coffee
 
+# c/c++ core dump
 core
 
+# binary file
+*.node
 build/*

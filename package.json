@@ -1,7 +1,7 @@
 {
   "name":"geoip",
   "description":"GeoIP client for node",
-  "version":"0.3.4-1",
+  "version":"0.4.0pre",
   "homepage":"",
   "author":"Guan 'kuno' Qing <neokuno at Gmail dot com>",
   "contributors":
@@ -32,6 +32,7 @@
       "benchmark":"./benchmark"
     },
   "engine":{"node": ">=0.2.1"},
+  "script":{"install": "node-waf configure build"},
   "licences":
     [
       {

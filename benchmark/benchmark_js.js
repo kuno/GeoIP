@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
-var geoip = require('../index.js');
+var geoip = require('geoip');
 var util = require('util');
+var City = geoip.City;
 var data = geoip.open('/tmp/GeoLiteCity.dat');
 
 var ip32 = function() {
@@ -17,7 +18,12 @@ var ip32 = function() {
 
 var start = new Date().getTime();
 for (var i = 0; i < 10000; ++i) {
-  geoip.City.record_by_addr(data, ip32());
+  var domain = 'www.google.com';
+  //console.log(addr);
+  var l = City.record_by_domain(data, domain, function(err, data) {
+      if (err) {throw err;}
+    });
+  //console.log(l);
 }
 var end = new Date().getTime();
 
