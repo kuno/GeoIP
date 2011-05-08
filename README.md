@@ -50,9 +50,11 @@ Not implemented yet, but if so the methods will be similar with ipv4 methods but
 
 * Data struct
 
-The struct of return from geoip will only have two types, object or string.
+The struct of the data return from geoip will only have two types, object or string.
 
-If the returned type have multiple properties (e.g city record) the all these properties will be encapsulate into an object, othewise will be an plain string.
+If the returned type have multiple properties (e.g city record) the all these properties will be encapsulate into an object, 
+
+othewise will be an plain string.
 
 
 ##Compatibility
