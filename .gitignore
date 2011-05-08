@@ -44,3 +44,6 @@ core
 # binary file
 *.node
 build/*
+
+# wscript files
+.locl-wscript
