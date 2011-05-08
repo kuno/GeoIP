@@ -5,8 +5,8 @@
  *		./configure && make && sudo make install
  */
 
-#ifndef NODE_GEOIP_org_H
-#define NODE_GEOIP_org_H
+#ifndef NODE_GEOIP_ORG_H
+#define NODE_GEOIP_ORG_H
 
 #include <v8.h>
 #include <node.h>
@@ -53,4 +53,4 @@ struct org_baton_t {
   Persistent<Function> cb;
 };
 
-#endif /* NODE_GEOIP_org_H */
+#endif /* NODE_GEOIP_ORG_H */
