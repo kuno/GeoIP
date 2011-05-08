@@ -6,9 +6,51 @@ GeoIP API for node.
 
 Get geolocation information based on domain or IP address.
 
-__Live Demo__
+__Important Warning__
 
-[http://64.30.136.194:8124/](http://64.30.136.194:8124)
+From v0.4.0(the next major release) geoip will be re-factor from Sketch, and will break the  api from previous version.
+
+* New Architecture
+
+geoip will be binding to libgeoip >= 1.4.6, which is a C library.
+
+![new_architecture](https://github.com/kuno/GeoIP/raw/master/misc/new_architecture.png)  
+
+* Api
+
+Every sub-module of geoip (geoip.Country, geoip.City...) will be a constructor function, for exampmle:
+
+    var geoip = require('geoip');
+
+    var city =  new City('/path/to/GeoLiteCity.dat', true);
+
+* Lookup methods
+
+Now every instance of geoip module will two kind of lookup methods, synchronous and asynchronous, for example:
+
+    var record = city.lookupSync('8.8.8.8');
+
+    city.lookup('8.8.8.8', function(data) {
+        if (data) {  // if not found, data will be null or undefined
+           //Do something with data
+        }
+    });
+
+* Support for ipv6
+
+Not implemented yet, but if so the methods will be similar with ipv4 methods but  have 6 suffix, for example:
+
+    var record6 = city.lookupSync6(ADDR_V6);
+
+    city.lookup6(ADDR_V6, function(data) {
+        ......
+    });
+
+* Data struct
+
+The struct of return from geoip will only have two types, object or string.
+
+If the returned type have multiple properties (e.g city record) the all these properties will be encapsulate into an object, othewise will be an plain string.
 
 
 ##Compatibility
