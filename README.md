@@ -1,5 +1,4 @@
-GeoIP API for node.
-===================
+####GeoIP API for node.
 
 Get geolocation information based on domain or IP address.
 
