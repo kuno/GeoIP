@@ -1,12 +1,10 @@
 GeoIP API for node.
 ===================
 
-
-##Description
-
 Get geolocation information based on domain or IP address.
 
-__Important Warning__
+
+###Important Warning###
 
 From v0.4.0(the next major release) geoip will be re-factor from Sketch,
 
