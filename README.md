@@ -1,9 +1,9 @@
-####GeoIP API for node.
+__GeoIP API for node__
 
 Get geolocation information based on domain or IP address.
 
 
-###Important Warning###
+##Important Warning
 
 From v0.4.0(the next major release) geoip will be re-factor from Sketch,
 
@@ -21,7 +21,7 @@ Every sub-module of geoip (geoip.Country, geoip.City...) will be a constructor f
 
     var geoip = require('geoip');
 
-    var city =  new City('/path/to/GeoLiteCity.dat', true);
+    var city =  new geoip.City('/path/to/GeoLiteCity.dat', true);
 
 * Lookup methods
 
