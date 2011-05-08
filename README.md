@@ -8,7 +8,9 @@ Get geolocation information based on domain or IP address.
 
 __Important Warning__
 
-From v0.4.0(the next major release) geoip will be re-factor from Sketch, and will break the  api from previous version.
+From v0.4.0(the next major release) geoip will be re-factor from Sketch,
+
+including drop support for nodejs 0.2.x and will break the  api from previous version.
 
 * New Architecture
 

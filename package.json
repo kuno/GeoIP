@@ -31,7 +31,7 @@
       "include":"./include",  
       "benchmark":"./benchmark"
     },
-  "engine":{"node": ">=0.2.1"},
+  "engine":{"node": ">=0.4.0"},
   "script":{"install": "node-waf configure build"},
   "licences":
     [
