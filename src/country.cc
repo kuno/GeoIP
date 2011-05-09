@@ -53,14 +53,14 @@ Handle<Value> geoip::Country::New(const Arguments& args)
         c->db_edition == GEOIP_CITY_EDITION_REV0 ||
         c->db_edition == GEOIP_CITY_EDITION_REV1) { 
       c->Wrap(args.This());
-      return args.This();
+      return scope.Close(args.This());
     } else {
       GeoIP_delete(c->db);	// free()'s the gi reference & closes its fd
       c->db = NULL;                                                       
-      return ThrowException(String::New("Error: Not valid country database"));
+      return scope.Close(ThrowException(String::New("Error: Not valid country database")));
     }
   } else {
-    return ThrowException(String::New("Error: Cao not open database"));
+    return scope.Close(ThrowException(String::New("Error: Cao not open database")));
   }
 }
 
@@ -82,7 +82,7 @@ Handle<Value> geoip::Country::lookupSync(const Arguments &args) {
   } else {
     int country_id = GeoIP_id_by_ipnum(c->db, ipnum);
     if (country_id == 0) {
-      return Null();
+      return scope.Close(Null());
     } else {
       data->Set(String::NewSymbol("country_code"), String::New(GeoIP_country_code[country_id]));
       //data->Set(String::NewSymbol("country_code3"), String::New(GeoIP_country_code3_by_addr(c->db, host_cstr)));

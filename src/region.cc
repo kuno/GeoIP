@@ -50,15 +50,15 @@ Handle<Value> geoip::Region::New(const Arguments& args)
     if (r->db_edition == GEOIP_REGION_EDITION_REV0 || 
         r->db_edition == GEOIP_REGION_EDITION_REV1) {
       r->Wrap(args.This());
-      return args.This();
+      return scope.Close(args.This());
     } else {
       GeoIP_delete(r->db);	// free()'s the gi reference & closes its fd
       r->db = NULL;
       printf("edition is %d", r->db_edition);
-      return ThrowException(String::New("Error: Not valid region database"));
+      return scope.Close(ThrowException(String::New("Error: Not valid region database")));
     }
   } else {
-    return ThrowException(String::New("Error: Cao not open database"));
+    return scope.Close(ThrowException(String::New("Error: Cao not open database")));
   }
 }
 
@@ -74,7 +74,7 @@ Handle<Value> geoip::Region::lookupSync(const Arguments &args) {
   uint32_t ipnum = _GeoIP_lookupaddress(host_cstr);
 
   if (ipnum <= 0) {
-    return Null();
+    return scope.Close(Null());
   }
 
   GeoIPRegion *region = GeoIP_region_by_ipnum(r->db, ipnum);
@@ -84,7 +84,7 @@ Handle<Value> geoip::Region::lookupSync(const Arguments &args) {
     data->Set(String::NewSymbol("region"), String::New(region->region));
     return scope.Close(data);
   } else {
-    return ThrowException(String::New("Error: Can not find match data"));
+    return scope.Close(ThrowException(String::New("Error: Can not find match data")));
   }
 }
 
@@ -110,7 +110,7 @@ Handle<Value> geoip::Region::lookup(const Arguments& args)
   eio_custom(EIO_Region, EIO_PRI_DEFAULT, EIO_AfterRegion, baton);
   ev_ref(EV_DEFAULT_UC);
 
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 int geoip::Region::EIO_Region(eio_req *req)

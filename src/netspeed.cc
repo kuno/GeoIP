@@ -50,14 +50,14 @@ Handle<Value> geoip::NetSpeed::New(const Arguments& args)
     n->db_edition = GeoIP_database_edition(n->db);
     if (n->db_edition == GEOIP_NETSPEED_EDITION) {
       n->Wrap(args.This());
-      return args.This();
+      return scope.Close(args.This());
     } else {
       GeoIP_delete(n->db);	// free()'s the gi reference & closes its fd
       n->db = NULL;                                                       
-      return ThrowException(String::New("Error: Not valid netspeed database"));
+      return scope.Close(ThrowException(String::New("Error: Not valid netspeed database")));
     }
   } else {
-    return ThrowException(String::New("Error: Cao not open database"));
+    return scope.Close(ThrowException(String::New("Error: Cao not open database")));
   }
 }
 
@@ -74,12 +74,12 @@ Handle<Value> geoip::NetSpeed::lookupSync(const Arguments &args) {
   uint32_t ipnum = _GeoIP_lookupaddress(host_cstr);
 
   if (ipnum <= 0) {  // || ipnum >= 81692295) {
-    return Null();  //return scope.Close(data);
+    return scope.Close(Null());  //return scope.Close(data);
   }
 
   int netspeed = GeoIP_id_by_ipnum(n->db, ipnum);
   if (netspeed < 0) {
-    return Null();
+    return scope.Close(Null());
   } else if (netspeed == GEOIP_UNKNOWN_SPEED) {
     data = String::New("Uknown");
   } else if (netspeed == GEOIP_DIALUP_SPEED) {
@@ -114,7 +114,7 @@ Handle<Value> geoip::NetSpeed::lookupSync(const Arguments &args) {
     eio_custom(EIO_NetSpeed, EIO_PRI_DEFAULT, EIO_AfterNetSpeed, baton);
     ev_ref(EV_DEFAULT_UC);
 
-    return Undefined();
+    return scope.Close(Undefined());
   }
 
   int geoip::NetSpeed::EIO_NetSpeed(eio_req *req)
@@ -151,23 +151,23 @@ Handle<Value> geoip::NetSpeed::lookupSync(const Arguments &args) {
         } else if (baton->netspeed == GEOIP_CABLEDSL_SPEED) {
           data = String::New("CableDSL");
         } else if (baton->netspeed == GEOIP_CORPORATE_SPEED) {
-          data = String::New("Corporate");   
-          argv[0] = data;
+          data = String::New("Corporate");
         }
-
-        TryCatch try_catch;
-
-        baton->cb->Call(Context::GetCurrent()->Global(), 1, argv);
-
-        if (try_catch.HasCaught()) {
-          FatalException(try_catch);
-        }
-
-        baton->cb.Dispose();
-
-        delete baton;
-        return 0;
+        argv[0] = data;
       }
+
+      TryCatch try_catch;
+
+      baton->cb->Call(Context::GetCurrent()->Global(), 1, argv);
+
+      if (try_catch.HasCaught()) {
+        FatalException(try_catch);
+      }
+
+      baton->cb.Dispose();
+
+      delete baton;
+      return 0;
     }
 
     Handle<Value> geoip::NetSpeed::close(const Arguments &args) {

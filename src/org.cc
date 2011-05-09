@@ -51,14 +51,14 @@ Handle<Value> geoip::Org::New(const Arguments& args)
     o->db_edition = GeoIP_database_edition(o->db);
     if (o->db_edition == GEOIP_ORG_EDITION) {
       o->Wrap(args.This());
-      return args.This();
+      return scope.Close(args.This());
     } else {
       GeoIP_delete(o->db);	// free()'s the gi reference & closes its fd
       o->db = NULL;                                                       
-      return ThrowException(String::New("Error: Not valid org database"));
+      return scope.Close(ThrowException(String::New("Error: Not valid org database")));
     }
   } else {
-    return ThrowException(String::New("Error: Cao not open database"));
+    return scope.Close(ThrowException(String::New("Error: Cao not open database")));
   }
 }
 
@@ -69,16 +69,16 @@ Handle<Value> geoip::Org::lookupSync(const Arguments &args) {
   Local<Object> data = Object::New();
   char host_cstr[host_str->Length()];
   host_str->WriteAscii(host_cstr);
-  Org* o = ObjectWrap::Unwrap<Org>(args.This());
+  Org* o = ObjectWrap::Unwrap<geoip::Org>(args.This());
 
   uint32_t ipnum = _GeoIP_lookupaddress(host_cstr);
   if (ipnum <= 0) {
-    return Null();
+    return scope.Close(Null());
   }
 
   char *org = GeoIP_name_by_ipnum(o->db, ipnum);
   if (org == NULL) {
-    return Null();
+    return scope.Close(Null());
   }
 
   data->Set(String::NewSymbol("org_name"), String::New(org));
@@ -91,7 +91,7 @@ Handle<Value> geoip::Org::lookup(const Arguments& args)
 
   REQ_FUN_ARG(1, cb);
 
-  Org *o = ObjectWrap::Unwrap<Org>(args.This());
+  Org *o = ObjectWrap::Unwrap<geoip::Org>(args.This());
   Local<String> host_str = args[0]->ToString();
 
   org_baton_t *baton = new org_baton_t();
@@ -137,6 +137,7 @@ int geoip::Org::EIO_AfterOrg(eio_req *req)
   Local<Value> argv[1];
   if (baton->org != NULL) {
     Local<Object> data = Object::New();
+
     data->Set(String::NewSymbol("org_name"), String::New(baton->org));
 
     argv[0] = data;

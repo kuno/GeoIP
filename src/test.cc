@@ -5,9 +5,9 @@
  *		./configure && make && sudo make install
  */
 
-#include "city.h"
+#include "test.h"
 
-void geoip::City::Init(Handle<Object> target)
+void geoip::Test::Init(Handle<Object> target)
 {
   HandleScope scope;
 
@@ -16,10 +16,10 @@ void geoip::City::Init(Handle<Object> target)
   constructor_template->InstanceTemplate()->SetInternalFieldCount(2);
   constructor_template->SetClassName(String::NewSymbol("geoip"));
 
-  NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookup", lookup);
+  //NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookup", lookup);
   NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookupSync", lookupSync);
   NODE_SET_PROTOTYPE_METHOD(constructor_template, "close", close);
-  target->Set(String::NewSymbol("City"), constructor_template->GetFunction());
+  target->Set(String::NewSymbol("Test"), constructor_template->GetFunction());
 }
 
 /*
@@ -32,10 +32,10 @@ void geoip::City::Init(Handle<Object> target)
    {
    } */
 
-Handle<Value> geoip::City::New(const Arguments& args)
+Handle<Value> geoip::Test::New(const Arguments& args)
 {
   HandleScope scope;
-  City *c = new City();
+  Test *c = new Test();
 
   Local<String> path_str = args[0]->ToString();
   char path_cstr[path_str->Length()];
@@ -50,7 +50,7 @@ Handle<Value> geoip::City::New(const Arguments& args)
     if (c->db_edition == GEOIP_CITY_EDITION_REV0 || 
         c->db_edition == GEOIP_CITY_EDITION_REV1) {
       c->Wrap(args.This());
-      return scope.Close(args.This());
+      return args.This();
     } else {
       GeoIP_delete(c->db);	// free()'s the gi reference & closes its fd
       c->db = NULL;                                                       
@@ -61,24 +61,29 @@ Handle<Value> geoip::City::New(const Arguments& args)
   }
 }
 
-Handle<Value> geoip::City::lookupSync(const Arguments &args) {
+Handle<Value> geoip::Test::lookupSync(const Arguments &args) {
   HandleScope scope;
 
   Local<String> host_str = args[0]->ToString();
   Local<Object> data = Object::New();
   char host_cstr[host_str->Length()];
   host_str->WriteAscii(host_cstr);
-  City * c = ObjectWrap::Unwrap<geoip::City>(args.This());
+  Test * c = ObjectWrap::Unwrap<geoip::Test>(args.This());
 
   uint32_t ipnum = _GeoIP_lookupaddress(host_cstr);
   if (ipnum <= 0) {
-    return scope.Close(Null());
+    return Null();
+  }
+
+  unsigned int seek_record = _GeoIP_seek_record(c->db, ipnum);
+  if (seek_record <= 0 ) {
+    return Null();
   }
 
   GeoIPRecord * record = GeoIP_record_by_ipnum(c->db, ipnum);
 
   if (record == NULL) {
-    return scope.Close(Null()); //return ThrowException(String::New("Error: Can not find match data"));
+    return scope.Close(Null());
   }
 
   if (record->country_code != NULL) {
@@ -90,7 +95,7 @@ Handle<Value> geoip::City::lookupSync(const Arguments &args) {
   }
 
   if (record->country_name != NULL) {
-    data->Set(String::NewSymbol("country_name"), String::New(record->country_name));
+  data->Set(String::NewSymbol("country_name"), String::New(record->country_name));
   }
 
   if (record->region != NULL ) {
@@ -98,36 +103,37 @@ Handle<Value> geoip::City::lookupSync(const Arguments &args) {
   }
 
   if (record->postal_code != NULL) {
-    data->Set(String::NewSymbol("postal_code"), String::New(record->postal_code));
+   data->Set(String::NewSymbol("postal_code"), String::New(record->postal_code));
   }
 
-  if (record->latitude > 0) {
+    if (record->latitude > 0) {
     data->Set(String::NewSymbol("latitude"), Number::New(record->latitude));
-  }
+    }
 
-  if (record->longitude > 0) {
+    if (record->longitude > 0) {
     data->Set(String::NewSymbol("longitude"), Number::New(record->longitude));
-  }
+    }
 
-  if (record->metro_code > 0 ) {
+    if (record->metro_code > 0 ) {
     data->Set(String::NewSymbol("metro_code"), Number::New(record->metro_code));
-  }
+    }
 
-  if (record->dma_code > 0 ) {
+    if (record->dma_code > 0 ) {
     data->Set(String::NewSymbol("dma_code"), Number::New(record->dma_code));
-  }
+    }
 
-  if (record->area_code > 0) {
+    if (record->area_code > 0) {
     data->Set(String::NewSymbol("area_code"), Number::New(record->area_code));
-  }
+    }
 
-  if (record->continent_code > 0) {
+    if (record->continent_code > 0) {
     data->Set(String::NewSymbol("continent_code"), String::New(record->continent_code));
-  }
+    }
 
-  return scope.Close(data);
+    return scope.Close(data);
 }
 
+/*
 Handle<Value> geoip::City::lookup(const Arguments& args)
 {
   HandleScope scope;
@@ -173,56 +179,24 @@ int geoip::City::EIO_AfterCity(eio_req *req)
 {
   HandleScope scope;
 
-  city_baton_t *baton = static_cast<city_baton_t *>(req->data);
+  city_baton_t * baton = static_cast<city_baton_t *>(req->data);
   ev_unref(EV_DEFAULT_UC);
   baton->c->Unref();
 
   Local<Value> argv[1];
   if (baton->record != NULL) {
     Local<Object> data = Object::New();
-
-    if (baton->record->country_code != NULL) {
-      data->Set(String::NewSymbol("country_code"), String::New(baton->record->country_code));
-    }
-    if (baton->record->country_code3 != NULL) {
-      data->Set(String::NewSymbol("country_code3"), String::New(baton->record->country_code3));
-    }
-
-    if (baton->record->country_name != NULL) {
-      data->Set(String::NewSymbol("country_name"), String::New(baton->record->country_name));
-    }
-
-    if (baton->record->region != NULL ) {
-      data->Set(String::NewSymbol("region"), String::New(baton->record->region));
-    }
-
-    if (baton->record->postal_code != NULL) {
-      data->Set(String::NewSymbol("postal_code"), String::New(baton->record->postal_code));
-    }
-
-    if (baton->record->latitude > 0) {
-      data->Set(String::NewSymbol("latitude"), Number::New(baton->record->latitude));
-    }
-
-    if (baton->record->longitude > 0) {
-      data->Set(String::NewSymbol("longitude"), Number::New(baton->record->longitude));
-    }
-
-    if (baton->record->metro_code > 0 ) {
-      data->Set(String::NewSymbol("metro_code"), Number::New(baton->record->metro_code));
-    }
-
-    if (baton->record->dma_code > 0 ) {
-      data->Set(String::NewSymbol("dma_code"), Number::New(baton->record->dma_code));
-    }
-
-    if (baton->record->area_code > 0) {
-      data->Set(String::NewSymbol("area_code"), Number::New(baton->record->area_code));
-    }
-
-    if (baton->record->continent_code > 0) {
-      data->Set(String::NewSymbol("continent_code"), String::New(baton->record->continent_code));
-    }                                            
+    data->Set(String::NewSymbol("country_code"), String::New(baton->record->country_code));
+    data->Set(String::NewSymbol("country_code3"), String::New(baton->record->country_code3));
+    data->Set(String::NewSymbol("country_name"), String::New(baton->record->country_name));
+    data->Set(String::NewSymbol("region"), String::New(baton->record->region));
+    data->Set(String::NewSymbol("postal_code"), String::New(baton->record->postal_code));
+    data->Set(String::NewSymbol("latitude"), Number::New(baton->record->latitude));
+    data->Set(String::NewSymbol("longitude"), Number::New(baton->record->longitude));
+    data->Set(String::NewSymbol("metro_code"), Number::New(baton->record->metro_code));
+    data->Set(String::NewSymbol("dma_code"), Number::New(baton->record->dma_code));
+    data->Set(String::NewSymbol("area_code"), Number::New(baton->record->area_code));
+    data->Set(String::NewSymbol("continent_code"), String::New(baton->record->continent_code));     
     argv[0] = data;
   }
 
@@ -238,14 +212,13 @@ int geoip::City::EIO_AfterCity(eio_req *req)
 
   delete baton;
   return 0;
-}
+}*/
 
-// Destroy the GeoIP* reference we're holding on to
-Handle<Value> geoip::City::close(const Arguments &args) {
-  City* c = ObjectWrap::Unwrap<geoip::City>(args.This()); 
+Handle<Value> geoip::Test::close(const Arguments &args) {
+  Test* c = ObjectWrap::Unwrap<geoip::Test>(args.This()); 
   GeoIP_delete(c->db);	// free()'s the gi reference & closes its fd
   c->db = NULL;
   HandleScope scope;	// Stick this down here since it seems to segfault when on top?
 }
 
-Persistent<FunctionTemplate> geoip::City::constructor_template;
+Persistent<FunctionTemplate> geoip::Test::constructor_template;

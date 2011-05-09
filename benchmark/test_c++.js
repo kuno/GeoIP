@@ -2,8 +2,8 @@
 
 var binding = require('../geoip.node');
 var util = require('util');
-var City = binding.City;
-var c = new City('/tmp/GeoLiteCity.dat', true);
+var Test = binding.Test;
+var c = new Test('/tmp/GeoLiteCity.dat', true);
 
 var ip32 = function() {
   var ip = '';
@@ -19,9 +19,9 @@ var ip32 = function() {
 var start = new Date().getTime();
 for (var i = 0; i < 10000; ++i) {
   var addr = ip32();
-  //console.log(addr);
+  console.log(addr);
   var l = c.lookupSync(addr);
-  //console.log(l);
+  console.log(l);
 }
 var end = new Date().getTime();
 

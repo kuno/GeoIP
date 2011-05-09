@@ -42,6 +42,7 @@ extern "C" GEOIP_API unsigned long _GeoIP_addr_to_num (const char *addr);
 
 extern "C" GEOIP_API unsigned int _GeoIP_seek_record_v6 (GeoIP *gi, geoipv6_t ipnum);
 extern "C" GEOIP_API geoipv6_t _GeoIP_addr_to_num_v6 (const char *addr);
+extern "C" GEOIP_API GeoIPRecord * _extract_record(GeoIP* gi, unsigned int seek_record, int *next_record_ptr);
 
 extern "C" GEOIP_API unsigned long _GeoIP_lookupaddress (const char *host);
 extern "C" GEOIP_API geoipv6_t _GeoIP_lookupaddress_v6 (const char *host);

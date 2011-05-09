@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
-var binding = require('../geoip.node');
+var geoip = require('../index.js');
 var util = require('util');
-var City = binding.City;
-var c = new City('/tmp/GeoLiteCity.dat', true);
+var NetSpeed = geoip.NetSpeed;
+var n = new NetSpeed('/tmp/GeoIPNetSpeed.dat', true);
 
 var ip32 = function() {
   var ip = '';
@@ -17,11 +17,11 @@ var ip32 = function() {
 }
 
 var start = new Date().getTime();
-for (var i = 0; i < 10000; ++i) {
+for (var i = 0; i < 100000; ++i) {
   var addr = ip32();
   //console.log(addr);
-  var l = c.lookupSync(addr);
-  //console.log(l);
+  var l = n.lookupSync(addr);
+  console.log(l);
 }
 var end = new Date().getTime();
 

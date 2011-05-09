@@ -5,10 +5,11 @@ var assert = require('assert'),
 var Org = geoip.Org;
 var org = new Org('/tmp/GeoIPOrg.dat', true);
 
-var sync_data = org.lookupSync('www.google.com');
+var sync_data = org.lookupSync('8.8.8.8');
+console.log(sync_data);
 assert.ok(sync_data, 'Can not find google in org module');
 
-org.lookup('8.8.8.8', function(data) {
+org.lookup('www.google.com', function(data) {
     if (data) {
       assert.deepEqual(sync_data, data, 'Oops! Async and sync org data not equal');
     } else {
