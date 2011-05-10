@@ -3,7 +3,7 @@ var assert = require('assert'),
     geoip = require('../index.js');
 
 var Org = geoip.Org;
-var org = new Org('/tmp/GeoIPOrg.dat', true);
+var org = new Org('/tmp/GeoIPASNum.dat', true);
 
 var sync_data = org.lookupSync('www.yahoo.com');
 console.log(sync_data);
