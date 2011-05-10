@@ -1,5 +1,5 @@
 /*
- * GeoIP C library binding for nodeje
+ * GeoIP C library binding for nodejs
  *
  * Licensed under the GNU LGPL 2.1 license
  */
