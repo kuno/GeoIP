@@ -1,4 +1,4 @@
-  /*
+/*
  * GeoIP C library binding for nodeje
  *
  * Licensed under the GNU LGPL 2.1 license
@@ -137,7 +137,9 @@ int geoip::Region::EIO_AfterRegion(eio_req *req)
   baton->r->Unref();
 
   Local<Value> argv[1];
-  if (baton->region != NULL) {
+  if (baton->region == NULL) {
+    argv[0] = scope.Close(Null());
+  } else {
     Local<Object> data = Object::New();
     data->Set(String::NewSymbol("country_code"), String::New(baton->region->country_code));
     data->Set(String::NewSymbol("region"), String::New(baton->region->region));

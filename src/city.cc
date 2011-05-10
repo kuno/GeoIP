@@ -177,7 +177,9 @@ int geoip::City::EIO_AfterCity(eio_req *req)
   baton->c->Unref();
 
   Local<Value> argv[1];
-  if (baton->record != NULL) {
+  if (baton->record == NULL) {
+    argv[0] = scope.Close(Null());
+  } else {
     Local<Object> data = Object::New();
 
     if (baton->record->country_code != NULL) {

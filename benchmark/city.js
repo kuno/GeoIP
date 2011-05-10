@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
-var binding = require('../geoip.node');
+var geoip = require('../index.js');
 var util = require('util');
-var City = binding.City;
+var City = geoip.City;
 var c = new City('/tmp/GeoLiteCity.dat', true);
 
 var ip32 = function() {

@@ -141,7 +141,9 @@ int geoip::Country::EIO_AfterCountry(eio_req *req)
   baton->c->Unref();
 
   Local<Value> argv[1];
-  if (baton->country_id > 0) {
+  if (baton->country_id <= 0) {
+    argv[0] = scope.Close(Null());
+  } else {
     Local<Object> data = Object::New();
     data->Set(String::NewSymbol("country_code"), String::New(GeoIP_country_code[baton->country_id]));
     data->Set(String::NewSymbol("country_code3"), String::New(GeoIP_country_code3[baton->country_id]));

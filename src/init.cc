@@ -1,3 +1,9 @@
+/*
+ * GeoIP C library binding for nodeje
+ *
+ * Licensed under the GNU LGPL 2.1 license
+ */                                              
+
 #include "netspeed.h"
 #include "country.h"
 #include "region.h"

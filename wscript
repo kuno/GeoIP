@@ -17,14 +17,17 @@ def configure(conf):
 def build(bld):
   obj = bld.new_task_gen("cxx", "shlib", "node_addon")
   obj.target = "geoip"
-  obj.find_sources_in_dirs("src")
+  obj.source = ['src/init.cc', 'src/netspeed.cc', 'src/country.cc',
+                'src/region.cc', 'src/city.cc', 'src/org.cc',
+                'src/utils.cc', 'src/test.cc']
+
   obj.lib = ["GeoIP"]
 
 def link(bld):
   # HACK to get binding.node out of build directory.
   # better way to do this?
   if Options.commands['clean']:
-    if exists('geoip.node'): unlink('geoip.node')
+    if exists(getcwd() + '/geoip.node'): unlink('geoip.node')
   else:
-    if exists('build/default/geoip.node') and not exists('geoip.node'):
-      symlink(getcwd()+'/build/default/geoip.node', 'geoip.node')
+    if exists(getcwd() + '/build/default/geoip.node') and not exists(getcwd() + 'geoip.node'):
+      symlink(getcwd()+'/build/default/geoip.node', getcwd() + 'geoip.node')

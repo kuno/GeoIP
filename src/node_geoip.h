@@ -1,20 +1,8 @@
-/*
- * =====================================================================================
+ /*
+ * GeoIP C library binding for nodeje
  *
- *       Filename:  node_geoip.h
- *
- *    Description:  j   
- *
- *        Version:  1.0
- *        Created:  2011年05月05日 18时46分48秒
- *       Revision:  none
- *       Compiler:  gcc
- *
- *         Author:  YOUR NAME (), 
- *        Company:  
- *
- * =====================================================================================
- */
+ * Licensed under the GNU LGPL 2.1 license
+ */                                              
 
 #include <GeoIP.h>
 #include <GeoIPCity.h>
@@ -31,7 +19,7 @@ extern "C" {
 #define REQ_FUN_ARG(I, VAR)                                             \
   if ((args.Length() + 1) <= (I) || !args[I]->IsFunction())             \
     return ThrowException(Exception::TypeError(                         \
-                  String::New("Argument " #I " must be a function")));  \
+                  String::New("Argument 2 must be a function")));  \
   Local<Function> VAR = Local<Function>::Cast(args[I]);
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -120,9 +120,9 @@ int geoip::Org::EIO_Org(eio_req *req)
   uint32_t ipnum = _GeoIP_lookupaddress(baton->host_cstr);
   if (ipnum <= 0) {
     baton->org = NULL;
-  } else {
+  } 
+
     baton->org = GeoIP_org_by_ipnum(baton->o->db, ipnum);
-  }
 
   return 0;
 }
@@ -136,10 +136,11 @@ int geoip::Org::EIO_AfterOrg(eio_req *req)
   baton->o->Unref();
 
   Local<Value> argv[1];
-  Local<Object> data;
 
-  if (baton->org != NULL) {
-    data = Object::New();
+  if (baton->org == NULL) {
+    argv[0] = scope.Close(Null());
+  } else {
+    Local<Object> data = Object::New();
     data->Set(String::NewSymbol("org_name"), String::New(baton->org));
     argv[0] = data;
   }

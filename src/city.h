@@ -1,9 +1,9 @@
-/* 
- *	geoip.cc - node.JS to C++ glue code for the GeoIP C library
- *	Written by Joe Vennix on March 15, 2011
- *	For the GeoIP C library, go here: http://www.maxmind.com/app/c
- *		./configure && make && sudo make install
- */
+ /*
+ * GeoIP C library binding for nodeje
+ *
+ * Licensed under the GNU LGPL 2.1 license
+ */                                              
+
 #ifndef NODE_GEOIP_CITY_H
 #define NODE_GEOIP_CITY_H
 

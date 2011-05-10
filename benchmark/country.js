@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
-var binding = require('../geoip.node');
+var geoip = require('../index.js');
 var util = require('util');
-var Country = binding.Country;
+var Country = geoip.Country;
 var c = new Country('/tmp/GeoIP.dat', true);
 
 var ip32 = function() {
