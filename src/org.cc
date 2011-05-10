@@ -1,8 +1,7 @@
-/* 
- *	geoip.cc - node.JS to C++ glue code for the GeoIP C library
- *	Written by Joe Vennix on March 15, 2011
- *	For the GeoIP C library, go here: http://www.maxmind.com/app/c
- *		./configure && make && sudo make install
+/*
+ * GeoIP C library binding for nodeje
+ *
+ * Licensed under the GNU LGPL 2.1 license
  */
 
 #include "org.h"
@@ -49,7 +48,9 @@ Handle<Value> geoip::Org::New(const Arguments& args)
   if (o->db != NULL) {
     // Successfully opened the file, return 1 (true)
     o->db_edition = GeoIP_database_edition(o->db);
-    if (o->db_edition == GEOIP_ORG_EDITION) {
+    if (o->db_edition == GEOIP_ORG_EDITION ||
+        o->db_edition == GEOIP_ASNUM_EDITION ||
+        o->db_edition == GEOIP_ISP_EDITION) {
       o->Wrap(args.This());
       return scope.Close(args.This());
     } else {
@@ -76,7 +77,7 @@ Handle<Value> geoip::Org::lookupSync(const Arguments &args) {
     return scope.Close(Null());
   }
 
-  char *org = GeoIP_name_by_ipnum(o->db, ipnum);
+  char *org = GeoIP_org_by_ipnum(o->db, ipnum);
   if (org == NULL) {
     return scope.Close(Null());
   }
@@ -118,10 +119,10 @@ int geoip::Org::EIO_Org(eio_req *req)
 
   uint32_t ipnum = _GeoIP_lookupaddress(baton->host_cstr);
   if (ipnum <= 0) {
-    return 1;
+    baton->org = NULL;
+  } else {
+    baton->org = GeoIP_org_by_ipnum(baton->o->db, ipnum);
   }
-
-  baton->org = GeoIP_name_by_ipnum(baton->o->db, ipnum);
 
   return 0;
 }
@@ -135,11 +136,11 @@ int geoip::Org::EIO_AfterOrg(eio_req *req)
   baton->o->Unref();
 
   Local<Value> argv[1];
+  Local<Object> data;
+
   if (baton->org != NULL) {
-    Local<Object> data = Object::New();
-
+    data = Object::New();
     data->Set(String::NewSymbol("org_name"), String::New(baton->org));
-
     argv[0] = data;
   }
 

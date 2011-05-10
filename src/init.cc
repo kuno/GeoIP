@@ -5,7 +5,6 @@
 #include "org.h"
 
 //#include "test.h"
-//#include "ipnum.h"
 #include "utils.h"
 
 extern "C" {
@@ -20,7 +19,7 @@ extern "C" {
     geoip::Org::Init(target);
 
     //geoip::Test::Init(target);
-   // NODE_SET_METHOD(target, "check", geoip::check);
+    // NODE_SET_METHOD(target, "check", geoip::check);
 
     Local<FunctionTemplate> t = FunctionTemplate::New(geoip::check);
     target->Set(String::NewSymbol("check"), t->GetFunction());

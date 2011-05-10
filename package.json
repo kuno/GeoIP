@@ -23,16 +23,14 @@
   "directory": 
     { "src":"./src",
       "doc":"./doc", 
-      "data":"./data", 
       "lib":"./lib",
       "test":"./test",   
       "misc":"./misc", 
       "sample":"./sample", 
-      "include":"./include",  
       "benchmark":"./benchmark"
     },
-  "engine":{"node": ">=0.4.0"},
-  "script":{"install": "node-waf configure build link",
+  "engine":{"node": ">=0.4.0", "npm": "1"},
+  "script":{"preinstall": "node-waf configure build link",
             "test":""},
   "licences":
     [

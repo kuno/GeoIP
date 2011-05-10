@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
-var geoip = require('geoip');
+var binding = require('../index.js');
 var util = require('util');
-var City = geoip.City;
-var data = geoip.open('/tmp/GeoLiteCity.dat');
+var Org = binding.Org;
+var o = new Org('/tmp/GeoIPOrg.dat', true);
 
 var ip32 = function() {
   var ip = '';
@@ -18,12 +18,10 @@ var ip32 = function() {
 
 var start = new Date().getTime();
 for (var i = 0; i < 10000; ++i) {
-  var domain = 'www.google.com';
-  //console.log(addr);
-  var l = City.record_by_domain(data, domain, function(err, data) {
-      if (err) {throw err;}
-    });
-  //console.log(l);
+  var addr = ip32();
+  console.log(addr);
+  var l = o.lookupSync(addr);
+  console.log(l);
 }
 var end = new Date().getTime();
 

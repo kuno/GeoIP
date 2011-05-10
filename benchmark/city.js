@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-var binding = require('../build/default/city.node');
+var binding = require('../geoip.node');
 var util = require('util');
 var City = binding.City;
 var c = new City('/tmp/GeoLiteCity.dat', true);
@@ -18,9 +18,9 @@ var ip32 = function() {
 
 var start = new Date().getTime();
 for (var i = 0; i < 10000; ++i) {
-  var addr = '0.0.0.0';
+  var addr = ip32();
   //console.log(addr);
-  var l = c.lookupSync(addr);
+  c.lookupSync(addr);
   //console.log(l);
 }
 var end = new Date().getTime();

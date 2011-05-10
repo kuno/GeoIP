@@ -47,7 +47,7 @@ namespace geoip {
 struct org_baton_t {
   geoip::Org * o;
   char host_cstr[256];
-  char *org;
+  char * org;
   int increment_by;
   int sleep_for;
   Persistent<Function> cb;

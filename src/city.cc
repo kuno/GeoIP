@@ -1,8 +1,7 @@
-/* 
- *	geoip.cc - node.JS to C++ glue code for the GeoIP C library
- *	Written by Joe Vennix on March 15, 2011
- *	For the GeoIP C library, go here: http://www.maxmind.com/app/c
- *		./configure && make && sudo make install
+/*
+ * GeoIP C library binding for nodeje
+ *
+ * Licensed under the GNU LGPL 2.1 license
  */
 
 #include "city.h"
@@ -13,7 +12,7 @@ void geoip::City::Init(Handle<Object> target)
 
   Local<FunctionTemplate> t = FunctionTemplate::New(New);
   constructor_template = Persistent<FunctionTemplate>::New(t);
-  constructor_template->InstanceTemplate()->SetInternalFieldCount(2);
+  constructor_template->InstanceTemplate()->SetInternalFieldCount(1);
   constructor_template->SetClassName(String::NewSymbol("geoip"));
 
   NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookup", lookup);
@@ -161,10 +160,10 @@ int geoip::City::EIO_City(eio_req *req)
 
   uint32_t ipnum = _GeoIP_lookupaddress(baton->host_cstr);
   if (ipnum <= 0) {
-    return 1;
+    baton->record = NULL;
+  } else {
+    baton->record = GeoIP_record_by_ipnum(baton->c->db, ipnum);
   }
-
-  baton->record = GeoIP_record_by_ipnum(baton->c->db, ipnum);
 
   return 0;
 }

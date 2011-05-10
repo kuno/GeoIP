@@ -1,8 +1,7 @@
-/* 
- *	geoip.cc - node.JS to C++ glue code for the GeoIP C library
- *	Written by Joe Vennix on March 15, 2011
- *	For the GeoIP C library, go here: http://www.maxmind.com/app/c
- *		./configure && make && sudo make install
+ /*
+ * GeoIP C library binding for nodeje
+ *
+ * Licensed under the GNU LGPL 2.1 license
  */
 
 #include "country.h"
@@ -73,11 +72,10 @@ Handle<Value> geoip::Country::lookupSync(const Arguments &args) {
   Local<Object> data = Object::New();
   char host_cstr[host_str->Length()];
   host_str->WriteAscii(host_cstr);
-  //Country* c = ObjectWrap::Unwrap<Country>(args.This());
 
   uint32_t ipnum = _GeoIP_lookupaddress(host_cstr);
 
-  if (ipnum <= 0) {  // || ipnum >= 81692295) {
+  if (ipnum <= 0) {
     return scope.Close(data);
   } else {
     int country_id = GeoIP_id_by_ipnum(c->db, ipnum);
@@ -85,93 +83,92 @@ Handle<Value> geoip::Country::lookupSync(const Arguments &args) {
       return scope.Close(Null());
     } else {
       data->Set(String::NewSymbol("country_code"), String::New(GeoIP_country_code[country_id]));
-      //data->Set(String::NewSymbol("country_code3"), String::New(GeoIP_country_code3_by_addr(c->db, host_cstr)));
+      data->Set(String::NewSymbol("country_code3"), String::New(GeoIP_country_code3[country_id]));
       data->Set(String::NewSymbol("country_name"), String::New(GeoIP_country_name[country_id]));
-      //r->Set(String::NewSymbol("continent_code"), String::New(gir->continent_code));
+      data->Set(String::NewSymbol("continent_code"), String::New(GeoIP_country_continent[country_id]));
       return scope.Close(data);
     }
   }
-  }
+}
 
-  Handle<Value> geoip::Country::lookup(const Arguments& args)
-  {
-    HandleScope scope;
+Handle<Value> geoip::Country::lookup(const Arguments& args)
+{
+  HandleScope scope;
 
-    REQ_FUN_ARG(1, cb);
+  REQ_FUN_ARG(1, cb);
 
-    Country * c = ObjectWrap::Unwrap<Country>(args.This());
-    Local<String> host_str = args[0]->ToString();
+  Country * c = ObjectWrap::Unwrap<Country>(args.This());
+  Local<String> host_str = args[0]->ToString();
 
-    country_baton_t *baton = new country_baton_t();
+  country_baton_t *baton = new country_baton_t();
 
-    baton->c = c;
-    host_str->WriteAscii(baton->host_cstr);
-    baton->increment_by = 2;
-    baton->sleep_for = 1;
-    baton->cb = Persistent<Function>::New(cb);
+  baton->c = c;
+  host_str->WriteAscii(baton->host_cstr);
+  baton->increment_by = 2;
+  baton->sleep_for = 1;
+  baton->cb = Persistent<Function>::New(cb);
 
-    c->Ref();
+  c->Ref();
 
-    eio_custom(EIO_Country, EIO_PRI_DEFAULT, EIO_AfterCountry, baton);
-    ev_ref(EV_DEFAULT_UC);
+  eio_custom(EIO_Country, EIO_PRI_DEFAULT, EIO_AfterCountry, baton);
+  ev_ref(EV_DEFAULT_UC);
 
-    return Undefined();
-  }
+  return Undefined();
+}
 
-  int geoip::Country::EIO_Country(eio_req *req)
-  {
-    country_baton_t *baton = static_cast<country_baton_t *>(req->data);
+int geoip::Country::EIO_Country(eio_req *req)
+{
+  country_baton_t *baton = static_cast<country_baton_t *>(req->data);
 
-    sleep(baton->sleep_for);
+  sleep(baton->sleep_for);
 
-    uint32_t ipnum = _GeoIP_lookupaddress(baton->host_cstr);
-    if (ipnum <= 0) {  // || ipnum >= 81692295) {
-      return 1;
-    }
-
+  uint32_t ipnum = _GeoIP_lookupaddress(baton->host_cstr);
+  if (ipnum <= 0) {
+    baton->country_id = 0;
+  } else {
     baton->country_id = GeoIP_id_by_ipnum(baton->c->db, ipnum);
+  }
 
-    return 0;
-    }
+  return 0;
+}
 
-    int geoip::Country::EIO_AfterCountry(eio_req *req)
-    {
-      HandleScope scope;
+int geoip::Country::EIO_AfterCountry(eio_req *req)
+{
+  HandleScope scope;
 
-      country_baton_t *baton = static_cast<country_baton_t *>(req->data);
-      ev_unref(EV_DEFAULT_UC);
-      baton->c->Unref();
+  country_baton_t *baton = static_cast<country_baton_t *>(req->data);
+  ev_unref(EV_DEFAULT_UC);
+  baton->c->Unref();
 
-      Local<Value> argv[1];
-      if (baton->country_id > 0) {
-        Local<Object> data = Object::New();
-        data->Set(String::NewSymbol("country_code"), String::New(GeoIP_country_code[baton->country_id]));
-        //data->Set(String::NewSymbol("country_code3"), String::New(baton->country_code3));
-        data->Set(String::NewSymbol("country_name"), String::New(GeoIP_country_name[baton->country_id]));
-        //r->Set(String::NewSymbol("continent_code"), String::New(baton->r->continent_code));     
+  Local<Value> argv[1];
+  if (baton->country_id > 0) {
+    Local<Object> data = Object::New();
+    data->Set(String::NewSymbol("country_code"), String::New(GeoIP_country_code[baton->country_id]));
+    data->Set(String::NewSymbol("country_code3"), String::New(GeoIP_country_code3[baton->country_id]));
+    data->Set(String::NewSymbol("country_name"), String::New(GeoIP_country_name[baton->country_id]));
+    data->Set(String::NewSymbol("continent_code"), String::New(GeoIP_country_continent[baton->country_id]));     
+    argv[0] = data;
+  }
 
-        argv[0] = data;
-      }
+  TryCatch try_catch;
 
-      TryCatch try_catch;
+  baton->cb->Call(Context::GetCurrent()->Global(), 1, argv);
 
-      baton->cb->Call(Context::GetCurrent()->Global(), 1, argv);
+  if (try_catch.HasCaught()) {
+    FatalException(try_catch);
+  }
 
-      if (try_catch.HasCaught()) {
-        FatalException(try_catch);
-      }
+  baton->cb.Dispose();
 
-      baton->cb.Dispose();
+  delete baton;
+  return 0;
+}
 
-      delete baton;
-      return 0;
-    }
+Handle<Value> geoip::Country::close(const Arguments &args) {
+  Country* c = ObjectWrap::Unwrap<Country>(args.This()); 
+  GeoIP_delete(c->db);	// free()'s the gi reference & closes its fd
+  c->db = NULL;
+  HandleScope scope;	// Stick this down here since it seems to segfault when on top?
+}
 
-    Handle<Value> geoip::Country::close(const Arguments &args) {
-      Country* c = ObjectWrap::Unwrap<Country>(args.This()); 
-      GeoIP_delete(c->db);	// free()'s the gi reference & closes its fd
-      c->db = NULL;
-      HandleScope scope;	// Stick this down here since it seems to segfault when on top?
-    }
-
-    Persistent<FunctionTemplate> geoip::Country::constructor_template;
+Persistent<FunctionTemplate> geoip::Country::constructor_template;

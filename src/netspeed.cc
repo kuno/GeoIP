@@ -1,9 +1,8 @@
-/* 
- *	geoip.cc - node.JS to C++ glue code for the GeoIP C library
- *	Written by Joe Vennix on March 15, 2011
- *	For the GeoIP C library, go here: http://www.maxmind.com/app/c
- *		./configure && make && sudo make install
- */
+/*
+ * GeoIP C library binding for nodeje
+ *
+ * Licensed under the GNU LGPL 2.1 license
+ */                                          
 
 #include "netspeed.h"
 
@@ -73,8 +72,8 @@ Handle<Value> geoip::NetSpeed::lookupSync(const Arguments &args) {
 
   uint32_t ipnum = _GeoIP_lookupaddress(host_cstr);
 
-  if (ipnum <= 0) {  // || ipnum >= 81692295) {
-    return scope.Close(Null());  //return scope.Close(data);
+  if (ipnum <= 0) {
+    return scope.Close(Null());
   }
 
   int netspeed = GeoIP_id_by_ipnum(n->db, ipnum);
@@ -90,91 +89,91 @@ Handle<Value> geoip::NetSpeed::lookupSync(const Arguments &args) {
     data = String::New("Corporate");
   }
   return scope.Close(data);
-  }
+}
 
-  Handle<Value> geoip::NetSpeed::lookup(const Arguments& args)
-  {
-    HandleScope scope;
+Handle<Value> geoip::NetSpeed::lookup(const Arguments& args)
+{
+  HandleScope scope;
 
-    REQ_FUN_ARG(1, cb);
+  REQ_FUN_ARG(1, cb);
 
-    NetSpeed * n = ObjectWrap::Unwrap<NetSpeed>(args.This());
-    Local<String> host_str = args[0]->ToString();
+  NetSpeed * n = ObjectWrap::Unwrap<NetSpeed>(args.This());
+  Local<String> host_str = args[0]->ToString();
 
-    netspeed_baton_t *baton = new netspeed_baton_t();
+  netspeed_baton_t *baton = new netspeed_baton_t();
 
-    baton->n = n;
-    host_str->WriteAscii(baton->host_cstr);
-    baton->increment_by = 2;
-    baton->sleep_for = 1;
-    baton->cb = Persistent<Function>::New(cb);
+  baton->n = n;
+  host_str->WriteAscii(baton->host_cstr);
+  baton->increment_by = 2;
+  baton->sleep_for = 1;
+  baton->cb = Persistent<Function>::New(cb);
 
-    n->Ref();
+  n->Ref();
 
-    eio_custom(EIO_NetSpeed, EIO_PRI_DEFAULT, EIO_AfterNetSpeed, baton);
-    ev_ref(EV_DEFAULT_UC);
+  eio_custom(EIO_NetSpeed, EIO_PRI_DEFAULT, EIO_AfterNetSpeed, baton);
+  ev_ref(EV_DEFAULT_UC);
 
-    return scope.Close(Undefined());
-  }
+  return scope.Close(Undefined());
+}
 
-  int geoip::NetSpeed::EIO_NetSpeed(eio_req *req)
-  {
-    netspeed_baton_t *baton = static_cast<netspeed_baton_t *>(req->data);
+int geoip::NetSpeed::EIO_NetSpeed(eio_req *req)
+{
+  netspeed_baton_t *baton = static_cast<netspeed_baton_t *>(req->data);
 
-    sleep(baton->sleep_for);
+  sleep(baton->sleep_for);
 
-    uint32_t ipnum = _GeoIP_lookupaddress(baton->host_cstr);
-    if (ipnum <= 0) {  // || ipnum >= 81692295) {
-      return 1;
-    }
-
+  uint32_t ipnum = _GeoIP_lookupaddress(baton->host_cstr);
+  if (ipnum <= 0) {
+    baton->netspeed = -1;
+  } else {
     baton->netspeed = GeoIP_id_by_ipnum(baton->n->db, ipnum);
+  }
 
-    return 0;
+  return 0;
+}
+
+int geoip::NetSpeed::EIO_AfterNetSpeed(eio_req *req)
+{
+  HandleScope scope;
+
+  netspeed_baton_t *baton = static_cast<netspeed_baton_t *>(req->data);
+  ev_unref(EV_DEFAULT_UC);
+  baton->n->Unref();
+
+  Local<Value> argv[1];
+  if (baton->netspeed >= 0) {
+    Local<String> data;
+    if (baton->netspeed == GEOIP_UNKNOWN_SPEED) {
+      data = String::New("Uknown");
+    } else if (baton->netspeed == GEOIP_DIALUP_SPEED) {
+      data = String::New("Dailup");
+    } else if (baton->netspeed == GEOIP_CABLEDSL_SPEED) {
+      data = String::New("CableDSL");
+    } else if (baton->netspeed == GEOIP_CORPORATE_SPEED) {
+      data = String::New("Corporate");
     }
+    argv[0] = data;
+  }
 
-    int geoip::NetSpeed::EIO_AfterNetSpeed(eio_req *req)
-    {
-      HandleScope scope;
+  TryCatch try_catch;
 
-      netspeed_baton_t *baton = static_cast<netspeed_baton_t *>(req->data);
-      ev_unref(EV_DEFAULT_UC);
-      baton->n->Unref();
+  baton->cb->Call(Context::GetCurrent()->Global(), 1, argv);
 
-      Local<Value> argv[1];
-      if (baton->netspeed >= 0) {
-        Local<String> data;
-        if (baton->netspeed == GEOIP_UNKNOWN_SPEED) {
-          data = String::New("Uknown");
-        } else if (baton->netspeed == GEOIP_DIALUP_SPEED) {
-          data = String::New("Dailup");
-        } else if (baton->netspeed == GEOIP_CABLEDSL_SPEED) {
-          data = String::New("CableDSL");
-        } else if (baton->netspeed == GEOIP_CORPORATE_SPEED) {
-          data = String::New("Corporate");
-        }
-        argv[0] = data;
-      }
+  if (try_catch.HasCaught()) {
+    FatalException(try_catch);
+  }
 
-      TryCatch try_catch;
+  baton->cb.Dispose();
 
-      baton->cb->Call(Context::GetCurrent()->Global(), 1, argv);
+  delete baton;
+  return 0;
+}
 
-      if (try_catch.HasCaught()) {
-        FatalException(try_catch);
-      }
+Handle<Value> geoip::NetSpeed::close(const Arguments &args) {
+  NetSpeed* n = ObjectWrap::Unwrap<NetSpeed>(args.This()); 
+  GeoIP_delete(n->db);	// free()'s the gi reference & closes its fd
+  n->db = NULL;
+  HandleScope scope;	// Stick this down here since it seems to segfault when on top?
+}
 
-      baton->cb.Dispose();
-
-      delete baton;
-      return 0;
-    }
-
-    Handle<Value> geoip::NetSpeed::close(const Arguments &args) {
-      NetSpeed* n = ObjectWrap::Unwrap<NetSpeed>(args.This()); 
-      GeoIP_delete(n->db);	// free()'s the gi reference & closes its fd
-      n->db = NULL;
-      HandleScope scope;	// Stick this down here since it seems to segfault when on top?
-    }
-
-    Persistent<FunctionTemplate> geoip::NetSpeed::constructor_template;
+Persistent<FunctionTemplate> geoip::NetSpeed::constructor_template;

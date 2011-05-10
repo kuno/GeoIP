@@ -1,9 +1,8 @@
-/* 
- *	geoip.cc - node.JS to C++ glue code for the GeoIP C library
- *	Written by Joe Vennix on March 15, 2011
- *	For the GeoIP C library, go here: http://www.maxmind.com/app/c
- *		./configure && make && sudo make install
- */
+  /*
+ * GeoIP C library binding for nodeje
+ *
+ * Licensed under the GNU LGPL 2.1 license
+ */                                          
 
 #include "region.h"
 
@@ -121,10 +120,10 @@ int geoip::Region::EIO_Region(eio_req *req)
 
   uint32_t ipnum = _GeoIP_lookupaddress(baton->host_cstr);
   if (ipnum <= 0) {
-    return 1;
+    baton->region = NULL;
+  } else {
+    baton->region = GeoIP_region_by_ipnum(baton->r->db, ipnum);
   }
-
-  baton->region = GeoIP_region_by_ipnum(baton->r->db, ipnum);
 
   return 0;
 }

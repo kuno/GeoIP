@@ -1,9 +1,8 @@
-/* 
- *	geoip.cc - node.JS to C++ glue code for the GeoIP C library
- *	Written by Joe Vennix on March 15, 2011
- *	For the GeoIP C library, go here: http://www.maxmind.com/app/c
- *		./configure && make && sudo make install
- */
+/*
+ * GeoIP C library binding for nodeje
+ *
+ * Licensed under the GNU LGPL 2.1 license
+ */                                          
 
 #include "utils.h"
 
@@ -21,31 +20,86 @@ namespace geoip {
     if (db != NULL) {
       int db_edition = GeoIP_database_edition(db);
 
-      if (db_edition == GEOIP_COUNTRY_EDITION) {
-        edition = String::New("country");
-      } else if (db_edition == GEOIP_COUNTRY_EDITION_V6) {
-        edition = String::New("country_v6");
-      } else if ( db_edition == GEOIP_CITY_EDITION_REV0 || 
-          db_edition == GEOIP_CITY_EDITION_REV1) {
-        edition = String::New("city");
-      } else if (db_edition == GEOIP_REGION_EDITION_REV0 || 
-          db_edition == GEOIP_REGION_EDITION_REV1) {
-        edition = String::New("region");
-      } else if (db_edition == GEOIP_ORG_EDITION) {
-        edition = String::New("org");
-      } else if (db_edition == GEOIP_ISP_EDITION) {
-        edition = String::New("isp");
-      } else if (db_edition == GEOIP_ASNUM_EDITION) {
-        edition = String::New("asnum");
-      } else if (db_edition == GEOIP_PROXY_EDITION) {
-        edition = String::New("proxy");
-      } else if (db_edition == GEOIP_NETSPEED_EDITION) {
-        edition = String::New("netspeed");
-      } else if (db_edition == GEOIP_DOMAIN_EDITION) {
-        edition = String::New("domain");
-      } else {
-        edition = String::New("unknown");
+      switch(db_edition) {
+        case GEOIP_COUNTRY_EDITION:
+          edition = String::New("country");
+          break;
+
+
+        case GEOIP_COUNTRY_EDITION_V6:
+          edition = String::New("country_v6");
+          break;
+
+        case GEOIP_CITY_EDITION_REV0:
+          edition = String::New("city");
+          break;
+
+        case GEOIP_CITY_EDITION_REV1:
+          edition = String::New("city");
+          break;
+
+        case GEOIP_REGION_EDITION_REV0:
+          edition = String::New("region");
+          break;
+
+        case GEOIP_REGION_EDITION_REV1:
+          edition = String::New("region");
+          break;
+
+        case GEOIP_ORG_EDITION:
+          edition = String::New("org");
+          break;
+
+        case GEOIP_ISP_EDITION:
+          edition = String::New("isp");
+          break;
+
+        case GEOIP_ASNUM_EDITION:
+          edition = String::New("asnum");
+          break;
+
+        case GEOIP_PROXY_EDITION:
+          edition = String::New("proxy");
+          break;
+
+        case GEOIP_NETSPEED_EDITION:
+          edition = String::New("netspeed");
+          break;
+
+        case GEOIP_DOMAIN_EDITION:
+          edition = String::New("domain");
+          break;
+
+        default:
+          edition = String::New("unknown");
       }
+
+      /*
+         if (db_edition == GEOIP_COUNTRY_EDITION) {
+         edition = String::New("country");
+         } else if (db_edition == GEOIP_COUNTRY_EDITION_V6) {
+         edition = String::New("country_v6");
+         } else if ( db_edition == GEOIP_CITY_EDITION_REV0 || 
+         db_edition == GEOIP_CITY_EDITION_REV1) {
+         edition = String::New("city");
+         } else if (db_edition == GEOIP_REGION_EDITION_REV0 || 
+         db_edition == GEOIP_REGION_EDITION_REV1) {
+         edition = String::New("region");
+         } else if (db_edition == GEOIP_ORG_EDITION) {
+         edition = String::New("org");
+         } else if (db_edition == GEOIP_ISP_EDITION) {
+         edition = String::New("isp");
+         } else if (db_edition == GEOIP_ASNUM_EDITION) {
+         edition = String::New("asnum");
+         } else if (db_edition == GEOIP_PROXY_EDITION) {
+         edition = String::New("proxy");
+         } else if (db_edition == GEOIP_NETSPEED_EDITION) {
+         edition = String::New("netspeed");
+         } else if (db_edition == GEOIP_DOMAIN_EDITION) {
+         edition = String::New("domain");
+         } else {
+         edition = String::New("unknown");
+         }*/
 
       GeoIP_delete(db);
       db = NULL;
