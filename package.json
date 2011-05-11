@@ -1,13 +1,14 @@
 {
   "name":"geoip",
   "description":"GeoIP client for node",
-  "version":"0.4.0pre",
+  "version":"0.4.0beta1",
   "homepage":"",
   "author":"Guan 'kuno' Qing <neokuno at Gmail dot com>",
   "contributors":
     [
       "Vladimir Dronnikov <dronnikov@gmail.com>",
-      "Konstantin Käfer <github@kkaefer.com>"
+      "Konstantin Käfer <github@kkaefer.com>",
+      "Joe Vennix <joevennix@gmail.com>"
     ],
   "repository":
     {
@@ -23,14 +24,13 @@
   "directory": 
     { "src":"./src",
       "doc":"./doc", 
-      "lib":"./lib",
       "test":"./test",   
       "misc":"./misc", 
       "sample":"./sample", 
       "benchmark":"./benchmark"
     },
   "engine":{"node": ">=0.4.0", "npm": "1"},
-  "script":{"preinstall": "node-waf configure build"},
+  "script":{"install": "node-waf configure build"},
   "licences":
     [
       {

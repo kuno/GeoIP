@@ -67,7 +67,7 @@ Handle<Value> geoip::Org::lookupSync(const Arguments &args) {
   HandleScope scope;
 
   Local<String> host_str = args[0]->ToString();
-  Local<Object> data = Object::New();
+  Local<Value> data;
   char host_cstr[host_str->Length()];
   host_str->WriteAscii(host_cstr);
   Org* o = ObjectWrap::Unwrap<geoip::Org>(args.This());
@@ -82,7 +82,7 @@ Handle<Value> geoip::Org::lookupSync(const Arguments &args) {
     return scope.Close(Null());
   }
 
-  data->Set(String::NewSymbol("org_name"), String::New(org));
+  data = String::New(org);
   return scope.Close(data);
 }
 
@@ -140,8 +140,7 @@ int geoip::Org::EIO_AfterOrg(eio_req *req)
   if (baton->org == NULL) {
     argv[0] = scope.Close(Null());
   } else {
-    Local<Object> data = Object::New();
-    data->Set(String::NewSymbol("org_name"), String::New(baton->org));
+    Local<String> data = String::New(baton->org);
     argv[0] = data;
   }
 

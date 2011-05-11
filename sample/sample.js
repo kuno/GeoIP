@@ -1,180 +1,131 @@
 var geoip = require('geoip');
 
 
-/*
- * Country geographic infomation
- *
- * Befor you can use geoip country information,
- * you need download GeoIP.dat file first. 
- * wget http://geolite.maxmind.com/download/geoip/country_database/GeoLiteCountry/GeoIP.dat.gz
- */
-var country_data = geoip.open('/path/to/GeoIP.dat');
-
+// Open the country data file
 var Country = geoip.Country;
+var country = new Country('/path/to/GeoIP.dat');
 
-// Synchronous methods, network independence.
-var code = Country.code_by_addr(country_data, '8.8.8.8'); // prints 'US'
-var name = Country.name_by_addr(country_data, '8.8.8.8'); // prints  'United States'
+var country_obj = country.lookup('8.8.8.8');
 
-// Asynchronous methods, depends on node's async-style dns module.
-Country.code_by_domain(country_data, 'www.google.com', function(err, code) {
-  if (err) {throw err;}
-  console.log(code);  // prints 'US'
-});
-
-Country.name_by_domain(country_data, 'www.google.com', function(err, name) {
-  if (err) {throw err;}
-  console.log(name);  // prints 'United States'
-});
-
-// Close the opened file
-geoip.close(country_data);
-
-
+console.log(country_obj);
 /*
- * City geographic infomation
- *
- * Befor you can use city geographic information,
- * you need download GeoLiteCity.dat file first.
- * wget http://geolite.maxmind.com/download/geoip/country_database/GeoLiteCity.dat.gz
- */
+{ country_code: 'US',
+  country_code3: 'USA',
+  country_name: 'United States',
+  continent_code: 'NA' }
+*/
 
-var city_country_data = geoip.open('/path/to/GeoLiteCity.dat');
+country.lookup('www.google.com', function(data) {
+    if (data) { // no err, if not found, just return null
+      console.log(data);  // same as lookup method
+    }
+});
 
+//Close the opened file.
+country.close();
+
+
+// City
 var City = geoip.City;
+var city = new City('/path/to/GeoLiteCity.dat');
 
 // Synchronous method
-var record = City.record_by_addr(city_country_data, '8.8.8.8');
-// Return a Object of city information
-//'{
-  //"country_code":"US",
-  //  "country_code3":"USA",
-  //  "country_name":"United States",
-  //  "continet_code":"NA",
-  //  "region":"CA",
-  //  "city":"Mountain View",
-  //  "postal_code":"94043",
-  //  "latitude":37.41919999999999,
-  //  "longitude":-122.0574,
-  //  "dma_code":807,
-  //  "metro_code":807,
-  //  "area_code":650
-  //  }'
+var city_obj = city.lookupSync('8.8.8.8');
+console.log(city_obj);
+// Return an object of city information
+// {
+//  "country_code":"US",
+//  "country_code3":"USA",
+//  "country_name":"United States",
+//  "continet_code":"NA",
+//  "region":"CA",
+//  "city":"Mountain View",
+//  "postal_code":"94043",
+//  "latitude":37.41919999999999,
+//  "longitude":-122.0574,
+//  "dma_code":807,
+//  "metro_code":807,
+//  "area_code":650
+//  }    
 
-  // Asynchronous method
-  City.record_by_domain(city_country_data, 'www.google.com', function(err, record) {
-    if (err) {throw err;}
-    console.log('is \'' + JSON.stringify(record) + '\'');
-    var keys = Object.keys(record);
-    keys.forEach(function(k) {
-      console.log(k + ':' + record[k]);
-    });
-  });
-
-  geoip.close(city_data);
-
-
-  /*
-   * Region geographic information
-   *
-   * Before you can use region geographic information,
-   * you need buy GeoIPRegion.dat from maxmind.com
-   */
-
-  var region_country_data = geoip.open('/path/to/GeoIPRegion.dat');
-
-  var Region = geoip.Region;
-
-  // Synchronous method
-  var reg = geoip.Region.region_by_addr(region_country_data, '8.8.8.8');  // prints 'US,CO'
-
-  // Asynchronous method
-  Region.region_by_domain(data, 'www.google.com', function(err, region) {
-    if (err) {throw err;}
-    console.log('is ' + region);
-  });
-
-  geoip.close(region_country_data);
-
-
-  /*
-   * Organization geographic information
-   * Before you can use Organization geographic information,
-   * you need but GeoIPOrg.dat data file from maxmind.com
-   */
-  // Get Organization    
-  var org_data = geoip.open('/path/to/GeoIPOrg.dat');
-
-  var Org = geoip.Org;
-
-  // Synchronous method
-  var org = Org.org_by_addr(org_data, '8.8.8.8');   
-  // Return an array of the name of organization
-  // [
-  // 'Genuity',
-  // 'The United Way',
-  // 'Education Management Corporation,
-  // 'International Generating Co. (Intergen)'
-  // ]
-
-  // Synchronous methos
-  Org.org_by_domain(org_data, 'www.google.com', function(err, org) {
-    if (err) {throw err;}
-    if (typeof org === 'string') {
-      console.log(org);  // Organization Not Found
-    } else {  // Same as org_by_addr
-      org.forEach(function(o) {
-        console.log(o[0] + ' : ' + o[1]);
-      });
+// Asynchronous method
+city.lookup('www.google.com', function(data) {
+    if (data) {
+      console.log(data);
     }
-  });
+});
 
-  geoip.close(org_data);
-
-  // Get ASNumber
-  var asn_data = geoip.open('/path/to/GeoIPASNum.dat');
-
-  // Synchronous method
-  var asn = Org.asn_by_addr(org_data, '8.8.8.8');
-  // Return an array of asn objects
-  //[ { number: 'AS15169', description: 'Google Inc.' },
-  //  { number: 'AS36597',
-  //    description: 'OmniTI Computer Consulting Inc.' },
-  //  { number: 'AS26471',
-  //    description: 'Smart City Networks' } ]
-
-  // Asynchronous method
-  Org.asn_by_domain(asn_data, 'www.google.com', function(err, asn) {
-    if (err) {throw err;}
-    if (typeof asn === 'string') { 
-      console.log(asn); // ASNumber Not Found
-    } else {  // Same as asn_by_addr
-    asn.forEach(function(a) {
-      var keys = Object.keys(a);
-      console.log(a[keys[0]] + ' : ' + a[keys[1]]);
-    });
-  }
-  });
-
-  geoip.close(asn_data);
+city.close();
 
 
-  /*
-   * NetSpeed information
-   * Before you can use NetSpeed information,
-   * you need to by netspeed data from maxmind.com
-   */
-  var NetSpeed = geoip.NetSpeed;
+// Organization
+var Org = geoip.Org;
+var org = new Org('/path/to/file');  // Org module can open three edition database 'org', 'asnum', 'isp'
 
-  var netspeed_data = geoip.open('/path/to/netspeed.dat');
+// Synchronous method
+var org_str = org.lookup('8.8.8.8');
 
-  // Synchronous method
-  var speed = Netspeed.speed_by_addr(netspeed_data, '8.8.8.8'); // prints 'Dailup'
+console.log(org_str);
+/*
+The type of returned data is string, for example:
 
-  // Asynchronous method
-  NetSpeed.speed_by_domain(data, 'www.google.com', function(err, speed) {
-    if (err) {throw err;}
-    console.log(speed);  // Maybe difference from speed_by_addr
-  });
+'Genuity'
+'AS15169 Google Inc.'
 
-  geoip.close(netspeed_data);
+no longer an object
+*/
+
+org.close();
+
+// Asynchronous method
+org.lookup('www.google.com', function(data) {
+    if (data) {
+      console.log(data);
+    }
+});
+
+
+// Region
+var Region = geoip.Region;
+var region = new Region('/path/to/GeoIPRegion.dat');
+
+// Synchronous method
+var region_obj = region.lookupSync('8.8.8.8'); 
+
+console.log(region_obj);
+/*
+region object has two properties:
+{ country_code: 'US', region: 'CO' }
+
+*/
+
+// Asynchronous method
+region.lookup('www.google.com', function(data) {
+    if (data) {
+      console.log(data);
+    }
+});
+
+region.close();
+
+
+// NetSpeed
+var NetSpeed = geoip.NetSpeed;
+var netspeed = new NetSpeed('/path/to/GeoIPNetSpeed.dat');
+
+// Synchronous method
+var netspeed_str = netspeed.lookupSync('8.8.8.8');
+
+console.log(netspeed_str);
+/*
+netspeed_str just a simple string, 'Dialup', 'Corprate'... so on
+*/
+
+// Asynchronous method
+netspeed.lookup('www.google.com', function(data) {
+    if (data) {
+      console.log(data);  // Maybe return 'unknow' or different from lookup method
+    }
+});
+
+netspeed.close();         
