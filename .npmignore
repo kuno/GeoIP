@@ -2,3 +2,5 @@ misc/*
 README.md
 TODO.md
 Changelog
+.lock-wscript
+core
