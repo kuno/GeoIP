@@ -50,7 +50,7 @@ From v0.4.0, geoip need nodejs >= 0.4.0, if you want to use it on old nodejs, yo
     var Country = geoip.Country;
     var country = new Country('/path/to/GeoIP.dat');
 
-Synchronous methods, network independence
+Synchronous method
 
     var country_obj = country.lookup('8.8.8.8');
 
@@ -62,7 +62,7 @@ Synchronous methods, network independence
         continent_code: 'NA' }
     */
 
-Asynchronous methods
+Asynchronous method
 
     country.lookup('www.google.com', function(data) {
         if (data) { // no err, if not found, just return null
