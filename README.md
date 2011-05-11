@@ -50,7 +50,7 @@ From v0.4.0, geoip need nodejs >= 0.4.0, if you want to use it on old nodejs, yo
     var Country = geoip.Country;
     var country = new Country('/path/to/GeoIP.dat');
 
-__Synchronous methods, network independence__
+* Synchronous methods, network independence
 
     var country_obj = country.lookup('8.8.8.8');
 
@@ -62,7 +62,7 @@ __Synchronous methods, network independence__
         continent_code: 'NA' }
     */
 
-__Asynchronous methods__
+* Asynchronous methods
 
     country.lookup('www.google.com', function(data) {
         if (data) { // no err, if not found, just return null
@@ -81,7 +81,7 @@ __Asynchronous methods__
     var City = geoip.City;
     var city = new City('/path/to/GeoLiteCity.dat');
 
-__Synchronous method__
+* Synchronous method
 
     var city_obj = city.lookupSync('8.8.8.8');
     console.log(city_obj);
@@ -101,7 +101,7 @@ __Synchronous method__
     //  "area_code":650
     //  }    
 
-__Asynchronous method__
+* Asynchronous method
 
     city.lookup('www.google.com', function(data) {
         if (data) {
@@ -117,7 +117,7 @@ __Asynchronous method__
     var Org = geoip.Org;
     var org = new Org('/path/to/file')  // Org module can open three edition database 'org', 'asnum', 'isp'
 
-__Synchronous method__
+* Synchronous method
 
     var org_str = org.lookup('8.8.8.8');
 
@@ -133,7 +133,7 @@ __Synchronous method__
 
     org.close();
 
-__Asynchronous method__
+* Asynchronous method
 
     org.lookup('www.google.com', function(data) {
         if (data) {
@@ -142,12 +142,12 @@ __Asynchronous method__
     });
 
 
-####Region
+###Region
 
     var Region = geoip.Region;
     var region = new Region('/path/to/GeoIPRegion.dat');
 
-__Synchronous method__
+* Synchronous method
 
     var region_obj = region.lookupSync('8.8.8.8'); 
     
@@ -158,7 +158,7 @@ __Synchronous method__
 
     */
 
-__Asynchronous method__
+* Asynchronous method
 
     region.lookup('www.google.com', function(data) {
         if (data) {
@@ -169,12 +169,12 @@ __Asynchronous method__
     region.close();
 
 
-####NetSpeed
+###NetSpeed
 
     var NetSpeed = geoip.NetSpeed;
     var netspeed = new NetSpeed('/path/to/GeoIPNetSpeed.dat');
 
-__Synchronous method__
+* Synchronous method
 
     var netspeed_str = netspeed.lookupSync('8.8.8.8');
     
@@ -183,7 +183,7 @@ __Synchronous method__
       netspeed_str just a simple string, 'Dialup', 'Corprate'... so on
     */
 
-__Asynchronous method__
+* Asynchronous method
 
     netspeed.lookup('www.google.com', function(data) {
         if (data) {
