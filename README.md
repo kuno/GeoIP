@@ -1,83 +1,19 @@
-__GeoIP API for node__
+__GeoIP binding for nodejs__
 
 Get geolocation information based on domain or IP address.
 
-
-##Important Warning
-
-From v0.4.0(the next major release) geoip will be re-factor from Sketch,
-
-including drop support for nodejs 0.2.x and will break the  api from previous version.
-
 * New Architecture
 
-geoip will be binding to libgeoip >= 1.4.6, which is a C library.
+From v0.4.0, geoip will be bind to libgeoip >= 1.4.6, which is a C library.
 
 ![new_architecture](https://github.com/kuno/GeoIP/raw/master/misc/new_architecture.png)  
-
-* Api
-
-Every sub-module of geoip (geoip.Country, geoip.City...) will be a constructor function, for exampmle:
-
-    var geoip = require('geoip');
-
-    var city =  new geoip.City('/path/to/GeoLiteCity.dat', true);
-
-* Lookup methods
-
-Now every instance of geoip module will two kind of lookup methods, synchronous and asynchronous, for example:
-
-    var record = city.lookupSync('8.8.8.8');
-
-    city.lookup('8.8.8.8', function(data) {
-        if (data) {  // if not found, data will be null or undefined
-           //Do something with data
-        }
-    });
-
-* Support for ipv6
-
-Not implemented yet, but if so the methods will be similar with ipv4 methods but  have 6 suffix, for example:
-
-    var record6 = city.lookupSync6(ADDR_V6);
-
-    city.lookup6(ADDR_V6, function(data) {
-        ......
-    });
-
-* Data struct
-
-The struct of the data return from geoip will only have two types, object or string.
-
-If the returned type have multiple properties (e.g city record) the all these properties will be encapsulate into an object, 
-
-othewise will be an plain string.
-
-
-##Compatibility
-
-Current version, v0.3.4-1, passed test on nodejs v0.2.1 ~ 0.2.6, v0.3.0 ~ 0.3.8, v0.4.0 ~ v0.4.2.
-
-
-##Architecture
-
-![architecture](https://github.com/kuno/GeoIP/raw/master/misc/architecture.png)
 
 
 ##Data
 
 Befor you can use this package, you need to download or buy some data from [www.maxmind.com](http://www.maxmind.com/app/ip-location).
 
-There are three free versions data among with some commercial versions.
-
-__Note: This package only support binary data and IP address version 4, not any other formats.__
-
-GeoIP ASN Edition [Download](http://geolite.maxmind.com/download/geoip/database/asnum/GeoIPASNum.dat.gz)  
-
-GeoIP City Lite Edition [Download](http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz)  
-
-GeoIP Country Lite Edition [Download](http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz).
-
+There are three free versions data among with some commercial versions, the free database can be found [here](http://geolite.maxmind.com/download/geoip/database/).
 
 
 ##Install
@@ -85,88 +21,70 @@ GeoIP Country Lite Edition [Download](http://geolite.maxmind.com/download/geoip/
     npm install geoip
 
 
+##Compatibility
+
+From v0.4.0, geoip need nodejs >= 0.4.0, if you want to use it on old nodejs, you can:
+
+    npm install geoip@0.3.4-1
+
+
 ##Usage
 
-###Open the binary data file
+###Check edition
 
-__The synchronous way:__
+    var edition = geoip.check('/path/to/file');
 
-    var data = geoip.open('/path/to/file');
+    console.log(edition); // output 'country', 'city', 'org'... so on
 
-    var type = geoip.check(data);
-    // Return one of these: 'country', 'city', 'org', 'netspeed', 'region';
-    // Or return null, if not a valid data
+###Create a new instance of sub-module, for example:
 
-    if (type === 'country') {
-        var name = geoip.Country.name_by_addr(data, '8.8.8.8');
-        if (!name) { // If not fount, return null
-            console.log('Not found');
-        } else {
-            console.log(name);  // prints 'United States'
-        }
-    }
+    var city = new geoip.City('/path/to/GeoLiteCity.dat', false);  // not to cache the database
 
-__The asynchronous way:__
-
-    geoip.filter('/path/to/file', function(err, type, data) {
-        if (err) {throw err;}  // The given path is not a valid data file.
-        if (type === 'country') { // The data type, in this case it's country
-            geoip.Country.code_by_domain(data, 'www.sina.com', function(err, code) {
-                if (err) {throw err;}
-                if (!code) { // If not found, geoip always return null!
-                    console.log('Not found.');
-                } else {  // Found!
-                    console.log(code); // prints 'CN'
-                }
-            });
-        }
-    });
-
-###Close the opened data object
-
-    geoip.close(data);
-
+    var city = new geoip.City('/path/to/GeoLiteCity.dat');  // the default option is cache
 
 ##Modules
 
 ###Country
 
     // Open the country data file
-    var country_data = geoip.open('/path/to/GeoIP.dat');
     var Country = geoip.Country;
+    var country = new Country('/path/to/GeoIP.dat');
 
 __Synchronous methods, network independence__
 
-    Country.code_by_addr(country_data, '8.8.8.8'); // Return 'US'
+    var country_obj = country.lookup('8.8.8.8');
 
-    Country.name_by_addr(country_data, '8.8.8.8'); // Return  'United States'
+    console.log(country_obj);
+    /*
+      { country_code: 'US',
+        country_code3: 'USA',
+        country_name: 'United States',
+        continent_code: 'NA' }
+    */
 
-__Asynchronous methods, depends on node's async-style dns module.__
+__Asynchronous methods__
 
-    Country.code_by_domain(country_data, 'www.google.com', function(err, code) {
-        if (err) {throw err;}
-        console.log(code);  // prints 'US'
+    country.lookup('www.google.com', function(data) {
+        if (data) { // no err, if not found, just return null
+            console.log(data);  // same as lookup method
+        }
     });
 
-    Country.name_by_domain(country_data, 'www.google.com', function(err, name) {
-        if (err) {throw err;}
-        console.log(name);  // prints 'United States'
-    });
 
     //Close the opened file.
-    geoip.close(country_data);
-
+    country.close();
 
 
 ###City
 
     // Open the GeoLiteCity.dat file first.
-    var city_data = geoip.open('/path/to/GeoLiteCity.dat');
     var City = geoip.City;
+    var city = new City('/path/to/GeoLiteCity.dat');
 
 __Synchronous method__
 
-    City.record_by_addr(city_data, '8.8.8.8');
+    var city_obj = city.lookupSync('8.8.8.8');
+    console.log(city_obj);
     // Return an object of city information
     // {
     //  "country_code":"US",
@@ -185,111 +103,92 @@ __Synchronous method__
 
 __Asynchronous method__
 
-    City.record_by_domain(city_data, 'www.google.com', function(err, reord) {
-        if (err) {throw err;}
-        var keys = Object.keys(record);
-        keys.forEach(function(k) {
-            console.log(k + ':' + record[k]); // Same as record_by_addr
-        });   
+    city.lookup('www.google.com', function(data) {
+        if (data) {
+            console.log(data);
+        }
     });
 
-    geoip.close(city_data);
+    city.close();
 
 
 ###Organization
 
-####Get Organization Information
-
-    // Open the GeoIPOrg.dat first.
-    var org_data = geoip.open('/path/to/GeoIPOrg.dat');
     var Org = geoip.Org;
+    var org = new Org('/path/to/file')  // Org module can open three edition database 'org', 'asnum', 'isp'
 
 __Synchronous method__
 
-    Org.org_by_addr(org_data, '8.8.8.8');
-    // Return an array of the names of organization
-    // [
-    // 'Genuity',
-    // 'The United Way',
-    // 'Education Management Corporation,
-    // 'International Generating Co. (Intergen)'
-    // ]    
+    var org_str = org.lookup('8.8.8.8');
 
-    geoip.close(org_data);
+    console.log(org_str);
+    /*
+      The type of returned data is string, for example:
 
-__Asynchronous method__
+      'Genuity'
+      'AS15169 Google Inc.'
+      
+      no longer an object
+    */
 
-    Org.org_by_domain(org_data, 'www.google.com', function(err, org) {
-        if (err) {throw err;} // Organization may NOT be Found
-        org.foreach(function(o) {
-            console.log(o); // Same result as org_by_addr, if returns
-        });
-    });
-
-
-####Get [ASN](http://www.apnic.net/services/services-apnic-provides/helpdesk/faqs/asn-faqs) informatioin
-
-    // Open the GeoIPASNum.dat.
-    var asn_data = geoip.open('/path/to/GeoIPASNum.dat');
-
-__Synchronous method__
-
-    Org.asn_by_addr(asn_data, '8.8.8.8');
-    // Return an array of asn objects
-    // [ 
-    //  { number: 'AS15169', description: 'Google Inc.' },
-    //  { number: 'AS36597', description: 'OmniTI Computer Consulting Inc.' },
-    //  { number: 'AS26471', description: 'Smart City Networks' } 
-    // ]
+    org.close();
 
 __Asynchronous method__
 
-    Org.asn_by_domain(asn_data, 'www.google.com', function(err, asn) {
-        if (err) {throw err;} // ASNumber Not Found
-        asn.forEach(function(a) {  // Same as asn_by_addr
-            var keys = object.keys(a);
-            console.log(a[keys[0]] + ' : ' + a[keys[1]]);
-        });
+    org.lookup('www.google.com', function(data) {
+        if (data) {
+            console.log(data);
+        }
     });
-
-    geoip.close(asn_data);
 
 
 ####Region
 
-    // Open the GeoIPRegion.dat first.
-    var region_data = geoip.open('/path/to/GeoIPRegion.dat');
     var Region = geoip.Region;
+    var region = new Region('/path/to/GeoIPRegion.dat');
 
 __Synchronous method__
 
-    Region.region_by_addr(region_data, '8.8.8.8');  // Return 'US,CO'
+    var region_obj = region.lookupSync('8.8.8.8'); 
+    
+    console.log('region_obj);
+    /*
+      region object has two properties:
+      { country_code: 'US', region: 'CO' }
+
+    */
 
 __Asynchronous method__
 
-    Region.region_by_domain(region_data, 'www.google.com', function(err, region) {
-        if (err) {throw err;}
-        console.log(region);  // Maybe different from region_by_addr
+    region.lookup('www.google.com', function(data) {
+        if (data) {
+          console.log(data);
+        }
     });
 
-    geoip.close(region_data);
+    region.close();
 
 
 ####NetSpeed
 
-    // Open the GeoIPNetSpeed.dat first.
-    var netspeed_data = geoip.open('/path/to/GeoIPNetSpeed.dat');
     var NetSpeed = geoip.NetSpeed;
+    var netspeed = new NetSpeed('/path/to/GeoIPNetSpeed.dat');
 
 __Synchronous method__
 
-    NetSpeed.speed_by_addr(netspeed_data, '8.8.8.8');  // Return 'Dailup'
+    var netspeed_str = netspeed.lookupSync('8.8.8.8');
+    
+    console.log(netspeed_str);
+    /*
+      netspeed_str just a simple string, 'Dialup', 'Corprate'... so on
+    */
 
 __Asynchronous method__
 
-    NetSpeed.speed_by_domain(data, 'www.google.com', function(err, speed) {
-        if (err) {throw err;}
-        console.log(speed);  // Maybe return unknow or different from speed_by_addr
+    netspeed.lookup('www.google.com', function(data) {
+        if (data) {
+          console.log(data);  // Maybe return 'unknow' or different from lookup method
+        }
     });
 
-    geoip.close(netspeed_data);
+    netspeed.close();
