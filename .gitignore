@@ -46,4 +46,4 @@ core
 build/*
 
 # wscript files
-.locl-wscript
+.lock-wscript

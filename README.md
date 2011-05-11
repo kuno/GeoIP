@@ -2,7 +2,7 @@ __GeoIP binding for nodejs__
 
 Get geolocation information based on domain or IP address.
 
-* New Architecture
+__New Architecture
 
 From v0.4.0, geoip will be bind to libgeoip >= 1.4.6, which is a C library.
 
@@ -50,7 +50,7 @@ From v0.4.0, geoip need nodejs >= 0.4.0, if you want to use it on old nodejs, yo
     var Country = geoip.Country;
     var country = new Country('/path/to/GeoIP.dat');
 
-* Synchronous methods, network independence
+__Synchronous methods, network independence
 
     var country_obj = country.lookup('8.8.8.8');
 
@@ -62,7 +62,7 @@ From v0.4.0, geoip need nodejs >= 0.4.0, if you want to use it on old nodejs, yo
         continent_code: 'NA' }
     */
 
-* Asynchronous methods
+__Asynchronous methods
 
     country.lookup('www.google.com', function(data) {
         if (data) { // no err, if not found, just return null
@@ -81,7 +81,7 @@ From v0.4.0, geoip need nodejs >= 0.4.0, if you want to use it on old nodejs, yo
     var City = geoip.City;
     var city = new City('/path/to/GeoLiteCity.dat');
 
-* Synchronous method
+__Synchronous method
 
     var city_obj = city.lookupSync('8.8.8.8');
     console.log(city_obj);
@@ -101,7 +101,7 @@ From v0.4.0, geoip need nodejs >= 0.4.0, if you want to use it on old nodejs, yo
     //  "area_code":650
     //  }    
 
-* Asynchronous method
+__Asynchronous method
 
     city.lookup('www.google.com', function(data) {
         if (data) {
@@ -117,7 +117,7 @@ From v0.4.0, geoip need nodejs >= 0.4.0, if you want to use it on old nodejs, yo
     var Org = geoip.Org;
     var org = new Org('/path/to/file')  // Org module can open three edition database 'org', 'asnum', 'isp'
 
-* Synchronous method
+__Synchronous method
 
     var org_str = org.lookup('8.8.8.8');
 
@@ -133,7 +133,7 @@ From v0.4.0, geoip need nodejs >= 0.4.0, if you want to use it on old nodejs, yo
 
     org.close();
 
-* Asynchronous method
+__Asynchronous method
 
     org.lookup('www.google.com', function(data) {
         if (data) {
@@ -147,7 +147,7 @@ From v0.4.0, geoip need nodejs >= 0.4.0, if you want to use it on old nodejs, yo
     var Region = geoip.Region;
     var region = new Region('/path/to/GeoIPRegion.dat');
 
-* Synchronous method
+__Synchronous method
 
     var region_obj = region.lookupSync('8.8.8.8'); 
     
@@ -158,7 +158,7 @@ From v0.4.0, geoip need nodejs >= 0.4.0, if you want to use it on old nodejs, yo
 
     */
 
-* Asynchronous method
+__Asynchronous method
 
     region.lookup('www.google.com', function(data) {
         if (data) {
@@ -174,7 +174,7 @@ From v0.4.0, geoip need nodejs >= 0.4.0, if you want to use it on old nodejs, yo
     var NetSpeed = geoip.NetSpeed;
     var netspeed = new NetSpeed('/path/to/GeoIPNetSpeed.dat');
 
-* Synchronous method
+__Synchronous method
 
     var netspeed_str = netspeed.lookupSync('8.8.8.8');
     
@@ -183,7 +183,7 @@ From v0.4.0, geoip need nodejs >= 0.4.0, if you want to use it on old nodejs, yo
       netspeed_str just a simple string, 'Dialup', 'Corprate'... so on
     */
 
-* Asynchronous method
+__Asynchronous method
 
     netspeed.lookup('www.google.com', function(data) {
         if (data) {
