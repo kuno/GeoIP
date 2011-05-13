@@ -200,6 +200,10 @@ int geoip::City::EIO_AfterCity(eio_req *req)
       data->Set(String::NewSymbol("region"), String::New(baton->record->region));
     }
 
+    if (baton->record->city != NULL) {
+      data->Set(String::NewSymbol("city"), String::New(baton->record->city));
+    }                                                                       
+
     if (baton->record->postal_code != NULL) {
       data->Set(String::NewSymbol("postal_code"), String::New(baton->record->postal_code));
     }
