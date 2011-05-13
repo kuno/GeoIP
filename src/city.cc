@@ -95,6 +95,9 @@ Handle<Value> geoip::City::lookupSync(const Arguments &args) {
   if (record->region != NULL ) {
     data->Set(String::NewSymbol("region"), String::New(record->region));
   }
+  if (record->city != NULL) {
+    data->Set(String::NewSymbol("city"), String::New(record->city));
+  }
 
   if (record->postal_code != NULL) {
     data->Set(String::NewSymbol("postal_code"), String::New(record->postal_code));
