@@ -10,6 +10,7 @@ assert.ok(sync_data, 'Can not find google?');
 
 city.lookup('www.google.com', function(data) {
     if (data) {
+      console.log(data);
       assert.deepEqual(sync_data, data, 'oops! Async and sync city data not equal');
     } else {
       console.log('Data not found');

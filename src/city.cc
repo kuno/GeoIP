@@ -107,7 +107,7 @@ Handle<Value> geoip::City::lookupSync(const Arguments &args) {
     data->Set(String::NewSymbol("latitude"), Number::New(record->latitude));
   }
 
-  if (record->longitude > 0) {
+  if (record->longitude >= -180 && record->longitude <= 180) {
     data->Set(String::NewSymbol("longitude"), Number::New(record->longitude));
   }
 
@@ -212,7 +212,7 @@ int geoip::City::EIO_AfterCity(eio_req *req)
       data->Set(String::NewSymbol("latitude"), Number::New(baton->record->latitude));
     }
 
-    if (baton->record->longitude > 0) {
+    if (baton->record->longitude >= -180 && baton->record->longitude <= 180) {
       data->Set(String::NewSymbol("longitude"), Number::New(baton->record->longitude));
     }
 
