@@ -17,7 +17,7 @@ void geoip::Country::Init(Handle<Object> target)
   constructor_template->SetClassName(String::NewSymbol("geoip"));
 
   NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookup", lookup);
-  //NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookup6", lookup6);
+  NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookup6", lookup6);
   NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookupSync", lookupSync);
   NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookupSync6", lookupSync6);
   NODE_SET_PROTOTYPE_METHOD(constructor_template, "close", close);
