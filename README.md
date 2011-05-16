@@ -13,7 +13,7 @@ From v0.4.0, geoip will be bind to libgeoip >= 1.4.6, which is a C library.
 
 Befor you can use this package, you need to download or buy some data from [www.maxmind.com](http://www.maxmind.com/app/ip-location).
 
-There are three free versions data among with some commercial versions, the free database can be found [here](http://geolite.maxmind.com/download/geoip/database/).
+There are some free databaes among with some commercial versions, the free database can be found [here](http://geolite.maxmind.com/download/geoip/database/).
 
 
 ##Install
@@ -53,7 +53,7 @@ ipv4
 
     var country = new Country('/path/to/GeoIP.dat');
 
-    //Synchronous method(the recommended way):
+    // Synchronous method(the recommended way):
     var country_obj = country.lookupSync('8.8.8.8');
 
     console.log(country_obj);
@@ -61,10 +61,11 @@ ipv4
       { country_code: 'US',
         country_code3: 'USA',
         country_name: 'United States',
-        continent_code: 'NA' }
+        continent_code: 'NA' 
+      }
     */
 
-    //Asynchronous method:
+    // Asynchronous method:
     country.lookup('www.google.com', function(err, data) {
         if (err) {throw err;}
         if (data) { // if not found, just return null
@@ -76,7 +77,7 @@ ipv6
 
     var country_v6 = new Country('/path/to/GeoIPv6.dat');
 
-    //Synchronous method
+    // Synchronous method
     var country_obj_v6 = country_v6.lookupSync6('2607:f0d0:1002:0051:0000:0000:0000:0004');
 
     console.log(country_obj_v6); // Same as ipv4
@@ -87,6 +88,23 @@ ipv6
         continent_code: 'NA' 
       }
     */
+
+    // Asynchronous method
+    country_v6.lookup6('2400:2352:b0f1:36c5:aa9d:694a:2f98:40bd', function(err, data_v6) {
+        if (err) {throw err;}
+        if (data_v6) {
+            console.log(data_v6);
+            /*
+             { 
+               country_code: 'JP',
+               country_code3: 'JPN',
+               country_name: 'Japan',
+               continent_code: 'AS' 
+              }
+
+            */
+        }
+    });
 
 close
 
