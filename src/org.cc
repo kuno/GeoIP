@@ -1,5 +1,5 @@
 /*
- * GeoIP C library binding for nodeje
+ * GeoIP C library binding for nodejs
  *
  * Licensed under the GNU LGPL 2.1 license
  */
@@ -135,18 +135,21 @@ int geoip::Org::EIO_AfterOrg(eio_req *req)
   ev_unref(EV_DEFAULT_UC);
   baton->o->Unref();
 
-  Local<Value> argv[1];
+  Handle<Value> argv[2];
 
   if (baton->org == NULL) {
-    argv[0] = scope.Close(Null());
+    argv[0] = Exception::Error(String::New("Data not found"));
+    argv[1] = Null();
   } else {
     Local<String> data = String::New(baton->org);
-    argv[0] = data;
+
+    argv[0] = Null();
+    argv[1] = data;
   }
 
   TryCatch try_catch;
 
-  baton->cb->Call(Context::GetCurrent()->Global(), 1, argv);
+  baton->cb->Call(Context::GetCurrent()->Global(), 2, argv);
 
   if (try_catch.HasCaught()) {
     FatalException(try_catch);

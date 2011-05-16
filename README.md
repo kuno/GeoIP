@@ -50,9 +50,9 @@ From v0.4.0, geoip need nodejs >= 0.4.0, if you want to use it on old nodejs, yo
     var Country = geoip.Country;
     var country = new Country('/path/to/GeoIP.dat');
 
-Synchronous method
+Synchronous method(the recommended way):
 
-    var country_obj = country.lookup('8.8.8.8');
+    var country_obj = country.lookupSync('8.8.8.8');
 
     console.log(country_obj);
     /*
@@ -62,10 +62,11 @@ Synchronous method
         continent_code: 'NA' }
     */
 
-Asynchronous method
+Asynchronous method:
 
-    country.lookup('www.google.com', function(data) {
-        if (data) { // no err, if not found, just return null
+    country.lookup('www.google.com', function(err, data) {
+        if (err) {throw err;}
+        if (data) { // if not found, just return null
             console.log(data);  // same as lookup method
         }
     });
@@ -81,7 +82,7 @@ Asynchronous method
     var City = geoip.City;
     var city = new City('/path/to/GeoLiteCity.dat');
 
-Synchronous method
+Synchronous method:
 
     var city_obj = city.lookupSync('8.8.8.8');
     console.log(city_obj);
@@ -101,9 +102,10 @@ Synchronous method
     //  "area_code":650
     //  }    
 
-Asynchronous method
+Asynchronous method:
 
-    city.lookup('www.google.com', function(data) {
+    city.lookup('www.google.com', function(err, data) {
+        if (err) {throw err;}
         if (data) {
             console.log(data);
         }
@@ -117,9 +119,9 @@ Asynchronous method
     var Org = geoip.Org;
     var org = new Org('/path/to/file')  // Org module can open three edition database 'org', 'asnum', 'isp'
 
-Synchronous method
+Synchronous method:
 
-    var org_str = org.lookup('8.8.8.8');
+    var org_str = org.lookupSync('8.8.8.8');
 
     console.log(org_str);
     /*
@@ -133,9 +135,10 @@ Synchronous method
 
     org.close();
 
-Asynchronous method
+Asynchronous method:
 
-    org.lookup('www.google.com', function(data) {
+    org.lookup('www.google.com', function(err, data) {
+        if (err) {throw err;}
         if (data) {
             console.log(data);
         }
@@ -147,7 +150,7 @@ Asynchronous method
     var Region = geoip.Region;
     var region = new Region('/path/to/GeoIPRegion.dat');
 
-Synchronous method
+Synchronous method:
 
     var region_obj = region.lookupSync('8.8.8.8'); 
     
@@ -158,9 +161,10 @@ Synchronous method
 
     */
 
-Asynchronous method
+Asynchronous method:
 
-    region.lookup('www.google.com', function(data) {
+    region.lookup('www.google.com', function(err, data) {
+        if (err) {throw err;}
         if (data) {
           console.log(data);
         }
@@ -174,7 +178,7 @@ Asynchronous method
     var NetSpeed = geoip.NetSpeed;
     var netspeed = new NetSpeed('/path/to/GeoIPNetSpeed.dat');
 
-Synchronous method
+Synchronous method:
 
     var netspeed_str = netspeed.lookupSync('8.8.8.8');
     
@@ -183,9 +187,10 @@ Synchronous method
       netspeed_str just a simple string, 'Dialup', 'Corprate'... so on
     */
 
-Asynchronous method
+Asynchronous method:
 
-    netspeed.lookup('www.google.com', function(data) {
+    netspeed.lookup('www.google.com', function(err, data) {
+        if (err) {throw err;}
         if (data) {
           console.log(data);  // Maybe return 'unknow' or different from lookup method
         }

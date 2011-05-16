@@ -1,5 +1,5 @@
 /*
- * GeoIP C library binding for nodeje
+ * GeoIP C library binding for nodejs
  *
  * Licensed under the GNU LGPL 2.1 license
  */
@@ -36,15 +36,17 @@ Handle<Value> geoip::City::New(const Arguments& args)
   HandleScope scope;
   City *c = new City();
 
-  Local<String> path_str = args[0]->ToString();
-  char path_cstr[path_str->Length()];
-  path_str->WriteAscii(path_cstr);
+  //String::AsciiValue file_str(args[0]->ToString());
+  //const char * file_cstr = ToCString(file_str);
+
+  Local<String> file_str = args[0]->ToString();
+  char file_cstr[file_str->Length()];
+  file_str->WriteAscii(file_cstr);
   bool cache_on = args[1]->ToBoolean()->Value(); 
 
-  c->db = GeoIP_open(path_cstr, cache_on?GEOIP_MEMORY_CACHE:GEOIP_STANDARD);
+  c->db = GeoIP_open(file_cstr, cache_on?GEOIP_MEMORY_CACHE:GEOIP_STANDARD);
 
   if (c->db != NULL) {
-    // Successfully opened the file, return 1 (true)
     c->db_edition = GeoIP_database_edition(c->db);
     if (c->db_edition == GEOIP_CITY_EDITION_REV0 || 
         c->db_edition == GEOIP_CITY_EDITION_REV1) {
@@ -95,16 +97,19 @@ Handle<Value> geoip::City::lookupSync(const Arguments &args) {
   if (record->region != NULL ) {
     data->Set(String::NewSymbol("region"), String::New(record->region));
   }
+  if (record->city != NULL) {
+    data->Set(String::NewSymbol("city"), String::New(record->city));
+  }
 
   if (record->postal_code != NULL) {
     data->Set(String::NewSymbol("postal_code"), String::New(record->postal_code));
   }
 
-  if (record->latitude > 0) {
+  if (record->latitude >= -90 && record->latitude <= 90) {
     data->Set(String::NewSymbol("latitude"), Number::New(record->latitude));
   }
 
-  if (record->longitude > 0) {
+  if (record->longitude >= -180 && record->longitude <= 180) {
     data->Set(String::NewSymbol("longitude"), Number::New(record->longitude));
   }
 
@@ -176,9 +181,10 @@ int geoip::City::EIO_AfterCity(eio_req *req)
   ev_unref(EV_DEFAULT_UC);
   baton->c->Unref();
 
-  Local<Value> argv[1];
+  Handle<Value> argv[2];
   if (baton->record == NULL) {
-    argv[0] = scope.Close(Null());
+    argv[0] = Exception::Error(String::New("Data not found"));
+    argv[1] = Null();
   } else {
     Local<Object> data = Object::New();
 
@@ -197,15 +203,19 @@ int geoip::City::EIO_AfterCity(eio_req *req)
       data->Set(String::NewSymbol("region"), String::New(baton->record->region));
     }
 
+    if (baton->record->city != NULL) {
+      data->Set(String::NewSymbol("city"), String::New(baton->record->city));
+    }                                                                       
+
     if (baton->record->postal_code != NULL) {
       data->Set(String::NewSymbol("postal_code"), String::New(baton->record->postal_code));
     }
 
-    if (baton->record->latitude > 0) {
+    if (baton->record->latitude >= -90 && baton->record->latitude <= 90) {
       data->Set(String::NewSymbol("latitude"), Number::New(baton->record->latitude));
     }
 
-    if (baton->record->longitude > 0) {
+    if (baton->record->longitude >= -180 && baton->record->longitude <= 180) {
       data->Set(String::NewSymbol("longitude"), Number::New(baton->record->longitude));
     }
 
@@ -223,13 +233,15 @@ int geoip::City::EIO_AfterCity(eio_req *req)
 
     if (baton->record->continent_code > 0) {
       data->Set(String::NewSymbol("continent_code"), String::New(baton->record->continent_code));
-    }                                            
-    argv[0] = data;
+    }
+    
+    argv[0] = Null();
+    argv[1] = data;
   }
 
   TryCatch try_catch;
 
-  baton->cb->Call(Context::GetCurrent()->Global(), 1, argv);
+  baton->cb->Call(Context::GetCurrent()->Global(), 2, argv);
 
   if (try_catch.HasCaught()) {
     FatalException(try_catch);

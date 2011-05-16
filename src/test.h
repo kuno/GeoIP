@@ -1,5 +1,5 @@
 /*
- * GeoIP C library binding for nodeje
+ * GeoIP C library binding for nodejs
  *
  * Licensed under the GNU LGPL 2.1 license
  */                                              
@@ -31,15 +31,29 @@ namespace geoip {
 
             static Handle<Value> lookupSync(const Arguments &args);
 
-            //static Handle<Value> lookup(const Arguments& args);
+            static Handle<Value> lookup(const Arguments& args);
 
-            //static int EIO_City(eio_req *req);
+            static int EIO_Test(eio_req *req);
 
-            //static int EIO_AfterCity(eio_req *req);
+            static int EIO_AfterTest(eio_req *req);
 
             static Handle<Value> close(const Arguments &args);
     };
 
 }
+
+struct test_baton_t {
+  geoip::Test * c;
+  char host_cstr[256];
+  GeoIPRecord * record;
+  int increment_by;
+  int sleep_for;
+  Persistent<Function> cb;
+};
+
+// Extracts a C string from a V8 Utf8Value.
+const char* ToCString(const v8::String::Utf8Value& value) {
+  return *value ? *value : "<string conversion failed>";
+}                                                                 
 
 #endif /* NODE_GEOIP_TEST_H */
