@@ -19,7 +19,7 @@ void geoip::Country::Init(Handle<Object> target)
   NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookup", lookup);
   //NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookup6", lookup6);
   NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookupSync", lookupSync);
-  //NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookupSync6", lookupSync6);
+  NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookupSync6", lookupSync6);
   NODE_SET_PROTOTYPE_METHOD(constructor_template, "close", close);
   target->Set(String::NewSymbol("Country"), constructor_template->GetFunction());
 }
@@ -80,9 +80,37 @@ Handle<Value> geoip::Country::lookupSync(const Arguments &args) {
   uint32_t ipnum = _GeoIP_lookupaddress(host_cstr);
 
   if (ipnum <= 0) {
-    return scope.Close(data);
+    return scope.Close(Null());
   } else {
     int country_id = GeoIP_id_by_ipnum(c->db, ipnum);
+    if (country_id == 0) {
+      return scope.Close(Null());
+    } else {
+      data->Set(String::NewSymbol("country_code"), String::New(GeoIP_country_code[country_id]));
+      data->Set(String::NewSymbol("country_code3"), String::New(GeoIP_country_code3[country_id]));
+      data->Set(String::NewSymbol("country_name"), String::New(GeoIP_country_name[country_id]));
+      data->Set(String::NewSymbol("continent_code"), String::New(GeoIP_country_continent[country_id]));
+      return scope.Close(data);
+    }
+  }
+}
+
+Handle<Value> geoip::Country::lookupSync6(const Arguments &args) {
+  HandleScope scope;
+
+  Country * c = ObjectWrap::Unwrap<Country>(args.This());
+
+  Local<String> host_str = args[0]->ToString();
+  Local<Object> data = Object::New();
+  char host_cstr[host_str->Length()];
+  host_str->WriteAscii(host_cstr);
+
+  geoipv6_t ipnum_v6 = _GeoIP_lookupaddress_v6(host_cstr);
+
+  if (__GEOIP_V6_IS_NULL(ipnum_v6)) {
+    return scope.Close(Null());
+  } else {
+    int country_id = GeoIP_id_by_ipnum_v6(c->db, ipnum_v6);
     if (country_id == 0) {
       return scope.Close(Null());
     } else {

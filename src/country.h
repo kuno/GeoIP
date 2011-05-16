@@ -31,7 +31,9 @@ namespace geoip {
       static void Init(Handle<Object> target);
 
 
-      static Handle<Value> lookupSync(const Arguments &args);
+      static Handle<Value> lookupSync(const Arguments& args);
+
+      static Handle<Value> lookupSync6(const arguments& args);
 
       static Handle<Value> lookup(const Arguments& args);
 
