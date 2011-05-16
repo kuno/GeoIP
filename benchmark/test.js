@@ -28,16 +28,16 @@ var end = new Date().getTime();
 util.puts((end - start) / 1000);
 */
 
-
+/*
 var start_asyc = new Date().getTime();
 var addr = '0.0.0.0';
 c.lookup(addr, function(err, data) {
-  //if (err) {throw err;}
+  if (err) {throw err;}
   if (data) {
     console.log(data);
   }
 });
-
+*/
 //var end_async = new Date().getTime();
 
 //util.puts((end_async - start_asyc) / 1000);       

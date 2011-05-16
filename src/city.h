@@ -51,4 +51,9 @@ struct city_baton_t {
   Persistent<Function> cb;
 };
 
+//// Extracts a C string from a V8 Utf8Value.
+//const char * ToCString(const String::AsciiValue& value) {
+//  return *value ? *value : "<string conversion failed>";
+//}                                                                 
+
 #endif /* NODE_GEOIP_CITY_H */

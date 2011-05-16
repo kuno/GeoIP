@@ -8,7 +8,7 @@ var region = new Region('/tmp/GeoIPRegion.dat', true);
 var sync_data = region.lookupSync('8.8.8.8');
 assert.ok(sync_data, 'Can not find google in region module');
 
-region.lookup('0.0.0.0', function(err, data) {
+region.lookup('www.google.com', function(err, data) {
     //if (err) {throw err;}
     if (data) {
       console.log(sync_data, ' vs ' , data);

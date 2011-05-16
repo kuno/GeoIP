@@ -6,7 +6,6 @@
 
 #include <GeoIP.h>
 #include <GeoIPCity.h>
-
 #include <unistd.h>
 
 #ifndef NODE_GEOIP_H
@@ -21,7 +20,6 @@ extern "C" {
     return ThrowException(Exception::TypeError(                         \
                   String::New("The second argument must be a function")));  \
   Local<Function> VAR = Local<Function>::Cast(args[I]);
-
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////// GeoIP Internal //////////////////////////////////

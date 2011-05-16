@@ -64,8 +64,9 @@ Synchronous method
 
 Asynchronous method
 
-    country.lookup('www.google.com', function(data) {
-        if (data) { // no err, if not found, just return null
+    country.lookup('www.google.com', function(err, data) {
+        if (err) {throw err;}
+        if (data) { // if not found, just return null
             console.log(data);  // same as lookup method
         }
     });
@@ -103,7 +104,8 @@ Synchronous method
 
 Asynchronous method
 
-    city.lookup('www.google.com', function(data) {
+    city.lookup('www.google.com', function(err, data) {
+        if (err) {throw err;}
         if (data) {
             console.log(data);
         }
@@ -135,7 +137,8 @@ Synchronous method
 
 Asynchronous method
 
-    org.lookup('www.google.com', function(data) {
+    org.lookup('www.google.com', function(err, data) {
+        if (err) {throw err;}
         if (data) {
             console.log(data);
         }
@@ -160,7 +163,8 @@ Synchronous method
 
 Asynchronous method
 
-    region.lookup('www.google.com', function(data) {
+    region.lookup('www.google.com', function(err, data) {
+        if (err) {throw err;}
         if (data) {
           console.log(data);
         }
@@ -185,7 +189,8 @@ Synchronous method
 
 Asynchronous method
 
-    netspeed.lookup('www.google.com', function(data) {
+    netspeed.lookup('www.google.com', function(err, data) {
+        if (err) {throw err;}
         if (data) {
           console.log(data);  // Maybe return 'unknow' or different from lookup method
         }
