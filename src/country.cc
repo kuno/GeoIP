@@ -1,4 +1,4 @@
- /*
+/*
  * GeoIP C library binding for nodejs
  *
  * Licensed under the GNU LGPL 2.1 license
@@ -42,9 +42,6 @@ Handle<Value> geoip::Country::New(const Arguments& args)
   String::Utf8Value file_str(args[0]->ToString());
   const char * file_cstr = ToCString(file_str);
 
-  //Local<String> file_str = args[0]->ToString();
-  //char file_cstr[file_str->Length()];
-  //file_str->WriteAscii(file_cstr);
   bool cache_on = args[1]->ToBoolean()->Value(); 
 
   c->db = GeoIP_open(file_cstr, cache_on?GEOIP_MEMORY_CACHE:GEOIP_STANDARD);
@@ -99,6 +96,11 @@ Handle<Value> geoip::Country::lookupSync6(const Arguments &args) {
   HandleScope scope;
 
   Country * c = ObjectWrap::Unwrap<Country>(args.This());
+
+  // Check if database is country ipv6 edition
+  if (c->db_edition != GEOIP_COUNTRY_EDITION_V6) {
+    return scope.Close(ThrowException(String::New("Error: Database is not country ipv6 edition")));
+  }
 
   Local<String> host_str = args[0]->ToString();
   Local<Object> data = Object::New();
@@ -159,6 +161,53 @@ int geoip::Country::EIO_Country(eio_req *req)
     baton->country_id = 0;
   } else {
     baton->country_id = GeoIP_id_by_ipnum(baton->c->db, ipnum);
+  }
+
+  return 0;
+}
+
+Handle<Value> geoip::Country::lookup6(const Arguments& args)
+{
+  HandleScope scope;
+
+  REQ_FUN_ARG(1, cb);
+
+  Country * c = ObjectWrap::Unwrap<Country>(args.This());
+
+  // Check if database is country ipv6 edition
+  if (c->db_edition != GEOIP_COUNTRY_EDITION_V6) {
+    return scope.Close(ThrowException(String::New("Error: Database is not country ipv6 edition")));
+  }                                                                                                   
+
+  Local<String> host_str = args[0]->ToString();
+
+  country_baton_t *baton = new country_baton_t();
+
+  baton->c = c;
+  host_str->WriteAscii(baton->host_cstr);
+  baton->increment_by = 2;
+  baton->sleep_for = 1;
+  baton->cb = Persistent<Function>::New(cb);
+
+  c->Ref();
+
+  eio_custom(EIO_Country6, EIO_PRI_DEFAULT, EIO_AfterCountry, baton);
+  ev_ref(EV_DEFAULT_UC);
+
+  return Undefined();
+}
+
+int geoip::Country::EIO_Country6(eio_req *req)
+{
+  country_baton_t *baton = static_cast<country_baton_t *>(req->data);
+
+  sleep(baton->sleep_for);
+
+  geoipv6_t ipnum_v6 = _GeoIP_lookupaddress_v6(baton->host_cstr);
+  if (__GEOIP_V6_IS_NULL(ipnum_v6)) {
+    baton->country_id = 0;
+  } else {
+    baton->country_id = GeoIP_id_by_ipnum_v6(baton->c->db, ipnum_v6);
   }
 
   return 0;
