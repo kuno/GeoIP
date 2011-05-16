@@ -48,10 +48,12 @@ From v0.4.0, geoip need nodejs >= 0.4.0, if you want to use it on old nodejs, yo
 
     // Open the country data file
     var Country = geoip.Country;
+
+ipv4
+
     var country = new Country('/path/to/GeoIP.dat');
 
-Synchronous method(the recommended way):
-
+    //Synchronous method(the recommended way):
     var country_obj = country.lookupSync('8.8.8.8');
 
     console.log(country_obj);
@@ -62,8 +64,7 @@ Synchronous method(the recommended way):
         continent_code: 'NA' }
     */
 
-Asynchronous method:
-
+    //Asynchronous method:
     country.lookup('www.google.com', function(err, data) {
         if (err) {throw err;}
         if (data) { // if not found, just return null
@@ -71,6 +72,23 @@ Asynchronous method:
         }
     });
 
+ipv6
+
+    var country_v6 = new Country('/path/to/GeoIPv6.dat');
+
+    //Synchronous method
+    var country_obj_v6 = country_v6.lookupSync6('2607:f0d0:1002:0051:0000:0000:0000:0004');
+
+    console.log(country_obj_v6); // Same as ipv4
+    /*
+      { country_code: 'US',
+        country_code3: 'USA',
+        country_name: 'United States',
+        continent_code: 'NA' 
+      }
+    */
+
+close
 
     //Close the opened file.
     country.close();
