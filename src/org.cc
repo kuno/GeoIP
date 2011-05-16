@@ -5,6 +5,7 @@
  */
 
 #include "org.h"
+#include "global.h"
 
 void geoip::Org::Init(Handle<Object> target)
 {
@@ -38,12 +39,14 @@ Handle<Value> geoip::Org::New(const Arguments& args)
   HandleScope scope;
   Org *o = new Org();
 
-  Local<String> path_str = args[0]->ToString();
-  char path_cstr[path_str->Length()];
-  path_str->WriteAscii(path_cstr);
+  String::Utf8Value file_str(args[0]->ToString());
+  const char * file_cstr = ToCString(file_str);      
+  //Local<String> path_str = args[0]->ToString();
+  //char path_cstr[path_str->Length()];
+  //path_str->WriteAscii(path_cstr);
   bool cache_on = args[1]->ToBoolean()->Value(); 
 
-  o->db = GeoIP_open(path_cstr, cache_on?GEOIP_MEMORY_CACHE:GEOIP_STANDARD);
+  o->db = GeoIP_open(file_cstr, cache_on?GEOIP_MEMORY_CACHE:GEOIP_STANDARD);
 
   if (o->db != NULL) {
     // Successfully opened the file, return 1 (true)

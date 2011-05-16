@@ -5,7 +5,12 @@
  */                                          
 
 #include "test.h"
+#include "global.h"
 
+// Extracts a C string from a V8 Utf8Value.
+//const char* ToCString(const v8::String::AsciiValue& value) {
+//  return *value ? *value : "<string conversion failed>";
+//}
 void geoip::Test::Init(Handle<Object> target)
 {
   HandleScope scope;
@@ -36,12 +41,11 @@ Handle<Value> geoip::Test::New(const Arguments& args)
   HandleScope scope;
   Test *c = new Test();
 
-  String::Utf8Value  path_str(args[0]->ToString());
-  const char * path_cstr = ToCString(path_str);
-  //path_str->WriteAscii(path_cstr);
+  String::Utf8Value  file_str(args[0]->ToString());
+  const char * file_cstr = ToCString(file_str);
   bool cache_on = args[1]->ToBoolean()->Value(); 
 
-  c->db = GeoIP_open(path_cstr, cache_on?GEOIP_MEMORY_CACHE:GEOIP_STANDARD);
+  c->db = GeoIP_open(file_cstr, cache_on?GEOIP_MEMORY_CACHE:GEOIP_STANDARD);
 
   if (c->db != NULL) {
     // Successfully opened the file, return 1 (true)

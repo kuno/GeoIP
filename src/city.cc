@@ -5,6 +5,7 @@
  */
 
 #include "city.h"
+#include "global.h"
 
 void geoip::City::Init(Handle<Object> target)
 {
@@ -36,12 +37,12 @@ Handle<Value> geoip::City::New(const Arguments& args)
   HandleScope scope;
   City *c = new City();
 
-  //String::AsciiValue file_str(args[0]->ToString());
-  //const char * file_cstr = ToCString(file_str);
+  String::Utf8Value file_str(args[0]->ToString());
+  const char * file_cstr = ToCString(file_str);
 
-  Local<String> file_str = args[0]->ToString();
-  char file_cstr[file_str->Length()];
-  file_str->WriteAscii(file_cstr);
+  //Local<String> file_str = args[0]->ToString();
+  //char file_cstr[file_str->Length()];
+  //file_str->WriteAscii(file_cstr);
   bool cache_on = args[1]->ToBoolean()->Value(); 
 
   c->db = GeoIP_open(file_cstr, cache_on?GEOIP_MEMORY_CACHE:GEOIP_STANDARD);

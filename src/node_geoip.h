@@ -14,13 +14,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#define REQ_FUN_ARG(I, VAR)                                             \
-  if ((args.Length() + 1) <= (I) || !args[I]->IsFunction())             \
-    return ThrowException(Exception::TypeError(                         \
-                  String::New("The second argument must be a function")));  \
-  Local<Function> VAR = Local<Function>::Cast(args[I]);
-
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////// GeoIP Internal //////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

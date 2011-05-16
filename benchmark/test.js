@@ -15,18 +15,18 @@ var ip32 = function() {
   }
   return ip;
 }
-/*
+
 var start = new Date().getTime();
-for (var i = 0; i < 10; ++i) {
+for (var i = 0; i < 10000; i++) {
   var addr = ip32();
-  console.log(addr);
+  //console.log(addr);
   var l = c.lookupSync(addr);
-  console.log(l);
+ // console.log(l);
 }
 var end = new Date().getTime();
 
 util.puts((end - start) / 1000);
-*/
+
 
 /*
 var start_asyc = new Date().getTime();

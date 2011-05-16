@@ -5,6 +5,7 @@
  */                                          
 
 #include "netspeed.h"
+#include "global.h"
 
 void geoip::NetSpeed::Init(Handle<Object> target)
 {
@@ -38,9 +39,11 @@ Handle<Value> geoip::NetSpeed::New(const Arguments& args)
   HandleScope scope;
   NetSpeed *n = new NetSpeed();
 
-  Local<String> file_str = args[0]->ToString();
-  char file_cstr[file_str->Length()];
-  file_str->WriteAscii(file_cstr);
+  String::Utf8Value file_str(args[0]->ToString());
+  const char * file_cstr = ToCString(file_str);      
+  //Local<String> file_str = args[0]->ToString();
+  //char file_cstr[file_str->Length()];
+  //file_str->WriteAscii(file_cstr);
   bool cache_on = args[1]->ToBoolean()->Value(); 
 
   n->db = GeoIP_open(file_cstr, cache_on?GEOIP_MEMORY_CACHE:GEOIP_STANDARD);
