@@ -140,21 +140,24 @@ int geoip::Country::EIO_AfterCountry(eio_req *req)
   ev_unref(EV_DEFAULT_UC);
   baton->c->Unref();
 
-  Local<Value> argv[1];
+  Handle<Value> argv[2];
   if (baton->country_id <= 0) {
-    argv[0] = scope.Close(Null());
+    argv[0] = Exception::Error(String::New("Data not found"));
+    argv[1] = Null();
   } else {
     Local<Object> data = Object::New();
     data->Set(String::NewSymbol("country_code"), String::New(GeoIP_country_code[baton->country_id]));
     data->Set(String::NewSymbol("country_code3"), String::New(GeoIP_country_code3[baton->country_id]));
     data->Set(String::NewSymbol("country_name"), String::New(GeoIP_country_name[baton->country_id]));
-    data->Set(String::NewSymbol("continent_code"), String::New(GeoIP_country_continent[baton->country_id]));     
-    argv[0] = data;
+    data->Set(String::NewSymbol("continent_code"), String::New(GeoIP_country_continent[baton->country_id]));
+
+    argv[0] = Null();
+    argv[1] = data;
   }
 
   TryCatch try_catch;
 
-  baton->cb->Call(Context::GetCurrent()->Global(), 1, argv);
+  baton->cb->Call(Context::GetCurrent()->Global(), 2, argv);
 
   if (try_catch.HasCaught()) {
     FatalException(try_catch);

@@ -9,7 +9,8 @@ var sync_data = org.lookupSync('www.google.com');
 console.log(sync_data);
 //assert.ok(sync_data, 'Can not find google in org module');
 
-org.lookup('www.google.com', function(data) {
+org.lookup('www.google.com', function(err, data) {
+    if (err) {throw err;}
     if (data) {
       console.log(data);
       assert.deepEqual(sync_data, data, 'Oops! Async and sync org data not equal');

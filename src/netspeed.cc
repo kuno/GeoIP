@@ -123,7 +123,7 @@ int geoip::NetSpeed::EIO_NetSpeed(eio_req *req)
   sleep(baton->sleep_for);
 
   uint32_t ipnum = _GeoIP_lookupaddress(baton->host_cstr);
-  if (ipnum <= 0) {
+  if (ipnum < 0) {
     baton->netspeed = -1;
   } else {
     baton->netspeed = GeoIP_id_by_ipnum(baton->n->db, ipnum);
@@ -140,8 +140,11 @@ int geoip::NetSpeed::EIO_AfterNetSpeed(eio_req *req)
   ev_unref(EV_DEFAULT_UC);
   baton->n->Unref();
 
-  Local<Value> argv[1];
-  if (baton->netspeed >= 0) {
+  Handle<Value> argv[2];
+  if (baton->netspeed < 0) {
+    argv[0] = Exception::Error(String::New("Data not found"));
+    argv[1] = Null();
+  } else {
     Local<String> data;
     if (baton->netspeed == GEOIP_UNKNOWN_SPEED) {
       data = String::New("Uknown");
@@ -152,12 +155,14 @@ int geoip::NetSpeed::EIO_AfterNetSpeed(eio_req *req)
     } else if (baton->netspeed == GEOIP_CORPORATE_SPEED) {
       data = String::New("Corporate");
     }
-    argv[0] = data;
+
+    argv[0] =  Null();
+    argv[1] = data;
   }
 
   TryCatch try_catch;
 
-  baton->cb->Call(Context::GetCurrent()->Global(), 1, argv);
+  baton->cb->Call(Context::GetCurrent()->Global(), 2, argv);
 
   if (try_catch.HasCaught()) {
     FatalException(try_catch);

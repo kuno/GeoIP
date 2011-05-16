@@ -5,6 +5,10 @@
  */                                          
 
 #include "test.h"
+// Extracts a C string from a V8 Utf8Value.
+const char* ToCString(const v8::String::Utf8Value& value) {
+  return *value ? *value : "<string conversion failed>";
+}
 
 void geoip::Test::Init(Handle<Object> target)
 {
@@ -36,9 +40,9 @@ Handle<Value> geoip::Test::New(const Arguments& args)
   HandleScope scope;
   Test *c = new Test();
 
-  Local<String> path_str = args[0]->ToString();
-  char path_cstr[path_str->Length()];
-  path_str->WriteAscii(path_cstr);
+  String::Utf8Value  path_str(args[0]->ToString());
+  const char * path_cstr = ToCString(path_str);
+  //path_str->WriteAscii(path_cstr);
   bool cache_on = args[1]->ToBoolean()->Value(); 
 
   c->db = GeoIP_open(path_cstr, cache_on?GEOIP_MEMORY_CACHE:GEOIP_STANDARD);
@@ -181,59 +185,61 @@ int geoip::Test::EIO_AfterTest(eio_req *req)
   ev_unref(EV_DEFAULT_UC);
   baton->c->Unref();
 
-  Local<Value> argv[1];
+  Handle<Value> argv[2];
   if (baton->record == NULL) {
-    argv[1] = scope.Close(Null()); //Exception::Error(String::New("Error not found"));
+    argv[0] = Exception::Error(String::New("Error")); //Exception::Error(String::New("Error not found"));
+    argv[1] = Null(); //Boolean::New(false);
   } else {
 
     Local<String> data = String::New("found");
     /*
-    Local<Object> data = Object::New();
-    if (baton->record->country_code != NULL) {
-      data->Set(String::NewSymbol("country_code"), String::New(baton->record->country_code));
-    }
+       Local<Object> data = Object::New();
+       if (baton->record->country_code != NULL) {
+       data->Set(String::NewSymbol("country_code"), String::New(baton->record->country_code));
+       }
 
-    if (baton->record->country_code3 != NULL) {
-      data->Set(String::NewSymbol("country_code3"), String::New(baton->record->country_code3));
-    }
+       if (baton->record->country_code3 != NULL) {
+       data->Set(String::NewSymbol("country_code3"), String::New(baton->record->country_code3));
+       }
 
-    if (baton->record->country_name != NULL) {
-      data->Set(String::NewSymbol("country_name"), String::New(baton->record->country_name));
-    }
+       if (baton->record->country_name != NULL) {
+       data->Set(String::NewSymbol("country_name"), String::New(baton->record->country_name));
+       }
 
-    if (baton->record->region != NULL ) {
-      data->Set(String::NewSymbol("region"), String::New(baton->record->region));
-    }
+       if (baton->record->region != NULL ) {
+       data->Set(String::NewSymbol("region"), String::New(baton->record->region));
+       }
 
-    if (baton->record->postal_code != NULL) {
-      data->Set(String::NewSymbol("postal_code"), String::New(baton->record->postal_code));
-    }
+       if (baton->record->postal_code != NULL) {
+       data->Set(String::NewSymbol("postal_code"), String::New(baton->record->postal_code));
+       }
 
-    if (baton->record->latitude > 0) {
-      data->Set(String::NewSymbol("latitude"), Number::New(baton->record->latitude));
-    }
+       if (baton->record->latitude > 0) {
+       data->Set(String::NewSymbol("latitude"), Number::New(baton->record->latitude));
+       }
 
-    if (baton->record->longitude > 0) {
-      data->Set(String::NewSymbol("longitude"), Number::New(baton->record->longitude));
-    }
+       if (baton->record->longitude > 0) {
+       data->Set(String::NewSymbol("longitude"), Number::New(baton->record->longitude));
+       }
 
-    if (baton->record->metro_code > 0 ) {
-      data->Set(String::NewSymbol("metro_code"), Number::New(baton->record->metro_code));
-    }
+       if (baton->record->metro_code > 0 ) {
+       data->Set(String::NewSymbol("metro_code"), Number::New(baton->record->metro_code));
+       }
 
-    if (baton->record->dma_code > 0 ) {
-      data->Set(String::NewSymbol("dma_code"), Number::New(baton->record->dma_code));
-    }
+       if (baton->record->dma_code > 0 ) {
+       data->Set(String::NewSymbol("dma_code"), Number::New(baton->record->dma_code));
+       }
 
-    if (baton->record->area_code > 0) {
-      data->Set(String::NewSymbol("area_code"), Number::New(baton->record->area_code));
-    }
+       if (baton->record->area_code > 0) {
+       data->Set(String::NewSymbol("area_code"), Number::New(baton->record->area_code));
+       }
 
-    if (baton->record->continent_code > 0) {
-      data->Set(String::NewSymbol("continent_code"), String::New(baton->record->continent_code));
-    }*/
+       if (baton->record->continent_code > 0) {
+       data->Set(String::NewSymbol("continent_code"), String::New(baton->record->continent_code));
+       }*/
 
     argv[1] = data;
+    argv[0] = Null(); //False();
   }
 
   TryCatch try_catch;
