@@ -7,7 +7,8 @@ var netspeed = new NetSpeed('/tmp/GeoIPNetSpeed.dat', true);
 
 var sync_data = netspeed.lookupSync('8.8.4.4');
 assert.ok(sync_data, 'Can not find google in country module');
-netspeed.lookup('www.google.com', function(data) {
+netspeed.lookup('www.google.com', function(err, data) {
+    if (err) {throw err;}
     if (data) {
       console.log(data);
       assert.ok(data, 'Oops! Async and sync netspeed data not equal.');

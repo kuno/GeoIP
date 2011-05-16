@@ -15,8 +15,9 @@ console.log(country_obj);
   continent_code: 'NA' }
 */
 
-country.lookup('www.google.com', function(data) {
-    if (data) { // no err, if not found, just return null
+country.lookup('www.google.com', function(err, data) {
+    if (err) {throw err;}
+    if (data) { // if not found, just return null
       console.log(data);  // same as lookup method
     }
 });
@@ -49,7 +50,8 @@ console.log(city_obj);
 //  }    
 
 // Asynchronous method
-city.lookup('www.google.com', function(data) {
+city.lookup('www.google.com', function(err, data) {
+    if (err) {throw err;}
     if (data) {
       console.log(data);
     }
@@ -78,7 +80,8 @@ no longer an object
 org.close();
 
 // Asynchronous method
-org.lookup('www.google.com', function(data) {
+org.lookup('www.google.com', function(err, data) {
+    if (err) {throw err;}
     if (data) {
       console.log(data);
     }
@@ -122,7 +125,8 @@ netspeed_str just a simple string, 'Dialup', 'Corprate'... so on
 */
 
 // Asynchronous method
-netspeed.lookup('www.google.com', function(data) {
+netspeed.lookup('www.google.com', function(err, data) {
+    if (err) {throw err;}
     if (data) {
       console.log(data);  // Maybe return 'unknow' or different from lookup method
     }

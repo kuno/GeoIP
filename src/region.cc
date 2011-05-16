@@ -136,19 +136,22 @@ int geoip::Region::EIO_AfterRegion(eio_req *req)
   ev_unref(EV_DEFAULT_UC);
   baton->r->Unref();
 
-  Local<Value> argv[1];
+  Handle<Value> argv[2];
   if (baton->region == NULL) {
-    argv[0] = scope.Close(Null());
+    argv[0] = Exception::Error(String::New("Data not found"));
+    argv[1] = Null();
   } else {
     Local<Object> data = Object::New();
     data->Set(String::NewSymbol("country_code"), String::New(baton->region->country_code));
     data->Set(String::NewSymbol("region"), String::New(baton->region->region));
-    argv[0] = data;
+    
+    argv[0] = Null();
+    argv[1] = data;
   }
 
   TryCatch try_catch;
 
-  baton->cb->Call(Context::GetCurrent()->Global(), 1, argv);
+  baton->cb->Call(Context::GetCurrent()->Global(), 2, argv);
 
   if (try_catch.HasCaught()) {
     FatalException(try_catch);
