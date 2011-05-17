@@ -13,7 +13,7 @@ From v0.4.0, geoip will be bind to libgeoip >= 1.4.6, which is a C library.
 
 Befor you can use this package, you need to download or buy some data from [www.maxmind.com](http://www.maxmind.com/app/ip-location).
 
-There are some free databaes among with some commercial versions, the free database can be found [here](http://geolite.maxmind.com/download/geoip/database/).
+There are some free databases among some commercial versions, the free databases can be found [here](http://geolite.maxmind.com/download/geoip/database/).
 
 
 ##Install
