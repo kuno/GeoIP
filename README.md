@@ -2,11 +2,29 @@ __GeoIP binding for nodejs__
 
 Get geolocation information based on domain or IP address.
 
-####New Architecture
+##Import Notification
 
 From v0.4.0, geoip will be bind to libgeoip >= 1.4.6, which is a C library.
 
+####New Architecture
+
 ![new_architecture](https://github.com/kuno/GeoIP/raw/master/misc/new_architecture.png)  
+
+
+####How to install geoip C library
+
+If your os has a system package manager (e.g, on linux, apt of ubuntu, yum of fedora, pacman of arch. MacPorts and homebrew on OSX),
+
+then, there is a very high possibility that there is alreay a geoip c library package inside the repository.
+
+If not, you can build for yourself:
+
+    wget http://geolite.maxmind.com/download/geoip/api/c/GeoIP-1.4.7.tar.gz
+    tar -xvzf GeoIP.tar.gz
+    cd GeoIP-1.4.7
+    ./confiure
+    make 
+    sudo make install
 
 
 ##Data
