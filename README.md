@@ -2,7 +2,7 @@ __GeoIP binding for nodejs__
 
 Get geolocation information based on domain or IP address.
 
-##Import Notification
+##Important Notification
 
 From v0.4.0, geoip will be bind to libgeoip >= 1.4.6, which is a C library.
 
