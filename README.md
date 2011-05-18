@@ -4,7 +4,7 @@ Get geolocation information based on domain or IP address.
 
 ##Important Notification
 
-From __v0.4.0__, geoip will be bind to libgeoip >= 1.4.6, which is a C library, __the api also been changed__.
+From __v0.4.0__, geoip will be bind to libgeoip >= 1.4.6, which is a C library, __the api also has been changed__.
 
 ###New Architecture
 
