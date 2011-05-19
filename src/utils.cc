@@ -5,6 +5,7 @@
  */                                          
 
 #include "utils.h"
+#include "global.h"
 
 namespace geoip {
   Handle<Value> check(const Arguments &args) {
@@ -99,7 +100,8 @@ namespace geoip {
          edition = String::New("domain");
          } else {
          edition = String::New("unknown");
-         }*/
+         }
+      */
 
       GeoIP_delete(db);
       db = NULL;
