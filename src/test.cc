@@ -233,7 +233,7 @@ int geoip::Test::EIO_AfterTest(eio_req *req)
        }*/
 
     argv[1] = data;
-    argv[0] = Null(); //False();
+    argv[0] = Null();
   }
 
   TryCatch try_catch;
@@ -250,11 +250,12 @@ int geoip::Test::EIO_AfterTest(eio_req *req)
   return 0;
 }
 
-Handle<Value> geoip::Test::close(const Arguments &args) {
-  Test* c = ObjectWrap::Unwrap<geoip::Test>(args.This()); 
+Handle<Value> geoip::Test::close(const Arguments& args) {
+  Test * c = ObjectWrap::Unwrap<geoip::Test>(args.This()); 
   GeoIP_delete(c->db);	// free()'s the gi reference & closes its fd
   c->db = NULL;
-  delete c;
+  Local<Object> instance = args.This();
+  instance.Clear();
   HandleScope scope;	// Stick this down here since it seems to segfault when on top?
 }
 
