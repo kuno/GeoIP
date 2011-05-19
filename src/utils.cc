@@ -26,7 +26,6 @@ namespace geoip {
           edition = String::New("country");
           break;
 
-
         case GEOIP_COUNTRY_EDITION_V6:
           edition = String::New("country_v6");
           break;
@@ -101,7 +100,7 @@ namespace geoip {
          } else {
          edition = String::New("unknown");
          }
-      */
+         */
 
       GeoIP_delete(db);
       db = NULL;
