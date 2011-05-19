@@ -23,6 +23,10 @@ namespace geoip {
             int db_edition;
 
         public:
+            Test();
+
+            ~Test();
+
             static Persistent<FunctionTemplate> constructor_template;
 
             static void Init(Handle<Object> target);
