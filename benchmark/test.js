@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+var assert = require('assert');
 var binding = require('../build/default/geoip.node');
 var util = require('util');
 var Test = binding.Test;
@@ -40,4 +41,7 @@ c.lookup(addr, function(err, data) {
 */
 //var end_async = new Date().getTime();
 
-//util.puts((end_async - start_asyc) / 1000);       
+//util.puts((end_async - start_asyc) / 1000);
+assert.ok(c.close(), 'Error when closing country object');
+assert.ok(c, 'object has been deleted');
+console.log(c);

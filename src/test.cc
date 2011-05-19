@@ -254,6 +254,7 @@ Handle<Value> geoip::Test::close(const Arguments &args) {
   Test* c = ObjectWrap::Unwrap<geoip::Test>(args.This()); 
   GeoIP_delete(c->db);	// free()'s the gi reference & closes its fd
   c->db = NULL;
+  delete c;
   HandleScope scope;	// Stick this down here since it seems to segfault when on top?
 }
 
