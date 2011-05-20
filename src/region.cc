@@ -7,6 +7,8 @@
 #include "region.h"
 #include "global.h"
 
+Persistent<FunctionTemplate> geoip::Region::constructor_template; 
+
 void geoip::Region::Init(Handle<Object> target)
 {
   HandleScope scope;
@@ -23,12 +25,12 @@ void geoip::Region::Init(Handle<Object> target)
 }
 
 /*
-   Region() :
+   geoip::Region::Region() :
    db_edition(0)
    {
    }
 
-   ~Region()
+   geoip::Region::~Region()
    {
    } */
 
@@ -172,5 +174,3 @@ Handle<Value> geoip::Region::close(const Arguments &args) {
   r->db = NULL;
   HandleScope scope;	// Stick this down here since it seems to segfault when on top?
 }
-
-Persistent<FunctionTemplate> geoip::Region::constructor_template;

@@ -23,12 +23,11 @@ void geoip::City::Init(Handle<Object> target)
 }
 
 /*
-   City() :
-   db_edition(0)
+   geoip::City::City()
    {
    }
 
-   ~City()
+   geoip::City::~City()
    {
    } */
 

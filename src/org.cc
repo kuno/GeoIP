@@ -7,6 +7,8 @@
 #include "org.h"
 #include "global.h"
 
+Persistent<FunctionTemplate> geoip::Org::constructor_template; 
+
 void geoip::Org::Init(Handle<Object> target)
 {
   HandleScope scope;
@@ -25,12 +27,11 @@ void geoip::Org::Init(Handle<Object> target)
 }
 
 /*
-   Org() :
-   db_edition(0)
+   geoip::Org::Org()
    {
    }
 
-   ~Org()
+   geoip::Org::~Org()
    {
    }*/
 
@@ -125,7 +126,7 @@ int geoip::Org::EIO_Org(eio_req *req)
     baton->org = NULL;
   } 
 
-    baton->org = GeoIP_org_by_ipnum(baton->o->db, ipnum);
+  baton->org = GeoIP_org_by_ipnum(baton->o->db, ipnum);
 
   return 0;
 }
@@ -170,5 +171,3 @@ Handle<Value> geoip::Org::close(const Arguments &args) {
   o->db = NULL;
   HandleScope scope;	// Stick this down here since it seems to segfault when on top?
 }
-
-Persistent<FunctionTemplate> geoip::Org::constructor_template;

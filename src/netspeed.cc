@@ -7,6 +7,8 @@
 #include "netspeed.h"
 #include "global.h"
 
+Persistent<FunctionTemplate> geoip::NetSpeed::constructor_template; 
+
 void geoip::NetSpeed::Init(Handle<Object> target)
 {
   HandleScope scope;
@@ -25,14 +27,14 @@ void geoip::NetSpeed::Init(Handle<Object> target)
 }
 
 /*
-   NetSpeed() :
-   db_edition(0)
+   geoip::NetSpeed::NetSpeed()
    {
    }
 
-   ~NetSpeed()
+   geoip::NetSpeed::~NetSpeed()
    {
-   }*/
+   }
+   */
 
 Handle<Value> geoip::NetSpeed::New(const Arguments& args)
 {
@@ -183,5 +185,3 @@ Handle<Value> geoip::NetSpeed::close(const Arguments &args) {
   n->db = NULL;
   HandleScope scope;	// Stick this down here since it seems to segfault when on top?
 }
-
-Persistent<FunctionTemplate> geoip::NetSpeed::constructor_template;

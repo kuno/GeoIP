@@ -7,6 +7,8 @@
 #include "test.h"
 #include "global.h"
 
+Persistent<FunctionTemplate> geoip::Test::constructor_template;
+
 void geoip::Test::Init(Handle<Object> target)
 {
   HandleScope scope;
@@ -258,5 +260,3 @@ Handle<Value> geoip::Test::close(const Arguments& args) {
   instance.Clear();
   HandleScope scope;	// Stick this down here since it seems to segfault when on top?
 }
-
-Persistent<FunctionTemplate> geoip::Test::constructor_template;

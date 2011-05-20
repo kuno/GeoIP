@@ -23,7 +23,7 @@ If not, you can build for yourself:
     wget http://geolite.maxmind.com/download/geoip/api/c/GeoIP-1.4.7.tar.gz
     tar -xvzf GeoIP-1.4.7.tar.gz
     cd GeoIP-1.4.7
-    ./confiure
+    ./confiure --prefix=/usr
     make 
     sudo make install
 
@@ -92,7 +92,7 @@ ipv4
         }
     });
 
-ipv6
+ipv6 (Currentlly only Country module supports ipv6)
 
     var country_v6 = new Country('/path/to/GeoIPv6.dat');
 

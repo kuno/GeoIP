@@ -7,6 +7,8 @@
 #include "country.h"
 #include "global.h"
 
+Persistent<FunctionTemplate> geoip::Country::constructor_template; 
+
 void geoip::Country::Init(Handle<Object> target)
 {
   HandleScope scope;
@@ -25,12 +27,11 @@ void geoip::Country::Init(Handle<Object> target)
 }
 
 /*
-   Country() :
-   db_edition(0)
+   geoip::Country::Country()
    {
    }
 
-   ~Country()
+   geoip::Country::~Country()
    {
    }*/
 
@@ -257,4 +258,4 @@ Handle<Value> geoip::Country::close(const Arguments &args) {
   HandleScope scope;	// Stick this down here since it seems to segfault when on top?
 }
 
-Persistent<FunctionTemplate> geoip::Country::constructor_template;
+//Persistent<FunctionTemplate> geoip::Country::constructor_template;
