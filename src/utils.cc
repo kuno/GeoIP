@@ -5,6 +5,7 @@
  */                                          
 
 #include "utils.h"
+#include "global.h"
 
 namespace geoip {
   Handle<Value> check(const Arguments &args) {
@@ -24,7 +25,6 @@ namespace geoip {
         case GEOIP_COUNTRY_EDITION:
           edition = String::New("country");
           break;
-
 
         case GEOIP_COUNTRY_EDITION_V6:
           edition = String::New("country_v6");
@@ -99,7 +99,8 @@ namespace geoip {
          edition = String::New("domain");
          } else {
          edition = String::New("unknown");
-         }*/
+         }
+         */
 
       GeoIP_delete(db);
       db = NULL;

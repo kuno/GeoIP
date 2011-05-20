@@ -5,6 +5,9 @@
  */
 
 #include "org.h"
+#include "global.h"
+
+Persistent<FunctionTemplate> geoip::Org::constructor_template; 
 
 void geoip::Org::Init(Handle<Object> target)
 {
@@ -12,7 +15,7 @@ void geoip::Org::Init(Handle<Object> target)
 
   Local<FunctionTemplate> t = FunctionTemplate::New(New);
   constructor_template = Persistent<FunctionTemplate>::New(t);
-  constructor_template->InstanceTemplate()->SetInternalFieldCount(2);
+  constructor_template->InstanceTemplate()->SetInternalFieldCount(1);
   constructor_template->SetClassName(String::NewSymbol("geoip"));
 
   NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookup", lookup);
@@ -24,12 +27,11 @@ void geoip::Org::Init(Handle<Object> target)
 }
 
 /*
-   Org() :
-   db_edition(0)
+   geoip::Org::Org()
    {
    }
 
-   ~Org()
+   geoip::Org::~Org()
    {
    }*/
 
@@ -38,12 +40,14 @@ Handle<Value> geoip::Org::New(const Arguments& args)
   HandleScope scope;
   Org *o = new Org();
 
-  Local<String> path_str = args[0]->ToString();
-  char path_cstr[path_str->Length()];
-  path_str->WriteAscii(path_cstr);
+  String::Utf8Value file_str(args[0]->ToString());
+  const char * file_cstr = ToCString(file_str);      
+  //Local<String> path_str = args[0]->ToString();
+  //char path_cstr[path_str->Length()];
+  //path_str->WriteAscii(path_cstr);
   bool cache_on = args[1]->ToBoolean()->Value(); 
 
-  o->db = GeoIP_open(path_cstr, cache_on?GEOIP_MEMORY_CACHE:GEOIP_STANDARD);
+  o->db = GeoIP_open(file_cstr, cache_on?GEOIP_MEMORY_CACHE:GEOIP_STANDARD);
 
   if (o->db != NULL) {
     // Successfully opened the file, return 1 (true)
@@ -122,7 +126,7 @@ int geoip::Org::EIO_Org(eio_req *req)
     baton->org = NULL;
   } 
 
-    baton->org = GeoIP_org_by_ipnum(baton->o->db, ipnum);
+  baton->org = GeoIP_org_by_ipnum(baton->o->db, ipnum);
 
   return 0;
 }
@@ -167,5 +171,3 @@ Handle<Value> geoip::Org::close(const Arguments &args) {
   o->db = NULL;
   HandleScope scope;	// Stick this down here since it seems to segfault when on top?
 }
-
-Persistent<FunctionTemplate> geoip::Org::constructor_template;

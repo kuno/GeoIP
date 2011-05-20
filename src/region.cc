@@ -5,6 +5,9 @@
  */                                          
 
 #include "region.h"
+#include "global.h"
+
+Persistent<FunctionTemplate> geoip::Region::constructor_template; 
 
 void geoip::Region::Init(Handle<Object> target)
 {
@@ -12,7 +15,7 @@ void geoip::Region::Init(Handle<Object> target)
 
   Local<FunctionTemplate> t = FunctionTemplate::New(New);
   constructor_template = Persistent<FunctionTemplate>::New(t);
-  constructor_template->InstanceTemplate()->SetInternalFieldCount(2);
+  constructor_template->InstanceTemplate()->SetInternalFieldCount(1);
   constructor_template->SetClassName(String::NewSymbol("geoip"));
 
   NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookup", lookup);
@@ -22,12 +25,12 @@ void geoip::Region::Init(Handle<Object> target)
 }
 
 /*
-   Region() :
+   geoip::Region::Region() :
    db_edition(0)
    {
    }
 
-   ~Region()
+   geoip::Region::~Region()
    {
    } */
 
@@ -36,12 +39,14 @@ Handle<Value> geoip::Region::New(const Arguments& args)
   HandleScope scope;
   Region * r = new Region();
 
-  Local<String> host_str = args[0]->ToString();
-  char host_cstr[host_str->Length()];
-  host_str->WriteAscii(host_cstr);
+  String::Utf8Value file_str(args[0]->ToString());
+  const char * file_cstr = ToCString(file_str);      
+  // Local<String> host_str = args[0]->ToString();
+  // char host_cstr[host_str->Length()];
+  // host_str->WriteAscii(host_cstr);
   bool cache_on = args[1]->ToBoolean()->Value(); 
 
-  r->db = GeoIP_open(host_cstr, cache_on?GEOIP_MEMORY_CACHE:GEOIP_STANDARD);
+  r->db = GeoIP_open(file_cstr, cache_on?GEOIP_MEMORY_CACHE:GEOIP_STANDARD);
 
   if (r->db != NULL) {
     // Successfully opened the file, return 1 (true)
@@ -144,7 +149,7 @@ int geoip::Region::EIO_AfterRegion(eio_req *req)
     Local<Object> data = Object::New();
     data->Set(String::NewSymbol("country_code"), String::New(baton->region->country_code));
     data->Set(String::NewSymbol("region"), String::New(baton->region->region));
-    
+
     argv[0] = Null();
     argv[1] = data;
   }
@@ -169,5 +174,3 @@ Handle<Value> geoip::Region::close(const Arguments &args) {
   r->db = NULL;
   HandleScope scope;	// Stick this down here since it seems to segfault when on top?
 }
-
-Persistent<FunctionTemplate> geoip::Region::constructor_template;

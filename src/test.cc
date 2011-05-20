@@ -5,6 +5,9 @@
  */                                          
 
 #include "test.h"
+#include "global.h"
+
+Persistent<FunctionTemplate> geoip::Test::constructor_template;
 
 void geoip::Test::Init(Handle<Object> target)
 {
@@ -21,27 +24,24 @@ void geoip::Test::Init(Handle<Object> target)
   target->Set(String::NewSymbol("Test"), constructor_template->GetFunction());
 }
 
-/*
-   Test() :
-   db_edition(0)
-   {
-   }
+geoip::Test::Test()
+{
+}
 
-   ~Test()
-   {
-   } */
+geoip::Test::~Test()
+{
+}
 
 Handle<Value> geoip::Test::New(const Arguments& args)
 {
   HandleScope scope;
   Test *c = new Test();
 
-  String::Utf8Value  path_str(args[0]->ToString());
-  const char * path_cstr = ToCString(path_str);
-  //path_str->WriteAscii(path_cstr);
+  String::Utf8Value  file_str(args[0]->ToString());
+  const char * file_cstr = ToCString(file_str);
   bool cache_on = args[1]->ToBoolean()->Value(); 
 
-  c->db = GeoIP_open(path_cstr, cache_on?GEOIP_MEMORY_CACHE:GEOIP_STANDARD);
+  c->db = GeoIP_open(file_cstr, cache_on?GEOIP_MEMORY_CACHE:GEOIP_STANDARD);
 
   if (c->db != NULL) {
     // Successfully opened the file, return 1 (true)
@@ -235,7 +235,7 @@ int geoip::Test::EIO_AfterTest(eio_req *req)
        }*/
 
     argv[1] = data;
-    argv[0] = Null(); //False();
+    argv[0] = Null();
   }
 
   TryCatch try_catch;
@@ -252,11 +252,11 @@ int geoip::Test::EIO_AfterTest(eio_req *req)
   return 0;
 }
 
-Handle<Value> geoip::Test::close(const Arguments &args) {
-  Test* c = ObjectWrap::Unwrap<geoip::Test>(args.This()); 
+Handle<Value> geoip::Test::close(const Arguments& args) {
+  Test * c = ObjectWrap::Unwrap<geoip::Test>(args.This()); 
   GeoIP_delete(c->db);	// free()'s the gi reference & closes its fd
   c->db = NULL;
+  Local<Object> instance = args.This();
+  instance.Clear();
   HandleScope scope;	// Stick this down here since it seems to segfault when on top?
 }
-
-Persistent<FunctionTemplate> geoip::Test::constructor_template;

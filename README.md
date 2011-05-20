@@ -2,18 +2,37 @@ __GeoIP binding for nodejs__
 
 Get geolocation information based on domain or IP address.
 
-####New Architecture
+##Important Notification
 
-From v0.4.0, geoip will be bind to libgeoip >= 1.4.6, which is a C library.
+From __v0.4.0__, geoip will be bind to libgeoip >= 1.4.6, which is a C library, __the api also has been changed__.
+
+###New Architecture
 
 ![new_architecture](https://github.com/kuno/GeoIP/raw/master/misc/new_architecture.png)  
+
+
+
+###How to install geoip C library
+
+If your os has a system package manager (e.g, on linux, apt of ubuntu, yum of fedora, pacman of arch. MacPorts and homebrew on OSX),
+
+then, there is a very high possibility that there is alreay a geoip c library package inside the repository.
+
+If not, you can build for yourself:
+
+    wget http://geolite.maxmind.com/download/geoip/api/c/GeoIP-1.4.7.tar.gz
+    tar -xvzf GeoIP-1.4.7.tar.gz
+    cd GeoIP-1.4.7
+    ./confiure --prefix=/usr
+    make 
+    sudo make install
 
 
 ##Data
 
 Befor you can use this package, you need to download or buy some data from [www.maxmind.com](http://www.maxmind.com/app/ip-location).
 
-There are three free versions data among with some commercial versions, the free database can be found [here](http://geolite.maxmind.com/download/geoip/database/).
+There are some free databases among some commercial versions, the free databases can be found [here](http://geolite.maxmind.com/download/geoip/database/).
 
 
 ##Install
@@ -48,10 +67,12 @@ From v0.4.0, geoip need nodejs >= 0.4.0, if you want to use it on old nodejs, yo
 
     // Open the country data file
     var Country = geoip.Country;
+
+ipv4
+
     var country = new Country('/path/to/GeoIP.dat');
 
-Synchronous method(the recommended way):
-
+    // Synchronous method(the recommended way):
     var country_obj = country.lookupSync('8.8.8.8');
 
     console.log(country_obj);
@@ -59,11 +80,11 @@ Synchronous method(the recommended way):
       { country_code: 'US',
         country_code3: 'USA',
         country_name: 'United States',
-        continent_code: 'NA' }
+        continent_code: 'NA' 
+      }
     */
 
-Asynchronous method:
-
+    // Asynchronous method:
     country.lookup('www.google.com', function(err, data) {
         if (err) {throw err;}
         if (data) { // if not found, just return null
@@ -71,6 +92,40 @@ Asynchronous method:
         }
     });
 
+ipv6 (Currentlly only Country module supports ipv6)
+
+    var country_v6 = new Country('/path/to/GeoIPv6.dat');
+
+    // Synchronous method
+    var country_obj_v6 = country_v6.lookupSync6('2607:f0d0:1002:0051:0000:0000:0000:0004');
+
+    console.log(country_obj_v6); // Same as ipv4
+    /*
+      { country_code: 'US',
+        country_code3: 'USA',
+        country_name: 'United States',
+        continent_code: 'NA' 
+      }
+    */
+
+    // Asynchronous method
+    country_v6.lookup6('2400:2352:b0f1:36c5:aa9d:694a:2f98:40bd', function(err, data_v6) {
+        if (err) {throw err;}
+        if (data_v6) {
+            console.log(data_v6);
+            /*
+             { 
+               country_code: 'JP',
+               country_code3: 'JPN',
+               country_name: 'Japan',
+               continent_code: 'AS' 
+              }
+
+            */
+        }
+    });
+
+close
 
     //Close the opened file.
     country.close();

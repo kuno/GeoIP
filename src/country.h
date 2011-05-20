@@ -31,11 +31,17 @@ namespace geoip {
       static void Init(Handle<Object> target);
 
 
-      static Handle<Value> lookupSync(const Arguments &args);
+      static Handle<Value> lookupSync(const Arguments& args);
+
+      static Handle<Value> lookupSync6(const Arguments& args);
 
       static Handle<Value> lookup(const Arguments& args);
 
       static int EIO_Country(eio_req *req);
+
+      static Handle<Value> lookup6(const Arguments& args);
+
+      static int EIO_Country6(eio_req *req);
 
       static int EIO_AfterCountry(eio_req *req);
 

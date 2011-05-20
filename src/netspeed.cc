@@ -5,6 +5,9 @@
  */                                          
 
 #include "netspeed.h"
+#include "global.h"
+
+Persistent<FunctionTemplate> geoip::NetSpeed::constructor_template; 
 
 void geoip::NetSpeed::Init(Handle<Object> target)
 {
@@ -24,23 +27,25 @@ void geoip::NetSpeed::Init(Handle<Object> target)
 }
 
 /*
-   NetSpeed() :
-   db_edition(0)
+   geoip::NetSpeed::NetSpeed()
    {
    }
 
-   ~NetSpeed()
+   geoip::NetSpeed::~NetSpeed()
    {
-   }*/
+   }
+   */
 
 Handle<Value> geoip::NetSpeed::New(const Arguments& args)
 {
   HandleScope scope;
   NetSpeed *n = new NetSpeed();
 
-  Local<String> file_str = args[0]->ToString();
-  char file_cstr[file_str->Length()];
-  file_str->WriteAscii(file_cstr);
+  String::Utf8Value file_str(args[0]->ToString());
+  const char * file_cstr = ToCString(file_str);      
+  //Local<String> file_str = args[0]->ToString();
+  //char file_cstr[file_str->Length()];
+  //file_str->WriteAscii(file_cstr);
   bool cache_on = args[1]->ToBoolean()->Value(); 
 
   n->db = GeoIP_open(file_cstr, cache_on?GEOIP_MEMORY_CACHE:GEOIP_STANDARD);
@@ -180,5 +185,3 @@ Handle<Value> geoip::NetSpeed::close(const Arguments &args) {
   n->db = NULL;
   HandleScope scope;	// Stick this down here since it seems to segfault when on top?
 }
-
-Persistent<FunctionTemplate> geoip::NetSpeed::constructor_template;
