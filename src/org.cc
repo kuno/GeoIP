@@ -15,7 +15,7 @@ void geoip::Org::Init(Handle<Object> target)
 
   Local<FunctionTemplate> t = FunctionTemplate::New(New);
   constructor_template = Persistent<FunctionTemplate>::New(t);
-  constructor_template->InstanceTemplate()->SetInternalFieldCount(2);
+  constructor_template->InstanceTemplate()->SetInternalFieldCount(1);
   constructor_template->SetClassName(String::NewSymbol("geoip"));
 
   NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookup", lookup);
