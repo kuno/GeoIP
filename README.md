@@ -92,7 +92,7 @@ ipv4
         }
     });
 
-ipv6 (Currentlly only Country module supports ipv6)
+ipv6 (Currently only Country module supports ipv6)
 
     var country_v6 = new Country('/path/to/GeoIPv6.dat');
 
