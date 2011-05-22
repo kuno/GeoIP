@@ -1,20 +1,28 @@
 var geoip = require('geoip');
 
+// Data
+// Befor you can use this package, you need to download or buy some data fro http://www.maxmind.com/app/ip-location.
+// There are some free databases among some commercial versions, the free databases can be found http://geolite.maxmind.com/download/geoip/database/.   
 
 // Open the country data file
 var Country = geoip.Country;
+
+// ipv4
 var country = new Country('/path/to/GeoIP.dat');
 
-var country_obj = country.lookup('8.8.8.8');
+// Synchronous method(the recommended way):
+var country_obj = country.lookupSync('8.8.8.8');
 
 console.log(country_obj);
 /*
 { country_code: 'US',
   country_code3: 'USA',
   country_name: 'United States',
-  continent_code: 'NA' }
+  continent_code: 'NA' 
+}
 */
 
+// Asynchronous method:
 country.lookup('www.google.com', function(err, data) {
     if (err) {throw err;}
     if (data) { // if not found, just return null
@@ -22,9 +30,42 @@ country.lookup('www.google.com', function(err, data) {
     }
 });
 
-//Close the opened file.
-country.close();
+// ipv6 (Currently only Country module supports ipv6)
+var country_v6 = new Country('/path/to/GeoIPv6.dat');
 
+// Synchronous method
+var country_obj_v6 = country_v6.lookupSync6('2607:f0d0:1002:0051:0000:0000:0000:0004');
+
+console.log(country_obj_v6); // Same as ipv4
+/*
+{ country_code: 'US',
+  country_code3: 'USA',
+  country_name: 'United States',
+  continent_code: 'NA' 
+}
+*/
+
+// Asynchronous method
+country_v6.lookup6('2400:2352:b0f1:36c5:aa9d:694a:2f98:40bd', function(err, data_v6) {
+    if (err) {throw err;}
+    if (data_v6) {
+      console.log(data_v6);
+      /*
+      { 
+        country_code: 'JP',
+        country_code3: 'JPN',
+        country_name: 'Japan',
+        continent_code: 'AS' 
+      }
+
+      */
+    }
+});
+
+close
+
+//Close the opened file.
+country.close();        
 
 // City
 var City = geoip.City;
