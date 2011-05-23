@@ -61,3 +61,7 @@ v0.4.0beta2, 2011-05-15
 v0.4.0rc, 2011-05-20
 1, implemented basic ipv6 support in Country module
 2, fixed vavious typos
+
+v0.4.0, 2011-05-23
+1, added country ipv6 samples
+2, clear some redundant codes
