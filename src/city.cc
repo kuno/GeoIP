@@ -7,6 +7,8 @@
 #include "city.h"
 #include "global.h"
 
+Persistent<FunctionTemplate> geoip::City::constructor_template; 
+
 void geoip::City::Init(Handle<Object> target)
 {
   HandleScope scope;
@@ -234,7 +236,7 @@ int geoip::City::EIO_AfterCity(eio_req *req)
     if (baton->record->continent_code > 0) {
       data->Set(String::NewSymbol("continent_code"), String::New(baton->record->continent_code));
     }
-    
+
     argv[0] = Null();
     argv[1] = data;
   }
@@ -260,5 +262,3 @@ Handle<Value> geoip::City::close(const Arguments &args) {
   c->db = NULL;
   HandleScope scope;	// Stick this down here since it seems to segfault when on top?
 }
-
-Persistent<FunctionTemplate> geoip::City::constructor_template;

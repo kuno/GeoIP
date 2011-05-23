@@ -257,5 +257,3 @@ Handle<Value> geoip::Country::close(const Arguments &args) {
   c->db = NULL;
   HandleScope scope;	// Stick this down here since it seems to segfault when on top?
 }
-
-//Persistent<FunctionTemplate> geoip::Country::constructor_template;

@@ -74,21 +74,23 @@ var city = new City('/path/to/GeoLiteCity.dat');
 // Synchronous method
 var city_obj = city.lookupSync('8.8.8.8');
 console.log(city_obj);
-// Return an object of city information
-// {
-//  "country_code":"US",
-//  "country_code3":"USA",
-//  "country_name":"United States",
-//  "continet_code":"NA",
-//  "region":"CA",
-//  "city":"Mountain View",
-//  "postal_code":"94043",
-//  "latitude":37.41919999999999,
-//  "longitude":-122.0574,
-//  "dma_code":807,
-//  "metro_code":807,
-//  "area_code":650
-//  }    
+/*
+Return an object of city information
+{
+  "country_code":"US",
+  "country_code3":"USA",
+  "country_name":"United States",
+  "continet_code":"NA",
+  "region":"CA",
+  "city":"Mountain View",
+  "postal_code":"94043",
+  "latitude":37.41919999999999,
+  "longitude":-122.0574,
+  "dma_code":807,
+  "metro_code":807,
+  "area_code":650
+}
+*/
 
 // Asynchronous method
 city.lookup('www.google.com', function(err, data) {

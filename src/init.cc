@@ -16,7 +16,8 @@ extern "C" {
   static void init(Handle<Object> target)
   {
     HandleScope scope;
-
+    
+    // Modules
     geoip::NetSpeed::Init(target);
     geoip::Country::Init(target);
     geoip::Region::Init(target);

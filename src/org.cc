@@ -33,7 +33,8 @@ void geoip::Org::Init(Handle<Object> target)
 
    geoip::Org::~Org()
    {
-   }*/
+   }
+   */
 
 Handle<Value> geoip::Org::New(const Arguments& args)
 {
