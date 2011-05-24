@@ -15,34 +15,34 @@ using namespace v8;
 using namespace node;
 
 namespace geoip {
-    class Test: ObjectWrap
-    {
-        private:
-            GeoIP *db;
+  class Test: ObjectWrap
+  {
+    private:
+      GeoIP *db;
 
-            int db_edition;
+      int db_edition;
 
-        public:
-            Test();
+    public:
+      Test();
 
-            ~Test();
+      ~Test();
 
-            static Persistent<FunctionTemplate> constructor_template;
+      static Persistent<FunctionTemplate> constructor_template;
 
-            static void Init(Handle<Object> target);
+      static void Init(Handle<Object> target);
 
-            static Handle<Value> New(const Arguments& args);
+      static Handle<Value> New(const Arguments& args);
 
-            static Handle<Value> lookupSync(const Arguments &args);
+      static Handle<Value> lookupSync(const Arguments &args);
 
-            static Handle<Value> lookup(const Arguments& args);
+      static Handle<Value> lookup(const Arguments& args);
 
-            static int EIO_Test(eio_req *req);
+      static int EIO_Test(eio_req *req);
 
-            static int EIO_AfterTest(eio_req *req);
+      static int EIO_AfterTest(eio_req *req);
 
-            static Handle<Value> close(const Arguments &args);
-    };
+      static Handle<Value> close(const Arguments &args);
+  };
 
 }
 
