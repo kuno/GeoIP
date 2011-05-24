@@ -1,7 +1,8 @@
 misc/*
+build/*
+sample/*
 README.md
 TODO.md
 Changelog
 .lock-wscript
 core
-build/*
