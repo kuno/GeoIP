@@ -253,10 +253,30 @@ int geoip::Test::EIO_AfterTest(eio_req *req)
 }
 
 Handle<Value> geoip::Test::close(const Arguments& args) {
+  HandleScope scope;
+
   Test * c = ObjectWrap::Unwrap<geoip::Test>(args.This()); 
-  GeoIP_delete(c->db);	// free()'s the gi reference & closes its fd
-  c->db = NULL;
-  Local<Object> instance = args.This();
-  instance.Clear();
-  HandleScope scope;	// Stick this down here since it seems to segfault when on top?
+
+  String::Utf8Value  file_str(args[0]->ToString());
+  const char * file_cstr = ToCString(file_str);
+  bool cache_on = args[1]->ToBoolean()->Value(); 
+
+  c->db = GeoIP_open(file_cstr, cache_on?GEOIP_MEMORY_CACHE:GEOIP_STANDARD);
+
+  if (c->db != NULL) {
+    // Successfully opened the file, return 1 (true)
+    c->db_edition = GeoIP_database_edition(c->db);
+    if (c->db_edition == GEOIP_CITY_EDITION_REV0 || 
+        c->db_edition == GEOIP_CITY_EDITION_REV1) {
+      c->Wrap(args.This());
+      return args.This();
+    } else {
+      GeoIP_delete(c->db);	// free()'s the gi reference & closes its fd
+      c->db = NULL;                                                       
+      return ThrowException(String::New("Error: Not valid city database"));
+    }
+  } else {
+    return ThrowException(String::New("Error: Cao not open database"));
+  }
+}                                                                          
 }
