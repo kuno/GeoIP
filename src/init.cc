@@ -24,9 +24,10 @@ extern "C" {
     geoip::City::Init(target);
     geoip::Org::Init(target);
 
+    // Inner testing module
     geoip::Test::Init(target);
 
-    // utility memeber method
+    // Utility memeber method
     Local<FunctionTemplate> t = FunctionTemplate::New(geoip::check);
     target->Set(String::NewSymbol("check"), t->GetFunction());
   }
