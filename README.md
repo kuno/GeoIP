@@ -8,7 +8,7 @@ From __v0.4.0__, geoip will be bind to libgeoip >= 1.4.6, which is a C library, 
 
 ###New Architecture
 
-![new_architecture](https://github.com/kuno/GeoIP/raw/master/misc/new_architecture.png)  
+![new_architecture](https://github.com/kuno/GeoIP/raw/master/misc/new_architecture.png)
 
 
 
@@ -23,8 +23,8 @@ If not, you can build for yourself:
     wget http://geolite.maxmind.com/download/geoip/api/c/GeoIP-1.4.7.tar.gz
     tar -xvzf GeoIP-1.4.7.tar.gz
     cd GeoIP-1.4.7
-    ./confiure --prefix=/usr
-    make 
+    ./configure --prefix=/usr
+    make
     sudo make install
 
 
@@ -80,7 +80,7 @@ ipv4
       { country_code: 'US',
         country_code3: 'USA',
         country_name: 'United States',
-        continent_code: 'NA' 
+        continent_code: 'NA'
       }
     */
 
@@ -104,7 +104,7 @@ ipv6 (Currently only Country module supports ipv6)
       { country_code: 'US',
         country_code3: 'USA',
         country_name: 'United States',
-        continent_code: 'NA' 
+        continent_code: 'NA'
       }
     */
 
@@ -114,11 +114,11 @@ ipv6 (Currently only Country module supports ipv6)
         if (data_v6) {
             console.log(data_v6);
             /*
-             { 
+             {
                country_code: 'JP',
                country_code3: 'JPN',
                country_name: 'Japan',
-               continent_code: 'AS' 
+               continent_code: 'AS'
               }
 
             */
@@ -186,7 +186,7 @@ Synchronous method:
 
       'Genuity'
       'AS15169 Google Inc.'
-      
+
       no longer an object
     */
 
@@ -209,8 +209,8 @@ Asynchronous method:
 
 Synchronous method:
 
-    var region_obj = region.lookupSync('8.8.8.8'); 
-    
+    var region_obj = region.lookupSync('8.8.8.8');
+
     console.log('region_obj);
     /*
       region object has two properties:
@@ -238,7 +238,7 @@ Asynchronous method:
 Synchronous method:
 
     var netspeed_str = netspeed.lookupSync('8.8.8.8');
-    
+
     console.log(netspeed_str);
     /*
       netspeed_str just a simple string, 'Dialup', 'Corprate'... so on
