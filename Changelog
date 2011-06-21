@@ -68,3 +68,6 @@ v0.4.0, 2011-05-23
 
 v0.4.0final, 2011-05-24
 1, change version to 0.4.0final
+
+v0.4.1, 2011-06-21
+1, build addon during installation not preinstall
