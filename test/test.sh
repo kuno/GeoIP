@@ -1,6 +1,7 @@
 #!/usr/bin/env sh
 
 TEST_DIR=$PWD
+BUILD=$TEST_DIR/../build/default/geoip.node
 
 GEOIP='http://archive/geoip/GeoIP.dat'
 GEOLITECITY='http://archive/geoip/GeoLiteCity.dat'
@@ -33,6 +34,13 @@ fi
 
 if [ ! -e /tmp/GeoIPRegion.dat ]; then
   wget $REGION
+fi
+
+if [ ! -e $BUILD ]; then
+  echo "Start to building..."
+  cd $TEST_DIR/.. || return 1
+  node-waf configure build || return 1
+  echo "Building is finished!"
 fi
 
 cd $TEST_DIR || return 1

@@ -15,5 +15,5 @@ netspeed.lookup('www.google.com', function(err, data) {
     } else {
       console.log('Data not found');
     }
-    assert.ok(netspeed.close(), 'Oops when closing netspeed object');
+   // assert.ok(netspeed.close(), 'Oops when closing netspeed object');
 });

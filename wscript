@@ -19,7 +19,9 @@ def build(bld):
   obj.target = "geoip"
   obj.source = ['src/init.cc', 'src/netspeed.cc', 'src/country.cc',
                 'src/region.cc', 'src/city.cc', 'src/org.cc',
-                'src/utils.cc', 'src/test.cc', 'src/global.cc']
+                'src/utils.cc', 
+                #'src/test.cc', 
+                'src/global.cc']
 
   obj.lib = ["GeoIP"]
 

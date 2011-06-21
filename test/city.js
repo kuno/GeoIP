@@ -16,5 +16,5 @@ city.lookup('www.google.com', function(err, data) {
     } else {
       console.log('Data not found');
     }
-    assert.ok(city.close(), 'oops! err when closing city object!');
+   // assert.ok(city.close(), 'oops! err when closing city object!');
 });

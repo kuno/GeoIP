@@ -43,8 +43,8 @@ rm -rf *.report
 #  neco_deactivate
 #done
 
-# Tesing no nodejs 0.3.x unstalbe branch
-for neco_id in 'test0.4.0' 'test0.4.1' 'test0.4.2'; do
+# Tesing no nodejs 0.4.x unstalbe branch
+for neco_id in 'test0.4.0' 'test0.4.1' 'test0.4.2' 'test0.4.3' 'test0.4.4' 'test0.4.5' 'test0.4.6' 'test0.4.7' 'test0.4.8'; do
   neco_activate $neco_id &>/dev/null
   version=$(node -v)
   report=$version.report
@@ -58,4 +58,5 @@ for neco_id in 'test0.4.0' 'test0.4.1' 'test0.4.2'; do
   echo '#############################################################' >> $report
   echo '' >> $report
   neco_deactivate
+  echo ''
 done 

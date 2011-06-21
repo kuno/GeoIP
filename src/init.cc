@@ -10,7 +10,7 @@
 #include "city.h"
 #include "org.h"
 #include "utils.h"
-#include "test.h"
+//#include "test.h"
 
 extern "C" {
   static void init(Handle<Object> target)
@@ -25,7 +25,7 @@ extern "C" {
     geoip::Org::Init(target);
 
     // Inner testing module
-    geoip::Test::Init(target);
+    //geoip::Test::Init(target);
 
     // Utility memeber method
     Local<FunctionTemplate> t = FunctionTemplate::New(geoip::check);
