@@ -31,7 +31,7 @@
       "benchmark":"./benchmark"
     },
   "engine":{"node": ">=0.4.0", "npm": "1"},
-  "script":{"preinstall": "node-waf configure build"},
+  "script":{"install": "node-waf configure build"},
   "licences":
     [
       {
