@@ -5,6 +5,7 @@
  */                                              
 
 #include "netspeed.h"
+#include "country6.h"
 #include "country.h"
 #include "region.h"
 #include "city.h"
@@ -19,6 +20,7 @@ extern "C" {
     
     // Modules
     geoip::NetSpeed::Init(target);
+    geoip::Country6::Init(target);
     geoip::Country::Init(target);
     geoip::Region::Init(target);
     geoip::City::Init(target);

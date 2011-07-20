@@ -4,8 +4,8 @@
  * Licensed under the GNU LGPL 2.1 license
  */                                              
 
-#ifndef NODE_GEOIP_COUNTRY_H
-#define NODE_GEOIP_COUNTRY_H
+#ifndef NODE_GEOIP_COUNTRY6_H
+#define NODE_GEOIP_COUNTRY6_H
 
 #include <v8.h>
 #include <node.h>
@@ -30,11 +30,11 @@ namespace geoip {
     public:
       static void Init(Handle<Object> target);
 
-      static Handle<Value> lookupSync(const Arguments& args);
+      static Handle<Value> lookupSync6(const Arguments& args);
 
-      static Handle<Value> lookup(const Arguments& args);
+      static Handle<Value> lookup6(const Arguments& args);
 
-      static int EIO_Country(eio_req *req);
+      static int EIO_Country6(eio_req *req);
 
       static int EIO_AfterCountry(eio_req *req);
 
@@ -51,4 +51,4 @@ struct country_baton_t {
   Persistent<Function> cb;
 };
 
-#endif /* NODE_GEOIP_COUNTRY_H */
+#endif /* NODE_GEOIP_COUNTRY6_H */

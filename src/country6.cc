@@ -4,7 +4,7 @@
  * Licensed under the GNU LGPL 2.1 license
  */
 
-#include "country.h"
+#include "country6.h"
 #include "global.h"
 
 Persistent<FunctionTemplate> geoip::Country::constructor_template; 
@@ -18,10 +18,10 @@ void geoip::Country::Init(Handle<Object> target)
   constructor_template->InstanceTemplate()->SetInternalFieldCount(1);
   constructor_template->SetClassName(String::NewSymbol("geoip"));
 
-  NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookup", lookup);
- // NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookup6", lookup6);
-  NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookupSync", lookupSync);
-  //NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookupSync6", lookupSync6);
+  //NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookup", lookup);
+  NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookup6", lookup6);
+  //NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookupSync", lookupSync);
+  NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookupSync6", lookupSync6);
   NODE_SET_PROTOTYPE_METHOD(constructor_template, "close", close);
   target->Set(String::NewSymbol("Country"), constructor_template->GetFunction());
 }
@@ -49,9 +49,8 @@ Handle<Value> geoip::Country::New(const Arguments& args)
 
   if (c->db != NULL) {
     c->db_edition = GeoIP_database_edition(c->db);
-    if (c->db_edition == GEOIP_COUNTRY_EDITION ||
-        c->db_edition == GEOIP_CITY_EDITION_REV0 ||
-        c->db_edition == GEOIP_CITY_EDITION_REV1) { 
+    //if (c->db_edition == GEOIP_COUNTRY_EDITION ||
+    if (c->db_edition == GEOIP_COUNTRY_EDITION_V6) {
       c->Wrap(args.This());
       return scope.Close(args.This());
     } else {
@@ -64,6 +63,7 @@ Handle<Value> geoip::Country::New(const Arguments& args)
   }
 }
 
+/*
 Handle<Value> geoip::Country::lookupSync(const Arguments &args) {
   HandleScope scope;
 
@@ -90,9 +90,8 @@ Handle<Value> geoip::Country::lookupSync(const Arguments &args) {
       return scope.Close(data);
     }
   }
-}
+}*/
 
-/*
 Handle<Value> geoip::Country::lookupSync6(const Arguments &args) {
   HandleScope scope;
 
@@ -124,8 +123,9 @@ Handle<Value> geoip::Country::lookupSync6(const Arguments &args) {
       return scope.Close(data);
     }
   }
-}*/
+}
 
+/*
 Handle<Value> geoip::Country::lookup(const Arguments& args)
 {
   HandleScope scope;
@@ -165,9 +165,8 @@ int geoip::Country::EIO_Country(eio_req *req)
   }
 
   return 0;
-}
+}*/
 
-/*
 Handle<Value> geoip::Country::lookup6(const Arguments& args)
 {
   HandleScope scope;
@@ -213,7 +212,7 @@ int geoip::Country::EIO_Country6(eio_req *req)
   }
 
   return 0;
-}*/
+}
 
 int geoip::Country::EIO_AfterCountry(eio_req *req)
 {
