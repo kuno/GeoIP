@@ -65,10 +65,10 @@ From v0.4.0, geoip need nodejs >= 0.4.0, if you want to use it on old nodejs, yo
 
 ###Country
 
+ipv4
+
     // Open the country data file
     var Country = geoip.Country;
-
-ipv4
 
     var country = new Country('/path/to/GeoIP.dat');
 
@@ -94,10 +94,13 @@ ipv4
 
 ipv6 (Currently only Country module supports ipv6)
 
-    var country_v6 = new Country('/path/to/GeoIPv6.dat');
+    // Open the ipv6 edition of country module
+    var Country6 = geoip.Country6;
+
+    var country_v6 = new Country6('/path/to/GeoIPv6.dat');
 
     // Synchronous method
-    var country_obj_v6 = country_v6.lookupSync6('2607:f0d0:1002:0051:0000:0000:0000:0004');
+    var country_obj_v6 = country_v6.lookupSync('2607:f0d0:1002:0051:0000:0000:0000:0004');
 
     console.log(country_obj_v6); // Same as ipv4
     /*
@@ -109,7 +112,7 @@ ipv6 (Currently only Country module supports ipv6)
     */
 
     // Asynchronous method
-    country_v6.lookup6('2400:2352:b0f1:36c5:aa9d:694a:2f98:40bd', function(err, data_v6) {
+    country_v6.lookup('2400:2352:b0f1:36c5:aa9d:694a:2f98:40bd', function(err, data_v6) {
         if (err) {throw err;}
         if (data_v6) {
             console.log(data_v6);
