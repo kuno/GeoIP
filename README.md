@@ -131,7 +131,7 @@ ipv6 (Currently only Country module supports ipv6)
 close
 
     //Close the opened file.
-    country.close();
+    country_v6.close();
 
 
 ###City
