@@ -7,9 +7,9 @@
 #include "country6.h"
 #include "global.h"
 
-Persistent<FunctionTemplate> geoip::Country::constructor_template; 
+Persistent<FunctionTemplate> geoip::Country6::constructor_template; 
 
-void geoip::Country::Init(Handle<Object> target)
+void geoip::Country6::Init(Handle<Object> target)
 {
   HandleScope scope;
 
@@ -18,27 +18,27 @@ void geoip::Country::Init(Handle<Object> target)
   constructor_template->InstanceTemplate()->SetInternalFieldCount(1);
   constructor_template->SetClassName(String::NewSymbol("geoip"));
 
-  //NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookup", lookup);
-  NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookup6", lookup6);
-  //NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookupSync", lookupSync);
-  NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookupSync6", lookupSync6);
+  NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookup", lookup);
+  //NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookup6", lookup6);
+  NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookupSync", lookupSync);
+  //NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookupSync6", lookupSync6);
   NODE_SET_PROTOTYPE_METHOD(constructor_template, "close", close);
-  target->Set(String::NewSymbol("Country"), constructor_template->GetFunction());
+  target->Set(String::NewSymbol("Country6"), constructor_template->GetFunction());
 }
 
 /*
-   geoip::Country::Country()
+   geoip::Country6::Country6()
    {
    }
 
-   geoip::Country::~Country()
+   geoip::Country6::~Country6()
    {
    }*/
 
-Handle<Value> geoip::Country::New(const Arguments& args)
+Handle<Value> geoip::Country6::New(const Arguments& args)
 {
   HandleScope scope;
-  Country *c = new Country();
+  Country6 *c = new Country6();
 
   String::Utf8Value file_str(args[0]->ToString());
   const char * file_cstr = ToCString(file_str);
@@ -92,10 +92,10 @@ Handle<Value> geoip::Country::lookupSync(const Arguments &args) {
   }
 }*/
 
-Handle<Value> geoip::Country::lookupSync6(const Arguments &args) {
+Handle<Value> geoip::Country6::lookupSync(const Arguments &args) {
   HandleScope scope;
 
-  Country * c = ObjectWrap::Unwrap<Country>(args.This());
+  Country6 * c = ObjectWrap::Unwrap<Country6>(args.This());
 
   // Check if database is country ipv6 edition
   if (c->db_edition != GEOIP_COUNTRY_EDITION_V6) {
@@ -135,7 +135,7 @@ Handle<Value> geoip::Country::lookup(const Arguments& args)
   Country * c = ObjectWrap::Unwrap<Country>(args.This());
   Local<String> host_str = args[0]->ToString();
 
-  country_baton_t *baton = new country_baton_t();
+  country6_baton_t *baton = new country6_baton_t();
 
   baton->c = c;
   host_str->WriteAscii(baton->host_cstr);
@@ -153,7 +153,7 @@ Handle<Value> geoip::Country::lookup(const Arguments& args)
 
 int geoip::Country::EIO_Country(eio_req *req)
 {
-  country_baton_t *baton = static_cast<country_baton_t *>(req->data);
+  country6_baton_t *baton = static_cast<country6_baton_t *>(req->data);
 
   sleep(baton->sleep_for);
 
@@ -167,13 +167,13 @@ int geoip::Country::EIO_Country(eio_req *req)
   return 0;
 }*/
 
-Handle<Value> geoip::Country::lookup6(const Arguments& args)
+Handle<Value> geoip::Country6::lookup(const Arguments& args)
 {
   HandleScope scope;
 
   REQ_FUN_ARG(1, cb);
 
-  Country * c = ObjectWrap::Unwrap<Country>(args.This());
+  Country6 * c = ObjectWrap::Unwrap<Country6>(args.This());
 
   // Check if database is country ipv6 edition
   if (c->db_edition != GEOIP_COUNTRY_EDITION_V6) {
@@ -182,7 +182,7 @@ Handle<Value> geoip::Country::lookup6(const Arguments& args)
 
   Local<String> host_str = args[0]->ToString();
 
-  country_baton_t *baton = new country_baton_t();
+  country6_baton_t *baton = new country6_baton_t();
 
   baton->c = c;
   host_str->WriteAscii(baton->host_cstr);
@@ -192,15 +192,15 @@ Handle<Value> geoip::Country::lookup6(const Arguments& args)
 
   c->Ref();
 
-  eio_custom(EIO_Country6, EIO_PRI_DEFAULT, EIO_AfterCountry, baton);
+  eio_custom(EIO_Country, EIO_PRI_DEFAULT, EIO_AfterCountry, baton);
   ev_ref(EV_DEFAULT_UC);
 
   return Undefined();
 }
 
-int geoip::Country::EIO_Country6(eio_req *req)
+int geoip::Country6::EIO_Country(eio_req *req)
 {
-  country_baton_t *baton = static_cast<country_baton_t *>(req->data);
+  country6_baton_t *baton = static_cast<country6_baton_t *>(req->data);
 
   sleep(baton->sleep_for);
 
@@ -214,11 +214,11 @@ int geoip::Country::EIO_Country6(eio_req *req)
   return 0;
 }
 
-int geoip::Country::EIO_AfterCountry(eio_req *req)
+int geoip::Country6::EIO_AfterCountry(eio_req *req)
 {
   HandleScope scope;
 
-  country_baton_t *baton = static_cast<country_baton_t *>(req->data);
+  country6_baton_t *baton = static_cast<country6_baton_t *>(req->data);
   ev_unref(EV_DEFAULT_UC);
   baton->c->Unref();
 
@@ -251,8 +251,8 @@ int geoip::Country::EIO_AfterCountry(eio_req *req)
   return 0;
 }
 
-Handle<Value> geoip::Country::close(const Arguments &args) {
-  Country* c = ObjectWrap::Unwrap<Country>(args.This()); 
+Handle<Value> geoip::Country6::close(const Arguments &args) {
+  Country6* c = ObjectWrap::Unwrap<Country6>(args.This()); 
   GeoIP_delete(c->db);	// free()'s the gi reference & closes its fd
   c->db = NULL;
   HandleScope scope;	// Stick this down here since it seems to segfault when on top?

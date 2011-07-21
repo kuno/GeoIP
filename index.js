@@ -5,6 +5,7 @@ var binding = require('./build/default/geoip.node');
 
 // Class
 exports.NetSpeed = binding.NetSpeed;
+exports.Country6 = binding.Country6;
 exports.Country  = binding.Country;
 exports.Region   = binding.Region;
 exports.City     = binding.City;
