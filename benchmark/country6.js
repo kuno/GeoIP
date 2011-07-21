@@ -2,9 +2,10 @@
 
 var geoip = require('../index.js');
 var util = require('util');
-var Country = geoip.Country;
-var c = new Country('/tmp/GeoIP.dat', true);
+var Country6 = geoip.Country6;
+var c6 = new Country6('/tmp/GeoIPv6.dat', true);
 
+/*
 var ip32 = function() {
   var ip = '';
   for (var i = 0; i < 4; ++i) {
@@ -14,9 +15,8 @@ var ip32 = function() {
     }
   }
   return ip;
-}
+}*/
 
-/*
 var ip128 = function() {
   var ip = '', hex;
   for (var i = 0; i < 8; i++) {
@@ -28,8 +28,9 @@ var ip128 = function() {
   }
 
   return ip
-}*/
+}
 
+/*
 var start = new Date().getTime();
 for (var i = 0; i < 100000; ++i) {
   var addr = '109.161.37.182'; //ip32();
@@ -40,18 +41,15 @@ for (var i = 0; i < 100000; ++i) {
 var end = new Date().getTime();
 
 util.puts((end - start) / 1000);
-
-/*
-var c6 = new Country('/tmp/GeoIPv6.dat');
+*/
 
 var start6 = new Date().getTime();
-for (var j = 0; j < 10000; j++) {
+for (var j = 0; j < 100000; j++) {
   var addr6 = ip128();
   //console.log(addr6);
-  var l6 = c6.lookupSync6(addr6);
+  var l6 = c6.lookupSync(addr6);
   if (l6) { console.log('addr6 is ' + addr6); console.log(l6);}
 }
 var end6 = new Date().getTime();
 
 util.puts((end6 - start6) / 1000);
-*/
