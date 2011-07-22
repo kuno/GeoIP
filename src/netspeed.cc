@@ -173,6 +173,36 @@ int geoip::NetSpeed::EIO_AfterNetSpeed(eio_req *req)
   return 0;
 }
 
+Handle<Value> geoip::NetSpeed::update(const Arguments &args) {
+  Locker locker();
+
+  HandleScope scope;
+
+  NetSpeed* n = ObjectWrap::Unwrap<NetSpeed>(args.This()); 
+
+  String::Utf8Value file_str(args[0]->ToString());
+  const char * file_cstr = ToCString(file_str);
+
+  bool cache_on = args[1]->ToBoolean()->Value(); 
+
+  n->db = GeoIP_open(file_cstr, cache_on?GEOIP_MEMORY_CACHE:GEOIP_STANDARD);
+
+  if (n->db != NULL) {
+    n->db_edition = GeoIP_database_edition(n->db);
+    if (n->db_edition == GEOIP_NETSPEED_EDITION) {
+      return scope.Close(True());
+    } else {
+      GeoIP_delete(n->db);	// free()'s the gi reference & closes its fd
+      n->db = NULL;                                                       
+      return scope.Close(ThrowException(String::New("Error: Not valid netspeed database")));
+    }
+  } else {
+    return scope.Close(ThrowException(String::New("Error: Cao not open database")));
+  }
+
+ Unlocker unlocker();
+}
+
 Handle<Value> geoip::NetSpeed::close(const Arguments &args) {
   NetSpeed* n = ObjectWrap::Unwrap<NetSpeed>(args.This()); 
   GeoIP_delete(n->db);	// free()'s the gi reference & closes its fd

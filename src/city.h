@@ -37,6 +37,8 @@ namespace geoip {
       static int EIO_City(eio_req *req);
 
       static int EIO_AfterCity(eio_req *req);
+      
+      static Handle<Value> update(const Arguments &args);
 
       static Handle<Value> close(const Arguments &args);
   };

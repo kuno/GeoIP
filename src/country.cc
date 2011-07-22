@@ -164,9 +164,7 @@ int geoip::Country::EIO_AfterCountry(eio_req *req)
 }
 
 Handle<Value> geoip::Country::update(const Arguments &args) {
-  //Isolate* isolate = Isolate::New(scope);
   Locker locker();
-  //Isolate::Scope isolate_scope(isolate);
 
   HandleScope scope;
 
@@ -192,7 +190,6 @@ Handle<Value> geoip::Country::update(const Arguments &args) {
     return scope.Close(ThrowException(String::New("Error: Cao not open database")));
   }
 
- //Iisolate->Exit();
  Unlocker unlocker();
 }         
 

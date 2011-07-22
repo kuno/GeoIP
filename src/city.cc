@@ -251,6 +251,37 @@ int geoip::City::EIO_AfterCity(eio_req *req)
   return 0;
 }
 
+Handle<Value> geoip::City::update(const Arguments &args) {
+  Locker locker();
+
+  HandleScope scope;
+
+  City* c = ObjectWrap::Unwrap<City>(args.This()); 
+
+  String::Utf8Value file_str(args[0]->ToString());
+  const char * file_cstr = ToCString(file_str);
+
+  bool cache_on = args[1]->ToBoolean()->Value(); 
+
+  c->db = GeoIP_open(file_cstr, cache_on?GEOIP_MEMORY_CACHE:GEOIP_STANDARD);
+
+  if (c->db != NULL) {
+    c->db_edition = GeoIP_database_edition(c->db);
+    if (c->db_edition == GEOIP_CITY_EDITION_REV0 ||
+        c->db_edition == GEOIP_CITY_EDITION_REV1) {
+      return scope.Close(True());
+    } else {
+      GeoIP_delete(c->db);	// free()'s the gi reference & closes its fd
+      c->db = NULL;                                                       
+      return scope.Close(ThrowException(String::New("Error: Not valid city database")));
+    }
+  } else {
+    return scope.Close(ThrowException(String::New("Error: Cao not open database")));
+  }
+
+ Unlocker unlocker();
+}              
+
 // Destroy the GeoIP* reference we're holding on to
 Handle<Value> geoip::City::close(const Arguments &args) {
   City* c = ObjectWrap::Unwrap<geoip::City>(args.This()); 

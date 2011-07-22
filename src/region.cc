@@ -164,6 +164,37 @@ int geoip::Region::EIO_AfterRegion(eio_req *req)
   return 0;
 }
 
+Handle<Value> geoip::Region::update(const Arguments &args) {
+  Locker locker();
+
+  HandleScope scope;
+
+  Region* r = ObjectWrap::Unwrap<Region>(args.This()); 
+
+  String::Utf8Value file_str(args[0]->ToString());
+  const char * file_cstr = ToCString(file_str);
+
+  bool cache_on = args[1]->ToBoolean()->Value(); 
+
+  r->db = GeoIP_open(file_cstr, cache_on?GEOIP_MEMORY_CACHE:GEOIP_STANDARD);
+
+  if (r->db != NULL) {
+    r->db_edition = GeoIP_database_edition(r->db);
+    if (r->db_edition == GEOIP_REGION_EDITION_REV0 ||
+        r->db_edition == GEOIP_REGION_EDITION_REV1) {
+      return scope.Close(True());
+    } else {
+      GeoIP_delete(r->db);	// free()'s the gi reference & closes its fd
+      r->db = NULL;                                                       
+      return scope.Close(ThrowException(String::New("Error: Not valid region database")));
+    }
+  } else {
+    return scope.Close(ThrowException(String::New("Error: Cao not open database")));
+  }
+
+ Unlocker unlocker();
+}                         
+
 Handle<Value> geoip::Region::close(const Arguments &args) {
   Region * r = ObjectWrap::Unwrap<Region>(args.This()); 
   GeoIP_delete(r->db);	// free()'s the gi reference & closes its fd

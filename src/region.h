@@ -35,7 +35,8 @@ namespace geoip {
 
             static int EIO_AfterRegion(eio_req *req);
 
-            // Destroy the GeoIP* reference we're holding on to
+            static Handle<Value> update(const Arguments &args);
+
             static Handle<Value> close(const Arguments &args);
     };
 

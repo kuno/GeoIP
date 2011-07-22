@@ -160,6 +160,38 @@ int geoip::Org::EIO_AfterOrg(eio_req *req)
   return 0;
 }
 
+Handle<Value> geoip::Org::update(const Arguments &args) {
+  Locker locker();
+
+  HandleScope scope;
+
+  Org* o = ObjectWrap::Unwrap<Org>(args.This()); 
+
+  String::Utf8Value file_str(args[0]->ToString());
+  const char * file_cstr = ToCString(file_str);
+
+  bool cache_on = args[1]->ToBoolean()->Value(); 
+
+  o->db = GeoIP_open(file_cstr, cache_on?GEOIP_MEMORY_CACHE:GEOIP_STANDARD);
+
+  if (o->db != NULL) {
+    o->db_edition = GeoIP_database_edition(o->db);
+   if (o->db_edition == GEOIP_ORG_EDITION ||
+       o->db_edition == GEOIP_ASNUM_EDITION ||
+       o->db_edition == GEOIP_ISP_EDITION) {          
+      return scope.Close(True());
+    } else {
+      GeoIP_delete(o->db);	// free()'s the gi reference & closes its fd
+      o->db = NULL;                                                       
+      return scope.Close(ThrowException(String::New("Error: Not valid organization database")));
+    }
+  } else {
+    return scope.Close(ThrowException(String::New("Error: Cao not open database")));
+  }
+
+ Unlocker unlocker();
+} 
+
 Handle<Value> geoip::Org::close(const Arguments &args) {
   Org* o = ObjectWrap::Unwrap<geoip::Org>(args.This()); 
   GeoIP_delete(o->db);	// free()'s the gi reference & closes its fd
