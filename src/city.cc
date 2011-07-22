@@ -141,7 +141,7 @@ Handle<Value> geoip::City::lookup(const Arguments& args)
 
   REQ_FUN_ARG(1, cb);
 
-  City *c = ObjectWrap::Unwrap<geoip::City>(args.This());
+  City* c = ObjectWrap::Unwrap<geoip::City>(args.This());
   Local<String> host_str = args[0]->ToString();
 
   city_baton_t *baton = new city_baton_t();

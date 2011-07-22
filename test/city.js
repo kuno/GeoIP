@@ -9,7 +9,7 @@ var sync_data = city.lookupSync('8.8.8.8');
 console.log(sync_data);
 assert.ok(sync_data, 'Can not find google?');
 
-city.lookup('8.8.4.4', function(err, data) {
+city.lookup('www.google.com', function(err, data) {
     if (err) {throw err;}
     if (data) {
       console.log(data);
