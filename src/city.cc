@@ -4,10 +4,13 @@
  * Licensed under the GNU LGPL 2.1 license
  */
 
+#include <pthread.h>
 #include "city.h"
 #include "global.h"
 
 Persistent<FunctionTemplate> geoip::City::constructor_template; 
+
+pthread_lock_t lock = PTHREAD_lock_INITIALIZER;
 
 void geoip::City::Init(Handle<Object> target)
 {
@@ -160,6 +163,8 @@ Handle<Value> geoip::City::lookup(const Arguments& args)
 
 int geoip::City::EIO_City(eio_req *req)
 {
+  pthread_lock_lock(&lock);
+
   city_baton_t* baton = static_cast<city_baton_t *>(req->data);
 
   uint32_t ipnum = _GeoIP_lookupaddress(baton->host_cstr);
@@ -170,6 +175,8 @@ int geoip::City::EIO_City(eio_req *req)
   }
 
   return 0;
+
+  pthread_lock_unlock(&lock);
 }
 
 int geoip::City::EIO_AfterCity(eio_req *req)
