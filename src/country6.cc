@@ -217,7 +217,8 @@ int geoip::Country6::EIO_Country(eio_req *req)
 
 int geoip::Country6::EIO_AfterCountry(eio_req *req)
 {
- pthread_lock_lock(&lock); 
+  pthread_lock_lock(&lock);
+
   HandleScope scope;
 
   country6_baton_t *baton = static_cast<country6_baton_t *>(req->data);
@@ -251,6 +252,8 @@ int geoip::Country6::EIO_AfterCountry(eio_req *req)
 
   delete baton;
   return 0;
+
+  pthread_lock_unlock(&lock); 
 }
 
 Handle<Value> geoip::Country6::update(const Arguments &args) {

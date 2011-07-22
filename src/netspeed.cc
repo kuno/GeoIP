@@ -4,10 +4,13 @@
  * Licensed under the GNU LGPL 2.1 license
  */                                          
 
+#include <pthread.h> 
 #include "netspeed.h"
 #include "global.h"
 
 Persistent<FunctionTemplate> geoip::NetSpeed::constructor_template; 
+
+pthread_lock_t lock = PTHREAD_lock_INITIALIZER; 
 
 void geoip::NetSpeed::Init(Handle<Object> target)
 {
@@ -20,6 +23,7 @@ void geoip::NetSpeed::Init(Handle<Object> target)
 
   NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookup", lookup);
   NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookupSync", lookupSync);
+  NODE_SET_PROTOTYPE_METHOD(constructor_template, "update", update);
   //NODE_SET_PROTOTYPE_METHOD(constructor_template, "close", close);
   target->Set(String::NewSymbol("NetSpeed"), constructor_template->GetFunction());
 }
@@ -119,6 +123,8 @@ Handle<Value> geoip::NetSpeed::lookup(const Arguments& args)
 
 int geoip::NetSpeed::EIO_NetSpeed(eio_req *req)
 {
+  pthread_lock_lock(&lock);
+
   netspeed_baton_t *baton = static_cast<netspeed_baton_t *>(req->data);
 
   uint32_t ipnum = _GeoIP_lookupaddress(baton->host_cstr);
@@ -129,6 +135,8 @@ int geoip::NetSpeed::EIO_NetSpeed(eio_req *req)
   }
 
   return 0;
+
+  pthread_lock_unlock(&lock); 
 }
 
 int geoip::NetSpeed::EIO_AfterNetSpeed(eio_req *req)
