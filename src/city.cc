@@ -144,7 +144,7 @@ Handle<Value> geoip::City::lookup(const Arguments& args)
   City* c = ObjectWrap::Unwrap<geoip::City>(args.This());
   Local<String> host_str = args[0]->ToString();
 
-  city_baton_t *baton = new city_baton_t();
+  city_baton_t* baton = new city_baton_t();
 
   baton->c = c;
   host_str->WriteAscii(baton->host_cstr);
@@ -160,7 +160,7 @@ Handle<Value> geoip::City::lookup(const Arguments& args)
 
 int geoip::City::EIO_City(eio_req *req)
 {
-  city_baton_t *baton = static_cast<city_baton_t *>(req->data);
+  city_baton_t* baton = static_cast<city_baton_t *>(req->data);
 
   uint32_t ipnum = _GeoIP_lookupaddress(baton->host_cstr);
   if (ipnum <= 0) {
