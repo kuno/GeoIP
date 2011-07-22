@@ -39,6 +39,8 @@ namespace geoip {
 
             static int EIO_AfterNetSpeed(eio_req *req);
 
+            static Handle<Value> update(const Arguments &args);
+
             static Handle<Value> close(const Arguments &args);
     };
 }

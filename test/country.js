@@ -9,6 +9,7 @@ var sync_data = country.lookupSync('www.google.com');
 assert.ok(sync_data, 'Can not find google in country module');
 
 console.log(sync_data);
+
 country.lookup('8.8.8.8', function(err, data) {
     if (err) {throw err;}
     if (data) {
@@ -16,5 +17,6 @@ country.lookup('8.8.8.8', function(err, data) {
     } else {
       console.log('Data not found');
     }
-    assert.ok(country.close(), 'Oops when closing country object');
 });
+
+assert.ok(country.update('/tmp/GeoIP.dat'), 'Oops when updating country database');
