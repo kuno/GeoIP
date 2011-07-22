@@ -37,6 +37,8 @@ namespace geoip {
       static int EIO_Country(eio_req *req);
 
       static int EIO_AfterCountry(eio_req *req);
+      
+      static Handle<Value> update(const Arguments &args);
 
       static Handle<Value> close(const Arguments &args);
   };
@@ -46,8 +48,6 @@ struct country6_baton_t {
   geoip::Country6 * c;
   char host_cstr[256];
   int country_id;
-  int increment_by;
-  int sleep_for;
   Persistent<Function> cb;
 };
 

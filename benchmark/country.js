@@ -33,11 +33,25 @@ var ip128 = function() {
 var start = new Date().getTime();
 for (var i = 0; i < 100000; ++i) {
   var addr = '109.161.37.182'; //ip32();
+  c.lookup(addr, function(err, data) {
+      //  console.log(l);
+  });
+ //c.update('/home/kuno/GeoIP.dat', true); 
+}
+c.update('/home/kuno/GeoIP.dat', true); 
+var end = new Date().getTime();  
+util.puts((end - start) / 1000);
+
+start = new Date().getTime();
+c.update('/home/kuno/GeoIP.dat', true);
+
+for (var i = 0; i < 100000; ++i) {
+  var addr = '109.161.37.182'; //ip32();
  // console.log(addr);
   var l = c.lookupSync(addr);
 //  console.log(l);
-}
-var end = new Date().getTime();
+}                                     
+end = new Date().getTime();
 
 util.puts((end - start) / 1000);
 

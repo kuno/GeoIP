@@ -5,18 +5,6 @@ var util = require('util');
 var Country6 = geoip.Country6;
 var c6 = new Country6('/tmp/GeoIPv6.dat', true);
 
-/*
-var ip32 = function() {
-  var ip = '';
-  for (var i = 0; i < 4; ++i) {
-    ip += Math.floor(Math.random() * 256);
-    if (i <= 2) {
-      ip += '.';
-    }
-  }
-  return ip;
-}*/
-
 var ip128 = function() {
   var ip = '', hex;
   for (var i = 0; i < 8; i++) {
@@ -44,7 +32,7 @@ util.puts((end - start) / 1000);
 */
 
 var start6 = new Date().getTime();
-for (var j = 0; j < 100000; j++) {
+for (var i = 0; i < 100000; i++) {
   var addr6 = ip128();
   //console.log(addr6);
   var l6 = c6.lookupSync(addr6);
@@ -53,3 +41,16 @@ for (var j = 0; j < 100000; j++) {
 var end6 = new Date().getTime();
 
 util.puts((end6 - start6) / 1000);
+
+c6.update('/home/kuno/GeoIPv6.dat');
+
+start6 = new Date().getTime();
+for (var j = 0; j < 100000; j++) {
+  var addr6 = ip128();
+  //console.log(addr6);
+  var l6 = c6.lookupSync(addr6);
+  if (l6) { console.log('addr6 is ' + addr6); console.log(l6);}
+}
+end6 = new Date().getTime();
+
+util.puts((end6 - start6) / 1000);   
