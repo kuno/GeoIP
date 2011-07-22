@@ -47,8 +47,6 @@ struct netspeed_baton_t {
     geoip::NetSpeed * n;
     char host_cstr[256];
     int netspeed;
-    int increment_by;
-    int sleep_for;
     Persistent<Function> cb;
 };
 

@@ -19,10 +19,8 @@ void geoip::Org::Init(Handle<Object> target)
   constructor_template->SetClassName(String::NewSymbol("geoip"));
 
   NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookup", lookup);
-  //NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookup6", lookup6);
   NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookupSync", lookupSync);
-  //NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookupSync6", lookupSync6);
-  NODE_SET_PROTOTYPE_METHOD(constructor_template, "close", close);
+  //NODE_SET_PROTOTYPE_METHOD(constructor_template, "close", close);
   target->Set(String::NewSymbol("Org"), constructor_template->GetFunction());
 }
 
@@ -104,8 +102,6 @@ Handle<Value> geoip::Org::lookup(const Arguments& args)
 
   baton->o = o;
   host_str->WriteAscii(baton->host_cstr);
-  baton->increment_by = 2;
-  baton->sleep_for = 1;
   baton->cb = Persistent<Function>::New(cb);
 
   o->Ref();
@@ -119,8 +115,6 @@ Handle<Value> geoip::Org::lookup(const Arguments& args)
 int geoip::Org::EIO_Org(eio_req *req)
 {
   org_baton_t *baton = static_cast<org_baton_t *>(req->data);
-
-  sleep(baton->sleep_for);
 
   uint32_t ipnum = _GeoIP_lookupaddress(baton->host_cstr);
   if (ipnum <= 0) {

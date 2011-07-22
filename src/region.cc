@@ -20,7 +20,7 @@ void geoip::Region::Init(Handle<Object> target)
 
   NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookup", lookup);
   NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookupSync", lookupSync);
-  NODE_SET_PROTOTYPE_METHOD(constructor_template, "close", close);
+  //NODE_SET_PROTOTYPE_METHOD(constructor_template, "close", close);
   target->Set(String::NewSymbol("Region"), constructor_template->GetFunction());
 }
 
@@ -105,8 +105,6 @@ Handle<Value> geoip::Region::lookup(const Arguments& args)
 
   baton->r = r;
   host_str->WriteAscii(baton->host_cstr);
-  baton->increment_by = 2;
-  baton->sleep_for = 1;
   baton->cb = Persistent<Function>::New(cb);
 
   r->Ref();
@@ -120,8 +118,6 @@ Handle<Value> geoip::Region::lookup(const Arguments& args)
 int geoip::Region::EIO_Region(eio_req *req)
 {
   region_baton_t *baton = static_cast<region_baton_t *>(req->data);
-
-  sleep(baton->sleep_for);
 
   uint32_t ipnum = _GeoIP_lookupaddress(baton->host_cstr);
   if (ipnum <= 0) {

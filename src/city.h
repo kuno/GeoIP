@@ -46,8 +46,6 @@ struct city_baton_t {
   geoip::City *c;
   char host_cstr[256];  // standard length of ipv4
   GeoIPRecord *record;
-  int increment_by;
-  int sleep_for;
   Persistent<Function> cb;
 };
 

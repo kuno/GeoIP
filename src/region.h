@@ -44,8 +44,6 @@ struct region_baton_t {
     geoip::Region *r;
     char host_cstr[256];  // standard length of ipv4
     GeoIPRegion *region;
-    int increment_by;
-    int sleep_for;
     Persistent<Function> cb;
 };
 

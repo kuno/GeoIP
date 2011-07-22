@@ -19,10 +19,8 @@ void geoip::NetSpeed::Init(Handle<Object> target)
   constructor_template->SetClassName(String::NewSymbol("geoip"));
 
   NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookup", lookup);
-  //NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookup6", lookup6);
   NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookupSync", lookupSync);
-  //NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookupSync6", lookupSync6);
-  NODE_SET_PROTOTYPE_METHOD(constructor_template, "close", close);
+  //NODE_SET_PROTOTYPE_METHOD(constructor_template, "close", close);
   target->Set(String::NewSymbol("NetSpeed"), constructor_template->GetFunction());
 }
 
@@ -109,8 +107,6 @@ Handle<Value> geoip::NetSpeed::lookup(const Arguments& args)
 
   baton->n = n;
   host_str->WriteAscii(baton->host_cstr);
-  baton->increment_by = 2;
-  baton->sleep_for = 1;
   baton->cb = Persistent<Function>::New(cb);
 
   n->Ref();
@@ -124,8 +120,6 @@ Handle<Value> geoip::NetSpeed::lookup(const Arguments& args)
 int geoip::NetSpeed::EIO_NetSpeed(eio_req *req)
 {
   netspeed_baton_t *baton = static_cast<netspeed_baton_t *>(req->data);
-
-  sleep(baton->sleep_for);
 
   uint32_t ipnum = _GeoIP_lookupaddress(baton->host_cstr);
   if (ipnum < 0) {

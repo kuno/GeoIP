@@ -20,7 +20,7 @@ void geoip::City::Init(Handle<Object> target)
 
   NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookup", lookup);
   NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookupSync", lookupSync);
-  NODE_SET_PROTOTYPE_METHOD(constructor_template, "close", close);
+  //NODE_SET_PROTOTYPE_METHOD(constructor_template, "close", close);
   target->Set(String::NewSymbol("City"), constructor_template->GetFunction());
 }
 
@@ -147,8 +147,6 @@ Handle<Value> geoip::City::lookup(const Arguments& args)
 
   baton->c = c;
   host_str->WriteAscii(baton->host_cstr);
-  baton->increment_by = 2;
-  baton->sleep_for = 1;
   baton->cb = Persistent<Function>::New(cb);
 
   c->Ref();
@@ -162,8 +160,6 @@ Handle<Value> geoip::City::lookup(const Arguments& args)
 int geoip::City::EIO_City(eio_req *req)
 {
   city_baton_t *baton = static_cast<city_baton_t *>(req->data);
-
-  sleep(baton->sleep_for);
 
   uint32_t ipnum = _GeoIP_lookupaddress(baton->host_cstr);
   if (ipnum <= 0) {
