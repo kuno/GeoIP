@@ -283,7 +283,6 @@ Handle<Value> geoip::City::update(const Arguments &args) {
  Unlocker unlocker();
 }              
 
-// Destroy the GeoIP* reference we're holding on to
 Handle<Value> geoip::City::close(const Arguments &args) {
   City* c = ObjectWrap::Unwrap<geoip::City>(args.This()); 
   GeoIP_delete(c->db);	// free()'s the gi reference & closes its fd

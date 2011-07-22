@@ -10,7 +10,7 @@ assert.ok(sync_data, 'Can not find google in country module');
 
 console.log(sync_data);
 
-country.lookup('8.8.8.8', function(err, data) {
+country.lookup('www.google.com', function(err, data) {
     if (err) {throw err;}
     if (data) {
       assert.deepEqual(sync_data, data, 'Oops! Async and sync country data not equal');
