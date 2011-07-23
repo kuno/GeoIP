@@ -61,6 +61,10 @@ From v0.4.0, geoip need nodejs >= 0.4.0, if you want to use it on old nodejs, yo
 
     var city = new geoip.City('/path/to/GeoLiteCity.dat');  // the default option is cache
 
+###Update database on the fly:
+
+    city.update('/path/to/new/GeoLiteCity.dat');
+
 ##Modules
 
 ###Country
@@ -128,11 +132,6 @@ ipv6 (Currently only Country module supports ipv6)
         }
     });
 
-close
-
-    //Close the opened file.
-    country_v6.close();
-
 
 ###City
 
@@ -171,8 +170,6 @@ Asynchronous method:
         }
     });
 
-    city.close();
-
 
 ###Organization
 
@@ -192,8 +189,6 @@ Synchronous method:
 
       no longer an object
     */
-
-    org.close();
 
 Asynchronous method:
 
@@ -230,8 +225,6 @@ Asynchronous method:
         }
     });
 
-    region.close();
-
 
 ###NetSpeed
 
@@ -255,5 +248,3 @@ Asynchronous method:
           console.log(data);  // Maybe return 'unknow' or different from lookup method
         }
     });
-
-    netspeed.close();

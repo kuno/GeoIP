@@ -71,3 +71,9 @@ v0.4.0final, 2011-05-24
 
 v0.4.1, 2011-06-21
 1, build addon during installation not preinstall
+
+v0.4.2, 2011-07-23
+1, enbale update database on the fly
+2, disable close method
+3, removed all sleep function
+4, always execute lookup in the main thread
