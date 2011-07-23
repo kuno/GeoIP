@@ -10,7 +10,7 @@
 
 Persistent<FunctionTemplate> geoip::City::constructor_template; 
 
-pthread_lock_t lock = PTHREAD_lock_INITIALIZER;
+pthread_lock_t lock = PTHREAD_lock_INITIALIZER; 
 
 void geoip::City::Init(Handle<Object> target)
 {

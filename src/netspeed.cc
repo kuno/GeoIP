@@ -4,11 +4,11 @@
  * Licensed under the GNU LGPL 2.1 license
  */                                          
 
-#include <pthread.h> 
+#include <pthread.h>
 #include "netspeed.h"
 #include "global.h"
 
-Persistent<FunctionTemplate> geoip::NetSpeed::constructor_template; 
+Persistent<FunctionTemplate> geoip::NetSpeed::constructor_template;
 
 pthread_lock_t lock = PTHREAD_lock_INITIALIZER; 
 
@@ -208,7 +208,7 @@ Handle<Value> geoip::NetSpeed::update(const Arguments &args) {
     return scope.Close(ThrowException(String::New("Error: Cao not open database")));
   }
 
- Unlocker unlocker();
+  Unlocker unlocker();
 }
 
 Handle<Value> geoip::NetSpeed::close(const Arguments &args) {

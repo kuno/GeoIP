@@ -4,12 +4,12 @@
  * Licensed under the GNU LGPL 2.1 license
  */                                              
 
-#include "netspeed.h"
-#include "country6.h"
-#include "country.h"
-#include "region.h"
+//#include "netspeed.h"
+//#include "country6.h"
+//#include "country.h"
+//#include "region.h"
 #include "city.h"
-#include "org.h"
+//#include "org.h"
 #include "utils.h"
 //#include "test.h"
 
@@ -19,12 +19,12 @@ extern "C" {
     HandleScope scope;
     
     // Modules
-    geoip::NetSpeed::Init(target);
-    geoip::Country6::Init(target);
-    geoip::Country::Init(target);
-    geoip::Region::Init(target);
+    //geoip::NetSpeed::Init(target);
+    //geoip::Country6::Init(target);
+    //geoip::Country::Init(target);
+    //geoip::Region::Init(target);
     geoip::City::Init(target);
-    geoip::Org::Init(target);
+    //geoip::Org::Init(target);
 
     // Inner testing module
     //geoip::Test::Init(target);
