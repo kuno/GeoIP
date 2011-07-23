@@ -9,14 +9,8 @@
 
 Persistent<FunctionTemplate> geoip::Country6::constructor_template; 
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 pthread_mutex_t country6_lock = PTHREAD_MUTEX_INITIALIZER;
 
-=======
->>>>>>> parent of 288cd89... back to pthread
-=======
->>>>>>> parent of 288cd89... back to pthread
 void geoip::Country6::Init(Handle<Object> target)
 {
   HandleScope scope;
@@ -222,14 +216,8 @@ int geoip::Country6::EIO_Country(eio_req *req)
 
 int geoip::Country6::EIO_AfterCountry(eio_req *req)
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
   pthread_mutex_lock(&country6_lock);
 
-=======
->>>>>>> parent of 288cd89... back to pthread
-=======
->>>>>>> parent of 288cd89... back to pthread
   HandleScope scope;
 
   country6_baton_t *baton = static_cast<country6_baton_t *>(req->data);

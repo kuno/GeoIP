@@ -7,17 +7,9 @@
 #include "country.h"
 #include "global.h"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 Persistent<FunctionTemplate> geoip::Country::constructor_template;
 
 pthread_mutex_t country_lock = PTHREAD_MUTEX_INITIALIZER; 
-=======
-Persistent<FunctionTemplate> geoip::Country::constructor_template; 
->>>>>>> parent of 288cd89... back to pthread
-=======
-Persistent<FunctionTemplate> geoip::Country::constructor_template; 
->>>>>>> parent of 288cd89... back to pthread
 
 void geoip::Country::Init(Handle<Object> target)
 {
@@ -124,17 +116,10 @@ Handle<Value> geoip::Country::lookup(const Arguments& args)
 
 int geoip::Country::EIO_Country(eio_req *req)
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-  pthread_mutex_lock(&country_lock);
-
-=======
->>>>>>> parent of 288cd89... back to pthread
-=======
->>>>>>> parent of 288cd89... back to pthread
   country_baton_t *baton = static_cast<country_baton_t *>(req->data);
 
   uint32_t ipnum = _GeoIP_lookupaddress(baton->host_cstr);
+
   if (ipnum <= 0) {
     baton->country_id = 0;
   } else {
@@ -142,14 +127,6 @@ int geoip::Country::EIO_Country(eio_req *req)
   }
 
   return 0;
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-  pthread_mutex_unlock(&country_lock); 
-=======
->>>>>>> parent of 288cd89... back to pthread
-=======
->>>>>>> parent of 288cd89... back to pthread
 }
 
 int geoip::Country::EIO_AfterCountry(eio_req *req)
