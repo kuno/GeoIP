@@ -3,6 +3,8 @@ var read  = require('fs').readFileSync,
 
 var binding = require('./build/default/geoip.node');
 
+var version  = JSON.parse(read(join(__dirname, 'package.json'))).version;
+
 // Class
 exports.NetSpeed = binding.NetSpeed;
 exports.Country6 = binding.Country6;
@@ -14,4 +16,5 @@ exports.Org      = binding.Org;
 
 // Utility
 exports.check    = binding.check;
-exports.version  = JSON.parse(read(join(__dirname, 'package.json'))).version;
+exports.version  = version; 
+exports.libgeoip = binding.libgeoip;

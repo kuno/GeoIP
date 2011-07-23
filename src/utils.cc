@@ -82,4 +82,5 @@ namespace geoip {
 
     return ThrowException(String::New("Error: Cao not open database"));   
   }
+
 }
