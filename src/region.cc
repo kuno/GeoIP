@@ -9,8 +9,6 @@
 
 Persistent<FunctionTemplate> geoip::Region::constructor_template; 
 
-pthread_mutex_t region_lock = PTHREAD_MUTEX_INITIALIZER; 
-
 void geoip::Region::Init(Handle<Object> target)
 {
   HandleScope scope;
@@ -103,11 +101,12 @@ Handle<Value> geoip::Region::lookup(const Arguments& args)
 
   Region * r = ObjectWrap::Unwrap<Region>(args.This());
   Local<String> host_str = args[0]->ToString();
+  char host_cstr[host_str->Length()];
+  host_str->WriteAscii(host_cstr);
 
   region_baton_t *baton = new region_baton_t();
-
   baton->r = r;
-  host_str->WriteAscii(baton->host_cstr);
+  baton->ipnum = _GeoIP_lookupaddress(host_cstr);
   baton->cb = Persistent<Function>::New(cb);
 
   r->Ref();
@@ -120,20 +119,15 @@ Handle<Value> geoip::Region::lookup(const Arguments& args)
 
 int geoip::Region::EIO_Region(eio_req *req)
 {
-  pthread_mutex_lock(&region_lock);
-
   region_baton_t *baton = static_cast<region_baton_t *>(req->data);
 
-  uint32_t ipnum = _GeoIP_lookupaddress(baton->host_cstr);
-  if (ipnum <= 0) {
+  if (baton->ipnum <= 0) {
     baton->region = NULL;
   } else {
-    baton->region = GeoIP_region_by_ipnum(baton->r->db, ipnum);
+    baton->region = GeoIP_region_by_ipnum(baton->r->db, baton->ipnum);
   }
 
   return 0;
-
-  pthread_mutex_unlock(&region_lock); 
 }
 
 int geoip::Region::EIO_AfterRegion(eio_req *req)

@@ -9,8 +9,6 @@
 
 Persistent<FunctionTemplate> geoip::Org::constructor_template; 
 
-pthread_mutex_t org_lock = PTHREAD_MUTEX_INITIALIZER; 
-
 void geoip::Org::Init(Handle<Object> target)
 {
   HandleScope scope;
@@ -100,11 +98,12 @@ Handle<Value> geoip::Org::lookup(const Arguments& args)
 
   Org *o = ObjectWrap::Unwrap<geoip::Org>(args.This());
   Local<String> host_str = args[0]->ToString();
+  char host_cstr[host_str->Length()];
+  host_str->WriteAscii(host_cstr);
 
   org_baton_t *baton = new org_baton_t();
-
   baton->o = o;
-  host_str->WriteAscii(baton->host_cstr);
+  baton->ipnum = _GeoIP_lookupaddress(host_cstr);
   baton->cb = Persistent<Function>::New(cb);
 
   o->Ref();
@@ -117,20 +116,15 @@ Handle<Value> geoip::Org::lookup(const Arguments& args)
 
 int geoip::Org::EIO_Org(eio_req *req)
 {
-  pthread_mutex_lock(&org_lock);
-
   org_baton_t *baton = static_cast<org_baton_t *>(req->data);
 
-  uint32_t ipnum = _GeoIP_lookupaddress(baton->host_cstr);
-  if (ipnum <= 0) {
+  if (baton->ipnum <= 0) {
     baton->org = NULL;
   } 
 
-  baton->org = GeoIP_org_by_ipnum(baton->o->db, ipnum);
+  baton->org = GeoIP_org_by_ipnum(baton->o->db, baton->ipnum);
 
   return 0;
-
-  pthread_mutex_unlock(&org_lock); 
 }
 
 int geoip::Org::EIO_AfterOrg(eio_req *req)

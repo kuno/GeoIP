@@ -5,7 +5,7 @@ var assert = require('assert'),
 var Country = geoip.Country;
 var country = new Country('/tmp/GeoIP.dat', true);
 
-var sync_data = country.lookupSync('www.google.com');
+var sync_data = country.lookupSync('8.8.8.8');
 assert.ok(sync_data, 'Can not find google in country module');
 
 console.log(sync_data);

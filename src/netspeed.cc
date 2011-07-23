@@ -9,8 +9,6 @@
 
 Persistent<FunctionTemplate> geoip::NetSpeed::constructor_template;
 
-pthread_mutex_t netspeed_lock = PTHREAD_MUTEX_INITIALIZER; 
-
 void geoip::NetSpeed::Init(Handle<Object> target)
 {
   HandleScope scope;
@@ -105,11 +103,12 @@ Handle<Value> geoip::NetSpeed::lookup(const Arguments& args)
 
   NetSpeed * n = ObjectWrap::Unwrap<NetSpeed>(args.This());
   Local<String> host_str = args[0]->ToString();
+  char host_cstr[host_str->Length()];
+  host_str->WriteAscii(host_cstr);
 
   netspeed_baton_t *baton = new netspeed_baton_t();
-
   baton->n = n;
-  host_str->WriteAscii(baton->host_cstr);
+  baton->ipnum = _GeoIP_lookupaddress(host_cstr);
   baton->cb = Persistent<Function>::New(cb);
 
   n->Ref();
@@ -122,20 +121,15 @@ Handle<Value> geoip::NetSpeed::lookup(const Arguments& args)
 
 int geoip::NetSpeed::EIO_NetSpeed(eio_req *req)
 {
-  pthread_mutex_lock(&netspeed_lock);
-
   netspeed_baton_t *baton = static_cast<netspeed_baton_t *>(req->data);
 
-  uint32_t ipnum = _GeoIP_lookupaddress(baton->host_cstr);
-  if (ipnum < 0) {
+  if (baton->ipnum < 0) {
     baton->netspeed = -1;
   } else {
-    baton->netspeed = GeoIP_id_by_ipnum(baton->n->db, ipnum);
+    baton->netspeed = GeoIP_id_by_ipnum(baton->n->db, baton->ipnum);
   }
 
   return 0;
-
-  pthread_mutex_unlock(&netspeed_lock); 
 }
 
 int geoip::NetSpeed::EIO_AfterNetSpeed(eio_req *req)

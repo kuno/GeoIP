@@ -7,7 +7,6 @@
 #ifndef NODE_GEOIP_NETSPEED_H
 #define NODE_GEOIP_NETSPEED_H
 
-#include <pthread.h>
 #include <v8.h>
 #include <node.h>
 #include "node_geoip.h"
@@ -48,7 +47,7 @@ namespace geoip {
 
 struct netspeed_baton_t {
     geoip::NetSpeed * n;
-    char host_cstr[256];
+    uint32_t ipnum;
     int netspeed;
     Persistent<Function> cb;
 };

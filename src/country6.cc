@@ -9,8 +9,6 @@
 
 Persistent<FunctionTemplate> geoip::Country6::constructor_template; 
 
-pthread_mutex_t country6_lock = PTHREAD_MUTEX_INITIALIZER;
-
 void geoip::Country6::Init(Handle<Object> target)
 {
   HandleScope scope;
@@ -181,11 +179,12 @@ Handle<Value> geoip::Country6::lookup(const Arguments& args)
   }                                                                                                   
 
   Local<String> host_str = args[0]->ToString();
+  char host_cstr[host_str->Length()];
+  host_str->WriteAscii(host_cstr);
 
   country6_baton_t *baton = new country6_baton_t();
-
   baton->c = c;
-  host_str->WriteAscii(baton->host_cstr);
+  baton->ipnum_v6 = _GeoIP_lookupaddress_v6(host_cstr);
   baton->cb = Persistent<Function>::New(cb);
 
   c->Ref();
@@ -202,11 +201,10 @@ int geoip::Country6::EIO_Country(eio_req *req)
 
   country6_baton_t *baton = static_cast<country6_baton_t *>(req->data);
 
-  geoipv6_t ipnum_v6 = _GeoIP_lookupaddress_v6(baton->host_cstr);
-  if (__GEOIP_V6_IS_NULL(ipnum_v6)) {
+  if (__GEOIP_V6_IS_NULL(baton->ipnum_v6)) {
     baton->country_id = 0;
   } else {
-    baton->country_id = GeoIP_id_by_ipnum_v6(baton->c->db, ipnum_v6);
+    baton->country_id = GeoIP_id_by_ipnum_v6(baton->c->db, baton->ipnum_v6);
   }
 
   return 0;
@@ -216,8 +214,6 @@ int geoip::Country6::EIO_Country(eio_req *req)
 
 int geoip::Country6::EIO_AfterCountry(eio_req *req)
 {
-  pthread_mutex_lock(&country6_lock);
-
   HandleScope scope;
 
   country6_baton_t *baton = static_cast<country6_baton_t *>(req->data);
@@ -251,8 +247,6 @@ int geoip::Country6::EIO_AfterCountry(eio_req *req)
 
   delete baton;
   return 0;
-
-  pthread_mutex_unlock(&country6_lock); 
 }
 
 Handle<Value> geoip::Country6::update(const Arguments &args) {

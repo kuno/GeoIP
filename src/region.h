@@ -7,7 +7,6 @@
 #ifndef NODE_GEOIP_REGION_H
 #define NODE_GEOIP_REGION_H
 
-#include <pthread.h>
 #include <v8.h>
 #include <node.h>
 #include "node_geoip.h"
@@ -44,7 +43,7 @@ namespace geoip {
 }
 struct region_baton_t {
     geoip::Region *r;
-    char host_cstr[256];  // standard length of ipv4
+    uint32_t ipnum;
     GeoIPRegion *region;
     Persistent<Function> cb;
 };

@@ -7,7 +7,6 @@
 #ifndef NODE_GEOIP_ORG_H
 #define NODE_GEOIP_ORG_H
 
-#include <pthread.h>
 #include <v8.h>
 #include <node.h>
 #include "node_geoip.h"
@@ -48,7 +47,7 @@ namespace geoip {
 
 struct org_baton_t {
   geoip::Org * o;
-  char host_cstr[256];
+  uint32_t ipnum;
   char * org;
   Persistent<Function> cb;
 };

@@ -7,7 +7,6 @@
 #ifndef NODE_GEOIP_COUNTRY6_H
 #define NODE_GEOIP_COUNTRY6_H
 
-#include <pthread.h>
 #include <v8.h>
 #include <node.h>
 #include "node_geoip.h"
@@ -47,7 +46,7 @@ namespace geoip {
 
 struct country6_baton_t {
   geoip::Country6 * c;
-  char host_cstr[256];
+  geoipv6_t ipnum_v6;
   int country_id;
   Persistent<Function> cb;
 };

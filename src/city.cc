@@ -9,8 +9,6 @@
 
 Persistent<FunctionTemplate> geoip::City::constructor_template;
 
-pthread_mutex_t city_lock = PTHREAD_MUTEX_INITIALIZER; 
-
 void geoip::City::Init(Handle<Object> target)
 {
   HandleScope scope;
@@ -145,11 +143,12 @@ Handle<Value> geoip::City::lookup(const Arguments& args)
 
   City* c = ObjectWrap::Unwrap<geoip::City>(args.This());
   Local<String> host_str = args[0]->ToString();
+  char host_cstr[host_str->Length()];
+  host_str->WriteAscii(host_cstr);
 
   city_baton_t* baton = new city_baton_t();
-
   baton->c = c;
-  host_str->WriteAscii(baton->host_cstr);
+  baton->ipnum = _GeoIP_lookupaddress(host_cstr);
   baton->cb = Persistent<Function>::New(cb);
 
   c->Ref();
@@ -162,20 +161,15 @@ Handle<Value> geoip::City::lookup(const Arguments& args)
 
 int geoip::City::EIO_City(eio_req *req)
 {
-  pthread_mutex_lock(&city_lock);
-
   city_baton_t* baton = static_cast<city_baton_t *>(req->data);
 
-  uint32_t ipnum = _GeoIP_lookupaddress(baton->host_cstr);
-  if (ipnum <= 0) {
+  if (baton->ipnum <= 0) {
     baton->record = NULL;
   } else {
-    baton->record = GeoIP_record_by_ipnum(baton->c->db, ipnum);
+    baton->record = GeoIP_record_by_ipnum(baton->c->db, baton->ipnum);
   }
 
   return 0;
-
-  pthread_mutex_unlock(&city_lock);
 }
 
 int geoip::City::EIO_AfterCity(eio_req *req)

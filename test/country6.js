@@ -16,8 +16,7 @@ country6.lookup('2607:f0d0:1002:0051:0000:0000:0000:0004', function(err, data6) 
     if (err) {throw err;}
     if (data6) {
       console.log(data6);
-       //assert.deepEqual(sync_data6, data6, 'Oops! Async and sync country data ipv6 not equal');
     }
-
-    assert.ok(country6.close(), 'Oops when closing country object');
 });
+
+assert.ok(country6.update('/tmp/GeoIPv6.dat'), 'Oops when updating country ipv6 database');
