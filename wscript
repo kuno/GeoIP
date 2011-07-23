@@ -25,7 +25,6 @@ def build(bld):
                 'src/city.cc', 
                 'src/org.cc', 
                 'src/utils.cc', 
-                #'src/test.cc', 
                 'src/global.cc']
 
   obj.lib = ["GeoIP"]
