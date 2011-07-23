@@ -8,9 +8,13 @@
 #include "global.h"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 Persistent<FunctionTemplate> geoip::Country::constructor_template;
 
 pthread_mutex_t country_lock = PTHREAD_MUTEX_INITIALIZER; 
+=======
+Persistent<FunctionTemplate> geoip::Country::constructor_template; 
+>>>>>>> parent of 288cd89... back to pthread
 =======
 Persistent<FunctionTemplate> geoip::Country::constructor_template; 
 >>>>>>> parent of 288cd89... back to pthread
@@ -121,8 +125,11 @@ Handle<Value> geoip::Country::lookup(const Arguments& args)
 int geoip::Country::EIO_Country(eio_req *req)
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
   pthread_mutex_lock(&country_lock);
 
+=======
+>>>>>>> parent of 288cd89... back to pthread
 =======
 >>>>>>> parent of 288cd89... back to pthread
   country_baton_t *baton = static_cast<country_baton_t *>(req->data);
@@ -136,8 +143,11 @@ int geoip::Country::EIO_Country(eio_req *req)
 
   return 0;
 <<<<<<< HEAD
+<<<<<<< HEAD
 
   pthread_mutex_unlock(&country_lock); 
+=======
+>>>>>>> parent of 288cd89... back to pthread
 =======
 >>>>>>> parent of 288cd89... back to pthread
 }

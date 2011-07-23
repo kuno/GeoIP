@@ -10,8 +10,11 @@
 Persistent<FunctionTemplate> geoip::City::constructor_template;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 pthread_mutex_t city_lock = PTHREAD_MUTEX_INITIALIZER; 
 
+=======
+>>>>>>> parent of 288cd89... back to pthread
 =======
 >>>>>>> parent of 288cd89... back to pthread
 void geoip::City::Init(Handle<Object> target)
@@ -166,8 +169,11 @@ Handle<Value> geoip::City::lookup(const Arguments& args)
 int geoip::City::EIO_City(eio_req *req)
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
   pthread_mutex_lock(&city_lock);
 
+=======
+>>>>>>> parent of 288cd89... back to pthread
 =======
 >>>>>>> parent of 288cd89... back to pthread
   city_baton_t* baton = static_cast<city_baton_t *>(req->data);
@@ -181,8 +187,11 @@ int geoip::City::EIO_City(eio_req *req)
 
   return 0;
 <<<<<<< HEAD
+<<<<<<< HEAD
 
   pthread_mutex_unlock(&city_lock);
+=======
+>>>>>>> parent of 288cd89... back to pthread
 =======
 >>>>>>> parent of 288cd89... back to pthread
 }
