@@ -4,13 +4,12 @@
  * Licensed under the GNU LGPL 2.1 license
  */
 
-#include <pthread.h> 
 #include "org.h"
 #include "global.h"
 
 Persistent<FunctionTemplate> geoip::Org::constructor_template; 
 
-pthread_lock_t lock = PTHREAD_lock_INITIALIZER; 
+pthread_mutex_t org_lock = PTHREAD_MUTEX_INITIALIZER; 
 
 void geoip::Org::Init(Handle<Object> target)
 {
@@ -23,7 +22,7 @@ void geoip::Org::Init(Handle<Object> target)
 
   NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookup", lookup);
   NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookupSync", lookupSync);
-  NODE_SET_PROTOTYPE_METHOD(constructor_template, "update", updated);
+  NODE_SET_PROTOTYPE_METHOD(constructor_template, "update", update);
   //NODE_SET_PROTOTYPE_METHOD(constructor_template, "close", close);
   target->Set(String::NewSymbol("Org"), constructor_template->GetFunction());
 }
@@ -118,7 +117,7 @@ Handle<Value> geoip::Org::lookup(const Arguments& args)
 
 int geoip::Org::EIO_Org(eio_req *req)
 {
-  pthread_lock_lock(&lock);
+  pthread_mutex_lock(&org_lock);
 
   org_baton_t *baton = static_cast<org_baton_t *>(req->data);
 
@@ -131,7 +130,7 @@ int geoip::Org::EIO_Org(eio_req *req)
 
   return 0;
 
-  pthread_lock_unlock(&lock); 
+  pthread_mutex_unlock(&org_lock); 
 }
 
 int geoip::Org::EIO_AfterOrg(eio_req *req)

@@ -4,13 +4,12 @@
  * Licensed under the GNU LGPL 2.1 license
  */
 
-#include <pthread.h> 
 #include "country.h"
 #include "global.h"
 
 Persistent<FunctionTemplate> geoip::Country::constructor_template;
 
-pthread_lock_t lock = PTHREAD_lock_INITIALIZER; 
+pthread_mutex_t country_lock = PTHREAD_MUTEX_INITIALIZER; 
 
 void geoip::Country::Init(Handle<Object> target)
 {
@@ -117,7 +116,7 @@ Handle<Value> geoip::Country::lookup(const Arguments& args)
 
 int geoip::Country::EIO_Country(eio_req *req)
 {
-  pthread_lock_lock(&lock);
+  pthread_mutex_lock(&country_lock);
 
   country_baton_t *baton = static_cast<country_baton_t *>(req->data);
 
@@ -130,7 +129,7 @@ int geoip::Country::EIO_Country(eio_req *req)
 
   return 0;
 
-  pthread_lock_unlock(&lock); 
+  pthread_mutex_unlock(&country_lock); 
 }
 
 int geoip::Country::EIO_AfterCountry(eio_req *req)

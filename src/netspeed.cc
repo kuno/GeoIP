@@ -4,13 +4,12 @@
  * Licensed under the GNU LGPL 2.1 license
  */                                          
 
-#include <pthread.h>
 #include "netspeed.h"
 #include "global.h"
 
 Persistent<FunctionTemplate> geoip::NetSpeed::constructor_template;
 
-pthread_lock_t lock = PTHREAD_lock_INITIALIZER; 
+pthread_mutex_t netspeed_lock = PTHREAD_MUTEX_INITIALIZER; 
 
 void geoip::NetSpeed::Init(Handle<Object> target)
 {
@@ -123,7 +122,7 @@ Handle<Value> geoip::NetSpeed::lookup(const Arguments& args)
 
 int geoip::NetSpeed::EIO_NetSpeed(eio_req *req)
 {
-  pthread_lock_lock(&lock);
+  pthread_mutex_lock(&netspeed_lock);
 
   netspeed_baton_t *baton = static_cast<netspeed_baton_t *>(req->data);
 
@@ -136,7 +135,7 @@ int geoip::NetSpeed::EIO_NetSpeed(eio_req *req)
 
   return 0;
 
-  pthread_lock_unlock(&lock); 
+  pthread_mutex_unlock(&netspeed_lock); 
 }
 
 int geoip::NetSpeed::EIO_AfterNetSpeed(eio_req *req)

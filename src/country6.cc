@@ -4,13 +4,12 @@
  * Licensed under the GNU LGPL 2.1 license
  */
 
-#include <pthread.h> 
 #include "country6.h"
 #include "global.h"
 
 Persistent<FunctionTemplate> geoip::Country6::constructor_template; 
 
-pthread_lock_t lock = PTHREAD_lock_INITIALIZER; 
+pthread_mutex_t country6_lock = PTHREAD_MUTEX_INITIALIZER;
 
 void geoip::Country6::Init(Handle<Object> target)
 {
@@ -217,7 +216,7 @@ int geoip::Country6::EIO_Country(eio_req *req)
 
 int geoip::Country6::EIO_AfterCountry(eio_req *req)
 {
-  pthread_lock_lock(&lock);
+  pthread_mutex_lock(&country6_lock);
 
   HandleScope scope;
 
@@ -253,7 +252,7 @@ int geoip::Country6::EIO_AfterCountry(eio_req *req)
   delete baton;
   return 0;
 
-  pthread_lock_unlock(&lock); 
+  pthread_mutex_unlock(&country6_lock); 
 }
 
 Handle<Value> geoip::Country6::update(const Arguments &args) {

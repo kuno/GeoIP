@@ -7,6 +7,7 @@
 #ifndef NODE_GEOIP_COUNTRY6_H
 #define NODE_GEOIP_COUNTRY6_H
 
+#include <pthread.h>
 #include <v8.h>
 #include <node.h>
 #include "node_geoip.h"
