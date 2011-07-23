@@ -4,6 +4,7 @@ TEST_DIR=$PWD
 BUILD=$TEST_DIR/../build/default/geoip.node
 
 GEOIP='http://archive/geoip/GeoIP.dat'
+GEOIPV6='http://archive/geoip/GeoIPv6.dat'
 GEOLITECITY='http://archive/geoip/GeoLiteCity.dat'
 REGION='http://archive/geoip/GeoIPRegion.dat'
 NETSPEED='http://archive/geoip/GeoIPNetSpeed.dat'
@@ -14,6 +15,10 @@ cd /tmp || return 1
 
 if [ ! -e /tmp/GeoIP.dat ]; then
   wget $GEOIP
+fi
+
+if [ ! -e /tmp/GeoIPv6.dat ]; then
+  wget $GEOIPV6
 fi
 
 if [ ! -e /tmp/GeoLiteCity.dat ]; then
@@ -45,13 +50,21 @@ fi
 
 cd $TEST_DIR || return 1
 
-echo "Start to test Country module......"
+echo "Start to test Country ipv4 module......"
 echo "============================================================"
 node ./country.js 
 echo "============================================================"
-echo "Country module test is finished!"
+echo "Country ipv4 module test is finished!"
 
 echo ""
+
+echo "Start to test Country ipv6 module......"
+echo "============================================================"
+node ./country6.js 
+echo "============================================================"
+echo "Country ipv6 module test is finished!"
+
+echo ""                                                             
 
 echo "Start to test City moduel......"
 echo "============================================================"
