@@ -17,16 +17,16 @@ var ip32 = function() {
 }
 
 var start = new Date().getTime();
-for (var i = 0; i < 10000; ++i) {
+for (var j = 0; j < 10000; ++j) {
   var addr = ip32();
   //console.log(addr);
-  c.lookup(addr, function(err, data) {
+  c.lookupSync(addr); //, function(err, data) {
       //if (err) {throw err;}
-      if (data) {
-        console.log(data);
-      }
-  });
+      //if (data) {
+      //  console.log(data);
+      //}
+ // });
 }
-var end = new Date().getTime();
 
+var end = new Date().getTime();
 util.puts((end - start) / 1000);
