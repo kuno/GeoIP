@@ -19,12 +19,12 @@ extern "C" {
     HandleScope scope;
     
     // Modules
-    //geoip::NetSpeed::Init(target);
-    //geoip::Country6::Init(target);
-    //geoip::Country::Init(target);
-    //geoip::Region::Init(target);
+    geoip::NetSpeed::Init(target);
+    geoip::Country6::Init(target);
+    geoip::Country::Init(target);
+    geoip::Region::Init(target);
     geoip::City::Init(target);
-    //geoip::Org::Init(target);
+    geoip::Org::Init(target);
 
     // Inner testing module
     //geoip::Test::Init(target);

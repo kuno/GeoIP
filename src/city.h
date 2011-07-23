@@ -7,7 +7,6 @@
 #ifndef NODE_GEOIP_CITY_H
 #define NODE_GEOIP_CITY_H
 
-#include <pthread.h>
 #include <v8.h>
 #include <node.h>
 #include "node_geoip.h"

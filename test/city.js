@@ -5,7 +5,7 @@ var City = geoip.City;
 var city = new City('/tmp/GeoLiteCity.dat', true);
 
 // Test record_by_domain method
-var sync_data = city.lookupSync('www.google.com');
+var sync_data = city.lookupSync('8.8.8.8');
 console.log(sync_data);
 assert.ok(sync_data, 'Can not find google?');
 
