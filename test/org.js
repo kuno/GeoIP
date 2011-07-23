@@ -5,11 +5,11 @@ var assert = require('assert'),
 var Org = geoip.Org;
 var org = new Org('/tmp/GeoIPASNum.dat', true);
 
-var sync_data = org.lookupSync('www.google.com');
+var sync_data = org.lookupSync('8.8.8.8');
 console.log(sync_data);
 //assert.ok(sync_data, 'Can not find google in org module');
 
-org.lookup('8.8.8.8', function(err, data) {
+org.lookup('www.google.com', function(err, data) {
     if (err) {throw err;}
     if (data) {
       console.log(data);
@@ -17,5 +17,6 @@ org.lookup('8.8.8.8', function(err, data) {
     } else {
       console.log('Data not found');
     }
-   // assert.ok(org.close(), 'Oops when closing org object');
 });
+
+assert.ok(org.update('/tmp/GeoIPASNum.dat'), 'Oops when updating org database');

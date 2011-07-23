@@ -30,20 +30,15 @@ namespace geoip {
     public:
       static void Init(Handle<Object> target);
 
-
       static Handle<Value> lookupSync(const Arguments& args);
-
-      static Handle<Value> lookupSync6(const Arguments& args);
 
       static Handle<Value> lookup(const Arguments& args);
 
       static int EIO_Country(eio_req *req);
 
-      static Handle<Value> lookup6(const Arguments& args);
-
-      static int EIO_Country6(eio_req *req);
-
       static int EIO_AfterCountry(eio_req *req);
+
+      static Handle<Value> update(const Arguments &args);
 
       static Handle<Value> close(const Arguments &args);
   };
@@ -51,10 +46,9 @@ namespace geoip {
 
 struct country_baton_t {
   geoip::Country * c;
-  char host_cstr[256];
+  //char host_cstr[256];
   int country_id;
-  int increment_by;
-  int sleep_for;
+  uint32_t ipnum;
   Persistent<Function> cb;
 };
 

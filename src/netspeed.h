@@ -39,16 +39,16 @@ namespace geoip {
 
             static int EIO_AfterNetSpeed(eio_req *req);
 
+            static Handle<Value> update(const Arguments &args);
+
             static Handle<Value> close(const Arguments &args);
     };
 }
 
 struct netspeed_baton_t {
     geoip::NetSpeed * n;
-    char host_cstr[256];
+    uint32_t ipnum;
     int netspeed;
-    int increment_by;
-    int sleep_for;
     Persistent<Function> cb;
 };
 

@@ -12,7 +12,7 @@
   if ((args.Length() + 1) <= (I) || !args[I]->IsFunction())             \
     return ThrowException(Exception::TypeError(                         \
                   String::New("The second argument must be a function")));  \
-  Local<Function> VAR = Local<Function>::Cast(args[I]);                       
+  Local<Function> VAR = Local<Function>::Cast(args[I]);
 
 // Extracts a C string from a V8 Utf8Value.
 extern const char* ToCString(const v8::String::Utf8Value& value);

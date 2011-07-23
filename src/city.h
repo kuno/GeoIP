@@ -37,17 +37,18 @@ namespace geoip {
       static int EIO_City(eio_req *req);
 
       static int EIO_AfterCity(eio_req *req);
+      
+      static Handle<Value> update(const Arguments &args);
 
       static Handle<Value> close(const Arguments &args);
   };
 
 }
+
 struct city_baton_t {
   geoip::City *c;
-  char host_cstr[256];  // standard length of ipv4
   GeoIPRecord *record;
-  int increment_by;
-  int sleep_for;
+  uint32_t ipnum;
   Persistent<Function> cb;
 };
 

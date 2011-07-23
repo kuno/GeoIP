@@ -20,7 +20,8 @@ void geoip::Region::Init(Handle<Object> target)
 
   NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookup", lookup);
   NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookupSync", lookupSync);
-  NODE_SET_PROTOTYPE_METHOD(constructor_template, "close", close);
+  NODE_SET_PROTOTYPE_METHOD(constructor_template, "update", update);
+  //NODE_SET_PROTOTYPE_METHOD(constructor_template, "close", close);
   target->Set(String::NewSymbol("Region"), constructor_template->GetFunction());
 }
 
@@ -100,13 +101,12 @@ Handle<Value> geoip::Region::lookup(const Arguments& args)
 
   Region * r = ObjectWrap::Unwrap<Region>(args.This());
   Local<String> host_str = args[0]->ToString();
+  char host_cstr[host_str->Length()];
+  host_str->WriteAscii(host_cstr);
 
   region_baton_t *baton = new region_baton_t();
-
   baton->r = r;
-  host_str->WriteAscii(baton->host_cstr);
-  baton->increment_by = 2;
-  baton->sleep_for = 1;
+  baton->ipnum = _GeoIP_lookupaddress(host_cstr);
   baton->cb = Persistent<Function>::New(cb);
 
   r->Ref();
@@ -121,13 +121,10 @@ int geoip::Region::EIO_Region(eio_req *req)
 {
   region_baton_t *baton = static_cast<region_baton_t *>(req->data);
 
-  sleep(baton->sleep_for);
-
-  uint32_t ipnum = _GeoIP_lookupaddress(baton->host_cstr);
-  if (ipnum <= 0) {
+  if (baton->ipnum <= 0) {
     baton->region = NULL;
   } else {
-    baton->region = GeoIP_region_by_ipnum(baton->r->db, ipnum);
+    baton->region = GeoIP_region_by_ipnum(baton->r->db, baton->ipnum);
   }
 
   return 0;
@@ -167,6 +164,37 @@ int geoip::Region::EIO_AfterRegion(eio_req *req)
   delete baton;
   return 0;
 }
+
+Handle<Value> geoip::Region::update(const Arguments &args) {
+  Locker locker();
+
+  HandleScope scope;
+
+  Region* r = ObjectWrap::Unwrap<Region>(args.This()); 
+
+  String::Utf8Value file_str(args[0]->ToString());
+  const char * file_cstr = ToCString(file_str);
+
+  bool cache_on = args[1]->ToBoolean()->Value(); 
+
+  r->db = GeoIP_open(file_cstr, cache_on?GEOIP_MEMORY_CACHE:GEOIP_STANDARD);
+
+  if (r->db != NULL) {
+    r->db_edition = GeoIP_database_edition(r->db);
+    if (r->db_edition == GEOIP_REGION_EDITION_REV0 ||
+        r->db_edition == GEOIP_REGION_EDITION_REV1) {
+      return scope.Close(True());
+    } else {
+      GeoIP_delete(r->db);	// free()'s the gi reference & closes its fd
+      r->db = NULL;                                                       
+      return scope.Close(ThrowException(String::New("Error: Not valid region database")));
+    }
+  } else {
+    return scope.Close(ThrowException(String::New("Error: Cao not open database")));
+  }
+
+ Unlocker unlocker();
+}                         
 
 Handle<Value> geoip::Region::close(const Arguments &args) {
   Region * r = ObjectWrap::Unwrap<Region>(args.This()); 

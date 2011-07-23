@@ -61,14 +61,18 @@ From v0.4.0, geoip need nodejs >= 0.4.0, if you want to use it on old nodejs, yo
 
     var city = new geoip.City('/path/to/GeoLiteCity.dat');  // the default option is cache
 
+###Update database on the fly:
+
+    city.update('/path/to/new/GeoLiteCity.dat');
+
 ##Modules
 
 ###Country
 
+ipv4
+
     // Open the country data file
     var Country = geoip.Country;
-
-ipv4
 
     var country = new Country('/path/to/GeoIP.dat');
 
@@ -94,10 +98,13 @@ ipv4
 
 ipv6 (Currently only Country module supports ipv6)
 
-    var country_v6 = new Country('/path/to/GeoIPv6.dat');
+    // Open the ipv6 edition of country module
+    var Country6 = geoip.Country6;
+
+    var country_v6 = new Country6('/path/to/GeoIPv6.dat');
 
     // Synchronous method
-    var country_obj_v6 = country_v6.lookupSync6('2607:f0d0:1002:0051:0000:0000:0000:0004');
+    var country_obj_v6 = country_v6.lookupSync('2607:f0d0:1002:0051:0000:0000:0000:0004');
 
     console.log(country_obj_v6); // Same as ipv4
     /*
@@ -109,7 +116,7 @@ ipv6 (Currently only Country module supports ipv6)
     */
 
     // Asynchronous method
-    country_v6.lookup6('2400:2352:b0f1:36c5:aa9d:694a:2f98:40bd', function(err, data_v6) {
+    country_v6.lookup('2400:2352:b0f1:36c5:aa9d:694a:2f98:40bd', function(err, data_v6) {
         if (err) {throw err;}
         if (data_v6) {
             console.log(data_v6);
@@ -124,11 +131,6 @@ ipv6 (Currently only Country module supports ipv6)
             */
         }
     });
-
-close
-
-    //Close the opened file.
-    country.close();
 
 
 ###City
@@ -168,8 +170,6 @@ Asynchronous method:
         }
     });
 
-    city.close();
-
 
 ###Organization
 
@@ -189,8 +189,6 @@ Synchronous method:
 
       no longer an object
     */
-
-    org.close();
 
 Asynchronous method:
 
@@ -227,8 +225,6 @@ Asynchronous method:
         }
     });
 
-    region.close();
-
 
 ###NetSpeed
 
@@ -252,5 +248,3 @@ Asynchronous method:
           console.log(data);  // Maybe return 'unknow' or different from lookup method
         }
     });
-
-    netspeed.close();

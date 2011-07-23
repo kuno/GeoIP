@@ -19,10 +19,9 @@ void geoip::Org::Init(Handle<Object> target)
   constructor_template->SetClassName(String::NewSymbol("geoip"));
 
   NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookup", lookup);
-  //NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookup6", lookup6);
   NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookupSync", lookupSync);
-  //NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookupSync6", lookupSync6);
-  NODE_SET_PROTOTYPE_METHOD(constructor_template, "close", close);
+  NODE_SET_PROTOTYPE_METHOD(constructor_template, "update", update);
+  //NODE_SET_PROTOTYPE_METHOD(constructor_template, "close", close);
   target->Set(String::NewSymbol("Org"), constructor_template->GetFunction());
 }
 
@@ -99,13 +98,12 @@ Handle<Value> geoip::Org::lookup(const Arguments& args)
 
   Org *o = ObjectWrap::Unwrap<geoip::Org>(args.This());
   Local<String> host_str = args[0]->ToString();
+  char host_cstr[host_str->Length()];
+  host_str->WriteAscii(host_cstr);
 
   org_baton_t *baton = new org_baton_t();
-
   baton->o = o;
-  host_str->WriteAscii(baton->host_cstr);
-  baton->increment_by = 2;
-  baton->sleep_for = 1;
+  baton->ipnum = _GeoIP_lookupaddress(host_cstr);
   baton->cb = Persistent<Function>::New(cb);
 
   o->Ref();
@@ -120,14 +118,11 @@ int geoip::Org::EIO_Org(eio_req *req)
 {
   org_baton_t *baton = static_cast<org_baton_t *>(req->data);
 
-  sleep(baton->sleep_for);
-
-  uint32_t ipnum = _GeoIP_lookupaddress(baton->host_cstr);
-  if (ipnum <= 0) {
+  if (baton->ipnum <= 0) {
     baton->org = NULL;
   } 
 
-  baton->org = GeoIP_org_by_ipnum(baton->o->db, ipnum);
+  baton->org = GeoIP_org_by_ipnum(baton->o->db, baton->ipnum);
 
   return 0;
 }
@@ -165,6 +160,38 @@ int geoip::Org::EIO_AfterOrg(eio_req *req)
   delete baton;
   return 0;
 }
+
+Handle<Value> geoip::Org::update(const Arguments &args) {
+  Locker locker();
+
+  HandleScope scope;
+
+  Org* o = ObjectWrap::Unwrap<Org>(args.This()); 
+
+  String::Utf8Value file_str(args[0]->ToString());
+  const char * file_cstr = ToCString(file_str);
+
+  bool cache_on = args[1]->ToBoolean()->Value(); 
+
+  o->db = GeoIP_open(file_cstr, cache_on?GEOIP_MEMORY_CACHE:GEOIP_STANDARD);
+
+  if (o->db != NULL) {
+    o->db_edition = GeoIP_database_edition(o->db);
+   if (o->db_edition == GEOIP_ORG_EDITION ||
+       o->db_edition == GEOIP_ASNUM_EDITION ||
+       o->db_edition == GEOIP_ISP_EDITION) {          
+      return scope.Close(True());
+    } else {
+      GeoIP_delete(o->db);	// free()'s the gi reference & closes its fd
+      o->db = NULL;                                                       
+      return scope.Close(ThrowException(String::New("Error: Not valid organization database")));
+    }
+  } else {
+    return scope.Close(ThrowException(String::New("Error: Cao not open database")));
+  }
+
+ Unlocker unlocker();
+} 
 
 Handle<Value> geoip::Org::close(const Arguments &args) {
   Org* o = ObjectWrap::Unwrap<geoip::Org>(args.This()); 

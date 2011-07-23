@@ -20,8 +20,12 @@ var start = new Date().getTime();
 for (var i = 0; i < 10000; ++i) {
   var addr = ip32();
   //console.log(addr);
-  c.lookupSync(addr);
-  //console.log(l);
+  c.lookup(addr, function(err, data) {
+      //if (err) {throw err;}
+      if (data) {
+        console.log(data);
+      }
+  });
 }
 var end = new Date().getTime();
 

@@ -4,8 +4,8 @@ var assert = require('assert'),
 var City = geoip.City;
 var city = new City('/tmp/GeoLiteCity.dat', true);
 
-// Test record_by_domain method
 var sync_data = city.lookupSync('8.8.8.8');
+console.log(sync_data);
 assert.ok(sync_data, 'Can not find google?');
 
 city.lookup('www.google.com', function(err, data) {
@@ -16,5 +16,6 @@ city.lookup('www.google.com', function(err, data) {
     } else {
       console.log('Data not found');
     }
-   // assert.ok(city.close(), 'oops! err when closing city object!');
 });
+
+assert.ok(city.update('/tmp/GeoLiteCity.dat'), 'Oops when updating city database'); 

@@ -9,13 +9,13 @@ var sync_data = region.lookupSync('8.8.8.8');
 assert.ok(sync_data, 'Can not find google in region module');
 
 region.lookup('www.google.com', function(err, data) {
-    //if (err) {throw err;}
+    if (err) {throw err;}
     if (data) {
       console.log(sync_data, ' vs ' , data);
       assert.ok(data, 'Oops! Async and sync region data not equal');
     } else {
       console.log('Data not found');
     }
-
-    //assert.ok(region.close(), 'Oops when closing region object');
 });
+
+assert.ok(region.update('/tmp/GeoIPRegion.dat'), 'Oops when updating region database');

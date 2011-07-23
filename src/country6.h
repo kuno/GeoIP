@@ -4,8 +4,8 @@
  * Licensed under the GNU LGPL 2.1 license
  */                                              
 
-#ifndef NODE_GEOIP_TEST_H
-#define NODE_GEOIP_TEST_H
+#ifndef NODE_GEOIP_COUNTRY6_H
+#define NODE_GEOIP_COUNTRY6_H
 
 #include <v8.h>
 #include <node.h>
@@ -15,44 +15,40 @@ using namespace v8;
 using namespace node;
 
 namespace geoip {
-  class Test: ObjectWrap
+  class Country6: ObjectWrap
   {
     private:
       GeoIP *db;
 
       int db_edition;
 
-    public:
-      Test();
-
-      ~Test();
-
       static Persistent<FunctionTemplate> constructor_template;
 
-      static void Init(Handle<Object> target);
-
+    protected:
       static Handle<Value> New(const Arguments& args);
 
-      static Handle<Value> lookupSync(const Arguments &args);
+    public:
+      static void Init(Handle<Object> target);
+
+      static Handle<Value> lookupSync(const Arguments& args);
 
       static Handle<Value> lookup(const Arguments& args);
 
-      static int EIO_Test(eio_req *req);
+      static int EIO_Country(eio_req *req);
 
-      static int EIO_AfterTest(eio_req *req);
+      static int EIO_AfterCountry(eio_req *req);
+      
+      static Handle<Value> update(const Arguments &args);
 
       static Handle<Value> close(const Arguments &args);
   };
-
 }
 
-struct test_baton_t {
-  geoip::Test * c;
-  char host_cstr[256];
-  GeoIPRecord * record;
-  int increment_by;
-  int sleep_for;
+struct country6_baton_t {
+  geoip::Country6 * c;
+  geoipv6_t ipnum_v6;
+  int country_id;
   Persistent<Function> cb;
 };
 
-#endif /* NODE_GEOIP_TEST_H */
+#endif /* NODE_GEOIP_COUNTRY6_H */

@@ -17,10 +17,14 @@ def configure(conf):
 def build(bld):
   obj = bld.new_task_gen("cxx", "shlib", "node_addon")
   obj.target = "geoip"
-  obj.source = ['src/init.cc', 'src/netspeed.cc', 'src/country.cc',
-                'src/region.cc', 'src/city.cc', 'src/org.cc',
+  obj.source = ['src/init.cc', 
+                'src/netspeed.cc', 
+                'src/country6.cc', 
+                'src/country.cc',
+                'src/region.cc', 
+                'src/city.cc', 
+                'src/org.cc', 
                 'src/utils.cc', 
-                #'src/test.cc', 
                 'src/global.cc']
 
   obj.lib = ["GeoIP"]

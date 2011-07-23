@@ -74,34 +74,6 @@ namespace geoip {
           edition = String::New("unknown");
       }
 
-      /*
-         if (db_edition == GEOIP_COUNTRY_EDITION) {
-         edition = String::New("country");
-         } else if (db_edition == GEOIP_COUNTRY_EDITION_V6) {
-         edition = String::New("country_v6");
-         } else if ( db_edition == GEOIP_CITY_EDITION_REV0 || 
-         db_edition == GEOIP_CITY_EDITION_REV1) {
-         edition = String::New("city");
-         } else if (db_edition == GEOIP_REGION_EDITION_REV0 || 
-         db_edition == GEOIP_REGION_EDITION_REV1) {
-         edition = String::New("region");
-         } else if (db_edition == GEOIP_ORG_EDITION) {
-         edition = String::New("org");
-         } else if (db_edition == GEOIP_ISP_EDITION) {
-         edition = String::New("isp");
-         } else if (db_edition == GEOIP_ASNUM_EDITION) {
-         edition = String::New("asnum");
-         } else if (db_edition == GEOIP_PROXY_EDITION) {
-         edition = String::New("proxy");
-         } else if (db_edition == GEOIP_NETSPEED_EDITION) {
-         edition = String::New("netspeed");
-         } else if (db_edition == GEOIP_DOMAIN_EDITION) {
-         edition = String::New("domain");
-         } else {
-         edition = String::New("unknown");
-         }
-         */
-
       GeoIP_delete(db);
       db = NULL;
 

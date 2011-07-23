@@ -4,6 +4,8 @@ var geoip = require('geoip');
 // Befor you can use this package, you need to download or buy some data fro http://www.maxmind.com/app/ip-location.
 // There are some free databases among some commercial versions, the free databases can be found http://geolite.maxmind.com/download/geoip/database/.   
 
+
+// Country
 // Open the country data file
 var Country = geoip.Country;
 
@@ -31,10 +33,11 @@ country.lookup('www.google.com', function(err, data) {
 });
 
 // ipv6 (Currently only Country module supports ipv6)
-var country_v6 = new Country('/path/to/GeoIPv6.dat');
+var Coutry6 = geoip.Country6;
+var country_v6 = new Country6('/path/to/GeoIPv6.dat');
 
 // Synchronous method
-var country_obj_v6 = country_v6.lookupSync6('2607:f0d0:1002:0051:0000:0000:0000:0004');
+var country_obj_v6 = country_v6.lookupSync('2607:f0d0:1002:0051:0000:0000:0000:0004');
 
 console.log(country_obj_v6); // Same as ipv4
 /*
@@ -45,8 +48,10 @@ console.log(country_obj_v6); // Same as ipv4
 }
 */
 
+country_v6.update('/path/to/new/country/ipv6/database');
+
 // Asynchronous method
-country_v6.lookup6('2400:2352:b0f1:36c5:aa9d:694a:2f98:40bd', function(err, data_v6) {
+country_v6.lookup('2400:2352:b0f1:36c5:aa9d:694a:2f98:40bd', function(err, data_v6) {
     if (err) {throw err;}
     if (data_v6) {
       console.log(data_v6);
@@ -61,11 +66,6 @@ country_v6.lookup6('2400:2352:b0f1:36c5:aa9d:694a:2f98:40bd', function(err, data
       */
     }
 });
-
-close
-
-//Close the opened file.
-country.close();        
 
 // City
 var City = geoip.City;
@@ -92,6 +92,8 @@ Return an object of city information
 }
 */
 
+city.update('/path/to/new/GeoLiteCity.dat');
+
 // Asynchronous method
 city.lookup('www.google.com', function(err, data) {
     if (err) {throw err;}
@@ -100,12 +102,10 @@ city.lookup('www.google.com', function(err, data) {
     }
 });
 
-city.close();
-
 
 // Organization
 var Org = geoip.Org;
-var org = new Org('/path/to/file');  // Org module can open three edition database 'org', 'asnum', 'isp'
+var org = new Org('/path/to/database');  // Org module can open three edition database 'org', 'asnum', 'isp'
 
 // Synchronous method
 var org_str = org.lookup('8.8.8.8');
@@ -120,7 +120,7 @@ The type of returned data is string, for example:
 no longer an object
 */
 
-org.close();
+org.update('/path/to/new/database');
 
 // Asynchronous method
 org.lookup('www.google.com', function(err, data) {
@@ -145,6 +145,8 @@ region object has two properties:
 
 */
 
+region.update('/path/to/new/GeoIPRegion.dat');
+
 // Asynchronous method
 region.lookup('www.google.com', function(data) {
     if (data) {
@@ -152,7 +154,6 @@ region.lookup('www.google.com', function(data) {
     }
 });
 
-region.close();
 
 
 // NetSpeed
@@ -167,6 +168,8 @@ console.log(netspeed_str);
 netspeed_str just a simple string, 'Dialup', 'Corprate'... so on
 */
 
+netspeed.update('/path/to/new/netspeed/database');         
+
 // Asynchronous method
 netspeed.lookup('www.google.com', function(err, data) {
     if (err) {throw err;}
@@ -174,5 +177,3 @@ netspeed.lookup('www.google.com', function(err, data) {
       console.log(data);  // Maybe return 'unknow' or different from lookup method
     }
 });
-
-netspeed.close();         

@@ -7,7 +7,7 @@
 #include "netspeed.h"
 #include "global.h"
 
-Persistent<FunctionTemplate> geoip::NetSpeed::constructor_template; 
+Persistent<FunctionTemplate> geoip::NetSpeed::constructor_template;
 
 void geoip::NetSpeed::Init(Handle<Object> target)
 {
@@ -19,10 +19,9 @@ void geoip::NetSpeed::Init(Handle<Object> target)
   constructor_template->SetClassName(String::NewSymbol("geoip"));
 
   NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookup", lookup);
-  //NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookup6", lookup6);
   NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookupSync", lookupSync);
-  //NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookupSync6", lookupSync6);
-  NODE_SET_PROTOTYPE_METHOD(constructor_template, "close", close);
+  NODE_SET_PROTOTYPE_METHOD(constructor_template, "update", update);
+  //NODE_SET_PROTOTYPE_METHOD(constructor_template, "close", close);
   target->Set(String::NewSymbol("NetSpeed"), constructor_template->GetFunction());
 }
 
@@ -104,13 +103,12 @@ Handle<Value> geoip::NetSpeed::lookup(const Arguments& args)
 
   NetSpeed * n = ObjectWrap::Unwrap<NetSpeed>(args.This());
   Local<String> host_str = args[0]->ToString();
+  char host_cstr[host_str->Length()];
+  host_str->WriteAscii(host_cstr);
 
   netspeed_baton_t *baton = new netspeed_baton_t();
-
   baton->n = n;
-  host_str->WriteAscii(baton->host_cstr);
-  baton->increment_by = 2;
-  baton->sleep_for = 1;
+  baton->ipnum = _GeoIP_lookupaddress(host_cstr);
   baton->cb = Persistent<Function>::New(cb);
 
   n->Ref();
@@ -125,13 +123,10 @@ int geoip::NetSpeed::EIO_NetSpeed(eio_req *req)
 {
   netspeed_baton_t *baton = static_cast<netspeed_baton_t *>(req->data);
 
-  sleep(baton->sleep_for);
-
-  uint32_t ipnum = _GeoIP_lookupaddress(baton->host_cstr);
-  if (ipnum < 0) {
+  if (baton->ipnum < 0) {
     baton->netspeed = -1;
   } else {
-    baton->netspeed = GeoIP_id_by_ipnum(baton->n->db, ipnum);
+    baton->netspeed = GeoIP_id_by_ipnum(baton->n->db, baton->ipnum);
   }
 
   return 0;
@@ -177,6 +172,36 @@ int geoip::NetSpeed::EIO_AfterNetSpeed(eio_req *req)
 
   delete baton;
   return 0;
+}
+
+Handle<Value> geoip::NetSpeed::update(const Arguments &args) {
+  Locker locker();
+
+  HandleScope scope;
+
+  NetSpeed* n = ObjectWrap::Unwrap<NetSpeed>(args.This()); 
+
+  String::Utf8Value file_str(args[0]->ToString());
+  const char * file_cstr = ToCString(file_str);
+
+  bool cache_on = args[1]->ToBoolean()->Value(); 
+
+  n->db = GeoIP_open(file_cstr, cache_on?GEOIP_MEMORY_CACHE:GEOIP_STANDARD);
+
+  if (n->db != NULL) {
+    n->db_edition = GeoIP_database_edition(n->db);
+    if (n->db_edition == GEOIP_NETSPEED_EDITION) {
+      return scope.Close(True());
+    } else {
+      GeoIP_delete(n->db);	// free()'s the gi reference & closes its fd
+      n->db = NULL;                                                       
+      return scope.Close(ThrowException(String::New("Error: Not valid netspeed database")));
+    }
+  } else {
+    return scope.Close(ThrowException(String::New("Error: Cao not open database")));
+  }
+
+  Unlocker unlocker();
 }
 
 Handle<Value> geoip::NetSpeed::close(const Arguments &args) {

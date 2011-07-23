@@ -16,6 +16,7 @@ var ip32 = function() {
   return ip;
 }
 
+/*
 var ip128 = function() {
   var ip = '', hex;
   for (var i = 0; i < 8; i++) {
@@ -27,21 +28,34 @@ var ip128 = function() {
   }
 
   return ip
-}
+}*/
 
-/*
 var start = new Date().getTime();
+for (var i = 0; i < 100000; ++i) {
+  var addr = '109.161.37.182'; //ip32();
+  c.lookup(addr, function(err, data) {
+      //  console.log(l);
+  });
+ //c.update('/home/kuno/GeoIP.dat', true); 
+}
+c.update('/home/kuno/GeoIP.dat', true); 
+var end = new Date().getTime();  
+util.puts((end - start) / 1000);
+
+start = new Date().getTime();
+c.update('/home/kuno/GeoIP.dat', true);
+
 for (var i = 0; i < 100000; ++i) {
   var addr = '109.161.37.182'; //ip32();
  // console.log(addr);
   var l = c.lookupSync(addr);
 //  console.log(l);
-}
-var end = new Date().getTime();
+}                                     
+end = new Date().getTime();
 
 util.puts((end - start) / 1000);
-*/
 
+/*
 var c6 = new Country('/tmp/GeoIPv6.dat');
 
 var start6 = new Date().getTime();
@@ -54,3 +68,4 @@ for (var j = 0; j < 10000; j++) {
 var end6 = new Date().getTime();
 
 util.puts((end6 - start6) / 1000);
+*/

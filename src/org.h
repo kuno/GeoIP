@@ -39,16 +39,16 @@ namespace geoip {
 
       static int EIO_AfterOrg(eio_req *req);
 
+      static Handle<Value> update(const Arguments &args);
+
       static Handle<Value> close(const Arguments &args);
   };
 }
 
 struct org_baton_t {
   geoip::Org * o;
-  char host_cstr[256];
+  uint32_t ipnum;
   char * org;
-  int increment_by;
-  int sleep_for;
   Persistent<Function> cb;
 };
 

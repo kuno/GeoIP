@@ -35,17 +35,16 @@ namespace geoip {
 
             static int EIO_AfterRegion(eio_req *req);
 
-            // Destroy the GeoIP* reference we're holding on to
+            static Handle<Value> update(const Arguments &args);
+
             static Handle<Value> close(const Arguments &args);
     };
 
 }
 struct region_baton_t {
     geoip::Region *r;
-    char host_cstr[256];  // standard length of ipv4
+    uint32_t ipnum;
     GeoIPRegion *region;
-    int increment_by;
-    int sleep_for;
     Persistent<Function> cb;
 };
 

@@ -5,12 +5,12 @@
  */                                              
 
 #include "netspeed.h"
+#include "country6.h"
 #include "country.h"
 #include "region.h"
 #include "city.h"
 #include "org.h"
 #include "utils.h"
-//#include "test.h"
 
 extern "C" {
   static void init(Handle<Object> target)
@@ -19,13 +19,11 @@ extern "C" {
     
     // Modules
     geoip::NetSpeed::Init(target);
+    geoip::Country6::Init(target);
     geoip::Country::Init(target);
     geoip::Region::Init(target);
     geoip::City::Init(target);
     geoip::Org::Init(target);
-
-    // Inner testing module
-    //geoip::Test::Init(target);
 
     // Utility memeber method
     Local<FunctionTemplate> t = FunctionTemplate::New(geoip::check);
