@@ -16,5 +16,7 @@ exports.Org      = binding.Org;
 
 // Utility
 exports.check    = binding.check;
-exports.version  = version; 
-exports.libgeoip = binding.libgeoip;
+
+// Versions
+exports.version  = 'v' + version; 
+exports.libgeoip = 'v' + binding.libgeoip;
