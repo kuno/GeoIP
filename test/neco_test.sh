@@ -59,4 +59,7 @@ for neco_id in 'test0.4.0' 'test0.4.1' 'test0.4.2' 'test0.4.3' 'test0.4.4' 'test
   echo '' >> $report
   neco_deactivate
   echo ''
-done 
+done
+
+# Remove testing building after tests are finished
+rm -rf ../build/ || return 1
