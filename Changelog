@@ -78,3 +78,7 @@ v0.4.2, 2011-07-23
 3, removed all sleep function
 4, always execute lookup in the main thread
 5, separate county ipv6 into a indiviual module
+
+v0.4.2-1, 2011-07-24
+1, added James Taylor as contributor
+2, added libgeoip's version literature
