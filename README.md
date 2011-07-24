@@ -37,7 +37,7 @@ There are some free databases among some commercial versions, the free databases
 
 ##Install
 
-    npm install geoip
+    [sudo] npm install geoip [-g]
 
 
 ##Compatibility
