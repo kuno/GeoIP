@@ -82,3 +82,6 @@ v0.4.2, 2011-07-23
 v0.4.2-1, 2011-07-24
 1, added James Taylor as contributor
 2, added libgeoip's version literature
+
+v0.4.2-2, 2011-08-01
+1, disabled libgeoip version literature due to compatibility issue.

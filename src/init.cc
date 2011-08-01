@@ -28,7 +28,8 @@ extern "C" {
     // Utility memeber method
     Local<FunctionTemplate> t = FunctionTemplate::New(geoip::check);
     target->Set(String::NewSymbol("check"), t->GetFunction());
-    target->Set(String::NewSymbol("libgeoip"), String::New(GeoIP_lib_version()));
+    // only works on libgeoip >= 1.4.7
+    //target->Set(String::NewSymbol("libgeoip"), String::New(GeoIP_lib_version()));
   }
 
   NODE_MODULE(geoip, init);
