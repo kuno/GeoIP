@@ -146,14 +146,14 @@ extern "C" GEOIP_API unsigned long GeoIP_addr_to_num(const char *addr);
 extern "C" GEOIP_API char *        GeoIP_num_to_addr(unsigned long ipnum);
 
 /* Internal function -- convert iso to utf8; return a malloced utf8 string. */
-char * _GeoIP_iso_8859_1__utf8(const char * iso);
+extern "C" char * _GeoIP_iso_8859_1__utf8(const char * iso);
 
 /* Cleans up memory used to hold file name paths. Returns 1 if successful; otherwise 0. 
  * */
 extern "C" GEOIP_API int GeoIP_cleanup(void);
 
 /* Returns the library version in use. Helpful if your loading dynamically. */
-extern "C" GEOIP_API const char * GeoIP_lib_version(void);                             
+//extern "C" GEOIP_API const char * GeoIP_lib_version(void); // requried libgeoip >= 1.4.7                            
 ////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////// GeoIP City ////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

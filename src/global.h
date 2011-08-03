@@ -7,22 +7,6 @@
 #define NODE_GEOIP_GLOBAL_H
 
 #include <v8.h>
-#include <iconv.h>
-
-static iconv_t cd;
-
-#ifndef ICONV_SRC_CONST
-#define ICONV_SRC_CONST
-#endif
-
-#define icv(a,b,blen) do { \
-  ICONV_SRC_CONST char *in = a; \
-  char *out = b; \
-  size_t inlen = strlen(a); \
-  size_t outlen = blen; \
-  if(iconv(cd, &in, &inlen, &out, &outlen) == -1) b[0] = '\0'; \
-  else *out = '\0'; \
-} while(0)
 
 #define REQ_FUN_ARG(I, VAR)                                             \
   if ((args.Length() + 1) <= (I) || !args[I]->IsFunction())             \

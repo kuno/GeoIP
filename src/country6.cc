@@ -38,8 +38,6 @@ Handle<Value> geoip::Country6::New(const Arguments& args)
 {
   HandleScope scope;
 
-  cd = iconv_open("utf-8", "ISO-8859-1"); 
-
   Country6 *c = new Country6();
 
   String::Utf8Value file_str(args[0]->ToString());
@@ -96,8 +94,6 @@ Handle<Value> geoip::Country::lookupSync(const Arguments &args) {
 Handle<Value> geoip::Country6::lookupSync(const Arguments &args) {
   HandleScope scope;
 
-  char outputbuff[1024];   
-
   Country6 * c = ObjectWrap::Unwrap<Country6>(args.This());
 
   // Check if database is country ipv6 edition
@@ -119,8 +115,7 @@ Handle<Value> geoip::Country6::lookupSync(const Arguments &args) {
     if (country_id == 0) {
       return scope.Close(Null());
     } else {
-      icv(const_cast<char*>(GeoIP_country_name[country_id]), outputbuff, sizeof(outputbuff)); 
-      data->Set(String::NewSymbol("country_name"), String::New(outputbuff));  
+      data->Set(String::NewSymbol("country_name"), String::New(GeoIP_country_name[country_id]));  
       data->Set(String::NewSymbol("country_code"), String::New(GeoIP_country_code[country_id]));
       data->Set(String::NewSymbol("country_code3"), String::New(GeoIP_country_code3[country_id]));
       data->Set(String::NewSymbol("continent_code"), String::New(GeoIP_country_continent[country_id]));
@@ -222,8 +217,6 @@ int geoip::Country6::EIO_AfterCountry(eio_req *req)
 {
   HandleScope scope;
 
-  char outputbuff[1024];  
-
   country6_baton_t *baton = static_cast<country6_baton_t *>(req->data);
   ev_unref(EV_DEFAULT_UC);
   baton->c->Unref();
@@ -234,7 +227,6 @@ int geoip::Country6::EIO_AfterCountry(eio_req *req)
     argv[1] = Null();
   } else {
     Local<Object> data = Object::New();
-    icv(const_cast<char*>(GeoIP_country_name[baton->country_id]), outputbuff, sizeof(outputbuff)); 
     data->Set(String::NewSymbol("country_name"), String::New(GeoIP_country_name[baton->country_id]));    
     data->Set(String::NewSymbol("country_code"), String::New(GeoIP_country_code[baton->country_id]));
     data->Set(String::NewSymbol("country_code3"), String::New(GeoIP_country_code3[baton->country_id]));

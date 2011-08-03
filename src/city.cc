@@ -37,9 +37,9 @@ void geoip::City::Init(Handle<Object> target)
 Handle<Value> geoip::City::New(const Arguments& args)
 {
   HandleScope scope;
+
   City *c = new City();
 
-  cd = iconv_open("utf-8", "ISO-8859-1");
   String::Utf8Value file_str(args[0]->ToString());
   const char * file_cstr = ToCString(file_str);
 
@@ -69,8 +69,6 @@ Handle<Value> geoip::City::New(const Arguments& args)
 Handle<Value> geoip::City::lookupSync(const Arguments &args) {
   HandleScope scope;
 
-  char outputbuff[1024];
-
   Local<String> host_str = args[0]->ToString();
   Local<Object> data = Object::New();
   char host_cstr[host_str->Length()];
@@ -97,16 +95,15 @@ Handle<Value> geoip::City::lookupSync(const Arguments &args) {
   }
 
   if (record->country_name != NULL) {
-    icv(record->country_name, outputbuff, sizeof(outputbuff));
-    data->Set(String::NewSymbol("country_name"), String::New(outputbuff));
+    data->Set(String::NewSymbol("country_name"), String::New(record->country_name));
   }
 
   if (record->region != NULL ) {
     data->Set(String::NewSymbol("region"), String::New(record->region));
   }
+
   if (record->city != NULL) {
-    icv(record->city, outputbuff, sizeof(outputbuff));
-    data->Set(String::NewSymbol("city"), String::New(outputbuff));
+    data->Set(String::NewSymbol("city"), String::New(_GeoIP_iso_8859_1__utf8(record->city)));
   }
 
   if (record->postal_code != NULL) {
@@ -181,8 +178,6 @@ int geoip::City::EIO_AfterCity(eio_req *req)
 {
   HandleScope scope;
 
-  char outputbuff[1024];
-
   city_baton_t *baton = static_cast<city_baton_t *>(req->data);
   ev_unref(EV_DEFAULT_UC);
   baton->c->Unref();
@@ -202,8 +197,7 @@ int geoip::City::EIO_AfterCity(eio_req *req)
     }
 
     if (baton->record->country_name != NULL) {
-      icv(baton->record->country_name, outputbuff, sizeof(outputbuff)); 
-      data->Set(String::NewSymbol("country_name"), String::New(outputbuff));
+      data->Set(String::NewSymbol("country_name"), String::New(baton->record->country_name));
     }
 
     if (baton->record->region != NULL ) {
@@ -211,8 +205,7 @@ int geoip::City::EIO_AfterCity(eio_req *req)
     }
 
     if (baton->record->city != NULL) {
-      icv(baton->record->city, outputbuff, sizeof(outputbuff)); 
-      data->Set(String::NewSymbol("city"), String::New(outputbuff));
+      data->Set(String::NewSymbol("city"), String::New(_GeoIP_iso_8859_1__utf8(baton->record->city)));
     }                                                                       
 
     if (baton->record->postal_code != NULL) {

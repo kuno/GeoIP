@@ -28,12 +28,6 @@ If not, you can build for yourself:
     make
     sudo make install
 
-####Gnu libconv library
-
-For characters encoding convertion, geoip depends on gnu libiconv library.
-
-Most Linux distribution and Mac OSX ships with a free implementation of gnu libiconv, there are also a windows port can be find [here](http://gnuwin32.sourceforge.net/packages/libiconv.htm)
-
 
 ##Data
 
