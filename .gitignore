@@ -13,6 +13,10 @@
 *.db
 database
 *.database
+database/*.dat
+database/*.gz
+database/*.csv
+database/*.zip
 
 # binary image files
 *.jpg

@@ -39,6 +39,7 @@ Handle<Value> geoip::City::New(const Arguments& args)
   HandleScope scope;
   City *c = new City();
 
+  cd = iconv_open("utf-8", "ISO-8859-1");
   String::Utf8Value file_str(args[0]->ToString());
   const char * file_cstr = ToCString(file_str);
 
@@ -68,6 +69,8 @@ Handle<Value> geoip::City::New(const Arguments& args)
 Handle<Value> geoip::City::lookupSync(const Arguments &args) {
   HandleScope scope;
 
+  char outputbuff[1024];
+
   Local<String> host_str = args[0]->ToString();
   Local<Object> data = Object::New();
   char host_cstr[host_str->Length()];
@@ -94,14 +97,16 @@ Handle<Value> geoip::City::lookupSync(const Arguments &args) {
   }
 
   if (record->country_name != NULL) {
-    data->Set(String::NewSymbol("country_name"), String::New(record->country_name));
+    icv(record->country_name, outputbuff, sizeof(outputbuff));
+    data->Set(String::NewSymbol("country_name"), String::New(outputbuff));
   }
 
   if (record->region != NULL ) {
     data->Set(String::NewSymbol("region"), String::New(record->region));
   }
   if (record->city != NULL) {
-    data->Set(String::NewSymbol("city"), String::New(record->city));
+    icv(record->city, outputbuff, sizeof(outputbuff));
+    data->Set(String::NewSymbol("city"), String::New(outputbuff));
   }
 
   if (record->postal_code != NULL) {
