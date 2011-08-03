@@ -6,5 +6,7 @@ TODO.md
 README.md
 Changelog
 
+database/*
+
 .lock-wscript
 core
