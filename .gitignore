@@ -13,6 +13,7 @@
 *.db
 database
 *.database
+database/*.txt
 database/*.dat
 database/*.gz
 database/*.csv
