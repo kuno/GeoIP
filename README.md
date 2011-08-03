@@ -11,7 +11,6 @@ From __v0.4.0__, geoip will be bind to libgeoip >= 1.4.6, which is a C library, 
 ![new_architecture](https://github.com/kuno/GeoIP/raw/master/misc/new_architecture.png)
 
 
-
 ###Dependency
 
 ####libgeoip C library
