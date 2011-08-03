@@ -32,9 +32,9 @@ var ip128 = function() {
 
 var start = new Date().getTime();
 for (var i = 0; i < 100000; ++i) {
-  var addr = '109.161.37.182'; //ip32();
+  var addr = '187.47.6.0'; //ip32();
   c.lookup(addr, function(err, data) {
-      //  console.log(l);
+        console.log(data);
   });
  //c.update('../database/GeoIP.dat', true); 
 }
@@ -46,10 +46,10 @@ start = new Date().getTime();
 c.update('../database/GeoIP.dat', true);
 
 for (var i = 0; i < 100000; ++i) {
-  var addr = '109.161.37.182'; //ip32();
+  var addr = '89.81.133.127'; //ip32();
  // console.log(addr);
   var l = c.lookupSync(addr);
-//  console.log(l);
+ // console.log(l);
 }                                     
 end = new Date().getTime();
 

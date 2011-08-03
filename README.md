@@ -12,7 +12,9 @@ From __v0.4.0__, geoip will be bind to libgeoip >= 1.4.6, which is a C library, 
 
 
 
-###How to install geoip C library
+###Dependency
+
+####libgeoip C library
 
 If your os has a system package manager (e.g, on linux, apt of ubuntu, yum of fedora, pacman of arch. MacPorts and homebrew on OSX),
 
@@ -26,6 +28,12 @@ If not, you can build for yourself:
     ./configure --prefix=/usr
     make
     sudo make install
+
+####Gnu libconv library
+
+For characters encoding convertion, geoip depends on gnu libiconv library.
+
+Most Linux distribution and Mac OSX ships with a free implementation of gnu libiconv, there are also a windows port can be find [here](http://gnuwin32.sourceforge.net/packages/libiconv.htm)
 
 
 ##Data
