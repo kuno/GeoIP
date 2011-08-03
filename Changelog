@@ -85,3 +85,6 @@ v0.4.2-1, 2011-07-24
 
 v0.4.2-2, 2011-08-01
 1, disabled libgeoip version literature due to compatibility issue.
+
+v0.4.3, 2011-08-03
+1, enabled converting city name to utf8 characters
