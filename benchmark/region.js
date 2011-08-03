@@ -3,7 +3,7 @@
 var geoip = require('../index.js');
 var util = require('util');
 var Region = geoip.Region;
-var c = new Region('/tmp/GeoIPRegion.dat', true);
+var c = new Region('../database/GeoIPRegion.dat', true);
 
 var ip32 = function() {
   var ip = '';

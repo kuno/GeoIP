@@ -4,7 +4,7 @@ var assert = require('assert');
 var binding = require('../build/default/geoip.node');
 var util = require('util');
 var Test = binding.Test;
-var c = new Test('/tmp/GeoLiteCity.dat', true);
+var c = new Test('../database/GeoLiteCity.dat', true);
 
 var ip32 = function() {
   var ip = '';

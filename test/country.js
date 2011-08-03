@@ -3,7 +3,7 @@ var assert = require('assert'),
     geoip = require('../index.js');
 
 var Country = geoip.Country;
-var country = new Country('/tmp/GeoIP.dat', true);
+var country = new Country('../database/GeoIP.dat', true);
 
 var sync_data = country.lookupSync('8.8.8.8');
 assert.ok(sync_data, 'Can not find google in country module');
@@ -19,4 +19,4 @@ country.lookup('www.google.com', function(err, data) {
     }
 });
 
-assert.ok(country.update('/tmp/GeoIP.dat'), 'Oops when updating country database');
+assert.ok(country.update('../database/GeoIP.dat'), 'Oops when updating country database');

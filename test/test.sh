@@ -3,42 +3,10 @@
 TEST_DIR=$PWD
 BUILD=$TEST_DIR/../build/default/geoip.node
 
-GEOIP='http://archive/geoip/GeoIP.dat'
-GEOIPV6='http://archive/geoip/GeoIPv6.dat'
-GEOLITECITY='http://archive/geoip/GeoLiteCity.dat'
-REGION='http://archive/geoip/GeoIPRegion.dat'
-NETSPEED='http://archive/geoip/GeoIPNetSpeed.dat'
-ORG='http://archive/geoip/GeoIPOrg.dat'
-ASN='http://archive/geoip/GeoIPASNum.dat'
-
-cd /tmp || return 1
-
-if [ ! -e /tmp/GeoIP.dat ]; then
-  wget $GEOIP
-fi
-
-if [ ! -e /tmp/GeoIPv6.dat ]; then
-  wget $GEOIPV6
-fi
-
-if [ ! -e /tmp/GeoLiteCity.dat ]; then
-  wget $GEOLITECITY
-fi
-
-if [ ! -e /tmp/GeoIPOrg.dat ]; then
-  wget $ORG  
-fi
-
-if [ ! -e /tmp/GeoIPASNum.dat ]; then
-  wget $ASN
-fi
-
-if [ ! -e /tmp/GeoIPNetSpeed.dat ]; then
-  wget $NETSPEED
-fi
-
-if [ ! -e /tmp/GeoIPRegion.dat ]; then
-  wget $REGION
+if   [ ! -e ../database/GeoIP.dat ] || [ ! -e ../database/GeoIPv6.dat ] || [ ! -e ../database/GeoLiteCity.dat ] || [ ! -e ../database/GeoLiteCityv6.dat ] || [ ! -e ../database/GeoIPOrg-111.dat ] || [ ! -e ../database/GeoIPASNum.dat ] || [ ! -e ../database/GeoIPRegion-515.dat ] || [ ! -e ../database/GeoIP-171_20040418.dat ]; then
+  echo "You need downlaod dababases first"
+  echo "See database/database.html"
+  return 1
 fi
 
 if [ ! -e $BUILD ]; then

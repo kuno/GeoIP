@@ -181,6 +181,8 @@ int geoip::City::EIO_AfterCity(eio_req *req)
 {
   HandleScope scope;
 
+  char outputbuff[1024];
+
   city_baton_t *baton = static_cast<city_baton_t *>(req->data);
   ev_unref(EV_DEFAULT_UC);
   baton->c->Unref();
@@ -200,7 +202,8 @@ int geoip::City::EIO_AfterCity(eio_req *req)
     }
 
     if (baton->record->country_name != NULL) {
-      data->Set(String::NewSymbol("country_name"), String::New(baton->record->country_name));
+      icv(baton->record->country_name, outputbuff, sizeof(outputbuff)); 
+      data->Set(String::NewSymbol("country_name"), String::New(outputbuff));
     }
 
     if (baton->record->region != NULL ) {
@@ -208,7 +211,8 @@ int geoip::City::EIO_AfterCity(eio_req *req)
     }
 
     if (baton->record->city != NULL) {
-      data->Set(String::NewSymbol("city"), String::New(baton->record->city));
+      icv(baton->record->city, outputbuff, sizeof(outputbuff)); 
+      data->Set(String::NewSymbol("city"), String::New(outputbuff));
     }                                                                       
 
     if (baton->record->postal_code != NULL) {

@@ -3,7 +3,7 @@
 var geoip = require('../index.js');
 var util = require('util');
 var NetSpeed = geoip.NetSpeed;
-var n = new NetSpeed('/tmp/GeoIPNetSpeed.dat', true);
+var n = new NetSpeed('../database/GeoIPNetSpeed.dat', true);
 
 var ip32 = function() {
   var ip = '';

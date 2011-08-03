@@ -38,6 +38,9 @@ void geoip::Org::Init(Handle<Object> target)
 Handle<Value> geoip::Org::New(const Arguments& args)
 {
   HandleScope scope;
+
+  cd = iconv_open("utf-8", "ISO-8859-1");
+
   Org *o = new Org();
 
   String::Utf8Value file_str(args[0]->ToString());
@@ -70,6 +73,8 @@ Handle<Value> geoip::Org::New(const Arguments& args)
 Handle<Value> geoip::Org::lookupSync(const Arguments &args) {
   HandleScope scope;
 
+  char outputbuff[1024];
+
   Local<String> host_str = args[0]->ToString();
   Local<Value> data;
   char host_cstr[host_str->Length()];
@@ -86,7 +91,8 @@ Handle<Value> geoip::Org::lookupSync(const Arguments &args) {
     return scope.Close(Null());
   }
 
-  data = String::New(org);
+  icv(org, outputbuff, sizeof(outputbuff)); 
+  data = String::New(outputbuff);
   return scope.Close(data);
 }
 
@@ -131,6 +137,8 @@ int geoip::Org::EIO_AfterOrg(eio_req *req)
 {
   HandleScope scope;
 
+  char outputbuff[1024]; 
+
   org_baton_t *baton = static_cast<org_baton_t *>(req->data);
   ev_unref(EV_DEFAULT_UC);
   baton->o->Unref();
@@ -141,7 +149,8 @@ int geoip::Org::EIO_AfterOrg(eio_req *req)
     argv[0] = Exception::Error(String::New("Data not found"));
     argv[1] = Null();
   } else {
-    Local<String> data = String::New(baton->org);
+    icv(baton->org, outputbuff, sizeof(outputbuff)); 
+    Local<String> data = String::New(outputbuff);
 
     argv[0] = Null();
     argv[1] = data;

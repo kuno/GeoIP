@@ -3,7 +3,7 @@
 var geoip = require('../index.js');
 var util = require('util');
 var City = geoip.City;
-var c = new City('/tmp/GeoLiteCity.dat', true);
+var c = new City('../database/GeoLiteCity.dat', true);
 
 var ip32 = function() {
   var ip = '';

@@ -3,7 +3,7 @@ var assert = require('assert'),
     geoip = require('../index.js');
 
 var NetSpeed = geoip.NetSpeed;
-var netspeed = new NetSpeed('/tmp/GeoIPNetSpeed.dat', true);
+var netspeed = new NetSpeed('../database/GeoIP-171_20040418.dat', true);
 
 var sync_data = netspeed.lookupSync('8.8.4.4');
 assert.ok(sync_data, 'Can not find google in country module');
@@ -17,4 +17,4 @@ netspeed.lookup('www.google.com', function(err, data) {
     }
 });
 
-assert.ok(netspeed.update('/tmp/GeoIPNetSpeed.dat'), 'Oops when updating netspeed database');
+assert.ok(netspeed.update('../database/GeoIP-171_20040418.dat'), 'Oops when updating netspeed database');

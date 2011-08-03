@@ -3,7 +3,7 @@ var assert = require('assert'),
     geoip = require('../index.js');
 
 var Region = geoip.Region;
-var region = new Region('/tmp/GeoIPRegion.dat', true);
+var region = new Region('../database/GeoIPRegion-515.dat', true);
 
 var sync_data = region.lookupSync('8.8.8.8');
 assert.ok(sync_data, 'Can not find google in region module');
@@ -18,4 +18,4 @@ region.lookup('www.google.com', function(err, data) {
     }
 });
 
-assert.ok(region.update('/tmp/GeoIPRegion.dat'), 'Oops when updating region database');
+assert.ok(region.update('../database/GeoIPRegion-515.dat'), 'Oops when updating region database');

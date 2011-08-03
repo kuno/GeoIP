@@ -2,7 +2,7 @@ var assert = require('assert'),
     geoip  = require('../index.js');
 
 var City = geoip.City;
-var city = new City('/tmp/GeoLiteCity.dat', true);
+var city = new City('../database/GeoLiteCity.dat', true);
 
 var sync_data = city.lookupSync('8.8.8.8');
 console.log(sync_data);
@@ -18,4 +18,4 @@ city.lookup('www.google.com', function(err, data) {
     }
 });
 
-assert.ok(city.update('/tmp/GeoLiteCity.dat'), 'Oops when updating city database'); 
+assert.ok(city.update('../database/GeoLiteCity.dat'), 'Oops when updating city database'); 

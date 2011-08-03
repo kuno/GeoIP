@@ -3,7 +3,7 @@ var assert = require('assert'),
     geoip = require('../index.js');
 
 var Org = geoip.Org;
-var org = new Org('/tmp/GeoIPASNum.dat', true);
+var org = new Org('../database/GeoIPASNum.dat', true);
 
 var sync_data = org.lookupSync('8.8.8.8');
 console.log(sync_data);
@@ -19,4 +19,4 @@ org.lookup('www.google.com', function(err, data) {
     }
 });
 
-assert.ok(org.update('/tmp/GeoIPASNum.dat'), 'Oops when updating org database');
+assert.ok(org.update('../database/GeoIPASNum.dat'), 'Oops when updating org database');

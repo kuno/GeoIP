@@ -3,7 +3,7 @@
 var binding = require('../index.js');
 var util = require('util');
 var Org = binding.Org;
-var o = new Org('/tmp/GeoIPOrg.dat', true);
+var o = new Org('../database/GeoIPOrg.dat', true);
 
 var ip32 = function() {
   var ip = '';

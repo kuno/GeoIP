@@ -3,7 +3,7 @@
 var geoip = require('../index.js');
 var util = require('util');
 var Country6 = geoip.Country6;
-var c6 = new Country6('/tmp/GeoIPv6.dat', true);
+var c6 = new Country6('../database/GeoIPv6.dat', true);
 
 var ip128 = function() {
   var ip = '', hex;

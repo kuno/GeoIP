@@ -3,7 +3,7 @@
 var geoip = require('../index.js');
 var util = require('util');
 var Country = geoip.Country;
-var c = new Country('/tmp/GeoIP.dat', true);
+var c = new Country('../database/GeoIP.dat', true);
 
 var ip32 = function() {
   var ip = '';
@@ -36,14 +36,14 @@ for (var i = 0; i < 100000; ++i) {
   c.lookup(addr, function(err, data) {
       //  console.log(l);
   });
- //c.update('/home/kuno/GeoIP.dat', true); 
+ //c.update('../database/GeoIP.dat', true); 
 }
-c.update('/home/kuno/GeoIP.dat', true); 
+c.update('../database/GeoIP.dat', true); 
 var end = new Date().getTime();  
 util.puts((end - start) / 1000);
 
 start = new Date().getTime();
-c.update('/home/kuno/GeoIP.dat', true);
+c.update('../database/GeoIP.dat', true);
 
 for (var i = 0; i < 100000; ++i) {
   var addr = '109.161.37.182'; //ip32();
@@ -56,7 +56,7 @@ end = new Date().getTime();
 util.puts((end - start) / 1000);
 
 /*
-var c6 = new Country('/tmp/GeoIPv6.dat');
+var c6 = new Country('../database/GeoIPv6.dat');
 
 var start6 = new Date().getTime();
 for (var j = 0; j < 10000; j++) {
