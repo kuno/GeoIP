@@ -1,7 +1,7 @@
 {
   "name":"geoip",
   "description":"GeoIP binding for node",
-  "version":"0.4.4pre",
+  "version":"0.5.0pre",
   "homepage":"http://github.com/kuno/GeoIP",
   "author":"Guan 'kuno' Qing <neokuno at Gmail dot com>",
   "contributors":
