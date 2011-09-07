@@ -62,35 +62,6 @@ Handle<Value> geoip::Country6::New(const Arguments& args)
   }
 }
 
-/*
-Handle<Value> geoip::Country::lookupSync(const Arguments &args) {
-  HandleScope scope;
-
-  Country * c = ObjectWrap::Unwrap<Country>(args.This());
-
-  Local<String> host_str = args[0]->ToString();
-  Local<Object> data = Object::New();
-  char host_cstr[host_str->Length()];
-  host_str->WriteAscii(host_cstr);
-
-  uint32_t ipnum = _GeoIP_lookupaddress(host_cstr);
-
-  if (ipnum <= 0) {
-    return scope.Close(Null());
-  } else {
-    int country_id = GeoIP_id_by_ipnum(c->db, ipnum);
-    if (country_id == 0) {
-      return scope.Close(Null());
-    } else {
-      data->Set(String::NewSymbol("country_code"), String::New(GeoIP_country_code[country_id]));
-      data->Set(String::NewSymbol("country_code3"), String::New(GeoIP_country_code3[country_id]));
-      data->Set(String::NewSymbol("country_name"), String::New(GeoIP_country_name[country_id]));
-      data->Set(String::NewSymbol("continent_code"), String::New(GeoIP_country_continent[country_id]));
-      return scope.Close(data);
-    }
-  }
-}*/
-
 Handle<Value> geoip::Country6::lookupSync(const Arguments &args) {
   HandleScope scope;
 
@@ -123,48 +94,6 @@ Handle<Value> geoip::Country6::lookupSync(const Arguments &args) {
     }
   }
 }
-
-/*
-Handle<Value> geoip::Country::lookup(const Arguments& args)
-{
-  HandleScope scope;
-
-  REQ_FUN_ARG(1, cb);
-
-  Country * c = ObjectWrap::Unwrap<Country>(args.This());
-  Local<String> host_str = args[0]->ToString();
-
-  country6_baton_t *baton = new country6_baton_t();
-
-  baton->c = c;
-  host_str->WriteAscii(baton->host_cstr);
-  baton->increment_by = 2;
-  baton->sleep_for = 1;
-  baton->cb = Persistent<Function>::New(cb);
-
-  c->Ref();
-
-  eio_custom(EIO_Country, EIO_PRI_DEFAULT, EIO_AfterCountry, baton);
-  ev_ref(EV_DEFAULT_UC);
-
-  return Undefined();
-}
-
-int geoip::Country::EIO_Country(eio_req *req)
-{
-  country6_baton_t *baton = static_cast<country6_baton_t *>(req->data);
-
-  sleep(baton->sleep_for);
-
-  uint32_t ipnum = _GeoIP_lookupaddress(baton->host_cstr);
-  if (ipnum <= 0) {
-    baton->country_id = 0;
-  } else {
-    baton->country_id = GeoIP_id_by_ipnum(baton->c->db, ipnum);
-  }
-
-  return 0;
-}*/
 
 Handle<Value> geoip::Country6::lookup(const Arguments& args)
 {

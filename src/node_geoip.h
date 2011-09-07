@@ -153,13 +153,14 @@ extern "C" char * _GeoIP_iso_8859_1__utf8(const char * iso);
 extern "C" GEOIP_API int GeoIP_cleanup(void);
 
 /* Returns the library version in use. Helpful if your loading dynamically. */
-//extern "C" GEOIP_API const char * GeoIP_lib_version(void); // requried libgeoip >= 1.4.7                            
+extern "C" GEOIP_API const char * GeoIP_lib_version(void); // requried libgeoip >= 1.4.7                            
 ////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////// GeoIP City ////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 extern "C" GeoIPRecord * GeoIP_record_by_addr (GeoIP * gi, const char * addr);
 extern "C" GeoIPRecord * GeoIP_record_by_name (GeoIP * gi, const char * host);    
 
+extern "C" GeoIPRecord * GeoIP_record_by_ipnum_v6 (GeoIP* gi, geoipv6_t ipnum);
 
 #ifdef __cplusplus
 }
