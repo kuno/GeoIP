@@ -22,21 +22,21 @@ namespace geoip {
 
       int db_edition;
 
+      static Persistent<FunctionTemplate> constructor_template;
+
+      static int EIO_City(eio_req *req);
+
+      static int EIO_AfterCity(eio_req *req);
+
     protected:
       static Handle<Value> New(const Arguments& args);
 
     public:
-      static Persistent<FunctionTemplate> constructor_template;
-
       static void Init(Handle<Object> target);
 
       static Handle<Value> lookupSync(const Arguments &args);
 
       static Handle<Value> lookup(const Arguments& args);
-
-      static int EIO_City(eio_req *req);
-
-      static int EIO_AfterCity(eio_req *req);
       
       static Handle<Value> update(const Arguments &args);
 
@@ -51,10 +51,5 @@ struct city_baton_t {
   uint32_t ipnum;
   Persistent<Function> cb;
 };
-
-//// Extracts a C string from a V8 Utf8Value.
-//const char * ToCString(const String::AsciiValue& value) {
-//  return *value ? *value : "<string conversion failed>";
-//}                                                                 
 
 #endif /* NODE_GEOIP_CITY_H */

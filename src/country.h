@@ -24,6 +24,10 @@ namespace geoip {
 
       static Persistent<FunctionTemplate> constructor_template;
 
+      static int EIO_Country(eio_req *req);
+
+      static int EIO_AfterCountry(eio_req *req);
+
     protected:
       static Handle<Value> New(const Arguments& args);
 
@@ -33,10 +37,6 @@ namespace geoip {
       static Handle<Value> lookupSync(const Arguments& args);
 
       static Handle<Value> lookup(const Arguments& args);
-
-      static int EIO_Country(eio_req *req);
-
-      static int EIO_AfterCountry(eio_req *req);
 
       static Handle<Value> update(const Arguments &args);
 

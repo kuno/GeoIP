@@ -24,20 +24,19 @@ namespace geoip {
 
       static Persistent<FunctionTemplate> constructor_template;
 
+      static int EIO_Org(eio_req *req);
+
+      static int EIO_AfterOrg(eio_req *req);
+
     protected:
       static Handle<Value> New(const Arguments& args);
 
     public:
       static void Init(Handle<Object> target);
 
-
       static Handle<Value> lookupSync(const Arguments &args);
 
       static Handle<Value> lookup(const Arguments& args);
-
-      static int EIO_Org(eio_req *req);
-
-      static int EIO_AfterOrg(eio_req *req);
 
       static Handle<Value> update(const Arguments &args);
 
