@@ -38,6 +38,14 @@ namespace geoip {
           edition = String::New("city");
           break;
 
+       case GEOIP_CITY_EDITION_REV0_V6:
+          edition = String::New("city_v6");
+          break;
+
+        case GEOIP_CITY_EDITION_REV1_V6:
+          edition = String::New("city_v6");
+          break;
+
         case GEOIP_REGION_EDITION_REV0:
           edition = String::New("region");
           break;

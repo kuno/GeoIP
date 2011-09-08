@@ -15,28 +15,28 @@ using namespace v8;
 using namespace node;
 
 namespace geoip {
-  class City: ObjectWrap
+  class City6: ObjectWrap
   {
     private:
-      GeoIP *db;
+      GeoIP * db;
 
       int db_edition;
+
+      static Persistent<FunctionTemplate> constructor_template;
+
+      static int EIO_City(eio_req *req);
+
+      static int EIO_AfterCity(eio_req *req);
 
     protected:
       static Handle<Value> New(const Arguments& args);
 
     public:
-      static Persistent<FunctionTemplate> constructor_template;
-
       static void Init(Handle<Object> target);
 
       static Handle<Value> lookupSync(const Arguments &args);
 
       static Handle<Value> lookup(const Arguments& args);
-
-      static int EIO_City(eio_req *req);
-
-      static int EIO_AfterCity(eio_req *req);
       
       static Handle<Value> update(const Arguments &args);
 
@@ -46,15 +46,10 @@ namespace geoip {
 }
 
 struct city6_baton_t {
-  geoip::City6 *c;
-  GeoIPRecord *record;
-  geoipv6_t ipnum;
+  geoip::City6 * c;
+  GeoIPRecord * record;
+  geoipv6_t ipnum_v6;
   Persistent<Function> cb;
 };
-
-//// Extracts a C string from a V8 Utf8Value.
-//const char * ToCString(const String::AsciiValue& value) {
-//  return *value ? *value : "<string conversion failed>";
-//}                                                                 
 
 #endif /* NODE_GEOIP_CITY6_H */
