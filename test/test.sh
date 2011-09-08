@@ -42,6 +42,14 @@ echo "City moduel test is finished!"
 
 echo ""
 
+echo "Start to test City ipv6 moduel......"
+echo "============================================================"
+node ./city6.js
+echo "============================================================"
+echo "City ipv6 moduel test is finished!"
+
+echo ""             
+
 echo "Start to test Org module......"
 echo "============================================================"
 node ./org.js
