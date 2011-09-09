@@ -43,3 +43,4 @@ color: #ff80b2;
 
 ###v0.5###
 * binding to geoip C library 1.4.7
+* works with new v8 api / uv compatibility layer
