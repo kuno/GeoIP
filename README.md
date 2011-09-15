@@ -182,23 +182,18 @@ ipv6 address lookup
 
   Synchronous method:
 
-      var city6_obj = city6.lookupSync('8.8.8.8');
+      var city6_obj = city6.lookupSync('2002:7679:b9af:db9b:ab51:501a:db4e:2d');
       console.log(city6_obj);
       /*
-      Return an object of city information
-      {
-       "country_code":"US",
-       "country_code3":"USA",
-       "country_name":"United States",
-       "continet_code":"NA",
-       "region":"CA",
-       "city":"Mountain View",
-       "postal_code":"94043",
-       "latitude":37.41919999999999,
-       "longitude":-122.0574,
-       "dma_code":807,
-       "metro_code":807,
-       "area_code":650
+      { 
+       country_code: 'CN',
+       country_code3: 'CHN',
+       country_name: 'China',
+       region: '32',
+       city: 'Chengdu',
+       latitude: 30.66670036315918,
+       longitude: 104.06670379638672,
+       continent_code: 'AS'
       }
       */
 
