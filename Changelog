@@ -88,3 +88,6 @@ v0.4.2-2, 2011-08-01
 
 v0.4.3, 2011-08-03
 1, enabled converting city name to utf8 characters
+
+v0.4.4, 2011-09-15
+1, support lookup city information through ipv6 address
