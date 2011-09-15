@@ -1,15 +1,17 @@
 var geoip = require('geoip');
 
-// Data
+// !! Important !!
 // Befor you can use this package, you need to download or buy some data fro http://www.maxmind.com/app/ip-location.
 // There are some free databases among some commercial versions, the free databases can be found http://geolite.maxmind.com/download/geoip/database/.   
 
 
+////////////////////////////////////////////////////////////////////////////////
 // Country
-// Open the country data file
+////////////////////////////////////////////////////////////////////////////////
+/////////////////////////
+// ipv4 address lookup //
+/////////////////////////
 var Country = geoip.Country;
-
-// ipv4
 var country = new Country('/path/to/GeoIP.dat');
 
 // Synchronous method(the recommended way):
@@ -32,14 +34,16 @@ country.lookup('www.google.com', function(err, data) {
     }
 });
 
-// ipv6 (Currently only Country module supports ipv6)
+/////////////////////////
+// ipv6 address lookup //
+/////////////////////////
 var Coutry6 = geoip.Country6;
 var country_v6 = new Country6('/path/to/GeoIPv6.dat');
 
 // Synchronous method
 var country_obj_v6 = country_v6.lookupSync('2607:f0d0:1002:0051:0000:0000:0000:0004');
 
-console.log(country_obj_v6); // Same as ipv4
+console.log(country_obj_v6);
 /*
 { country_code: 'US',
   country_code3: 'USA',
@@ -62,12 +66,17 @@ country_v6.lookup('2400:2352:b0f1:36c5:aa9d:694a:2f98:40bd', function(err, data_
         country_name: 'Japan',
         continent_code: 'AS' 
       }
-
       */
     }
 });
 
+
+////////////////////////////////////////////////////////////////////////////////
 // City
+////////////////////////////////////////////////////////////////////////////////
+//////////////////////////
+// ipv4 address lookup ///
+//////////////////////////
 var City = geoip.City;
 var city = new City('/path/to/GeoLiteCity.dat');
 
@@ -102,8 +111,51 @@ city.lookup('www.google.com', function(err, data) {
     }
 });
 
+/////////////////////////
+// ipv6 address lookup //
+/////////////////////////
+var City6 = geoip.City6;
+var city6 = new City6('/path/to/GeoLiteCityv6.dat');
 
+// Synchronous method
+var city6_obj = city6.lookupSync('2002:a46f:f395:14de:f876:542b:41cb:5bbe');
+console.log(city6_obj);
+/*
+Return an object of city information
+{ country_code: 'US',
+  country_code3: 'USA',
+  country_name: 'United States',
+  region: 'AL',
+  city: 'Birmingham',
+  postal_code: '35294',
+  latitude: 33.54460144042969,
+  longitude: -86.92919921875,
+  continent_code: 'NA' }
+*/
+
+city6.update('/path/to/new/GeoLiteCityv6.dat');
+
+// Asynchronous method
+city6.lookup('2001:b565:487a:c05d:5f07:5662:c3cd:cfcf', function(err, data) {
+    if (err) {throw err;}
+    if (data) {
+      console.log(data);
+      /*
+      { country_code: 'TW',
+        country_code3: 'TWN',
+        country_name: 'Taiwan',
+        latitude: 23.5,
+        longitude: 121,
+        continent_code: 'AS' 
+      }
+      */
+    }
+});           
+
+
+////////////////////////////////////////////////////////////////////////////////
 // Organization
+////////////////////////////////////////////////////////////////////////////////
 var Org = geoip.Org;
 var org = new Org('/path/to/database');  // Org module can open three edition database 'org', 'asnum', 'isp'
 
@@ -131,7 +183,9 @@ org.lookup('www.google.com', function(err, data) {
 });
 
 
+////////////////////////////////////////////////////////////////////////////////
 // Region
+////////////////////////////////////////////////////////////////////////////////
 var Region = geoip.Region;
 var region = new Region('/path/to/GeoIPRegion.dat');
 
@@ -155,8 +209,9 @@ region.lookup('www.google.com', function(data) {
 });
 
 
-
+////////////////////////////////////////////////////////////////////////////////
 // NetSpeed
+////////////////////////////////////////////////////////////////////////////////
 var NetSpeed = geoip.NetSpeed;
 var netspeed = new NetSpeed('/path/to/GeoIPNetSpeed.dat');
 

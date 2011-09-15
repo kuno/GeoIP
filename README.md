@@ -70,7 +70,7 @@ From v0.4.0, geoip need nodejs >= 0.4.0, if you want to use it on old nodejs, yo
 
 ###Country
 
-ipv4
+ipv4 address lookup
 
     // Open the country data file
     var Country = geoip.Country;
@@ -97,7 +97,7 @@ ipv4
         }
     });
 
-ipv6 (Currently only Country module supports ipv6)
+ipv6 address lookup (Currently only Country and City module supports ipv6)
 
     // Open the ipv6 edition of country module
     var Country6 = geoip.Country6;
@@ -136,41 +136,93 @@ ipv6 (Currently only Country module supports ipv6)
 
 ###City
 
+ipv4 address lookup
+
     // Open the GeoLiteCity.dat file first.
     var City = geoip.City;
     var city = new City('/path/to/GeoLiteCity.dat');
 
-Synchronous method:
+  Synchronous method:
 
-    var city_obj = city.lookupSync('8.8.8.8');
-    console.log(city_obj);
-    /*
-     Return an object of city information
-     {
-      "country_code":"US",
-      "country_code3":"USA",
-      "country_name":"United States",
-      "continet_code":"NA",
-      "region":"CA",
-      "city":"Mountain View",
-      "postal_code":"94043",
-      "latitude":37.41919999999999,
-      "longitude":-122.0574,
-      "dma_code":807,
-      "metro_code":807,
-      "area_code":650
-      }
-     */
+      var city_obj = city.lookupSync('8.8.8.8');
+      console.log(city_obj);
+      /*
+      Return an object of city information
+      {
+       "country_code":"US",
+       "country_code3":"USA",
+       "country_name":"United States",
+       "continet_code":"NA",
+       "region":"CA",
+       "city":"Mountain View",
+       "postal_code":"94043",
+       "latitude":37.41919999999999,
+       "longitude":-122.0574,
+       "dma_code":807,
+       "metro_code":807,
+       "area_code":650
+       }
+       */
 
-Asynchronous method:
+  Asynchronous method:
 
-    city.lookup('www.google.com', function(err, data) {
+      city.lookup('www.google.com', function(err, data) {
         if (err) {throw err;}
         if (data) {
             console.log(data);
         }
-    });
+      });
 
+
+ipv6 address lookup
+
+    // Open the GeoLiteCityv6.dat file first.
+    var City6 = geoip.City6;
+    var city6 = new City6('/path/to/GeoLiteCityv6.dat');             
+
+  Synchronous method:
+
+      var city6_obj = city6.lookupSync('8.8.8.8');
+      console.log(city6_obj);
+      /*
+      Return an object of city information
+      {
+       "country_code":"US",
+       "country_code3":"USA",
+       "country_name":"United States",
+       "continet_code":"NA",
+       "region":"CA",
+       "city":"Mountain View",
+       "postal_code":"94043",
+       "latitude":37.41919999999999,
+       "longitude":-122.0574,
+       "dma_code":807,
+       "metro_code":807,
+       "area_code":650
+      }
+      */
+
+  Asynchronous method:
+
+      city6.lookup('2002:c6aa:2dc8:b719:4314:2a7d:e31c:fe73', function(err, data) {
+        if (err) {throw err;}
+        if (data) {
+            console.log(data);
+            /* As expected ,return an object that contains city information
+            { 
+             country_code: 'US',
+             country_code3: 'USA',
+             country_name: 'United States',
+             region: 'CO',
+             city: 'Englewood',
+             postal_code: '80112',
+             latitude: 39.569000244140625,
+             longitude: -104.85820007324219,
+             continent_code: 'NA' 
+            }
+            */
+          }
+      });              
 
 ###Organization
 
