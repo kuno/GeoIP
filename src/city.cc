@@ -134,6 +134,13 @@ Handle<Value> geoip::City::lookupSync(const Arguments &args) {
     data->Set(String::NewSymbol("continent_code"), String::New(record->continent_code));
   }
 
+  if (record->country_code != NULL && record->region != NULL) {
+    const char * time_zone = GeoIP_time_zone_by_country_and_region(record->country_code, record->region);
+    if(time_zone != NULL) {
+      data->Set(String::NewSymbol("time_zone"), String::New(time_zone));
+    }
+  }
+
   return scope.Close(data);
 }
 
