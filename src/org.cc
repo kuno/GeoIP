@@ -125,7 +125,7 @@ void geoip::Org::EIO_Org(eio_req *req)
 
   baton->org = GeoIP_org_by_ipnum(baton->o->db, baton->ipnum);
 
-  return 0;
+  //return 0;
 }
 
 int geoip::Org::EIO_AfterOrg(eio_req *req)

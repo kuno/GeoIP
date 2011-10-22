@@ -172,7 +172,7 @@ void geoip::City6::EIO_City(eio_req *req)
     baton->record = GeoIP_record_by_ipnum_v6(baton->c->db, baton->ipnum_v6);
   }
 
-  return 0;
+  //return 0;
 }
 
 int geoip::City6::EIO_AfterCity(eio_req *req)

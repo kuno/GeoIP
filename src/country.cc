@@ -127,7 +127,7 @@ void geoip::Country::EIO_Country(eio_req *req)
     baton->country_id = GeoIP_id_by_ipnum(baton->c->db, baton->ipnum);
   }
 
-  return 0;
+  //return 0;
 }
 
 int geoip::Country::EIO_AfterCountry(eio_req *req)

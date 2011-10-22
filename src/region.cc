@@ -127,7 +127,7 @@ void geoip::Region::EIO_Region(eio_req *req)
     baton->region = GeoIP_region_by_ipnum(baton->r->db, baton->ipnum);
   }
 
-  return 0;
+  //return 0;
 }
 
 int geoip::Region::EIO_AfterRegion(eio_req *req)
