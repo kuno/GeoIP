@@ -114,10 +114,10 @@ Handle<Value> geoip::Region::lookup(const Arguments& args)
   eio_custom(EIO_Region, EIO_PRI_DEFAULT, EIO_AfterRegion, baton);
   ev_ref(EV_DEFAULT_UC);
 
-  return scope.Close(Undefined());
+  //return scope.Close(Undefined());
 }
 
-int geoip::Region::EIO_Region(eio_req *req)
+void geoip::Region::EIO_Region(eio_req *req)
 {
   region_baton_t *baton = static_cast<region_baton_t *>(req->data);
 

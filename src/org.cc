@@ -112,10 +112,10 @@ Handle<Value> geoip::Org::lookup(const Arguments& args)
   eio_custom(EIO_Org, EIO_PRI_DEFAULT, EIO_AfterOrg, baton);
   ev_ref(EV_DEFAULT_UC);
 
-  return Undefined();
+  //return Undefined();
 }
 
-int geoip::Org::EIO_Org(eio_req *req)
+void geoip::Org::EIO_Org(eio_req *req)
 {
   org_baton_t *baton = static_cast<org_baton_t *>(req->data);
 

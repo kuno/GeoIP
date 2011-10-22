@@ -159,10 +159,10 @@ Handle<Value> geoip::City6::lookup(const Arguments& args)
   eio_custom(EIO_City, EIO_PRI_DEFAULT, EIO_AfterCity, baton);
   ev_ref(EV_DEFAULT_UC);
 
-  return Undefined();
+  //return Undefined();
 }
 
-int geoip::City6::EIO_City(eio_req *req)
+void geoip::City6::EIO_City(eio_req *req)
 {
   city6_baton_t * baton = static_cast<city6_baton_t *>(req->data);
 
