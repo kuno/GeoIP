@@ -31,7 +31,7 @@
       "sample":"./sample", 
       "benchmark":"./benchmark"
     },
-  "engine":{"node": ">=0.5.0", "npm": "1"},
+  "engine":{"node": ">=0.6.0", "npm": "1"},
   "script":{"install": "node-waf configure build"},
   "licences":
     [
