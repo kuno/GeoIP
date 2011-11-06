@@ -38,15 +38,15 @@ There are some free databases among some commercial versions, the free databases
 
 ##Install
 
-### nodejs greater then 0.6.0 (current version)
+### for nodejs greater than (and including) 0.6.0 (current version)
 
     [sudo] npm install geoip [-g]
 
-### nodejs from 0.4.0 to 0.5.10
+### for nodejs from 0.4.0 to 0.5.10
 
     [sudo] npm install geoip@0.4.4 [-g]
 
-### nodejs older than 0.4.0
+### for nodejs older than 0.4.0
 
 From v0.4.0, geoip need nodejs >= 0.4.0, if you want to use it on old nodejs, you can:
 
