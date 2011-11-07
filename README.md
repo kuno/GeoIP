@@ -42,7 +42,7 @@ There are some free databases among some commercial versions, the free databases
 
     [sudo] npm install geoip [-g]
 
-### for nodejs from 0.4.0 to 0.5.10
+### for nodejs 0.4.x
 
     [sudo] npm install geoip@0.4.4 [-g]
 
