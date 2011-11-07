@@ -21,7 +21,7 @@
   "bugs":
     {
       "mail":"neokuno@gmail.com",
-      "web":"http://github.com/kuno/GeoIP/issues"
+      "url":"http://github.com/kuno/GeoIP/issues"
     },
   "main":"index.js",
   "directory": 
