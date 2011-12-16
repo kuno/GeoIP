@@ -115,7 +115,7 @@ Handle<Value> geoip::Country::lookup(const Arguments& args)
   //return Undefined();
 }
 
-void geoip::Country::EIO_Country(eio_req *req)
+EIO_CUSTOM_TYPE geoip::Country::EIO_Country(eio_req *req)
 {
   country_baton_t *baton = static_cast<country_baton_t *>(req->data);
 
@@ -127,7 +127,7 @@ void geoip::Country::EIO_Country(eio_req *req)
     baton->country_id = GeoIP_id_by_ipnum(baton->c->db, baton->ipnum);
   }
 
-  //return 0;
+  EIO_CUSTOM_RETURN
 }
 
 int geoip::Country::EIO_AfterCountry(eio_req *req)

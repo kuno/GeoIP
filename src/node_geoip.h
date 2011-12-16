@@ -7,6 +7,7 @@
 #include <GeoIP.h>
 #include <GeoIPCity.h>
 #include <unistd.h>
+#include <node_version.h>
 
 #ifndef NODE_GEOIP_H
 #define NODE_GEOIP_H
@@ -14,6 +15,16 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+#if NODE_VERSION_AT_LEAST(0,6,0)
+#define EIO_CUSTOM_TYPE void
+#define EIO_CUSTOM_RETURN return;
+#else  
+#define EIO_CUSTOM_TYPE int
+#define EIO_CUSTOM_RETURN return 0;
+#endif
+
+
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////// GeoIP Internal //////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

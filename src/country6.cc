@@ -125,7 +125,7 @@ Handle<Value> geoip::Country6::lookup(const Arguments& args)
   return Undefined();
 }
 
-void geoip::Country6::EIO_Country(eio_req *req)
+EIO_CUSTOM_TYPE geoip::Country6::EIO_Country(eio_req *req)
 {
   Locker locker();
 
@@ -137,9 +137,9 @@ void geoip::Country6::EIO_Country(eio_req *req)
     baton->country_id = GeoIP_id_by_ipnum_v6(baton->c->db, baton->ipnum_v6);
   }
 
-  //return 0;
-
   Unlocker unlocker(); 
+
+  EIO_CUSTOM_RETURN
 }
 
 int geoip::Country6::EIO_AfterCountry(eio_req *req)
