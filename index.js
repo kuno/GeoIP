@@ -1,7 +1,12 @@
 var read  = require('fs').readFileSync,
     join  = require('path').join;
 
-var binding = require('./build/default/geoip.node');
+var binding
+try {
+  binding = require('./build/default/geoip.node');
+} catch (err) {
+  binding = require('./build/Release/geoip.node');
+}
 
 var version  = JSON.parse(read(join(__dirname, 'package.json'))).version;
 
