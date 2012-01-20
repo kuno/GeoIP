@@ -243,6 +243,13 @@ int geoip::City::EIO_AfterCity(eio_req *req)
       data->Set(String::NewSymbol("continent_code"), String::New(baton->record->continent_code));
     }
 
+    if (baton->record->country_code != NULL && baton->record->region != NULL) {
+      const char * time_zone = GeoIP_time_zone_by_country_and_region(baton->record->country_code, baton->record->region);
+      if(time_zone != NULL) {
+        data->Set(String::NewSymbol("time_zone"), String::New(time_zone));
+      }
+    }
+    
     argv[0] = Null();
     argv[1] = data;
   }
