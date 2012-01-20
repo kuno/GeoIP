@@ -119,7 +119,7 @@ Handle<Value> geoip::NetSpeed::lookup(const Arguments& args)
   return scope.Close(Undefined());
 }
 
-int geoip::NetSpeed::EIO_NetSpeed(eio_req *req)
+void geoip::NetSpeed::EIO_NetSpeed(eio_req *req)
 {
   netspeed_baton_t *baton = static_cast<netspeed_baton_t *>(req->data);
 
@@ -129,7 +129,7 @@ int geoip::NetSpeed::EIO_NetSpeed(eio_req *req)
     baton->netspeed = GeoIP_id_by_ipnum(baton->n->db, baton->ipnum);
   }
 
-  return 0;
+  //return 0;
 }
 
 int geoip::NetSpeed::EIO_AfterNetSpeed(eio_req *req)

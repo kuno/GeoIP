@@ -24,7 +24,7 @@ namespace geoip {
 
             static Persistent<FunctionTemplate> constructor_template;
 
-            static int EIO_NetSpeed(eio_req *req);
+            static void EIO_NetSpeed(eio_req *req);
 
             static int EIO_AfterNetSpeed(eio_req *req);
 

@@ -24,7 +24,7 @@ namespace geoip {
 
       static Persistent<FunctionTemplate> constructor_template;
 
-      static int EIO_Country(eio_req *req);
+      static void EIO_Country(eio_req *req);
 
       static int EIO_AfterCountry(eio_req *req);
 
