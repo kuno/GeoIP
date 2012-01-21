@@ -4,6 +4,7 @@ import os
 from os import popen, unlink, symlink, getcwd
 from os import name as platform
 from os.path import exists
+from shutil import rmtree
 
 srcdir = "."
 blddir = "build"
@@ -149,9 +150,10 @@ def build(bld):
 
   obj.lib = ["GeoIP"]
 
-def clean_geoip():
+def clean(bld):
     if not Options.options.shared_geoip:
-      rmtree('deps/%s' % BUNDLED_GEOIP)
+      rmtree('deps/%s' % BUNDLED_GEOIP, ignore_errors = True)
+      rmtree('build', ignore_errors = True)
 
 def link(bld):
   # HACK to get binding.node out of build directory.
