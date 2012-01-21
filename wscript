@@ -4,6 +4,7 @@ import os
 from os import popen, unlink, symlink, getcwd
 from os import name as platform
 from os.path import exists
+from shutil import rmtree
 
 srcdir = "."
 blddir = "build"
@@ -161,3 +162,7 @@ def link(bld):
   else:
     if exists(getcwd() + '/build/default/geoip.node') and not exists(getcwd() + 'geoip.node'):
       symlink(getcwd()+'/build/default/geoip.node', getcwd() + 'geoip.node')
+
+def shutdown():
+  if Options.commands['clean']:
+    clean_geoip()
