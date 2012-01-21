@@ -150,9 +150,10 @@ def build(bld):
 
   obj.lib = ["GeoIP"]
 
-def clean_geoip():
+def clean(bld):
     if not Options.options.shared_geoip:
-      rmtree('deps/%s' % BUNDLED_GEOIP)
+      rmtree('deps/%s' % BUNDLED_GEOIP, ignore_errors = True)
+      rmtree('build', ignore_errors = True)
 
 def link(bld):
   # HACK to get binding.node out of build directory.
@@ -162,7 +163,3 @@ def link(bld):
   else:
     if exists(getcwd() + '/build/default/geoip.node') and not exists(getcwd() + 'geoip.node'):
       symlink(getcwd()+'/build/default/geoip.node', getcwd() + 'geoip.node')
-
-def shutdown():
-  if Options.commands['clean']:
-    clean_geoip()
