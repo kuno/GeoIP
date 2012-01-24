@@ -168,7 +168,7 @@ Handle<Value> geoip::City::lookup(const Arguments& args)
   return Undefined();
 }
 
-void geoip::City::EIO_City(eio_req *req)
+EIO_CUSTOM_TYPE geoip::City::EIO_City(eio_req *req)
 {
   city_baton_t* baton = static_cast<city_baton_t *>(req->data);
 
@@ -178,7 +178,7 @@ void geoip::City::EIO_City(eio_req *req)
     baton->record = GeoIP_record_by_ipnum(baton->c->db, baton->ipnum);
   }
 
-  //return 0;
+  EIO_CUSTOM_RETURN
 }
 
 int geoip::City::EIO_AfterCity(eio_req *req)

@@ -117,7 +117,7 @@ Handle<Value> geoip::Region::lookup(const Arguments& args)
   //return scope.Close(Undefined());
 }
 
-void geoip::Region::EIO_Region(eio_req *req)
+EIO_CUSTOM_TYPE geoip::Region::EIO_Region(eio_req *req)
 {
   region_baton_t *baton = static_cast<region_baton_t *>(req->data);
 
@@ -127,7 +127,7 @@ void geoip::Region::EIO_Region(eio_req *req)
     baton->region = GeoIP_region_by_ipnum(baton->r->db, baton->ipnum);
   }
 
-  //return 0;
+  EIO_CUSTOM_RETURN
 }
 
 int geoip::Region::EIO_AfterRegion(eio_req *req)

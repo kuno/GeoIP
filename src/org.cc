@@ -115,7 +115,7 @@ Handle<Value> geoip::Org::lookup(const Arguments& args)
   //return Undefined();
 }
 
-void geoip::Org::EIO_Org(eio_req *req)
+EIO_CUSTOM_TYPE geoip::Org::EIO_Org(eio_req *req)
 {
   org_baton_t *baton = static_cast<org_baton_t *>(req->data);
 
@@ -125,7 +125,7 @@ void geoip::Org::EIO_Org(eio_req *req)
 
   baton->org = GeoIP_org_by_ipnum(baton->o->db, baton->ipnum);
 
-  //return 0;
+  EIO_CUSTOM_RETURN
 }
 
 int geoip::Org::EIO_AfterOrg(eio_req *req)
