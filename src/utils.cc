@@ -88,7 +88,7 @@ namespace geoip {
       return scope.Close(edition);
     }
 
-    return ThrowException(String::New("Error: Cao not open database"));   
+    return ThrowException(String::New("Error: Cannot open database"));   
   }
 
 }
