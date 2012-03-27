@@ -1,11 +1,12 @@
 {
-  "name":"geoip",
-  "description":"GeoIP binding for node",
-  "version":"0.4.5",
-  "homepage":"http://github.com/kuno/GeoIP",
-  "author":"Guan 'kuno' Qing <neokuno at Gmail dot com>",
+  "name":"geoip-static",
+  "description":"GeoIP binding for node. Static native library included. Also deployable on heroku.",
+  "version":"0.4.6",
+  "homepage":"http://github.com/toots/GeoIP",
+  "author":"Romain Beauxis <toots@rastageeks.org",
   "contributors":
     [
+      "Guan 'kuno' Qing <neokuno@gmail.com>",
       "Vladimir Dronnikov <dronnikov@gmail.com>",
       "Konstantin Käfer <github@kkaefer.com>",
       "Joe Vennix <joevennix@gmail.com>",
@@ -16,12 +17,12 @@
   "repository":
     {
       "type":"git",
-      "url":"git://github.com/kuno/GeoIP.git"
+      "url":"git://github.com/toots/GeoIP.git"
     },
   "bugs":
     {
-      "mail":"neokuno@gmail.com",
-      "url":"http://github.com/kuno/GeoIP/issues"
+      "mail":"toots@rastageeks.org",
+      "url":"http://github.com/toots/GeoIP/issues"
     },
   "main":"index.js",
   "directory": 
@@ -31,7 +32,7 @@
       "sample":"./sample", 
       "benchmark":"./benchmark"
     },
-  "engine":{"node": ">=0.6.0", "npm": "1"},
+  "engine":{"node": ">= 0.4.7", "npm": "1"},
   "script":{"install": "node-waf clean configure build"},
   "licences":
     [
