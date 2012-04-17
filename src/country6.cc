@@ -58,7 +58,7 @@ Handle<Value> geoip::Country6::New(const Arguments& args)
       return scope.Close(ThrowException(String::New("Error: Not valid country database")));
     }
   } else {
-    return scope.Close(ThrowException(String::New("Error: Cao not open database")));
+    return scope.Close(ThrowException(String::New("Error: Cannot open database")));
   }
 }
 
@@ -203,7 +203,7 @@ Handle<Value> geoip::Country6::update(const Arguments &args) {
       return scope.Close(ThrowException(String::New("Error: Not valid country database")));
     }
   } else {
-    return scope.Close(ThrowException(String::New("Error: Cao not open database")));
+    return scope.Close(ThrowException(String::New("Error: Cannot open database")));
   }
 
  Unlocker unlocker();

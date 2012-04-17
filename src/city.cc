@@ -62,7 +62,7 @@ Handle<Value> geoip::City::New(const Arguments& args)
       return ThrowException(String::New("Error: Not valid city database"));
     }
   } else {
-    return ThrowException(String::New("Error: Cao not open database"));
+    return ThrowException(String::New("Error: Cannot open database"));
   }
 }
 
@@ -293,7 +293,7 @@ Handle<Value> geoip::City::update(const Arguments &args) {
       return scope.Close(ThrowException(String::New("Error: Not valid city database")));
     }
   } else {
-    return scope.Close(ThrowException(String::New("Error: Cao not open database")));
+    return scope.Close(ThrowException(String::New("Error: Cannot open database")));
   }
 
  Unlocker unlocker();

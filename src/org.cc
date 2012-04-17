@@ -64,7 +64,7 @@ Handle<Value> geoip::Org::New(const Arguments& args)
       return scope.Close(ThrowException(String::New("Error: Not valid org database")));
     }
   } else {
-    return scope.Close(ThrowException(String::New("Error: Cao not open database")));
+    return scope.Close(ThrowException(String::New("Error: Cannot open database")));
   }
 }
 
@@ -188,7 +188,7 @@ Handle<Value> geoip::Org::update(const Arguments &args) {
       return scope.Close(ThrowException(String::New("Error: Not valid organization database")));
     }
   } else {
-    return scope.Close(ThrowException(String::New("Error: Cao not open database")));
+    return scope.Close(ThrowException(String::New("Error: Cannot open database")));
   }
 
  Unlocker unlocker();
