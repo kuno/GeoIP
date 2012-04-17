@@ -32,7 +32,7 @@ If not, you can build for yourself:
 
 GeoIP takes the so call 'two steps' dependency policy, which means the minimal version of libgeoip is always the previous release of the latest one.
 
-For example, the current(Appril 2012) latest release of libgeoip is 1.4.8, so the minimal dependency will be the previous release, which is 1.4.7, and so on. 
+For example, currently(April 2012) latest release of libgeoip is 1.4.8, so the minimal dependency will be the previous release, which is 1.4.7, and so on. 
 
 ##Data
 
