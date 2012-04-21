@@ -4,19 +4,19 @@ Get geolocation information based on domain or IP address.
 
 ##Important Notification
 
-From __v0.4.0__, geoip will be bind to libgeoip >= __1.4.7__, which is a C library, __the api also has been changed__.
-
 ###Technical Architecture
 
-![new_architecture](https://github.com/kuno/GeoIP/raw/master/misc/new_architecture.png)
+![new_architecture](https://github.com/toots/GeoIP/raw/master/misc/new_architecture.png)
 
 
 ###Dependency
 
 ####libgeoip C library
 
-If your os has a system package manager (e.g, on linux, apt of ubuntu, yum of fedora, pacman of arch. MacPorts and homebrew on OSX),
+This module requires the C libgeoip library. You can either use a version installed on your system or 
+let the module use the version included with it.
 
+If your os has a system package manager (e.g, on linux, apt of ubuntu, yum of fedora, pacman of arch. MacPorts and homebrew on OSX), 
 then, there is a very high possibility that there is alreay a geoip c library package inside the repository.
 
 If not, you can build for yourself:
@@ -31,26 +31,16 @@ If not, you can build for yourself:
 
 ##Data
 
-Befor you can use this package, you need to download or buy some data from [www.maxmind.com](http://www.maxmind.com/app/ip-location).
+Befor you can use this package, you need to download or buy some data from 
+[www.maxmind.com](http://www.maxmind.com/app/ip-location).
 
-There are some free databases among some commercial versions, the free databases can be found [here](http://geolite.maxmind.com/download/geoip/database/).
+There are some free databases among some commercial versions, the free databases can be 
+found [here](http://geolite.maxmind.com/download/geoip/database/).
 
 
 ##Install
 
-### for nodejs greater than (and including) 0.6.0 (current version)
-
-    [sudo] npm install geoip [-g]
-
-### for nodejs 0.4.x
-
-    [sudo] npm install geoip@0.4.4 [-g]
-
-### for nodejs older than 0.4.0
-
-From v0.4.0, geoip need nodejs >= 0.4.0, if you want to use it on old nodejs, you can:
-
-    npm install geoip@0.3.4-1
+    [sudo] npm install geoip-static [-g]
 
 
 ##Usage
