@@ -34,7 +34,7 @@
       "benchmark":"./benchmark"
     },
   "engine":{"node": ">=0.6.0", "npm": "1"},
-  "script":{"install": "node-gyp configure build"},
+  "script":{"install": "node-gyp clean configure build"},
   "licences":
     [
       {
