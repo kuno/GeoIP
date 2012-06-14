@@ -56,3 +56,5 @@ build/*
 # npm files
 npm-*.log
 .npmignore
+
+node_modules
