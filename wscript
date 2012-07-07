@@ -35,7 +35,7 @@ def configure_geoip():
     if not Options.options.shared_geoip:
         Utils.pprint('GREEN','configuring internal geoip dep')
         os.chdir('deps')
-        if not os.path.exists(BUNDLED_GEOIP):
+        if not os.fs.exists(BUNDLED_GEOIP):
             os.system('tar xzf %s' % BUNDLED_GEOIP_TAR)
         os.chdir(BUNDLED_GEOIP)
         cxxflags = ''
@@ -97,13 +97,13 @@ def configure(conf):
         # strip paths that don't exist, turn into proper flags
         new_inc = []
         for i in geoip_includes:
-           if os.path.exists(i):
+           if os.fs.exists(i):
                new_inc.append('-I%s' % i)
         geoip_includes = new_inc
     
         new_inc = []
         for i in geoip_libpath:
-           if os.path.exists(i):
+           if os.fs.exists(i):
                new_inc.append('-L%s' % i)
         geoip_libpath = new_inc
 
