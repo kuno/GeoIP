@@ -12,7 +12,7 @@ fi
 if [ ! -e $BUILD ]; then
   echo "Start to building..."
   cd $TEST_DIR/.. || return 1
-  node-waf configure build || return 1
+  node-gyp clean configure build || return 1
   echo "Building is finished!"
 fi
 

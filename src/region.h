@@ -39,7 +39,7 @@ namespace geoip {
 
             static Handle<Value> update(const Arguments &args);
 
-            static Handle<Value> close(const Arguments &args);
+            static void close(const Arguments &args);
     };
 
 }

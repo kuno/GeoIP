@@ -197,7 +197,7 @@ Handle<Value> geoip::Country::update(const Arguments &args) {
  Unlocker unlocker();
 }         
 
-Handle<Value> geoip::Country::close(const Arguments &args) {
+void geoip::Country::close(const Arguments &args) {
   Country* c = ObjectWrap::Unwrap<Country>(args.This()); 
   GeoIP_delete(c->db);	// free()'s the gi reference & closes its fd
   c->db = NULL;

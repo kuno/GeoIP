@@ -204,7 +204,7 @@ Handle<Value> geoip::NetSpeed::update(const Arguments &args) {
   Unlocker unlocker();
 }
 
-Handle<Value> geoip::NetSpeed::close(const Arguments &args) {
+void geoip::NetSpeed::close(const Arguments &args) {
   NetSpeed* n = ObjectWrap::Unwrap<NetSpeed>(args.This()); 
   GeoIP_delete(n->db);	// free()'s the gi reference & closes its fd
   n->db = NULL;
