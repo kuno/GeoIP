@@ -33,7 +33,7 @@
       "sample":"./sample", 
       "benchmark":"./benchmark"
     },
-  "engine":{"node": ">=0.6.0", "npm": "1"},
+  "engine":{"node": ">=0.8.0", "npm": "1"},
   "script":{"install": "node-gyp clean configure build"},
   "licences":
     [

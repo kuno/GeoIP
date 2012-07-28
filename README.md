@@ -41,11 +41,11 @@ Befor you can use this package, you need to download or buy some data from [www.
 There are some free databases among some commercial versions, the free databases can be found [here](http://geolite.maxmind.com/download/geoip/database/).
 
 
-##Install
+##Installation
 
-### for nodejs greater than (and including) 0.6.0 (current version)
+### for nodejs 0.6.x
 
-    [sudo] npm install geoip [-g]
+    [sudo] npm install geoip@0.4.5 [-g]
 
 ### for nodejs 0.4.x
 
