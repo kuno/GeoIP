@@ -94,3 +94,6 @@ v0.4.4, 2011-09-15
 
 v0.4.5, 2011-11-07
 1, now needs nodejs >= 0.6.0
+
+v0.4.6, 2012-07-29
+1, fully support nodejs 0.8.x, breaking the compatibility with 0.6.x
