@@ -23,9 +23,9 @@ namespace geoip {
 
             static Persistent<FunctionTemplate> constructor_template;
 
-            static void EIO_Region(eio_req *req);
+            static void EIO_Region(uv_work_t *req);
 
-            static int EIO_AfterRegion(eio_req *req);
+            static void EIO_AfterRegion(uv_work_t *req);
 
         protected:
             static Handle<Value> New(const Arguments& args);

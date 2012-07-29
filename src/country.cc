@@ -107,15 +107,15 @@ Handle<Value> geoip::Country::lookup(const Arguments& args)
   baton->ipnum = _GeoIP_lookupaddress(host_cstr);
   baton->cb = Persistent<Function>::New(cb);
 
-  c->Ref();
+  uv_work_t *req = new uv_work_t;
+  req->data = baton;
 
-  eio_custom(EIO_Country, EIO_PRI_DEFAULT, EIO_AfterCountry, baton);
-  ev_ref(EV_DEFAULT_UC);
+  uv_queue_work(uv_default_loop(), req, EIO_Country, EIO_AfterCountry);
 
-  //return Undefined();
+  return scope.Close(Undefined());         
 }
 
-void geoip::Country::EIO_Country(eio_req *req)
+void geoip::Country::EIO_Country(uv_work_t *req)
 {
   country_baton_t *baton = static_cast<country_baton_t *>(req->data);
 
@@ -126,19 +126,16 @@ void geoip::Country::EIO_Country(eio_req *req)
   } else {
     baton->country_id = GeoIP_id_by_ipnum(baton->c->db, baton->ipnum);
   }
-
-  //return 0;
 }
 
-int geoip::Country::EIO_AfterCountry(eio_req *req)
+void geoip::Country::EIO_AfterCountry(uv_work_t *req)
 {
   HandleScope scope;
 
   country_baton_t *baton = static_cast<country_baton_t *>(req->data);
-  ev_unref(EV_DEFAULT_UC);
-  baton->c->Unref();
 
   Handle<Value> argv[2];
+
   if (baton->country_id <= 0) {
     argv[0] = Exception::Error(String::New("Data not found"));
     argv[1] = Null();
@@ -154,17 +151,16 @@ int geoip::Country::EIO_AfterCountry(eio_req *req)
   }
 
   TryCatch try_catch;
-
   baton->cb->Call(Context::GetCurrent()->Global(), 2, argv);
+
+  // Cleanup
+  baton->cb.Dispose();
+  delete baton;
+  delete req;
 
   if (try_catch.HasCaught()) {
     FatalException(try_catch);
   }
-
-  baton->cb.Dispose();
-
-  delete baton;
-  return 0;
 }
 
 Handle<Value> geoip::Country::update(const Arguments &args) {

@@ -111,15 +111,15 @@ Handle<Value> geoip::NetSpeed::lookup(const Arguments& args)
   baton->ipnum = _GeoIP_lookupaddress(host_cstr);
   baton->cb = Persistent<Function>::New(cb);
 
-  n->Ref();
+  uv_work_t *req = new uv_work_t;
+  req->data = baton;
 
-  eio_custom(EIO_NetSpeed, EIO_PRI_DEFAULT, EIO_AfterNetSpeed, baton);
-  ev_ref(EV_DEFAULT_UC);
+  uv_queue_work(uv_default_loop(), req, EIO_NetSpeed, EIO_AfterNetSpeed);
 
-  return scope.Close(Undefined());
+  return scope.Close(Undefined());        
 }
 
-void geoip::NetSpeed::EIO_NetSpeed(eio_req *req)
+void geoip::NetSpeed::EIO_NetSpeed(uv_work_t *req)
 {
   netspeed_baton_t *baton = static_cast<netspeed_baton_t *>(req->data);
 
@@ -128,19 +128,16 @@ void geoip::NetSpeed::EIO_NetSpeed(eio_req *req)
   } else {
     baton->netspeed = GeoIP_id_by_ipnum(baton->n->db, baton->ipnum);
   }
-
-  //return 0;
 }
 
-int geoip::NetSpeed::EIO_AfterNetSpeed(eio_req *req)
+void geoip::NetSpeed::EIO_AfterNetSpeed(uv_work_t *req)
 {
   HandleScope scope;
 
   netspeed_baton_t *baton = static_cast<netspeed_baton_t *>(req->data);
-  ev_unref(EV_DEFAULT_UC);
-  baton->n->Unref();
 
   Handle<Value> argv[2];
+
   if (baton->netspeed < 0) {
     argv[0] = Exception::Error(String::New("Data not found"));
     argv[1] = Null();
@@ -161,17 +158,16 @@ int geoip::NetSpeed::EIO_AfterNetSpeed(eio_req *req)
   }
 
   TryCatch try_catch;
-
   baton->cb->Call(Context::GetCurrent()->Global(), 2, argv);
+
+  // Cleanup
+  baton->cb.Dispose();
+  delete baton;
+  delete req;
 
   if (try_catch.HasCaught()) {
     FatalException(try_catch);
   }
-
-  baton->cb.Dispose();
-
-  delete baton;
-  return 0;
 }
 
 Handle<Value> geoip::NetSpeed::update(const Arguments &args) {

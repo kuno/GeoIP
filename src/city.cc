@@ -148,7 +148,7 @@ Handle<Value> geoip::City::lookup(const Arguments& args)
 {
   HandleScope scope;
 
-  //REQ_FUN_ARG(1, cb);
+  REQ_FUN_ARG(1, cb);
 
   City* c = ObjectWrap::Unwrap<geoip::City>(args.This());
   Local<String> host_str = args[0]->ToString();
@@ -158,17 +158,14 @@ Handle<Value> geoip::City::lookup(const Arguments& args)
   city_baton_t* baton = new city_baton_t();
   baton->c = c;
   baton->ipnum = _GeoIP_lookupaddress(host_cstr);
-  baton->cb = Persistent<Function>::New(Local<Function>::Cast(args[0]));
-  //baton->cb = Persistent<Function>::New(cb);
+  baton->cb = Persistent<Function>::New(cb);
 
   uv_work_t *req = new uv_work_t;
   req->data = baton;
 
   uv_queue_work(uv_default_loop(), req, EIO_City, EIO_AfterCity);
-  //eio_custom(EIO_City, EIO_PRI_DEFAULT, EIO_AfterCity, baton);
-  //ev_ref(EV_DEFAULT_UC);
 
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 void geoip::City::EIO_City(uv_work_t *req)
@@ -180,8 +177,6 @@ void geoip::City::EIO_City(uv_work_t *req)
   } else {
     baton->record = GeoIP_record_by_ipnum(baton->c->db, baton->ipnum);
   }
-
-  //return 0;
 }
 
 void geoip::City::EIO_AfterCity(uv_work_t *req)
@@ -189,8 +184,6 @@ void geoip::City::EIO_AfterCity(uv_work_t *req)
   HandleScope scope;
 
   city_baton_t *baton = static_cast<city_baton_t *>(req->data);
-  //ev_unref(EV_DEFAULT_UC);
-  //baton->c->Unref();
 
   Handle<Value> argv[2];
 
@@ -259,17 +252,16 @@ void geoip::City::EIO_AfterCity(uv_work_t *req)
   }
 
   TryCatch try_catch;
-
   baton->cb->Call(Context::GetCurrent()->Global(), 2, argv);
+
+  // Cleanup
+  baton->cb.Dispose();
+  delete baton;
+  delete req;
 
   if (try_catch.HasCaught()) {
     FatalException(try_catch);
   }
-
-  baton->cb.Dispose();
-
-  delete baton;
-  //return 0;
 }
 
 Handle<Value> geoip::City::update(const Arguments &args) {

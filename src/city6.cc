@@ -161,15 +161,15 @@ Handle<Value> geoip::City6::lookup(const Arguments& args)
   baton->ipnum_v6 = _GeoIP_lookupaddress_v6(host_cstr);
   baton->cb = Persistent<Function>::New(cb);
 
-  c->Ref();
+  uv_work_t *req = new uv_work_t;
+  req->data = baton;
 
-  eio_custom(EIO_City, EIO_PRI_DEFAULT, EIO_AfterCity, baton);
-  ev_ref(EV_DEFAULT_UC);
+  uv_queue_work(uv_default_loop(), req, EIO_City, EIO_AfterCity);
 
-  //return Undefined();
+  return scope.Close(Undefined());                  
 }
 
-void geoip::City6::EIO_City(eio_req *req)
+void geoip::City6::EIO_City(uv_work_t *req)
 {
   city6_baton_t * baton = static_cast<city6_baton_t *>(req->data);
 
@@ -178,19 +178,16 @@ void geoip::City6::EIO_City(eio_req *req)
   } else {
     baton->record = GeoIP_record_by_ipnum_v6(baton->c->db, baton->ipnum_v6);
   }
-
-  //return 0;
 }
 
-int geoip::City6::EIO_AfterCity(eio_req *req)
+void geoip::City6::EIO_AfterCity(uv_work_t *req)
 {
   HandleScope scope;
 
   city6_baton_t * baton = static_cast<city6_baton_t *>(req->data);
-  ev_unref(EV_DEFAULT_UC);
-  baton->c->Unref();
 
   Handle<Value> argv[2];
+
   if (baton->record == NULL) {
     argv[0] = Exception::Error(String::New("Data not found"));
     argv[1] = Null();
@@ -256,17 +253,16 @@ int geoip::City6::EIO_AfterCity(eio_req *req)
   }
 
   TryCatch try_catch;
-
   baton->cb->Call(Context::GetCurrent()->Global(), 2, argv);
+
+  // Cleanup
+  baton->cb.Dispose();
+  delete baton;
+  delete req;
 
   if (try_catch.HasCaught()) {
     FatalException(try_catch);
   }
-
-  baton->cb.Dispose();
-
-  delete baton;
-  return 0;
 }
 
 Handle<Value> geoip::City6::update(const Arguments &args) {

@@ -109,15 +109,15 @@ Handle<Value> geoip::Region::lookup(const Arguments& args)
   baton->ipnum = _GeoIP_lookupaddress(host_cstr);
   baton->cb = Persistent<Function>::New(cb);
 
-  r->Ref();
+  uv_work_t *req = new uv_work_t;
+  req->data = baton;
 
-  eio_custom(EIO_Region, EIO_PRI_DEFAULT, EIO_AfterRegion, baton);
-  ev_ref(EV_DEFAULT_UC);
+  uv_queue_work(uv_default_loop(), req, EIO_Region, EIO_AfterRegion);
 
-  //return scope.Close(Undefined());
+  return scope.Close(Undefined());      
 }
 
-void geoip::Region::EIO_Region(eio_req *req)
+void geoip::Region::EIO_Region(uv_work_t *req)
 {
   region_baton_t *baton = static_cast<region_baton_t *>(req->data);
 
@@ -126,19 +126,16 @@ void geoip::Region::EIO_Region(eio_req *req)
   } else {
     baton->region = GeoIP_region_by_ipnum(baton->r->db, baton->ipnum);
   }
-
-  //return 0;
 }
 
-int geoip::Region::EIO_AfterRegion(eio_req *req)
+void geoip::Region::EIO_AfterRegion(uv_work_t *req)
 {
   HandleScope scope;
 
   region_baton_t * baton = static_cast<region_baton_t *>(req->data);
-  ev_unref(EV_DEFAULT_UC);
-  baton->r->Unref();
 
   Handle<Value> argv[2];
+
   if (baton->region == NULL) {
     argv[0] = Exception::Error(String::New("Data not found"));
     argv[1] = Null();
@@ -152,17 +149,16 @@ int geoip::Region::EIO_AfterRegion(eio_req *req)
   }
 
   TryCatch try_catch;
-
   baton->cb->Call(Context::GetCurrent()->Global(), 2, argv);
+
+  // Cleanup
+  baton->cb.Dispose();
+  delete baton;
+  delete req;
 
   if (try_catch.HasCaught()) {
     FatalException(try_catch);
   }
-
-  baton->cb.Dispose();
-
-  delete baton;
-  return 0;
 }
 
 Handle<Value> geoip::Region::update(const Arguments &args) {

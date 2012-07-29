@@ -107,15 +107,15 @@ Handle<Value> geoip::Org::lookup(const Arguments& args)
   baton->ipnum = _GeoIP_lookupaddress(host_cstr);
   baton->cb = Persistent<Function>::New(cb);
 
-  o->Ref();
+  uv_work_t *req = new uv_work_t;
+  req->data = baton;
 
-  eio_custom(EIO_Org, EIO_PRI_DEFAULT, EIO_AfterOrg, baton);
-  ev_ref(EV_DEFAULT_UC);
+  uv_queue_work(uv_default_loop(), req, EIO_Org, EIO_AfterOrg);
 
-  //return Undefined();
+  return scope.Close(Undefined());       
 }
 
-void geoip::Org::EIO_Org(eio_req *req)
+void geoip::Org::EIO_Org(uv_work_t *req)
 {
   org_baton_t *baton = static_cast<org_baton_t *>(req->data);
 
@@ -124,17 +124,13 @@ void geoip::Org::EIO_Org(eio_req *req)
   } 
 
   baton->org = GeoIP_org_by_ipnum(baton->o->db, baton->ipnum);
-
-  //return 0;
 }
 
-int geoip::Org::EIO_AfterOrg(eio_req *req)
+void geoip::Org::EIO_AfterOrg(uv_work_t *req)
 {
   HandleScope scope;
 
   org_baton_t *baton = static_cast<org_baton_t *>(req->data);
-  ev_unref(EV_DEFAULT_UC);
-  baton->o->Unref();
 
   Handle<Value> argv[2];
 
@@ -149,17 +145,16 @@ int geoip::Org::EIO_AfterOrg(eio_req *req)
   }
 
   TryCatch try_catch;
-
   baton->cb->Call(Context::GetCurrent()->Global(), 2, argv);
+
+  // Cleanup
+  baton->cb.Dispose();
+  delete baton;
+  delete req;
 
   if (try_catch.HasCaught()) {
     FatalException(try_catch);
   }
-
-  baton->cb.Dispose();
-
-  delete baton;
-  return 0;
 }
 
 Handle<Value> geoip::Org::update(const Arguments &args) {
