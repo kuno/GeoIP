@@ -1,6 +1,7 @@
 #!/usr/bin/env sh
 
 TEST_DIR=$PWD
+BUILD_DIR=$TEST_DIR/../build
 BUILD=$TEST_DIR/../build/default/geoip.node
 
 if   [ ! -e ../database/GeoIP.dat ] || [ ! -e ../database/GeoIPv6.dat ] || [ ! -e ../database/GeoLiteCity.dat ] || [ ! -e ../database/GeoLiteCityv6.dat ] || [ ! -e ../database/GeoIPOrg-111.dat ] || [ ! -e ../database/GeoIPASNum.dat ] || [ ! -e ../database/GeoIPRegion-515.dat ] || [ ! -e ../database/GeoIP-171_20040418.dat ]; then
@@ -9,12 +10,13 @@ if   [ ! -e ../database/GeoIP.dat ] || [ ! -e ../database/GeoIPv6.dat ] || [ ! -
   return 1
 fi
 
-if [ ! -e $BUILD ]; then
-  echo "Start to building..."
-  cd $TEST_DIR/.. || return 1
-  node-gyp clean configure build || return 1
-  echo "Building is finished!"
-fi
+echo "Removal old build"
+rm -rf $BUILD_DIR || return 1
+
+echo "Start to building..."
+cd $TEST_DIR/.. || return 1
+node-gyp clean configure build || return 1
+echo "Building is finished!"
 
 cd $TEST_DIR || return 1
 
