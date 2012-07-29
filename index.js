@@ -1,7 +1,7 @@
-var read  = require('fs').readFileSync,
-    join  = require('path').join;
+var join  = require('path').join,
+    read  = require('fs').readFileSync;
 
-var binding = require('./build/Release/geoip.node');
+var binding = require(join(__dirname, 'build/Release/geoip.node'));
 
 var version  = JSON.parse(read(join(__dirname, 'package.json'))).version;
 
@@ -13,7 +13,6 @@ exports.Region   = binding.Region;
 exports.City6    = binding.City6;
 exports.City     = binding.City;
 exports.Org      = binding.Org;
-
 
 // Utilities
 exports.check    = binding.check;
