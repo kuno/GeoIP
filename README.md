@@ -1,3 +1,4 @@
+[![build status](https://secure.travis-ci.org/kuno/GeoIP.png)](http://travis-ci.org/kuno/GeoIP)
 __GeoIP binding for nodejs__
 
 Get geolocation information based on domain or IP address.
