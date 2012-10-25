@@ -5,7 +5,7 @@ var binding = require(join(__dirname, 'build/Release/geoip.node'));
 
 var version  = JSON.parse(read(join(__dirname, 'package.json'))).version;
 
-// Modules
+// Classes
 exports.NetSpeed = binding.NetSpeed;
 exports.Country6 = binding.Country6;
 exports.Country  = binding.Country;
