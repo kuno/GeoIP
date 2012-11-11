@@ -88,6 +88,8 @@ Handle<Value> geoip::Org::lookupSync(const Arguments &args) {
   }
 
   data = String::New(_GeoIP_iso_8859_1__utf8(org));
+
+  delete org;
   return scope.Close(data);
 }
 
