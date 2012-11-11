@@ -87,8 +87,10 @@ Handle<Value> geoip::Region::lookupSync(const Arguments &args) {
   if (region != NULL) {
     data->Set(String::NewSymbol("country_code"), String::New(region->country_code));
     data->Set(String::NewSymbol("region"), String::New(region->region));
+    GeoIPRegion_delete(region);
     return scope.Close(data);
   } else {
+    GeoIPRegion_delete(region);
     return scope.Close(ThrowException(String::New("Error: Can not find match data")));
   }
 }
