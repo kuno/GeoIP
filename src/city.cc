@@ -83,6 +83,7 @@ Handle<Value> geoip::City::lookupSync(const Arguments &args) {
   GeoIPRecord * record = GeoIP_record_by_ipnum(c->db, ipnum);
 
   if (record == NULL) {
+    delete record;
     return scope.Close(Null()); //return ThrowException(String::New("Error: Can not find match data"));
   }
 
@@ -141,6 +142,7 @@ Handle<Value> geoip::City::lookupSync(const Arguments &args) {
     }
   }
 
+  delete record;
   return scope.Close(data);
 }
 
