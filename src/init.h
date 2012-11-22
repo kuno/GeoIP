@@ -8,8 +8,8 @@
 #include <GeoIPCity.h>
 #include <unistd.h>
 
-#ifndef NODE_GEOIP_H
-#define NODE_GEOIP_H
+#ifndef NODE_GEOIP_INIT_H
+#define NODE_GEOIP_INIT_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -166,4 +166,4 @@ extern "C" GeoIPRecord * GeoIP_record_by_ipnum_v6 (GeoIP* gi, geoipv6_t ipnum);
 }
 #endif
 
-#endif /* NODE_GEOIP_H */
+#endif /* NODE_GEOIP_INIT_H */
