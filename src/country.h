@@ -48,7 +48,7 @@ struct country_baton_t {
   geoip::Country * c;
   //char host_cstr[256];
   int country_id;
-  uint32_t ipnum;
+  int ipnum;  // uint32_t?
   Persistent<Function> cb;
 };
 

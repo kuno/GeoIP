@@ -46,7 +46,7 @@ namespace geoip {
 
 struct org_baton_t {
   geoip::Org * o;
-  uint32_t ipnum;
+  int ipnum;  // uint32_t?
   char * org;
   Persistent<Function> cb;
 };

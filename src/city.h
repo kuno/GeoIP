@@ -48,7 +48,7 @@ namespace geoip {
 struct city_baton_t {
   geoip::City *c;
   GeoIPRecord *record;
-  uint32_t ipnum;
+  int ipnum;  // uint32_t?
   Persistent<Function> cb;
 };
 

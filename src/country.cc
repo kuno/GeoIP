@@ -164,7 +164,7 @@ void geoip::Country::EIO_AfterCountry(uv_work_t *req)
 }
 
 Handle<Value> geoip::Country::update(const Arguments &args) {
-  Locker locker();
+  Locker locker;
 
   HandleScope scope;
 
@@ -182,7 +182,7 @@ Handle<Value> geoip::Country::update(const Arguments &args) {
     if (c->db_edition == GEOIP_COUNTRY_EDITION) {
       return scope.Close(True());
     } else {
-      GeoIP_delete(c->db);	// free()'s the gi reference & closes its fd
+      GeoIP_delete(c->db);  // free()'s the gi reference & closes its fd
       c->db = NULL;                                                       
       return scope.Close(ThrowException(String::New("Error: Not valid country database")));
     }
@@ -190,12 +190,12 @@ Handle<Value> geoip::Country::update(const Arguments &args) {
     return scope.Close(ThrowException(String::New("Error: Cannot open database")));
   }
 
- Unlocker unlocker();
-}         
+  Unlocker unlocker;
+}
 
 void geoip::Country::close(const Arguments &args) {
   Country* c = ObjectWrap::Unwrap<Country>(args.This()); 
-  GeoIP_delete(c->db);	// free()'s the gi reference & closes its fd
+  GeoIP_delete(c->db);  // free()'s the gi reference & closes its fd
   c->db = NULL;
-  HandleScope scope;	// Stick this down here since it seems to segfault when on top?
+  HandleScope scope;  // Stick this down here since it seems to segfault when on top?
 }

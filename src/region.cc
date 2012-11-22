@@ -164,7 +164,7 @@ void geoip::Region::EIO_AfterRegion(uv_work_t *req)
 }
 
 Handle<Value> geoip::Region::update(const Arguments &args) {
-  Locker locker();
+  Locker locker;
 
   HandleScope scope;
 
@@ -191,7 +191,7 @@ Handle<Value> geoip::Region::update(const Arguments &args) {
     return scope.Close(ThrowException(String::New("Error: Cannot open database")));
   }
 
- Unlocker unlocker();
+ Unlocker unlocker;
 }                         
 
 void geoip::Region::close(const Arguments &args) {

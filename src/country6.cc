@@ -176,7 +176,7 @@ void geoip::Country6::EIO_AfterCountry(uv_work_t *req)
 }
 
 Handle<Value> geoip::Country6::update(const Arguments &args) {
-  Locker locker();
+  Locker locker;
 
   HandleScope scope;
 
@@ -202,7 +202,7 @@ Handle<Value> geoip::Country6::update(const Arguments &args) {
     return scope.Close(ThrowException(String::New("Error: Cannot open database")));
   }
 
- Unlocker unlocker();
+ Unlocker unlocker;
 }         
 
 void geoip::Country6::close(const Arguments &args) {

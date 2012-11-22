@@ -46,7 +46,7 @@ namespace geoip {
 
 struct netspeed_baton_t {
     geoip::NetSpeed * n;
-    uint32_t ipnum;
+    int ipnum;  // uint32_t?
     int netspeed;
     Persistent<Function> cb;
 };

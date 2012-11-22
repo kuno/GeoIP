@@ -45,7 +45,7 @@ namespace geoip {
 }
 struct region_baton_t {
     geoip::Region *r;
-    uint32_t ipnum;
+    int ipnum;  // uint32_t?
     GeoIPRegion *region;
     Persistent<Function> cb;
 };

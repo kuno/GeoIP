@@ -267,7 +267,7 @@ void geoip::City::EIO_AfterCity(uv_work_t *req)
 }
 
 Handle<Value> geoip::City::update(const Arguments &args) {
-  Locker locker();
+  Locker locke;
 
   HandleScope scope;
 
@@ -294,8 +294,8 @@ Handle<Value> geoip::City::update(const Arguments &args) {
     return scope.Close(ThrowException(String::New("Error: Cannot open database")));
   }
 
- Unlocker unlocker();
-}              
+ Unlocker unlocker;
+}
 
 void geoip::City::close(const Arguments &args) {
   City* c = ObjectWrap::Unwrap<geoip::City>(args.This()); 

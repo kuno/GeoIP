@@ -171,7 +171,7 @@ void geoip::NetSpeed::EIO_AfterNetSpeed(uv_work_t *req)
 }
 
 Handle<Value> geoip::NetSpeed::update(const Arguments &args) {
-  Locker locker();
+  Locker locker;
 
   HandleScope scope;
 
@@ -197,7 +197,7 @@ Handle<Value> geoip::NetSpeed::update(const Arguments &args) {
     return scope.Close(ThrowException(String::New("Error: Cannot open database")));
   }
 
-  Unlocker unlocker();
+  Unlocker unlocker;
 }
 
 void geoip::NetSpeed::close(const Arguments &args) {

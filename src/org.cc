@@ -160,7 +160,7 @@ void geoip::Org::EIO_AfterOrg(uv_work_t *req)
 }
 
 Handle<Value> geoip::Org::update(const Arguments &args) {
-  Locker locker();
+  Locker locker;
 
   HandleScope scope;
 
@@ -188,8 +188,8 @@ Handle<Value> geoip::Org::update(const Arguments &args) {
     return scope.Close(ThrowException(String::New("Error: Cannot open database")));
   }
 
- Unlocker unlocker();
-} 
+ Unlocker unlocker;
+}
 
 void geoip::Org::close(const Arguments &args) {
   Org* o = ObjectWrap::Unwrap<geoip::Org>(args.This()); 
