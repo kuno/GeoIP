@@ -32,10 +32,10 @@ describe('City', function() {
       setTimeout(done, 1);
     });
 
-    it('should has a close method', function(done) {
-      instance.close.should.be.a('function');
-      setTimeout(done, 1);
-    });
+    // it('should has a close method', function(done) {
+    //   instance.close.should.be.a('function');
+    //   setTimeout(done, 1);
+    // });
   });
 
   describe('Synchrouns Lookup', function() {
@@ -53,20 +53,22 @@ describe('City', function() {
   });
 
   describe('Asynchrouns Lookup', function() {
-    it('should can find location by domain', function(doen) {
+    it('should can find location by domain', function(done) {
       instance.lookup('www.google.com', function(err, data) {
         should.not.exist(err);
         should.exist(data);
         data.should.be.an('object');
-      }); 
+        setTimeout(done, 1);
+      });
     });
 
-    it('should can find location by ip address', function(doen) {
+    it('should can find location by ip address', function(done) {
       instance.lookup('8.8.8.8', function(err, data) {
         should.not.exist(err);
         should.exist(data);
         data.should.be.an('object');
-      }); 
+        setTimeout(done, 1);
+      });
     });
   });
 

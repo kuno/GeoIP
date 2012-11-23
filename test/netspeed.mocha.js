@@ -32,40 +32,42 @@ describe('NetSpeed', function() {
       setTimeout(done, 1);
     });
 
-    it('should has a close method', function(done) {
-      instance.close.should.be.a('function');
-      setTimeout(done, 1);
-    });
+    // it('should has a close method', function(done) {
+    //   instance.close.should.be.a('function');
+    //   setTimeout(done, 1);
+    // });
   });
 
   describe('Synchrouns Lookup', function() {
     it('should can find location by domain', function(done) {
       var data = instance.lookupSync('www.google.com');
-      data.should.be.a('object');
+      data.should.be.a('string');
       setTimeout(done, 1);
     });
 
     it('should can find location by ip address', function(done) {
       var data = instance.lookupSync('8.8.8.8');
-      data.should.be.a('object');
+      data.should.be.a('string');
       setTimeout(done, 1);
     });
   });
 
   describe('Asynchrouns Lookup', function() {
-    it('should can find location by domain', function(doen) {
+    it('should can find location by domain', function(done) {
       instance.lookup('www.google.com', function(err, data) {
         should.not.exist(err);
         should.exist(data);
-        data.should.be.an('object');
-      }); 
+        data.should.be.an('string');
+        setTimeout(done, 1);
+      });
     });
 
-    it('should can find location by ip address', function(doen) {
+    it('should can find location by ip address', function(done) {
       instance.lookup('8.8.8.8', function(err, data) {
         should.not.exist(err);
         should.exist(data);
-        data.should.be.an('object');
+        data.should.be.an('string');
+        setTimeout(done, 1);
       }); 
     });
   });
