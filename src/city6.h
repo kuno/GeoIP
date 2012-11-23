@@ -18,7 +18,7 @@ namespace geoip {
   class City6: ObjectWrap
   {
     private:
-      GeoIP * db;
+      GeoIP *db;
 
       int db_edition;
 
@@ -29,14 +29,14 @@ namespace geoip {
       static void EIO_AfterCity(uv_work_t *req);
 
     protected:
-      static Handle<Value> New(const Arguments& args);
+      static Handle<Value> New(const Arguments &args);
 
     public:
       static void Init(Handle<Object> target);
 
       static Handle<Value> lookupSync(const Arguments &args);
 
-      static Handle<Value> lookup(const Arguments& args);
+      static Handle<Value> lookup(const Arguments &args);
       
       static Handle<Value> update(const Arguments &args);
 
@@ -46,8 +46,8 @@ namespace geoip {
 }
 
 struct city6_baton_t {
-  geoip::City6 * c;
-  GeoIPRecord * record;
+  geoip::City6 *c;
+  GeoIPRecord *record;
   geoipv6_t ipnum_v6;
   Persistent<Function> cb;
 };

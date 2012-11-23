@@ -18,7 +18,7 @@ namespace geoip {
   class Country6: ObjectWrap
   {
     private:
-      GeoIP * db;
+      GeoIP *db;
 
       int db_edition;
 
@@ -29,14 +29,14 @@ namespace geoip {
       static void EIO_AfterCountry(uv_work_t *req);
 
     protected:
-      static Handle<Value> New(const Arguments& args);
+      static Handle<Value> New(const Arguments &args);
 
     public:
       static void Init(Handle<Object> target);
 
-      static Handle<Value> lookupSync(const Arguments& args);
+      static Handle<Value> lookupSync(const Arguments &args);
 
-      static Handle<Value> lookup(const Arguments& args);
+      static Handle<Value> lookup(const Arguments &args);
       
       static Handle<Value> update(const Arguments &args);
 
@@ -45,7 +45,7 @@ namespace geoip {
 }
 
 struct country6_baton_t {
-  geoip::Country6 * c;
+  geoip::Country6 *c;
   geoipv6_t ipnum_v6;
   int country_id;
   Persistent<Function> cb;

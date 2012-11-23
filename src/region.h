@@ -28,14 +28,14 @@ namespace geoip {
             static void EIO_AfterRegion(uv_work_t *req);
 
         protected:
-            static Handle<Value> New(const Arguments& args);
+            static Handle<Value> New(const Arguments &args);
 
         public:
             static void Init(Handle<Object> target);
 
             static Handle<Value> lookupSync(const Arguments &args);
 
-            static Handle<Value> lookup(const Arguments& args);
+            static Handle<Value> lookup(const Arguments &args);
 
             static Handle<Value> update(const Arguments &args);
 

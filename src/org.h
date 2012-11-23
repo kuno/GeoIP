@@ -29,14 +29,14 @@ namespace geoip {
       static void EIO_AfterOrg(uv_work_t *req);
 
     protected:
-      static Handle<Value> New(const Arguments& args);
+      static Handle<Value> New(const Arguments &args);
 
     public:
       static void Init(Handle<Object> target);
 
       static Handle<Value> lookupSync(const Arguments &args);
 
-      static Handle<Value> lookup(const Arguments& args);
+      static Handle<Value> lookup(const Arguments &args);
 
       static Handle<Value> update(const Arguments &args);
 
@@ -45,9 +45,9 @@ namespace geoip {
 }
 
 struct org_baton_t {
-  geoip::Org * o;
+  geoip::Org *o;
   int ipnum;  // uint32_t?
-  char * org;
+  char *org;
   Persistent<Function> cb;
 };
 

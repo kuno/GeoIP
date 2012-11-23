@@ -34,9 +34,9 @@ namespace geoip {
     public:
       static void Init(Handle<Object> target);
 
-      static Handle<Value> lookupSync(const Arguments& args);
+      static Handle<Value> lookupSync(const Arguments &args);
 
-      static Handle<Value> lookup(const Arguments& args);
+      static Handle<Value> lookup(const Arguments &args);
 
       static Handle<Value> update(const Arguments &args);
 
@@ -45,7 +45,7 @@ namespace geoip {
 }
 
 struct country_baton_t {
-  geoip::Country * c;
+  geoip::Country *c;
   //char host_cstr[256];
   int country_id;
   int ipnum;  // uint32_t?

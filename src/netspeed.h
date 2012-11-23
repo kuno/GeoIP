@@ -29,14 +29,14 @@ namespace geoip {
             static void EIO_AfterNetSpeed(uv_work_t *req);
 
         protected:
-            static Handle<Value> New(const Arguments& args);
+            static Handle<Value> New(const Arguments &args);
 
         public:
             static void Init(Handle<Object> target);
 
             static Handle<Value> lookupSync(const Arguments &args);
 
-            static Handle<Value> lookup(const Arguments& args);
+            static Handle<Value> lookup(const Arguments &args);
 
             static Handle<Value> update(const Arguments &args);
 
@@ -45,7 +45,7 @@ namespace geoip {
 }
 
 struct netspeed_baton_t {
-    geoip::NetSpeed * n;
+    geoip::NetSpeed *n;
     int ipnum;  // uint32_t?
     int netspeed;
     Persistent<Function> cb;
