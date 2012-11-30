@@ -25,15 +25,9 @@ void geoip::Org::Init(Handle<Object> target)
   target->Set(String::NewSymbol("Org"), constructor_template->GetFunction());
 }
 
-/*
-   geoip::Org::Org()
-   {
-   }
+geoip::Org::Org() {};
 
-   geoip::Org::~Org()
-   {
-   }
-   */
+geoip::Org::~Org() {};
 
 Handle<Value> geoip::Org::New(const Arguments& args)
 {

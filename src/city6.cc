@@ -25,14 +25,9 @@ void geoip::City6::Init(Handle<Object> target)
   target->Set(String::NewSymbol("City6"), constructor_template->GetFunction());
 }
 
-/*
-   geoip::City6::City6()
-   {
-   }
+geoip::City6::City6() {};
 
-   geoip::City6::~City6()
-   {
-   } */
+geoip::City6::~City6() {};
 
 Handle<Value> geoip::City6::New(const Arguments& args)
 {

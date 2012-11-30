@@ -18,6 +18,10 @@ namespace geoip {
   class City6: ObjectWrap
   {
     private:
+      City6();
+
+      ~City6();
+
       GeoIP *db;
 
       int db_edition;

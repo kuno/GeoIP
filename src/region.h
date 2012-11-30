@@ -15,39 +15,43 @@ using namespace v8;
 using namespace node;
 
 namespace geoip {
-    class Region: ObjectWrap
-    {
-        private:
-            GeoIP *db;
-            int db_edition;
+  class Region: ObjectWrap
+  {
+    private:
+      Region();
 
-            static Persistent<FunctionTemplate> constructor_template;
+      ~Region();
 
-            static void EIO_Region(uv_work_t *req);
+      GeoIP *db;
+      int db_edition;
 
-            static void EIO_AfterRegion(uv_work_t *req);
+      static Persistent<FunctionTemplate> constructor_template;
 
-        protected:
-            static Handle<Value> New(const Arguments &args);
+      static void EIO_Region(uv_work_t *req);
 
-        public:
-            static void Init(Handle<Object> target);
+      static void EIO_AfterRegion(uv_work_t *req);
 
-            static Handle<Value> lookupSync(const Arguments &args);
+    protected:
+      static Handle<Value> New(const Arguments &args);
 
-            static Handle<Value> lookup(const Arguments &args);
+    public:
+      static void Init(Handle<Object> target);
 
-            static Handle<Value> update(const Arguments &args);
+      static Handle<Value> lookupSync(const Arguments &args);
 
-            static void close(const Arguments &args);
-    };
+      static Handle<Value> lookup(const Arguments &args);
+
+      static Handle<Value> update(const Arguments &args);
+
+      static void close(const Arguments &args);
+  };
 
 }
 struct region_baton_t {
-    geoip::Region *r;
-    int ipnum;  // uint32_t?
-    GeoIPRegion *region;
-    Persistent<Function> cb;
+  geoip::Region *r;
+  int ipnum;  // uint32_t?
+  GeoIPRegion *region;
+  Persistent<Function> cb;
 };
 
 #endif /* NODE_GEOIP_REGION_H */

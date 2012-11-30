@@ -25,14 +25,9 @@ void geoip::Country::Init(Handle<Object> target)
   target->Set(String::NewSymbol("Country"), constructor_template->GetFunction());
 }
 
-/*
-   geoip::Country::Country()
-   {
-   }
+geoip::Country::Country() {};
 
-   geoip::Country::~Country()
-   {
-   }*/
+geoip::Country::~Country() {};
 
 Handle<Value> geoip::Country::New(const Arguments& args)
 {

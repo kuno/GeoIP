@@ -18,6 +18,10 @@ namespace geoip {
   class Org: ObjectWrap
   {
     private:
+      Org();
+
+      ~Org();
+
       GeoIP *db;
 
       int db_edition;

@@ -13,7 +13,7 @@ var instance = new NetSpeed(file, true);
 describe('NetSpeed', function() {
   describe('Instance', function() {
     it('should be a object', function(done) {
-      instance.should.be.an('object');
+      instance.should.be.an('function');
       setTimeout(done, 1);
     });
 

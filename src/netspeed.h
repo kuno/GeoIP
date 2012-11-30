@@ -15,40 +15,44 @@ using namespace v8;
 using namespace node;
 
 namespace geoip {
-    class NetSpeed: ObjectWrap
-    {
-        private:
-            GeoIP *db;
+  class NetSpeed: ObjectWrap
+  {
+    private:
+      NetSpeed();
 
-            int db_edition;
+      ~NetSpeed();
 
-            static Persistent<FunctionTemplate> constructor_template;
+      GeoIP *db;
 
-            static void EIO_NetSpeed(uv_work_t *req);
+      int db_edition;
 
-            static void EIO_AfterNetSpeed(uv_work_t *req);
+      static Persistent<FunctionTemplate> constructor_template;
 
-        protected:
-            static Handle<Value> New(const Arguments &args);
+      static void EIO_NetSpeed(uv_work_t *req);
 
-        public:
-            static void Init(Handle<Object> target);
+      static void EIO_AfterNetSpeed(uv_work_t *req);
 
-            static Handle<Value> lookupSync(const Arguments &args);
+    protected:
+      static Handle<Value> New(const Arguments &args);
 
-            static Handle<Value> lookup(const Arguments &args);
+    public:
+      static void Init(Handle<Object> target);
 
-            static Handle<Value> update(const Arguments &args);
+      static Handle<Value> lookupSync(const Arguments &args);
 
-            static void close(const Arguments &args);
-    };
+      static Handle<Value> lookup(const Arguments &args);
+
+      static Handle<Value> update(const Arguments &args);
+
+      static void close(const Arguments &args);
+  };
 }
 
 struct netspeed_baton_t {
-    geoip::NetSpeed *n;
-    int ipnum;  // uint32_t?
-    int netspeed;
-    Persistent<Function> cb;
+  geoip::NetSpeed *n;
+  int ipnum;  // uint32_t?
+  int netspeed;
+  Persistent<Function> cb;
 };
 
 #endif /* NODE_GEOIP_NETSPEED_H */
