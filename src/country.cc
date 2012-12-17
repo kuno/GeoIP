@@ -76,10 +76,15 @@ Handle<Value> geoip::Country::lookupSync(const Arguments &args) {
     if (country_id == 0) {
       return scope.Close(Null());
     } else {
-      data->Set(String::NewSymbol("country_name"), String::New(_GeoIP_iso_8859_1__utf8(GeoIP_country_name[country_id])));
+      const char * name = _GeoIP_iso_8859_1__utf8(GeoIP_country_name[country_id]);
+
+      data->Set(String::NewSymbol("country_name"), String::New(name));
       data->Set(String::NewSymbol("country_code"), String::New(GeoIP_country_code[country_id]));
       data->Set(String::NewSymbol("country_code3"), String::New(GeoIP_country_code3[country_id]));
       data->Set(String::NewSymbol("continent_code"), String::New(GeoIP_country_continent[country_id]));
+
+      delete name;
+
       return scope.Close(data);
     }
   }
@@ -136,13 +141,18 @@ void geoip::Country::EIO_AfterCountry(uv_work_t *req)
     argv[1] = Null();
   } else {
     Local<Object> data = Object::New();
-    data->Set(String::NewSymbol("country_name"), String::New(GeoIP_country_name[baton->country_id]));
+
+    const char * name = _GeoIP_iso_8859_1__utf8(GeoIP_country_name[baton->country_id]);
+
+    data->Set(String::NewSymbol("country_name"), String::New(name));
     data->Set(String::NewSymbol("country_code"), String::New(GeoIP_country_code[baton->country_id]));
     data->Set(String::NewSymbol("country_code3"), String::New(GeoIP_country_code3[baton->country_id]));
     data->Set(String::NewSymbol("continent_code"), String::New(GeoIP_country_continent[baton->country_id]));
 
     argv[0] = Null();
     argv[1] = data;
+
+    delete name;
   }
 
   TryCatch try_catch;

@@ -80,10 +80,13 @@ Handle<Value> geoip::Org::lookupSync(const Arguments &args) {
   if (org == NULL) {
     return scope.Close(Null());
   }
+  
+  const char * name = _GeoIP_iso_8859_1__utf8(org);
 
-  data = String::New(_GeoIP_iso_8859_1__utf8(org));
-
+  data = String::New(name);
+ 
   delete org;
+  delete name;
   return scope.Close(data);
 }
 
@@ -134,10 +137,14 @@ void geoip::Org::EIO_AfterOrg(uv_work_t *req)
     argv[0] = Exception::Error(String::New("Data not found"));
     argv[1] = Null();
   } else {
-    Local<String> data = String::New(_GeoIP_iso_8859_1__utf8(baton->org));
+    const char * name = _GeoIP_iso_8859_1__utf8(baton->org);
+
+    Local<String> data = String::New(name);
 
     argv[0] = Null();
     argv[1] = data;
+
+    delete name;
   }
 
   TryCatch try_catch;
