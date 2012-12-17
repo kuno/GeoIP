@@ -57,4 +57,10 @@ build/*
 npm-*.log
 .npmignore
 
-node_modules
+# noe modules
+node_modules/*
+
+# sublime files
+*sublime*
+
+
