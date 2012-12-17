@@ -7,7 +7,7 @@
 #include "country6.h"
 #include "global.h"
 
-Persistent<FunctionTemplate> geoip::Country6::constructor_template; 
+Persistent<FunctionTemplate> geoip::Country6::constructor_template;
 
 void geoip::Country6::Init(Handle<Object> target)
 {
@@ -20,7 +20,7 @@ void geoip::Country6::Init(Handle<Object> target)
 
   NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookup", lookup);
   NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookupSync", lookupSync);
-  NODE_SET_PROTOTYPE_METHOD(constructor_template, "update", update); 
+  NODE_SET_PROTOTYPE_METHOD(constructor_template, "update", update);
   //NODE_SET_PROTOTYPE_METHOD(constructor_template, "close", close);
   target->Set(String::NewSymbol("Country6"), constructor_template->GetFunction());
 }
@@ -38,7 +38,7 @@ Handle<Value> geoip::Country6::New(const Arguments& args)
   String::Utf8Value file_str(args[0]->ToString());
   const char * file_cstr = ToCString(file_str);
 
-  bool cache_on = args[1]->ToBoolean()->Value(); 
+  bool cache_on = args[1]->ToBoolean()->Value();
 
   c->db = GeoIP_open(file_cstr, cache_on?GEOIP_MEMORY_CACHE:GEOIP_STANDARD);
 
@@ -49,7 +49,7 @@ Handle<Value> geoip::Country6::New(const Arguments& args)
       return scope.Close(args.This());
     } else {
       GeoIP_delete(c->db);	// free()'s the gi reference & closes its fd
-      c->db = NULL;                                                       
+      c->db = NULL;
       return scope.Close(ThrowException(String::New("Error: Not valid country database")));
     }
   } else {
@@ -81,7 +81,7 @@ Handle<Value> geoip::Country6::lookupSync(const Arguments &args) {
     if (country_id == 0) {
       return scope.Close(Null());
     } else {
-      data->Set(String::NewSymbol("country_name"), String::New(GeoIP_country_name[country_id]));  
+      data->Set(String::NewSymbol("country_name"), String::New(GeoIP_country_name[country_id]));
       data->Set(String::NewSymbol("country_code"), String::New(GeoIP_country_code[country_id]));
       data->Set(String::NewSymbol("country_code3"), String::New(GeoIP_country_code3[country_id]));
       data->Set(String::NewSymbol("continent_code"), String::New(GeoIP_country_continent[country_id]));
@@ -101,7 +101,7 @@ Handle<Value> geoip::Country6::lookup(const Arguments& args)
   // Check if database is country ipv6 edition
   if (c->db_edition != GEOIP_COUNTRY_EDITION_V6) {
     return scope.Close(ThrowException(String::New("Error: Database is not country ipv6 edition")));
-  }                                                                                                   
+  }
 
   Local<String> host_str = args[0]->ToString();
   char host_cstr[host_str->Length()];
@@ -111,13 +111,13 @@ Handle<Value> geoip::Country6::lookup(const Arguments& args)
   baton->c = c;
   baton->ipnum_v6 = _GeoIP_lookupaddress_v6(host_cstr);
   baton->cb = Persistent<Function>::New(cb);
- 
+
   uv_work_t *req = new uv_work_t;
   req->data = baton;
 
   uv_queue_work(uv_default_loop(), req, EIO_Country, EIO_AfterCountry);
 
-  return scope.Close(Undefined());           
+  return scope.Close(Undefined());
 }
 
 void geoip::Country6::EIO_Country(uv_work_t *req)
@@ -132,7 +132,7 @@ void geoip::Country6::EIO_Country(uv_work_t *req)
     baton->country_id = GeoIP_id_by_ipnum_v6(baton->c->db, baton->ipnum_v6);
   }
 
-  //Unlocker unlocker(); 
+  //Unlocker unlocker();
 }
 
 void geoip::Country6::EIO_AfterCountry(uv_work_t *req)
@@ -148,7 +148,7 @@ void geoip::Country6::EIO_AfterCountry(uv_work_t *req)
     argv[1] = Null();
   } else {
     Local<Object> data = Object::New();
-    data->Set(String::NewSymbol("country_name"), String::New(GeoIP_country_name[baton->country_id]));    
+    data->Set(String::NewSymbol("country_name"), String::New(GeoIP_country_name[baton->country_id]));
     data->Set(String::NewSymbol("country_code"), String::New(GeoIP_country_code[baton->country_id]));
     data->Set(String::NewSymbol("country_code3"), String::New(GeoIP_country_code3[baton->country_id]));
     data->Set(String::NewSymbol("continent_code"), String::New(GeoIP_country_continent[baton->country_id]));
@@ -175,12 +175,12 @@ Handle<Value> geoip::Country6::update(const Arguments &args) {
 
   HandleScope scope;
 
-  Country6* c = ObjectWrap::Unwrap<Country6>(args.This()); 
+  Country6* c = ObjectWrap::Unwrap<Country6>(args.This());
 
   String::Utf8Value file_str(args[0]->ToString());
   const char * file_cstr = ToCString(file_str);
 
-  bool cache_on = args[1]->ToBoolean()->Value(); 
+  bool cache_on = args[1]->ToBoolean()->Value();
 
   c->db = GeoIP_open(file_cstr, cache_on?GEOIP_MEMORY_CACHE:GEOIP_STANDARD);
 
@@ -190,7 +190,7 @@ Handle<Value> geoip::Country6::update(const Arguments &args) {
       return scope.Close(True());
     } else {
       GeoIP_delete(c->db);	// free()'s the gi reference & closes its fd
-      c->db = NULL;                                                       
+      c->db = NULL;
       return scope.Close(ThrowException(String::New("Error: Not valid country database")));
     }
   } else {
@@ -198,10 +198,10 @@ Handle<Value> geoip::Country6::update(const Arguments &args) {
   }
 
  Unlocker unlocker;
-}         
+}
 
 void geoip::Country6::close(const Arguments &args) {
-  Country6* c = ObjectWrap::Unwrap<Country6>(args.This()); 
+  Country6* c = ObjectWrap::Unwrap<Country6>(args.This());
   GeoIP_delete(c->db);	// free()'s the gi reference & closes its fd
   c->db = NULL;
   HandleScope scope;	// Stick this down here since it seems to segfault when on top?

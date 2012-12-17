@@ -32,11 +32,11 @@
       "url":"http://github.com/kuno/GeoIP/issues"
     },
   "main":"index.js",
-  "directory": 
+  "directory":
     { "src":"./src",
-      "test":"./test",   
-      "misc":"./misc", 
-      "sample":"./sample", 
+      "test":"./test",
+      "misc":"./misc",
+      "sample":"./sample",
       "benchmark":"./benchmark"
     },
   "engine":{"node": "~0.8.0", "npm": "1"},

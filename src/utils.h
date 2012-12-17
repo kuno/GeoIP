@@ -2,7 +2,7 @@
  * GeoIP C library binding for nodejs
  *
  * Licensed under the GNU LGPL 2.1 license
- */                                              
+ */
 
 #ifndef GEOIP_UTILS_H
 #define GEOIP_UTILS_H

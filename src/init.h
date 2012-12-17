@@ -2,7 +2,7 @@
  * GeoIP C library binding for nodejs
  *
  * Licensed under the GNU LGPL 2.1 license
- */                                              
+ */
 
 #include <GeoIP.h>
 #include <GeoIPCity.h>
@@ -29,7 +29,7 @@ extern "C" GEOIP_API geoipv6_t _GeoIP_lookupaddress_v6 (const char *host);
 extern "C" GEOIP_API int __GEOIP_V6_IS_NULL(geoipv6_t v6);
 
 extern "C" GEOIP_API void _GeoIP_setup_dbfilename();
-extern "C" GEOIP_API char *_GeoIP_full_path_to(const char *file_name);  
+extern "C" GEOIP_API char *_GeoIP_full_path_to(const char *file_name);
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -148,17 +148,17 @@ extern "C" GEOIP_API char *        GeoIP_num_to_addr(unsigned long ipnum);
 /* Internal function -- convert iso to utf8; return a malloced utf8 string. */
 extern "C" char * _GeoIP_iso_8859_1__utf8(const char * iso);
 
-/* Cleans up memory used to hold file name paths. Returns 1 if successful; otherwise 0. 
+/* Cleans up memory used to hold file name paths. Returns 1 if successful; otherwise 0.
  * */
 extern "C" GEOIP_API int GeoIP_cleanup(void);
 
 /* Returns the library version in use. Helpful if your loading dynamically. */
-extern "C" GEOIP_API const char * GeoIP_lib_version(void); // requried libgeoip >= 1.4.7                            
+extern "C" GEOIP_API const char * GeoIP_lib_version(void); // requried libgeoip >= 1.4.7
 ////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////// GeoIP City ////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 extern "C" GeoIPRecord * GeoIP_record_by_addr (GeoIP * gi, const char * addr);
-extern "C" GeoIPRecord * GeoIP_record_by_name (GeoIP * gi, const char * host);    
+extern "C" GeoIPRecord * GeoIP_record_by_name (GeoIP * gi, const char * host);
 
 extern "C" GeoIPRecord * GeoIP_record_by_ipnum_v6 (GeoIP* gi, geoipv6_t ipnum);
 

@@ -46,7 +46,7 @@ describe('Check database file type', function() {
       type.should.equal('country_v6');
       setTimeout(done, 1);
     });
-  }); 
+  });
 
   describe('../database/GeoLiteCity.dat', function() {
     it('should equal to city', function(done) {
@@ -66,7 +66,7 @@ describe('Check database file type', function() {
       type.should.equal('city_v6');
       setTimeout(done, 1);
     });
-  }); 
+  });
 
   describe('../database/GeoIPRegion-515.dat', function() {
     it('should equal to region', function(done) {
@@ -86,5 +86,5 @@ describe('Check database file type', function() {
       type.should.equal('org');
       setTimeout(done, 1);
     });
-  }); 
+  });
 });

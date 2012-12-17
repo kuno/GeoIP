@@ -7,7 +7,7 @@
 #include "org.h"
 #include "global.h"
 
-Persistent<FunctionTemplate> geoip::Org::constructor_template; 
+Persistent<FunctionTemplate> geoip::Org::constructor_template;
 
 void geoip::Org::Init(Handle<Object> target)
 {
@@ -36,11 +36,11 @@ Handle<Value> geoip::Org::New(const Arguments& args)
   Org *o = new Org();
 
   String::Utf8Value file_str(args[0]->ToString());
-  const char * file_cstr = ToCString(file_str);      
+  const char * file_cstr = ToCString(file_str);
   //Local<String> path_str = args[0]->ToString();
   //char path_cstr[path_str->Length()];
   //path_str->WriteAscii(path_cstr);
-  bool cache_on = args[1]->ToBoolean()->Value(); 
+  bool cache_on = args[1]->ToBoolean()->Value();
 
   o->db = GeoIP_open(file_cstr, cache_on?GEOIP_MEMORY_CACHE:GEOIP_STANDARD);
 
@@ -54,7 +54,7 @@ Handle<Value> geoip::Org::New(const Arguments& args)
       return scope.Close(args.This());
     } else {
       GeoIP_delete(o->db);	// free()'s the gi reference & closes its fd
-      o->db = NULL;                                                       
+      o->db = NULL;
       return scope.Close(ThrowException(String::New("Error: Not valid org database")));
     }
   } else {
@@ -108,7 +108,7 @@ Handle<Value> geoip::Org::lookup(const Arguments& args)
 
   uv_queue_work(uv_default_loop(), req, EIO_Org, EIO_AfterOrg);
 
-  return scope.Close(Undefined());       
+  return scope.Close(Undefined());
 }
 
 void geoip::Org::EIO_Org(uv_work_t *req)
@@ -117,7 +117,7 @@ void geoip::Org::EIO_Org(uv_work_t *req)
 
   if (baton->ipnum <= 0) {
     baton->org = NULL;
-  } 
+  }
 
   baton->org = GeoIP_org_by_ipnum(baton->o->db, baton->ipnum);
 }
@@ -158,12 +158,12 @@ Handle<Value> geoip::Org::update(const Arguments &args) {
 
   HandleScope scope;
 
-  Org* o = ObjectWrap::Unwrap<Org>(args.This()); 
+  Org* o = ObjectWrap::Unwrap<Org>(args.This());
 
   String::Utf8Value file_str(args[0]->ToString());
   const char * file_cstr = ToCString(file_str);
 
-  bool cache_on = args[1]->ToBoolean()->Value(); 
+  bool cache_on = args[1]->ToBoolean()->Value();
 
   o->db = GeoIP_open(file_cstr, cache_on?GEOIP_MEMORY_CACHE:GEOIP_STANDARD);
 
@@ -171,11 +171,11 @@ Handle<Value> geoip::Org::update(const Arguments &args) {
     o->db_edition = GeoIP_database_edition(o->db);
    if (o->db_edition == GEOIP_ORG_EDITION ||
        o->db_edition == GEOIP_ASNUM_EDITION ||
-       o->db_edition == GEOIP_ISP_EDITION) {          
+       o->db_edition == GEOIP_ISP_EDITION) {
       return scope.Close(True());
     } else {
       GeoIP_delete(o->db);	// free()'s the gi reference & closes its fd
-      o->db = NULL;                                                       
+      o->db = NULL;
       return scope.Close(ThrowException(String::New("Error: Not valid organization database")));
     }
   } else {
@@ -186,7 +186,7 @@ Handle<Value> geoip::Org::update(const Arguments &args) {
 }
 
 void geoip::Org::close(const Arguments &args) {
-  Org* o = ObjectWrap::Unwrap<geoip::Org>(args.This()); 
+  Org* o = ObjectWrap::Unwrap<geoip::Org>(args.This());
   GeoIP_delete(o->db);	// free()'s the gi reference & closes its fd
   o->db = NULL;
   HandleScope scope;	// Stick this down here since it seems to segfault when on top?

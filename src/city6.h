@@ -2,7 +2,7 @@
  * GeoIP C library binding for nodejs
  *
  * Licensed under the GNU LGPL 2.1 license
- */                                              
+ */
 
 #ifndef NODE_GEOIP_CITY6_H
 #define NODE_GEOIP_CITY6_H
@@ -41,7 +41,7 @@ namespace geoip {
       static Handle<Value> lookupSync(const Arguments &args);
 
       static Handle<Value> lookup(const Arguments &args);
-      
+
       static Handle<Value> update(const Arguments &args);
 
       static void close(const Arguments &args);

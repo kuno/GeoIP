@@ -2,7 +2,7 @@ var geoip = require('geoip');
 
 // !! Important !!
 // Befor you can use this package, you need to download or buy some data fro http://www.maxmind.com/app/ip-location.
-// There are some free databases among some commercial versions, the free databases can be found http://geolite.maxmind.com/download/geoip/database/.   
+// There are some free databases among some commercial versions, the free databases can be found http://geolite.maxmind.com/download/geoip/database/.
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -22,7 +22,7 @@ console.log(country_obj);
 { country_code: 'US',
   country_code3: 'USA',
   country_name: 'United States',
-  continent_code: 'NA' 
+  continent_code: 'NA'
 }
 */
 
@@ -48,7 +48,7 @@ console.log(country_obj_v6);
 { country_code: 'US',
   country_code3: 'USA',
   country_name: 'United States',
-  continent_code: 'NA' 
+  continent_code: 'NA'
 }
 */
 
@@ -60,11 +60,11 @@ country_v6.lookup('2400:2352:b0f1:36c5:aa9d:694a:2f98:40bd', function(err, data_
     if (data_v6) {
       console.log(data_v6);
       /*
-      { 
+      {
         country_code: 'JP',
         country_code3: 'JPN',
         country_name: 'Japan',
-        continent_code: 'AS' 
+        continent_code: 'AS'
       }
       */
     }
@@ -146,11 +146,11 @@ city6.lookup('2001:b565:487a:c05d:5f07:5662:c3cd:cfcf', function(err, data) {
         country_name: 'Taiwan',
         latitude: 23.5,
         longitude: 121,
-        continent_code: 'AS' 
+        continent_code: 'AS'
       }
       */
     }
-});           
+});
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -190,7 +190,7 @@ var Region = geoip.Region;
 var region = new Region('/path/to/GeoIPRegion.dat');
 
 // Synchronous method
-var region_obj = region.lookupSync('8.8.8.8'); 
+var region_obj = region.lookupSync('8.8.8.8');
 
 console.log(region_obj);
 /*
@@ -223,7 +223,7 @@ console.log(netspeed_str);
 netspeed_str just a simple string, 'Dialup', 'Corprate'... so on
 */
 
-netspeed.update('/path/to/new/netspeed/database');         
+netspeed.update('/path/to/new/netspeed/database');
 
 // Asynchronous method
 netspeed.lookup('www.google.com', function(err, data) {

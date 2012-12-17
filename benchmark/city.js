@@ -14,7 +14,7 @@ var ip32 = function() {
     }
   }
   return ip;
-}
+};
 
 var start = new Date().getTime();
 for (var j = 0; j < 10000; ++j) {

@@ -33,7 +33,7 @@ If not, you can build for yourself:
 
 GeoIP takes the so call 'two steps' dependency policy, which means the minimal version of libgeoip is always the previous release of the latest one.
 
-For example, currently(April 2012) latest release of libgeoip is 1.4.8, so the minimal dependency will be the previous release, which is 1.4.7, and so on. 
+For example, currently(April 2012) latest release of libgeoip is 1.4.8, so the minimal dependency will be the previous release, which is 1.4.7, and so on.
 
 ##Data
 
@@ -193,14 +193,14 @@ ipv6 address lookup
 
     // Open the GeoLiteCityv6.dat file first.
     var City6 = geoip.City6;
-    var city6 = new City6('/path/to/GeoLiteCityv6.dat');             
+    var city6 = new City6('/path/to/GeoLiteCityv6.dat');
 
   Synchronous method:
 
       var city6_obj = city6.lookupSync('2002:7679:b9af:db9b:ab51:501a:db4e:2d');
       console.log(city6_obj);
       /*
-      { 
+      {
        country_code: 'CN',
        country_code3: 'CHN',
        country_name: 'China',
@@ -219,7 +219,7 @@ ipv6 address lookup
         if (data) {
             console.log(data);
             /* As expected ,return an object that contains city information
-            { 
+            {
              country_code: 'US',
              country_code3: 'USA',
              country_name: 'United States',
@@ -228,11 +228,11 @@ ipv6 address lookup
              postal_code: '80112',
              latitude: 39.569000244140625,
              longitude: -104.85820007324219,
-             continent_code: 'NA' 
+             continent_code: 'NA'
             }
             */
           }
-      });              
+      });
 
 ###Organization
 

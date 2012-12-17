@@ -20,7 +20,7 @@ color: #ff80b2;
 * add db_type check in every module
 
 ###v0.2.1###
-* Try in added ASNUM file supporting  
+* Try in added ASNUM file supporting
 * Make org_by_add method return an arrary of string rather than a strang object
 
 ###v0.3.0###

@@ -41,19 +41,19 @@ Handle<Value> geoip::City6::New(const Arguments& args)
   //Local<String> file_str = args[0]->ToString();
   //char file_cstr[file_str->Length()];
   //file_str->WriteAscii(file_cstr);
-  bool cache_on = args[1]->ToBoolean()->Value(); 
+  bool cache_on = args[1]->ToBoolean()->Value();
 
   c->db = GeoIP_open(file_cstr, cache_on?GEOIP_MEMORY_CACHE:GEOIP_STANDARD);
 
   if (c->db != NULL) {
     c->db_edition = GeoIP_database_edition(c->db);
-    if (c->db_edition == GEOIP_CITY_EDITION_REV0_V6 || 
+    if (c->db_edition == GEOIP_CITY_EDITION_REV0_V6 ||
         c->db_edition == GEOIP_CITY_EDITION_REV1_V6) {
       c->Wrap(args.This());
       return scope.Close(args.This());
     } else {
       GeoIP_delete(c->db);	// free()'s the gi reference & closes its fd
-      c->db = NULL;                                                       
+      c->db = NULL;
       return ThrowException(String::New("Error: Not valid city ipv6 database"));
     }
   } else {
@@ -161,7 +161,7 @@ Handle<Value> geoip::City6::lookup(const Arguments& args)
 
   uv_queue_work(uv_default_loop(), req, EIO_City, EIO_AfterCity);
 
-  return scope.Close(Undefined());                  
+  return scope.Close(Undefined());
 }
 
 void geoip::City6::EIO_City(uv_work_t *req)
@@ -206,7 +206,7 @@ void geoip::City6::EIO_AfterCity(uv_work_t *req)
 
     if (baton->record->city != NULL) {
       data->Set(String::NewSymbol("city"), String::New(_GeoIP_iso_8859_1__utf8(baton->record->city)));
-    }                                                                       
+    }
 
     if (baton->record->postal_code != NULL) {
       data->Set(String::NewSymbol("postal_code"), String::New(baton->record->postal_code));
@@ -265,12 +265,12 @@ Handle<Value> geoip::City6::update(const Arguments &args) {
 
   HandleScope scope;
 
-  City6 * c = ObjectWrap::Unwrap<City6>(args.This()); 
+  City6 * c = ObjectWrap::Unwrap<City6>(args.This());
 
   String::Utf8Value file_str(args[0]->ToString());
   const char * file_cstr = ToCString(file_str);
 
-  bool cache_on = args[1]->ToBoolean()->Value(); 
+  bool cache_on = args[1]->ToBoolean()->Value();
 
   c->db = GeoIP_open(file_cstr, cache_on?GEOIP_MEMORY_CACHE:GEOIP_STANDARD);
 
@@ -281,7 +281,7 @@ Handle<Value> geoip::City6::update(const Arguments &args) {
       return scope.Close(True());
     } else {
       GeoIP_delete(c->db);	// free()'s the gi reference & closes its fd
-      c->db = NULL;                                                       
+      c->db = NULL;
       return scope.Close(ThrowException(String::New("Error: Not valid city ipv6 database")));
     }
   } else {
@@ -292,7 +292,7 @@ Handle<Value> geoip::City6::update(const Arguments &args) {
 }
 
 void geoip::City6::close(const Arguments &args) {
-  City6 * c = ObjectWrap::Unwrap<geoip::City6>(args.This()); 
+  City6 * c = ObjectWrap::Unwrap<geoip::City6>(args.This());
   GeoIP_delete(c->db);	// free()'s the gi reference & closes its fd
   c->db = NULL;
   HandleScope scope;	// Stick this down here since it seems to segfault when on top?

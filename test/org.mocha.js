@@ -59,7 +59,7 @@ describe('Organization', function() {
         should.exist(data);
         data.should.be.an('string');
         setTimeout(done, 1);
-      }); 
+      });
     });
 
     it('should can find location by ip address', function(done) {
@@ -78,4 +78,4 @@ describe('Organization', function() {
       setTimeout(done, 1);
     });
   });
-});  
+});

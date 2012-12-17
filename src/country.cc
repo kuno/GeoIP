@@ -20,7 +20,7 @@ void geoip::Country::Init(Handle<Object> target)
 
   NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookup", lookup);
   NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookupSync", lookupSync);
-  NODE_SET_PROTOTYPE_METHOD(constructor_template, "update", update); 
+  NODE_SET_PROTOTYPE_METHOD(constructor_template, "update", update);
   //NODE_SET_PROTOTYPE_METHOD(constructor_template, "close", close);
   target->Set(String::NewSymbol("Country"), constructor_template->GetFunction());
 }
@@ -38,7 +38,7 @@ Handle<Value> geoip::Country::New(const Arguments& args)
   String::Utf8Value file_str(args[0]->ToString());
   const char * file_cstr = ToCString(file_str);
 
-  bool cache_on = args[1]->ToBoolean()->Value(); 
+  bool cache_on = args[1]->ToBoolean()->Value();
 
   c->db = GeoIP_open(file_cstr, cache_on?GEOIP_MEMORY_CACHE:GEOIP_STANDARD);
 
@@ -49,7 +49,7 @@ Handle<Value> geoip::Country::New(const Arguments& args)
       return scope.Close(args.This());
     } else {
       GeoIP_delete(c->db);	// free()'s the gi reference & closes its fd
-      c->db = NULL;                                                       
+      c->db = NULL;
       return scope.Close(ThrowException(String::New("Error: Not valid country database")));
     }
   } else {
@@ -94,7 +94,7 @@ Handle<Value> geoip::Country::lookup(const Arguments& args)
   Country * c = ObjectWrap::Unwrap<Country>(args.This());
   Local<String> host_str = args[0]->ToString();
   char host_cstr[host_str->Length()];
-  host_str->WriteAscii(host_cstr);           
+  host_str->WriteAscii(host_cstr);
 
   country_baton_t *baton = new country_baton_t();
 
@@ -107,7 +107,7 @@ Handle<Value> geoip::Country::lookup(const Arguments& args)
 
   uv_queue_work(uv_default_loop(), req, EIO_Country, EIO_AfterCountry);
 
-  return scope.Close(Undefined());         
+  return scope.Close(Undefined());
 }
 
 void geoip::Country::EIO_Country(uv_work_t *req)
@@ -163,12 +163,12 @@ Handle<Value> geoip::Country::update(const Arguments &args) {
 
   HandleScope scope;
 
-  Country* c = ObjectWrap::Unwrap<Country>(args.This()); 
+  Country* c = ObjectWrap::Unwrap<Country>(args.This());
 
   String::Utf8Value file_str(args[0]->ToString());
   const char * file_cstr = ToCString(file_str);
 
-  bool cache_on = args[1]->ToBoolean()->Value(); 
+  bool cache_on = args[1]->ToBoolean()->Value();
 
   c->db = GeoIP_open(file_cstr, cache_on?GEOIP_MEMORY_CACHE:GEOIP_STANDARD);
 
@@ -178,7 +178,7 @@ Handle<Value> geoip::Country::update(const Arguments &args) {
       return scope.Close(True());
     } else {
       GeoIP_delete(c->db);  // free()'s the gi reference & closes its fd
-      c->db = NULL;                                                       
+      c->db = NULL;
       return scope.Close(ThrowException(String::New("Error: Not valid country database")));
     }
   } else {
@@ -189,7 +189,7 @@ Handle<Value> geoip::Country::update(const Arguments &args) {
 }
 
 void geoip::Country::close(const Arguments &args) {
-  Country* c = ObjectWrap::Unwrap<Country>(args.This()); 
+  Country* c = ObjectWrap::Unwrap<Country>(args.This());
   GeoIP_delete(c->db);  // free()'s the gi reference & closes its fd
   c->db = NULL;
   HandleScope scope;  // Stick this down here since it seems to segfault when on top?

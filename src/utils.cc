@@ -2,7 +2,7 @@
  * GeoIP C library binding for nodejs
  *
  * Licensed under the GNU LGPL 2.1 license
- */                                          
+ */
 
 #include "utils.h"
 #include "global.h"
@@ -88,7 +88,7 @@ namespace geoip {
       return scope.Close(edition);
     }
 
-    return ThrowException(String::New("Error: Cannot open database"));   
+    return ThrowException(String::New("Error: Cannot open database"));
   }
 
 }

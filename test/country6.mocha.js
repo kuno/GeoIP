@@ -59,7 +59,7 @@ describe('Country6', function() {
         should.exist(data);
         data.should.be.an('object');
         setTimeout(done, 1);
-      }); 
+      });
     });
 
     it('should find location by ip address', function(done) {
@@ -76,6 +76,6 @@ describe('Country6', function() {
         instance.update(file).should.be.ok;
         setTimeout(done, 1);
       });
-    }); 
+    });
   });
-}); 
+});

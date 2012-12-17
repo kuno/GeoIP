@@ -49,7 +49,7 @@ describe('City6', function() {
       var data = instance.lookupSync('2406:a000:f0ff:fffe::122d');
       data.should.be.a('object');
       setTimeout(done, 1);
-    });  
+    });
   });
 
   describe('Asynchrouns Lookup', function() {
@@ -59,7 +59,7 @@ describe('City6', function() {
         should.exist(data);
         data.should.be.an('object');
         setTimeout(done, 1);
-      }); 
+      });
     });
 
     it('should can find location by ip address', function(done) {
@@ -68,7 +68,7 @@ describe('City6', function() {
         should.exist(data);
         data.should.be.an('object');
         setTimeout(done, 1);
-      }); 
+      });
     });
   });
 
@@ -78,4 +78,4 @@ describe('City6', function() {
       setTimeout(done, 1);
     });
   });
-}); 
+});

@@ -59,7 +59,7 @@ describe('Region', function() {
         should.exist(data);
         data.should.be.an('object');
         setTimeout(done, 1);
-      }); 
+      });
     });
 
     it('should can find location by ip address', function(done) {
@@ -78,4 +78,4 @@ describe('Region', function() {
       setTimeout(done, 1);
     });
   });
-}); 
+});

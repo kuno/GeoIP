@@ -1,13 +1,14 @@
+
 /*
  * GeoIP C library binding for nodejs
  *
  * Licensed under the GNU LGPL 2.1 license
- */                                          
+ */
 
 #include "region.h"
 #include "global.h"
 
-Persistent<FunctionTemplate> geoip::Region::constructor_template; 
+Persistent<FunctionTemplate> geoip::Region::constructor_template;
 
 void geoip::Region::Init(Handle<Object> target)
 {
@@ -35,18 +36,18 @@ Handle<Value> geoip::Region::New(const Arguments& args)
   Region * r = new Region();
 
   String::Utf8Value file_str(args[0]->ToString());
-  const char * file_cstr = ToCString(file_str);      
+  const char * file_cstr = ToCString(file_str);
   // Local<String> host_str = args[0]->ToString();
   // char host_cstr[host_str->Length()];
   // host_str->WriteAscii(host_cstr);
-  bool cache_on = args[1]->ToBoolean()->Value(); 
+  bool cache_on = args[1]->ToBoolean()->Value();
 
   r->db = GeoIP_open(file_cstr, cache_on?GEOIP_MEMORY_CACHE:GEOIP_STANDARD);
 
   if (r->db != NULL) {
     // Successfully opened the file, return 1 (true)
     r->db_edition = GeoIP_database_edition(r->db);
-    if (r->db_edition == GEOIP_REGION_EDITION_REV0 || 
+    if (r->db_edition == GEOIP_REGION_EDITION_REV0 ||
         r->db_edition == GEOIP_REGION_EDITION_REV1) {
       r->Wrap(args.This());
       return scope.Close(args.This());
@@ -110,7 +111,7 @@ Handle<Value> geoip::Region::lookup(const Arguments& args)
 
   uv_queue_work(uv_default_loop(), req, EIO_Region, EIO_AfterRegion);
 
-  return scope.Close(Undefined());      
+  return scope.Close(Undefined());
 }
 
 void geoip::Region::EIO_Region(uv_work_t *req)
@@ -162,12 +163,12 @@ Handle<Value> geoip::Region::update(const Arguments &args) {
 
   HandleScope scope;
 
-  Region* r = ObjectWrap::Unwrap<Region>(args.This()); 
+  Region* r = ObjectWrap::Unwrap<Region>(args.This());
 
   String::Utf8Value file_str(args[0]->ToString());
   const char * file_cstr = ToCString(file_str);
 
-  bool cache_on = args[1]->ToBoolean()->Value(); 
+  bool cache_on = args[1]->ToBoolean()->Value();
 
   r->db = GeoIP_open(file_cstr, cache_on?GEOIP_MEMORY_CACHE:GEOIP_STANDARD);
 
@@ -178,7 +179,7 @@ Handle<Value> geoip::Region::update(const Arguments &args) {
       return scope.Close(True());
     } else {
       GeoIP_delete(r->db);	// free()'s the gi reference & closes its fd
-      r->db = NULL;                                                       
+      r->db = NULL;
       return scope.Close(ThrowException(String::New("Error: Not valid region database")));
     }
   } else {
@@ -186,10 +187,10 @@ Handle<Value> geoip::Region::update(const Arguments &args) {
   }
 
  Unlocker unlocker;
-}                         
+}
 
 void geoip::Region::close(const Arguments &args) {
-  Region * r = ObjectWrap::Unwrap<Region>(args.This()); 
+  Region * r = ObjectWrap::Unwrap<Region>(args.This());
   GeoIP_delete(r->db);	// free()'s the gi reference & closes its fd
   r->db = NULL;
   HandleScope scope;	// Stick this down here since it seems to segfault when on top?

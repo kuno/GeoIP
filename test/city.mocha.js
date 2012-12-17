@@ -49,7 +49,7 @@ describe('City', function() {
       var data = instance.lookupSync('8.8.8.8');
       data.should.be.a('object');
       setTimeout(done, 1);
-    }); 
+    });
   });
 
   describe('Asynchrouns Lookup', function() {

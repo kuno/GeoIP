@@ -2,7 +2,7 @@
  * GeoIP C library binding for nodejs
  *
  * Licensed under the GNU LGPL 2.1 license
- */                                              
+ */
 
 #include "netspeed.h"
 #include "country6.h"
@@ -17,7 +17,7 @@ extern "C" {
   static void init(Handle<Object> target)
   {
     HandleScope scope;
-    
+
     // Initialize Modules
     geoip::NetSpeed::Init(target);
     geoip::Country6::Init(target);
@@ -35,4 +35,4 @@ extern "C" {
   }
 
   NODE_MODULE(geoip, init);
-} 
+}

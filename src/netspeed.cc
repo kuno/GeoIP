@@ -2,7 +2,7 @@
  * GeoIP C library binding for nodejs
  *
  * Licensed under the GNU LGPL 2.1 license
- */                                          
+ */
 
 #include "netspeed.h"
 #include "global.h"
@@ -35,11 +35,11 @@ Handle<Value> geoip::NetSpeed::New(const Arguments& args)
   NetSpeed *n = new NetSpeed();
 
   String::Utf8Value file_str(args[0]->ToString());
-  const char * file_cstr = ToCString(file_str);      
+  const char * file_cstr = ToCString(file_str);
   //Local<String> file_str = args[0]->ToString();
   //char file_cstr[file_str->Length()];
   //file_str->WriteAscii(file_cstr);
-  bool cache_on = args[1]->ToBoolean()->Value(); 
+  bool cache_on = args[1]->ToBoolean()->Value();
 
   n->db = GeoIP_open(file_cstr, cache_on?GEOIP_MEMORY_CACHE:GEOIP_STANDARD);
 
@@ -50,7 +50,7 @@ Handle<Value> geoip::NetSpeed::New(const Arguments& args)
       return scope.Close(args.This());
     } else {
       GeoIP_delete(n->db);	// free()'s the gi reference & closes its fd
-      n->db = NULL;                                                       
+      n->db = NULL;
       return scope.Close(ThrowException(String::New("Error: Not valid netspeed database")));
     }
   } else {
@@ -110,7 +110,7 @@ Handle<Value> geoip::NetSpeed::lookup(const Arguments& args)
 
   uv_queue_work(uv_default_loop(), req, EIO_NetSpeed, EIO_AfterNetSpeed);
 
-  return scope.Close(Undefined());        
+  return scope.Close(Undefined());
 }
 
 void geoip::NetSpeed::EIO_NetSpeed(uv_work_t *req)
@@ -169,12 +169,12 @@ Handle<Value> geoip::NetSpeed::update(const Arguments &args) {
 
   HandleScope scope;
 
-  NetSpeed* n = ObjectWrap::Unwrap<NetSpeed>(args.This()); 
+  NetSpeed* n = ObjectWrap::Unwrap<NetSpeed>(args.This());
 
   String::Utf8Value file_str(args[0]->ToString());
   const char * file_cstr = ToCString(file_str);
 
-  bool cache_on = args[1]->ToBoolean()->Value(); 
+  bool cache_on = args[1]->ToBoolean()->Value();
 
   n->db = GeoIP_open(file_cstr, cache_on?GEOIP_MEMORY_CACHE:GEOIP_STANDARD);
 
@@ -184,7 +184,7 @@ Handle<Value> geoip::NetSpeed::update(const Arguments &args) {
       return scope.Close(True());
     } else {
       GeoIP_delete(n->db);	// free()'s the gi reference & closes its fd
-      n->db = NULL;                                                       
+      n->db = NULL;
       return scope.Close(ThrowException(String::New("Error: Not valid netspeed database")));
     }
   } else {
@@ -195,7 +195,7 @@ Handle<Value> geoip::NetSpeed::update(const Arguments &args) {
 }
 
 void geoip::NetSpeed::close(const Arguments &args) {
-  NetSpeed* n = ObjectWrap::Unwrap<NetSpeed>(args.This()); 
+  NetSpeed* n = ObjectWrap::Unwrap<NetSpeed>(args.This());
   GeoIP_delete(n->db);	// free()'s the gi reference & closes its fd
   n->db = NULL;
   HandleScope scope;	// Stick this down here since it seems to segfault when on top?
