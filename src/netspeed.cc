@@ -50,7 +50,7 @@ Handle<Value> geoip::NetSpeed::New(const Arguments& args)
       return scope.Close(args.This());
     } else {
       GeoIP_delete(n->db);	// free()'s the gi reference & closes its fd
-      n->db = NULL;
+      delete n->db;
       return scope.Close(ThrowException(String::New("Error: Not valid netspeed database")));
     }
   } else {
@@ -184,7 +184,7 @@ Handle<Value> geoip::NetSpeed::update(const Arguments &args) {
       return scope.Close(True());
     } else {
       GeoIP_delete(n->db);	// free()'s the gi reference & closes its fd
-      n->db = NULL;
+      delete n->db;
       return scope.Close(ThrowException(String::New("Error: Not valid netspeed database")));
     }
   } else {
@@ -197,6 +197,6 @@ Handle<Value> geoip::NetSpeed::update(const Arguments &args) {
 void geoip::NetSpeed::close(const Arguments &args) {
   NetSpeed* n = ObjectWrap::Unwrap<NetSpeed>(args.This());
   GeoIP_delete(n->db);	// free()'s the gi reference & closes its fd
-  n->db = NULL;
+  delete n->db;
   HandleScope scope;	// Stick this down here since it seems to segfault when on top?
 }

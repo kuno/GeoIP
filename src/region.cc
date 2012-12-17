@@ -53,7 +53,7 @@ Handle<Value> geoip::Region::New(const Arguments& args)
       return scope.Close(args.This());
     } else {
       GeoIP_delete(r->db);	// free()'s the gi reference & closes its fd
-      r->db = NULL;
+      delete r->db;
       printf("edition is %d", r->db_edition);
       return scope.Close(ThrowException(String::New("Error: Not valid region database")));
     }
@@ -179,7 +179,7 @@ Handle<Value> geoip::Region::update(const Arguments &args) {
       return scope.Close(True());
     } else {
       GeoIP_delete(r->db);	// free()'s the gi reference & closes its fd
-      r->db = NULL;
+      delete r->db;
       return scope.Close(ThrowException(String::New("Error: Not valid region database")));
     }
   } else {
@@ -192,6 +192,6 @@ Handle<Value> geoip::Region::update(const Arguments &args) {
 void geoip::Region::close(const Arguments &args) {
   Region * r = ObjectWrap::Unwrap<Region>(args.This());
   GeoIP_delete(r->db);	// free()'s the gi reference & closes its fd
-  r->db = NULL;
+  delete r->db;
   HandleScope scope;	// Stick this down here since it seems to segfault when on top?
 }

@@ -54,7 +54,7 @@ Handle<Value> geoip::Org::New(const Arguments& args)
       return scope.Close(args.This());
     } else {
       GeoIP_delete(o->db);	// free()'s the gi reference & closes its fd
-      o->db = NULL;
+      delete o->db;
       return scope.Close(ThrowException(String::New("Error: Not valid org database")));
     }
   } else {
@@ -175,7 +175,7 @@ Handle<Value> geoip::Org::update(const Arguments &args) {
       return scope.Close(True());
     } else {
       GeoIP_delete(o->db);	// free()'s the gi reference & closes its fd
-      o->db = NULL;
+      delete o->db;
       return scope.Close(ThrowException(String::New("Error: Not valid organization database")));
     }
   } else {
@@ -188,6 +188,6 @@ Handle<Value> geoip::Org::update(const Arguments &args) {
 void geoip::Org::close(const Arguments &args) {
   Org* o = ObjectWrap::Unwrap<geoip::Org>(args.This());
   GeoIP_delete(o->db);	// free()'s the gi reference & closes its fd
-  o->db = NULL;
+  delete o->db;
   HandleScope scope;	// Stick this down here since it seems to segfault when on top?
 }

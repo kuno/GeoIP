@@ -53,7 +53,7 @@ Handle<Value> geoip::City6::New(const Arguments& args)
       return scope.Close(args.This());
     } else {
       GeoIP_delete(c->db);	// free()'s the gi reference & closes its fd
-      c->db = NULL;
+      delete c->db;
       return ThrowException(String::New("Error: Not valid city ipv6 database"));
     }
   } else {
@@ -281,7 +281,7 @@ Handle<Value> geoip::City6::update(const Arguments &args) {
       return scope.Close(True());
     } else {
       GeoIP_delete(c->db);	// free()'s the gi reference & closes its fd
-      c->db = NULL;
+      delete c->db;
       return scope.Close(ThrowException(String::New("Error: Not valid city ipv6 database")));
     }
   } else {
@@ -294,6 +294,6 @@ Handle<Value> geoip::City6::update(const Arguments &args) {
 void geoip::City6::close(const Arguments &args) {
   City6 * c = ObjectWrap::Unwrap<geoip::City6>(args.This());
   GeoIP_delete(c->db);	// free()'s the gi reference & closes its fd
-  c->db = NULL;
+  delete c->db;
   HandleScope scope;	// Stick this down here since it seems to segfault when on top?
 }
