@@ -9,7 +9,7 @@ REGION_DB="http://www.maxmind.com/sample/GeoIPRegion-515_20050401.tar.gz"
 ASUM_DB="http://geolite.maxmind.com/download/geoip/database/asnum/GeoIPASNum.dat.gz"
 NETSPEED_DB="http://www.maxmind.com/sample/GeoIP-171_20040418.tar.gz"
 
-mkdir ./database || return 1
+mkdir -p ./database || return 1
 cd ./database || return 1
 
 # Country
