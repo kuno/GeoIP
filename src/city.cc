@@ -99,11 +99,13 @@ Handle<Value> geoip::City::lookupSync(const Arguments &args) {
   }
 
   if (record->city != NULL) {
-    const char * name = _GeoIP_iso_8859_1__utf8(record->city);
+    char * name = _GeoIP_iso_8859_1__utf8(record->city);
+    
+    if (name) {
+      data->Set(String::NewSymbol("city"), String::New(name));
+    }
 
-    data->Set(String::NewSymbol("city"), String::New(name));
-
-    delete name;
+    free(name);
   }
 
   if (record->postal_code != NULL) {
@@ -210,11 +212,13 @@ void geoip::City::EIO_AfterCity(uv_work_t *req)
     }
 
     if (baton->record->city != NULL) {
-      const char * name = _GeoIP_iso_8859_1__utf8(baton->record->city);
+      char * name = _GeoIP_iso_8859_1__utf8(baton->record->city);
 
-      data->Set(String::NewSymbol("city"), String::New(name));
+      if (name) {
+        data->Set(String::NewSymbol("city"), String::New(name));
+      }
 
-      delete name;
+      free(name);
     }
 
     if (baton->record->postal_code != NULL) {

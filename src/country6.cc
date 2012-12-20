@@ -81,14 +81,14 @@ Handle<Value> geoip::Country6::lookupSync(const Arguments &args) {
     if (country_id == 0) {
       return scope.Close(Null());
     } else {
-      const char * name = _GeoIP_iso_8859_1__utf8(GeoIP_country_name[country_id]);
+      char * name = _GeoIP_iso_8859_1__utf8(GeoIP_country_name[country_id]);
 
       data->Set(String::NewSymbol("country_name"), String::New(name));
       data->Set(String::NewSymbol("country_code"), String::New(GeoIP_country_code[country_id]));
       data->Set(String::NewSymbol("country_code3"), String::New(GeoIP_country_code3[country_id]));
       data->Set(String::NewSymbol("continent_code"), String::New(GeoIP_country_continent[country_id]));
 
-      delete name;
+      free(name);
 
       return scope.Close(data);
     }
@@ -154,7 +154,7 @@ void geoip::Country6::EIO_AfterCountry(uv_work_t *req)
   } else {
     Local<Object> data = Object::New();
 
-    const char * name = _GeoIP_iso_8859_1__utf8(GeoIP_country_name[baton->country_id]);
+    char * name = _GeoIP_iso_8859_1__utf8(GeoIP_country_name[baton->country_id]);
 
     data->Set(String::NewSymbol("country_name"), String::New(name));
     data->Set(String::NewSymbol("country_code"), String::New(GeoIP_country_code[baton->country_id]));
@@ -164,7 +164,7 @@ void geoip::Country6::EIO_AfterCountry(uv_work_t *req)
     argv[0] = Null();
     argv[1] = data;
 
-    delete name;
+    free(name);
   }
 
   TryCatch try_catch;

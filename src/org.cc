@@ -37,6 +37,7 @@ Handle<Value> geoip::Org::New(const Arguments& args)
 
   String::Utf8Value file_str(args[0]->ToString());
   const char * file_cstr = ToCString(file_str);
+
   //Local<String> path_str = args[0]->ToString();
   //char path_cstr[path_str->Length()];
   //path_str->WriteAscii(path_cstr);
@@ -81,12 +82,13 @@ Handle<Value> geoip::Org::lookupSync(const Arguments &args) {
     return scope.Close(Null());
   }
   
-  const char * name = _GeoIP_iso_8859_1__utf8(org);
+  char * name = _GeoIP_iso_8859_1__utf8(org);
 
   data = String::New(name);
  
   delete org;
-  delete name;
+  free(name);
+  
   return scope.Close(data);
 }
 
@@ -137,14 +139,14 @@ void geoip::Org::EIO_AfterOrg(uv_work_t *req)
     argv[0] = Exception::Error(String::New("Data not found"));
     argv[1] = Null();
   } else {
-    const char * name = _GeoIP_iso_8859_1__utf8(baton->org);
+    char * name = _GeoIP_iso_8859_1__utf8(baton->org);
 
     Local<String> data = String::New(name);
 
     argv[0] = Null();
     argv[1] = data;
 
-    delete name;
+    free(name);
   }
 
   TryCatch try_catch;
