@@ -78,8 +78,18 @@ describe('Check database file type', function() {
     });
   });
 
-  describe('../database/GeoIPASNum.dat', function() {
+  describe('../database/GeoIPOrg-111.dat', function() {
     it('should equal to org', function(done) {
+      var file = path.resolve(__dirname, '../database/GeoIPOrg-111.dat');
+      var type = geoip.check(file);
+
+      type.should.equal('org');
+      setTimeout(done, 1);
+    });
+  });
+
+  describe('../database/GeoIPASNum.dat', function() {
+    it('should equal to asnum', function(done) {
       var file = path.resolve(__dirname, '../database/GeoIPASNum.dat');
       var type = geoip.check(file);
 
