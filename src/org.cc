@@ -70,14 +70,14 @@ Handle<Value> geoip::Org::lookupSync(const Arguments &args) {
   Local<Value> data;
   char host_cstr[host_str->Length()];
   host_str->WriteAscii(host_cstr);
-  Org* o = ObjectWrap::Unwrap<geoip::Org>(args.This());
+  Org * o = ObjectWrap::Unwrap<geoip::Org>(args.This());
 
   uint32_t ipnum = _GeoIP_lookupaddress(host_cstr);
   if (ipnum <= 0) {
     return scope.Close(Null());
   }
 
-  char *org = GeoIP_org_by_ipnum(o->db, ipnum);
+  char * org = GeoIP_org_by_ipnum(o->db, ipnum);
   if (org == NULL) {
     return scope.Close(Null());
   }
@@ -86,7 +86,7 @@ Handle<Value> geoip::Org::lookupSync(const Arguments &args) {
 
   data = String::New(name);
  
-  delete org;
+  free(org);
   free(name);
   
   return scope.Close(data);
