@@ -11,6 +11,15 @@ From __v0.4.0__, geoip will be bind to libgeoip >= __1.4.7__, which is a C libra
 
 ![new_architecture](https://github.com/kuno/GeoIP/raw/master/misc/new_architecture.png)
 
+###Memory leak issue
+As up to the version 0.4.7 (commit [22dadd98646f75318412b54b3de90cc079d34b1d](https://github.com/kuno/GeoIP/commit/22dadd98646f75318412b54b3de90cc079d34b1d)), there will be some memory leak when new a object from GeoIP class.
+
+Here is the [report](https://gist.github.com/4357339), I'll update it frequently.
+
+Fortunately, the number of leaked bytes is not huge, and you wont new a object very offen.
+
+If you are willing to fix this but, please fork this project.
+
 
 ###Dependency
 
