@@ -18,10 +18,6 @@ namespace geoip {
   class NetSpeed: ObjectWrap
   {
     private:
-      NetSpeed();
-
-      ~NetSpeed();
-
       GeoIP *db;
 
       int db_edition;
@@ -36,6 +32,10 @@ namespace geoip {
       static Handle<Value> New(const Arguments &args);
 
     public:
+      NetSpeed();
+
+      ~NetSpeed();
+
       static void Init(Handle<Object> target);
 
       static Handle<Value> lookupSync(const Arguments &args);

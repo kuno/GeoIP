@@ -25,9 +25,13 @@ void geoip::NetSpeed::Init(Handle<Object> target)
   target->Set(String::NewSymbol("NetSpeed"), constructor_template->GetFunction());
 }
 
-geoip::NetSpeed::NetSpeed() {};
+geoip::NetSpeed::NetSpeed() : db(NULL) {};
 
-geoip::NetSpeed::~NetSpeed() {};
+geoip::NetSpeed::~NetSpeed() {
+  if (db) {
+    GeoIP_delete(db);
+  }
+};
 
 Handle<Value> geoip::NetSpeed::New(const Arguments& args)
 {

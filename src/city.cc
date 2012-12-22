@@ -25,9 +25,12 @@ void geoip::City::Init(Handle<Object> target)
   target->Set(String::NewSymbol("City"), constructor_template->GetFunction());
 }
 
-geoip::City::City() {};
+geoip::City::City() : db(NULL) {};
 
-geoip::City::~City() {};
+geoip::City::~City() { if (db) {
+  GeoIP_delete(db);
+  }
+};
 
 Handle<Value> geoip::City::New(const Arguments& args)
 {
@@ -61,7 +64,7 @@ Handle<Value> geoip::City::New(const Arguments& args)
   }
 }
 
-Handle<Value> geoip::City::lookupSync(const Arguments &args) {
+Handle<Value> geoip::City::lookupSync(const Arguments &   args) {
   HandleScope scope;
 
   Local<String> host_str = args[0]->ToString();
@@ -100,7 +103,7 @@ Handle<Value> geoip::City::lookupSync(const Arguments &args) {
 
   if (record->city != NULL) {
     char * name = _GeoIP_iso_8859_1__utf8(record->city);
-    
+
     if (name) {
       data->Set(String::NewSymbol("city"), String::New(name));
     }
@@ -147,7 +150,7 @@ Handle<Value> geoip::City::lookupSync(const Arguments &args) {
   return scope.Close(data);
 }
 
-Handle<Value> geoip::City::lookup(const Arguments& args)
+Handle<Value> geoip::City::lookup(const Arguments & args)
 {
   HandleScope scope;
 
@@ -171,7 +174,7 @@ Handle<Value> geoip::City::lookup(const Arguments& args)
   return scope.Close(Undefined());
 }
 
-void geoip::City::EIO_City(uv_work_t *req)
+void geoip::City::EIO_City(uv_work_t * req)
 {
   city_baton_t* baton = static_cast<city_baton_t *>(req->data);
 
@@ -182,11 +185,11 @@ void geoip::City::EIO_City(uv_work_t *req)
   }
 }
 
-void geoip::City::EIO_AfterCity(uv_work_t *req)
+void geoip::City::EIO_AfterCity(uv_work_t * req)
 {
   HandleScope scope;
 
-  city_baton_t *baton = static_cast<city_baton_t *>(req->data);
+  city_baton_t * baton = static_cast<city_baton_t *>(req->data);
 
   Handle<Value> argv[2];
 
@@ -273,12 +276,12 @@ void geoip::City::EIO_AfterCity(uv_work_t *req)
   }
 }
 
-Handle<Value> geoip::City::update(const Arguments &args) {
+Handle<Value> geoip::City::update(const Arguments & args) {
   Locker locke;
 
   HandleScope scope;
 
-  City* c = ObjectWrap::Unwrap<City>(args.This());
+  City * c = ObjectWrap::Unwrap<City>(args.This());
 
   String::Utf8Value file_str(args[0]->ToString());
   const char * file_cstr = ToCString(file_str);
@@ -305,7 +308,7 @@ Handle<Value> geoip::City::update(const Arguments &args) {
 }
 
 void geoip::City::close(const Arguments &args) {
-  City* c = ObjectWrap::Unwrap<geoip::City>(args.This());
+  City * c = ObjectWrap::Unwrap<geoip::City>(args.This());
   GeoIP_delete(c->db);	// free()'s the gi reference & closes its fd
   delete c->db;
   HandleScope scope;	// Stick this down here since it seems to segfault when on top?

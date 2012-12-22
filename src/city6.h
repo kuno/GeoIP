@@ -18,10 +18,6 @@ namespace geoip {
   class City6: ObjectWrap
   {
     private:
-      City6();
-
-      ~City6();
-
       GeoIP *db;
 
       int db_edition;
@@ -36,6 +32,10 @@ namespace geoip {
       static Handle<Value> New(const Arguments &args);
 
     public:
+      City6();
+
+      ~City6();
+
       static void Init(Handle<Object> target);
 
       static Handle<Value> lookupSync(const Arguments &args);

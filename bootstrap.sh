@@ -31,13 +31,13 @@ if [ ! -e "GeoLiteCity.dat" ]; then
 fi
 
 # City6
-if [ ! -e "GeoLiteCityv6" ]; then
+if [ ! -e "GeoLiteCityv6.dat" ]; then
   wget $CITY6_DB || return 1
   gunzip GeoLiteCityv6.dat.gz
 fi
 
 # Org
-if [ ! -e "GeoIOrg-111.dat" ]; then
+if [ ! -e "GeoIPOrg-111.dat" ]; then
     wget $ORG_DB || return 1
     tar -xvf GeoIP-111_20030603.tar.gz
     mv GeoIP-111_20030603/*.dat .

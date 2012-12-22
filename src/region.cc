@@ -26,9 +26,13 @@ void geoip::Region::Init(Handle<Object> target)
   target->Set(String::NewSymbol("Region"), constructor_template->GetFunction());
 }
 
-geoip::Region::Region() {};
+geoip::Region::Region() : db(NULL) {};
 
-geoip::Region::~Region() {};
+geoip::Region::~Region() {
+  if (db) {
+    GeoIP_delete(db);
+  }
+};
 
 Handle<Value> geoip::Region::New(const Arguments& args)
 {

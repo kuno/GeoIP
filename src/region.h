@@ -18,11 +18,8 @@ namespace geoip {
   class Region: ObjectWrap
   {
     private:
-      Region();
-
-      ~Region();
-
       GeoIP *db;
+
       int db_edition;
 
       static Persistent<FunctionTemplate> constructor_template;
@@ -35,6 +32,10 @@ namespace geoip {
       static Handle<Value> New(const Arguments &args);
 
     public:
+      Region();
+
+      ~Region();
+
       static void Init(Handle<Object> target);
 
       static Handle<Value> lookupSync(const Arguments &args);
