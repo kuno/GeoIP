@@ -97,3 +97,7 @@ v0.4.5, 2011-11-07
 
 v0.4.6, 2012-07-29
 1, fully support nodejs 0.8.x, breaking the compatibility with 0.6.x
+
+v0.4.7, 2012-12-22
+1, fixed most memory leak
+2, some cleanup
