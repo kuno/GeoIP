@@ -1,4 +1,3 @@
-test/*
 misc/*
 build/*
 sample/*
@@ -12,3 +11,6 @@ database/*
 
 .lock-wscript
 core
+
+.travis.yml
+*sublime*
