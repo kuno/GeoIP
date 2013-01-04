@@ -15,7 +15,8 @@
       "Robert Schultz <robert@cosmicrealms.com>",
       "Tim Oxley <secoif@gmail.com>",
       "sajal <sajal@turbobytes.com>",
-      "Chris O'Hara <cohara87@gmail.com>"
+      "Chris O'Hara <cohara87@gmail.com>",
+      "James Taylor <jt@gosquared.com>"
     ],
     "devDependencies": {
       "mocha": "~1.7.0",
