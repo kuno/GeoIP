@@ -1,7 +1,7 @@
 {
   "name":"geoip",
   "description":"GeoIP binding for node",
-  "version":"0.4.7",
+  "version":"0.4.8",
   "homepage":"http://github.com/kuno/GeoIP",
   "author":"Guan 'kuno' Qing <neokuno at Gmail dot com>",
   "contributors":
@@ -16,7 +16,8 @@
       "Tim Oxley <secoif@gmail.com>",
       "sajal <sajal@turbobytes.com>",
       "Chris O'Hara <cohara87@gmail.com>",
-      "James Taylor <jt@gosquared.com>"
+      "James Taylor <jt@gosquared.com>",
+      "Christopher Holt <cwholt@gmail.com>"
     ],
     "devDependencies": {
       "mocha": "~1.7.0",
