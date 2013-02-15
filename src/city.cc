@@ -74,7 +74,11 @@ Handle<Value> geoip::City::lookupSync(const Arguments &   args) {
   City * c = ObjectWrap::Unwrap<geoip::City>(args.This());
 
   uint32_t ipnum = _GeoIP_lookupaddress(host_cstr);
-  if (ipnum <= 0) {
+
+  //printf("Ip is %s.\n", host_cstr);
+  //printf("Ipnum is %d.", ipnum);
+
+  if (ipnum == 0) {
     return scope.Close(Null());
   }
 
@@ -172,6 +176,9 @@ Handle<Value> geoip::City::lookup(const Arguments & args)
   uv_work_t *req = new uv_work_t;
   req->data = baton;
 
+  //printf("Ip is %s.\n", host_cstr);
+  //printf("Ipnum is %d.", baton->ipnum);
+
   uv_queue_work(uv_default_loop(), req, EIO_City, (uv_after_work_cb)EIO_AfterCity);
 
   return scope.Close(Undefined());
@@ -181,7 +188,7 @@ void geoip::City::EIO_City(uv_work_t * req)
 {
   city_baton_t* baton = static_cast<city_baton_t *>(req->data);
 
-  if (baton->ipnum <= 0) {
+  if (baton->ipnum == 0) {
     baton->record = NULL;
   } else {
     baton->record = GeoIP_record_by_ipnum(baton->c->db, baton->ipnum);
