@@ -114,7 +114,7 @@ Handle<Value> geoip::Country::lookup(const Arguments& args)
   uv_work_t *req = new uv_work_t;
   req->data = baton;
 
-  uv_queue_work(uv_default_loop(), req, EIO_Country, EIO_AfterCountry);
+  uv_queue_work(uv_default_loop(), req, EIO_Country, (uv_after_work_cb)EIO_AfterCountry);
 
   return scope.Close(Undefined());
 }

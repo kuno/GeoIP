@@ -111,7 +111,7 @@ Handle<Value> geoip::Org::lookup(const Arguments& args)
   uv_work_t *req = new uv_work_t;
   req->data = baton;
 
-  uv_queue_work(uv_default_loop(), req, EIO_Org, EIO_AfterOrg);
+  uv_queue_work(uv_default_loop(), req, EIO_Org, (uv_after_work_cb)EIO_AfterOrg);
 
   return scope.Close(Undefined());
 }

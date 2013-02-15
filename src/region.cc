@@ -113,7 +113,7 @@ Handle<Value> geoip::Region::lookup(const Arguments& args)
   uv_work_t *req = new uv_work_t;
   req->data = baton;
 
-  uv_queue_work(uv_default_loop(), req, EIO_Region, EIO_AfterRegion);
+  uv_queue_work(uv_default_loop(), req, EIO_Region, (uv_after_work_cb)EIO_AfterRegion);
 
   return scope.Close(Undefined());
 }
