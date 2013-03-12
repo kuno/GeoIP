@@ -107,3 +107,6 @@ v0.4.7, 2013-01-04
 
 v0.4.8, 2013-02-15
 1, fix missing city data when looking up some special ip in async mode.
+
+v0.4.9, 2013-03-12
+1, make compatible with node 0.10.0
