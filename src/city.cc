@@ -179,7 +179,7 @@ Handle<Value> geoip::City::lookup(const Arguments & args)
   //printf("Ip is %s.\n", host_cstr);
   //printf("Ipnum is %d.", baton->ipnum);
 
-  uv_queue_work(uv_default_loop(), req, EIO_City, EIO_AfterCity);
+  uv_queue_work(uv_default_loop(), req, EIO_City, (uv_after_work_cb)EIO_AfterCity);
 
   return scope.Close(Undefined());
 }

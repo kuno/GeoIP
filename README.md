@@ -3,6 +3,10 @@ __GeoIP binding for nodejs__
 
 Get geolocation information based on domain or IP address.
 
+**Pure javascript implementation**
+
+If you are looking for a pure javascript implementation, the [`node-geoip`](https://github.com/bluesmoon/node-geoip) maybe your choice.
+
 ##Important Notification
 
 From __v0.4.0__, geoip will be bind to libgeoip >= __1.4.7__, which is a C library, __the api also has been changed__.
@@ -19,7 +23,6 @@ Here is the [report](https://gist.github.com/4357339), I'll update it frequently
 Fortunately, the number of leaked bytes is not huge, and you wont new a object very offen.
 
 If you are willing to fix this but, please fork this project.
-
 
 ###Dependency
 
@@ -53,9 +56,13 @@ There are some free databases among some commercial versions, the free databases
 
 ##Installation
 
-### for nodejs 0.8.x
+### for nodejs 0.10.x
 
     [sudo] npm install geoip [-g]
+
+### for nodejs 0.8.x
+
+    [sudo] npm install geoip@0.4.8 [-g]
 
 ### for nodejs 0.6.x
 
