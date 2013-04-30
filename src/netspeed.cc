@@ -161,7 +161,7 @@ Handle<Value> geoip::NetSpeed::lookupCellular(const Arguments& args)
   uv_work_t *req = new uv_work_t;
   req->data = baton;
 
-  uv_queue_work(uv_default_loop(), req, EIO_NetSpeed, EIO_AfterNetSpeed);
+  uv_queue_work(uv_default_loop(), req, EIO_NetSpeed, (uv_after_work_cb)EIO_AfterNetSpeed);
 
   return scope.Close(Undefined());
 }
