@@ -75,7 +75,7 @@
       'HAVE_STDLIB_H=1',
       'HAVE_MALLOC=1',
       'HAVE_STDLIB_H=1',
-      'HAVE_REALLOC=1',   
+      'HAVE_REALLOC=1',
       'GEOIPDATADIR="/tmp/"'
       ],
     'conditions': [

@@ -16,7 +16,6 @@
       ],
       'link_settings': {
       'libraries': [
-#'-llibGeoIP'
         ],
       },
       'include_dirs': [
