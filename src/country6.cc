@@ -203,7 +203,7 @@ Handle<Value> geoip::Country6::update(const Arguments &args) {
     if (c->db_edition == GEOIP_COUNTRY_EDITION_V6) {
       return scope.Close(True());
     } else {
-      GeoIP_delete(c->db);	// free()'s the gi reference & closes its fd
+      GeoIP_delete(c->db);  // free()'s the gi reference & closes its fd
       delete c->db;
       return scope.Close(ThrowException(String::New("Error: Not valid country database")));
     }
@@ -215,8 +215,8 @@ Handle<Value> geoip::Country6::update(const Arguments &args) {
 }
 
 void geoip::Country6::close(const Arguments &args) {
-  Country6* c = ObjectWrap::Unwrap<Country6>(args.This());
-  GeoIP_delete(c->db);	// free()'s the gi reference & closes its fd
+  Country6 * c = ObjectWrap::Unwrap<Country6>(args.This());
+  GeoIP_delete(c->db);  // free()'s the gi reference & closes its fd
   delete c->db;
-  HandleScope scope;	// Stick this down here since it seems to segfault when on top?
+  HandleScope scope;  // Stick this down here since it seems to segfault when on top?
 }

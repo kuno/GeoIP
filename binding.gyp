@@ -26,7 +26,10 @@
         'deps/GeoIP-1.5.0/libgeoip.gypi:geoip'
       ],
       'conditions': [
-       # TODO
+        ['OS=="win"', {
+          'defines': [
+            ]
+        }]
       ]
     },
   ]

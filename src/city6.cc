@@ -109,7 +109,7 @@ Handle<Value> geoip::City6::lookupSync(const Arguments &args) {
       data->Set(String::NewSymbol("city"), String::New(name));
     }
 
-    free(name);  
+    free(name);
   }
 
   if (record->postal_code != NULL) {
@@ -147,6 +147,7 @@ Handle<Value> geoip::City6::lookupSync(const Arguments &args) {
     }
   }
 
+  GeoIPRecord_delete(record);
   return scope.Close(data);
 }
 
