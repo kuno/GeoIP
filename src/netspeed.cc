@@ -19,7 +19,9 @@ void geoip::NetSpeed::Init(Handle<Object> target)
   constructor_template->SetClassName(String::NewSymbol("geoip"));
 
   NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookup", lookup);
+  NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookupCellular", lookupCellular);
   NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookupSync", lookupSync);
+  NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookupCellularSync", lookupCellularSync);
   NODE_SET_PROTOTYPE_METHOD(constructor_template, "update", update);
   //NODE_SET_PROTOTYPE_METHOD(constructor_template, "close", close);
   target->Set(String::NewSymbol("NetSpeed"), constructor_template->GetFunction());
@@ -50,7 +52,8 @@ Handle<Value> geoip::NetSpeed::New(const Arguments& args)
 
   if (n->db != NULL) {
     n->db_edition = GeoIP_database_edition(n->db);
-    if (n->db_edition == GEOIP_NETSPEED_EDITION) {
+    if (n->db_edition == GEOIP_NETSPEED_EDITION ||
+        n->db_edition == GEOIP_NETSPEED_EDITION_REV1) {
       n->Wrap(args.This());
       return scope.Close(args.This());
     } else {
@@ -94,6 +97,27 @@ Handle<Value> geoip::NetSpeed::lookupSync(const Arguments &args) {
   return scope.Close(data);
 }
 
+Handle<Value> geoip::NetSpeed::lookupCellularSync(const Arguments &args) {
+  HandleScope scope;
+
+  NetSpeed * n = ObjectWrap::Unwrap<NetSpeed>(args.This());
+
+  Local<String> host_str = args[0]->ToString();
+  Local<String> data;
+  char host_cstr[host_str->Length()];
+  host_str->WriteAscii(host_cstr);
+
+  char* speed = GeoIP_name_by_addr(n->db, host_cstr);
+  if (speed == NULL) {
+    data = String::New("Unknown");
+  }
+  else {
+    data = String::New(speed);
+  }
+
+  return scope.Close(data);
+}
+
 Handle<Value> geoip::NetSpeed::lookup(const Arguments& args)
 {
   HandleScope scope;
@@ -118,44 +142,84 @@ Handle<Value> geoip::NetSpeed::lookup(const Arguments& args)
   return scope.Close(Undefined());
 }
 
+Handle<Value> geoip::NetSpeed::lookupCellular(const Arguments& args)
+{
+  HandleScope scope;
+
+  REQ_FUN_ARG(1, cb);
+
+  NetSpeed * n = ObjectWrap::Unwrap<NetSpeed>(args.This());
+  Local<String> host_str = args[0]->ToString();
+  char host_cstr[host_str->Length()];
+  host_str->WriteAscii(host_cstr);
+
+  netspeed_baton_t *baton = new netspeed_baton_t();
+  baton->n = n;
+  baton->host_addr = host_cstr;
+  baton->cb = Persistent<Function>::New(cb);
+
+  uv_work_t *req = new uv_work_t;
+  req->data = baton;
+
+  uv_queue_work(uv_default_loop(), req, EIO_NetSpeed, (uv_after_work_cb)EIO_AfterNetSpeed);
+
+  return scope.Close(Undefined());
+}
+
 void geoip::NetSpeed::EIO_NetSpeed(uv_work_t *req)
 {
   netspeed_baton_t *baton = static_cast<netspeed_baton_t *>(req->data);
 
-  if (baton->ipnum < 0) {
-    baton->netspeed = -1;
-  } else {
-    baton->netspeed = GeoIP_id_by_ipnum(baton->n->db, baton->ipnum);
+  if (baton->n->db_edition == GEOIP_NETSPEED_EDITION_REV1) {
+    baton->netspeed_str = GeoIP_name_by_addr(baton->n->db, baton->host_addr);
+  }
+  else {
+    if (baton->ipnum < 0) {
+      baton->netspeed = -1;
+    } else {
+      baton->netspeed = GeoIP_id_by_ipnum(baton->n->db, baton->ipnum);
+    }
   }
 }
 
 void geoip::NetSpeed::EIO_AfterNetSpeed(uv_work_t *req)
 {
   HandleScope scope;
+  Handle<Value> argv[2];
 
   netspeed_baton_t *baton = static_cast<netspeed_baton_t *>(req->data);
 
-  Handle<Value> argv[2];
-
-  if (baton->netspeed < 0) {
-    argv[0] = Exception::Error(String::New("Data not found"));
-    argv[1] = Null();
-  } else {
-    Local<String> data;
-    if (baton->netspeed == GEOIP_UNKNOWN_SPEED) {
-      data = String::New("Uknown");
-    } else if (baton->netspeed == GEOIP_DIALUP_SPEED) {
-      data = String::New("Dailup");
-    } else if (baton->netspeed == GEOIP_CABLEDSL_SPEED) {
-      data = String::New("CableDSL");
-    } else if (baton->netspeed == GEOIP_CORPORATE_SPEED) {
-      data = String::New("Corporate");
+  if (baton->n->db_edition == GEOIP_NETSPEED_EDITION_REV1) {
+    if (!baton->netspeed_str) {
+      argv[0] = Exception::Error(String::New("Data not found"));
+      argv[1] = Null();
     }
-
-    argv[0] =  Null();
-    argv[1] = data;
+    else {
+      Local<String> data = String::New(baton->netspeed_str);
+      argv[0] = Null();
+      argv[1] = data;
+    }
   }
+  else {
+    if (baton->netspeed < 0) {
+      argv[0] = Exception::Error(String::New("Data not found"));
+      argv[1] = Null();
+    } else {
+      Local<String> data;
+      if (baton->netspeed == GEOIP_UNKNOWN_SPEED) {
+        data = String::New("Unknown");
+      } else if (baton->netspeed == GEOIP_DIALUP_SPEED) {
+        data = String::New("Dailup");
+      } else if (baton->netspeed == GEOIP_CABLEDSL_SPEED) {
+        data = String::New("CableDSL");
+      } else if (baton->netspeed == GEOIP_CORPORATE_SPEED) {
+        data = String::New("Corporate");
+      }
 
+      argv[0] =  Null();
+      argv[1] = data;
+    }
+  }
   TryCatch try_catch;
   baton->cb->Call(Context::GetCurrent()->Global(), 2, argv);
 
@@ -185,7 +249,8 @@ Handle<Value> geoip::NetSpeed::update(const Arguments &args) {
 
   if (n->db != NULL) {
     n->db_edition = GeoIP_database_edition(n->db);
-    if (n->db_edition == GEOIP_NETSPEED_EDITION) {
+    if (n->db_edition == GEOIP_NETSPEED_EDITION ||
+        n->db_edition == GEOIP_NETSPEED_EDITION_REV1) {
       return scope.Close(True());
     } else {
       GeoIP_delete(n->db);	// free()'s the gi reference & closes its fd

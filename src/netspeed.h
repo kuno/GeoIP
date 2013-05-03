@@ -40,7 +40,11 @@ namespace geoip {
 
       static Handle<Value> lookupSync(const Arguments &args);
 
+      static Handle<Value> lookupCellularSync(const Arguments &args);
+
       static Handle<Value> lookup(const Arguments &args);
+
+      static Handle<Value> lookupCellular(const Arguments &args);
 
       static Handle<Value> update(const Arguments &args);
 
@@ -51,7 +55,9 @@ namespace geoip {
 struct netspeed_baton_t {
   geoip::NetSpeed *n;
   int ipnum;  // uint32_t?
+  char* host_addr;
   int netspeed;
+  char* netspeed_str;
   Persistent<Function> cb;
 };
 
