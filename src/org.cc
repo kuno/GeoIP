@@ -29,7 +29,7 @@ geoip::Org::Org() {};
 
 geoip::Org::~Org() {};
 
-Handle<Value> geoip::Org::New(const Arguments& args)
+Handle<Value> geoip::Org::New(const Arguments &args)
 {
   HandleScope scope;
 
@@ -54,8 +54,7 @@ Handle<Value> geoip::Org::New(const Arguments& args)
       o->Wrap(args.This());
       return scope.Close(args.This());
     } else {
-      GeoIP_delete(o->db);	// free()'s the gi reference & closes its fd
-      delete o->db;
+      GeoIP_delete(o->db);  // free()'s the gi reference & closes its fd
       return scope.Close(ThrowException(String::New("Error: Not valid org database")));
     }
   } else {
@@ -73,26 +72,27 @@ Handle<Value> geoip::Org::lookupSync(const Arguments &args) {
   Org * o = ObjectWrap::Unwrap<geoip::Org>(args.This());
 
   uint32_t ipnum = _GeoIP_lookupaddress(host_cstr);
+
   if (ipnum <= 0) {
     return scope.Close(Null());
   }
 
-  char * org = GeoIP_org_by_ipnum(o->db, ipnum);
+  char *org = GeoIP_org_by_ipnum(o->db, ipnum);
   if (org == NULL) {
     return scope.Close(Null());
   }
-  
-  char * name = _GeoIP_iso_8859_1__utf8(org);
+
+  char *name = _GeoIP_iso_8859_1__utf8(org);
 
   data = String::New(name);
- 
+
   free(org);
   free(name);
-  
+
   return scope.Close(data);
 }
 
-Handle<Value> geoip::Org::lookup(const Arguments& args)
+Handle<Value> geoip::Org::lookup(const Arguments &args)
 {
   HandleScope scope;
 
@@ -167,14 +167,14 @@ Handle<Value> geoip::Org::update(const Arguments &args) {
 
   HandleScope scope;
 
-  Org* o = ObjectWrap::Unwrap<Org>(args.This());
+  Org *o = ObjectWrap::Unwrap<Org>(args.This());
 
   String::Utf8Value file_str(args[0]->ToString());
-  const char * file_cstr = ToCString(file_str);
+  const char *file_cstr = ToCString(file_str);
 
   bool cache_on = args[1]->ToBoolean()->Value();
 
-  o->db = GeoIP_open(file_cstr, cache_on?GEOIP_MEMORY_CACHE:GEOIP_STANDARD);
+  o->db = GeoIP_open(file_cstr, cache_on ? GEOIP_MEMORY_CACHE : GEOIP_STANDARD);
 
   if (o->db != NULL) {
     o->db_edition = GeoIP_database_edition(o->db);
@@ -183,8 +183,7 @@ Handle<Value> geoip::Org::update(const Arguments &args) {
        o->db_edition == GEOIP_ISP_EDITION) {
       return scope.Close(True());
     } else {
-      GeoIP_delete(o->db);	// free()'s the gi reference & closes its fd
-      delete o->db;
+      GeoIP_delete(o->db);  // free()'s the gi reference & closes its fd
       return scope.Close(ThrowException(String::New("Error: Not valid organization database")));
     }
   } else {
@@ -196,7 +195,6 @@ Handle<Value> geoip::Org::update(const Arguments &args) {
 
 void geoip::Org::close(const Arguments &args) {
   Org* o = ObjectWrap::Unwrap<geoip::Org>(args.This());
-  GeoIP_delete(o->db);	// free()'s the gi reference & closes its fd
-  delete o->db;
-  HandleScope scope;	// Stick this down here since it seems to segfault when on top?
+  GeoIP_delete(o->db);  // free()'s the gi reference & closes its fd
+  HandleScope scope;  // Stick this down here since it seems to segfault when on top?
 }

@@ -33,11 +33,11 @@ geoip::City6::~City6() {
   }
 };
 
-Handle<Value> geoip::City6::New(const Arguments& args)
+Handle<Value> geoip::City6::New(const Arguments &args)
 {
   HandleScope scope;
 
-  City6 * c = new City6();
+  City6 *c = new City6();
 
   String::Utf8Value file_str(args[0]->ToString());
   const char * file_cstr = ToCString(file_str);
@@ -47,7 +47,7 @@ Handle<Value> geoip::City6::New(const Arguments& args)
   //file_str->WriteAscii(file_cstr);
   bool cache_on = args[1]->ToBoolean()->Value();
 
-  c->db = GeoIP_open(file_cstr, cache_on?GEOIP_MEMORY_CACHE:GEOIP_STANDARD);
+  c->db = GeoIP_open(file_cstr, cache_on ? GEOIP_MEMORY_CACHE : GEOIP_STANDARD);
 
   if (c->db != NULL) {
     c->db_edition = GeoIP_database_edition(c->db);
@@ -56,8 +56,7 @@ Handle<Value> geoip::City6::New(const Arguments& args)
       c->Wrap(args.This());
       return scope.Close(args.This());
     } else {
-      GeoIP_delete(c->db);	// free()'s the gi reference & closes its fd
-      delete c->db;
+      GeoIP_delete(c->db);  // free()'s the gi reference & closes its fd
       return ThrowException(String::New("Error: Not valid city ipv6 database"));
     }
   } else {
@@ -80,7 +79,7 @@ Handle<Value> geoip::City6::lookupSync(const Arguments &args) {
     return scope.Close(Null());
   }
 
-  GeoIPRecord * record = GeoIP_record_by_ipnum_v6(c->db, ipnum_v6);
+  GeoIPRecord *record = GeoIP_record_by_ipnum_v6(c->db, ipnum_v6);
 
   if (record == NULL) {
     return scope.Close(Null()); //return ThrowException(String::New("Error: Can not find match data"));
@@ -103,7 +102,7 @@ Handle<Value> geoip::City6::lookupSync(const Arguments &args) {
   }
 
   if (record->city != NULL) {
-    char * name = _GeoIP_iso_8859_1__utf8(record->city);
+    char *name = _GeoIP_iso_8859_1__utf8(record->city);
 
     if (name) {
       data->Set(String::NewSymbol("city"), String::New(name));
@@ -141,7 +140,7 @@ Handle<Value> geoip::City6::lookupSync(const Arguments &args) {
   }
 
   if (record->country_code != NULL && record->region != NULL) {
-    const char * time_zone = GeoIP_time_zone_by_country_and_region(record->country_code, record->region);
+    const char *time_zone = GeoIP_time_zone_by_country_and_region(record->country_code, record->region);
     if(time_zone != NULL) {
       data->Set(String::NewSymbol("time_zone"), String::New(time_zone));
     }
@@ -151,18 +150,18 @@ Handle<Value> geoip::City6::lookupSync(const Arguments &args) {
   return scope.Close(data);
 }
 
-Handle<Value> geoip::City6::lookup(const Arguments& args)
+Handle<Value> geoip::City6::lookup(const Arguments &args)
 {
   HandleScope scope;
 
   REQ_FUN_ARG(1, cb);
 
-  City6 * c = ObjectWrap::Unwrap<geoip::City6>(args.This());
+  City6 *c = ObjectWrap::Unwrap<geoip::City6>(args.This());
   Local<String> host_str = args[0]->ToString();
   char host_cstr[host_str->Length()];
   host_str->WriteAscii(host_cstr);
 
-  city6_baton_t * baton = new city6_baton_t();
+  city6_baton_t *baton = new city6_baton_t();
   baton->c = c;
   baton->ipnum_v6 = _GeoIP_lookupaddress_v6(host_cstr);
   baton->cb = Persistent<Function>::New(cb);
@@ -177,7 +176,7 @@ Handle<Value> geoip::City6::lookup(const Arguments& args)
 
 void geoip::City6::EIO_City(uv_work_t *req)
 {
-  city6_baton_t * baton = static_cast<city6_baton_t *>(req->data);
+  city6_baton_t *baton = static_cast<city6_baton_t *>(req->data);
 
   if (__GEOIP_V6_IS_NULL(baton->ipnum_v6)) {
     baton->record = NULL;
@@ -190,7 +189,7 @@ void geoip::City6::EIO_AfterCity(uv_work_t *req)
 {
   HandleScope scope;
 
-  city6_baton_t * baton = static_cast<city6_baton_t *>(req->data);
+  city6_baton_t *baton = static_cast<city6_baton_t *>(req->data);
 
   Handle<Value> argv[2];
 
@@ -216,7 +215,7 @@ void geoip::City6::EIO_AfterCity(uv_work_t *req)
     }
 
     if (baton->record->city != NULL) {
-      char * name = _GeoIP_iso_8859_1__utf8(baton->record->city);
+      char *name = _GeoIP_iso_8859_1__utf8(baton->record->city);
 
       if (name) {
         data->Set(String::NewSymbol("city"), String::New(name));
@@ -254,7 +253,7 @@ void geoip::City6::EIO_AfterCity(uv_work_t *req)
     }
 
     if (baton->record->country_code != NULL && baton->record->region != NULL) {
-      const char * time_zone = GeoIP_time_zone_by_country_and_region(baton->record->country_code, baton->record->region);
+      const char *time_zone = GeoIP_time_zone_by_country_and_region(baton->record->country_code, baton->record->region);
       if(time_zone != NULL) {
         data->Set(String::NewSymbol("time_zone"), String::New(time_zone));
       }
@@ -282,14 +281,14 @@ Handle<Value> geoip::City6::update(const Arguments &args) {
 
   HandleScope scope;
 
-  City6 * c = ObjectWrap::Unwrap<City6>(args.This());
+  City6 *c = ObjectWrap::Unwrap<City6>(args.This());
 
   String::Utf8Value file_str(args[0]->ToString());
-  const char * file_cstr = ToCString(file_str);
+  const char *file_cstr = ToCString(file_str);
 
   bool cache_on = args[1]->ToBoolean()->Value();
 
-  c->db = GeoIP_open(file_cstr, cache_on?GEOIP_MEMORY_CACHE:GEOIP_STANDARD);
+  c->db = GeoIP_open(file_cstr, cache_on ? GEOIP_MEMORY_CACHE : GEOIP_STANDARD);
 
   if (c->db != NULL) {
     c->db_edition = GeoIP_database_edition(c->db);
@@ -297,20 +296,18 @@ Handle<Value> geoip::City6::update(const Arguments &args) {
         c->db_edition == GEOIP_CITY_EDITION_REV1_V6) {
       return scope.Close(True());
     } else {
-      GeoIP_delete(c->db);	// free()'s the gi reference & closes its fd
-      delete c->db;
+      GeoIP_delete(c->db);  // free()'s the gi reference & closes its fd
       return scope.Close(ThrowException(String::New("Error: Not valid city ipv6 database")));
     }
   } else {
     return scope.Close(ThrowException(String::New("Error: Cannot open database")));
   }
 
- Unlocker unlocker;
+  Unlocker unlocker;
 }
 
 void geoip::City6::close(const Arguments &args) {
   City6 * c = ObjectWrap::Unwrap<geoip::City6>(args.This());
-  GeoIP_delete(c->db);	// free()'s the gi reference & closes its fd
-  delete c->db;
-  HandleScope scope;	// Stick this down here since it seems to segfault when on top?
+  GeoIP_delete(c->db);  // free()'s the gi reference & closes its fd
+  HandleScope scope;  // Stick this down here since it seems to segfault when on top?
 }

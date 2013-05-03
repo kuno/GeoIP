@@ -29,7 +29,7 @@ namespace geoip {
       static void EIO_AfterCity(uv_work_t *req);
 
     protected:
-      static Handle<Value> New(const Arguments& args);
+      static Handle<Value> New(const Arguments &args);
 
     public:
       City();
@@ -40,7 +40,7 @@ namespace geoip {
 
       static Handle<Value> lookupSync(const Arguments &args);
 
-      static Handle<Value> lookup(const Arguments& args);
+      static Handle<Value> lookup(const Arguments &args);
 
       static Handle<Value> update(const Arguments &args);
 
