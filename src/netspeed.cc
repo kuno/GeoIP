@@ -92,8 +92,6 @@ Handle<Value> geoip::NetSpeed::lookupSync(const Arguments &args) {
     data = String::New("Corporate");
   }
 
-  free(&netspeed);
-
   return scope.Close(data);
 }
 
