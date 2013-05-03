@@ -7,10 +7,6 @@ Get geolocation information based on domain or IP address.
 
 If you are looking for a pure javascript implementation, the [`node-geoip`](https://github.com/bluesmoon/node-geoip) maybe your choice.
 
-##Important Notification
-
-From __v0.4.0__, geoip will be bind to libgeoip >= __1.4.7__, which is a C library, __the api also has been changed__.
-
 ###Technical Architecture
 
 ![new_architecture](https://github.com/kuno/GeoIP/raw/master/misc/new_architecture.png)
@@ -23,35 +19,6 @@ Here is the [report](https://gist.github.com/4357339), I'll update it frequently
 Fortunately, the number of leaked bytes is not huge, and you wont new a object very offen.
 
 If you are willing to fix this but, please fork this project.
-
-###Dependency
-
-####libgeoip C library
-
-If your os has a system package manager (e.g, on linux, apt of ubuntu, yum of fedora, pacman of arch. MacPorts and homebrew on OSX),
-
-then, there is a very high possibility that there is alreay a geoip c library package inside the repository.
-
-If not, you can build for yourself:
-
-    wget http://geolite.maxmind.com/download/geoip/api/c/GeoIP-1.4.7.tar.gz
-    tar -xvzf GeoIP-1.4.7.tar.gz
-    cd GeoIP-1.4.7
-    ./configure --prefix=/usr
-    make
-    sudo make install
-
-#####Dependency Policy
-
-GeoIP takes the so call 'two steps' dependency policy, which means the minimal version of libgeoip is always the previous release of the latest one.
-
-For example, currently(April 2012) latest release of libgeoip is 1.4.8, so the minimal dependency will be the previous release, which is 1.4.7, and so on.
-
-##Data
-
-Befor you can use this package, you need to download or buy some data from [www.maxmind.com](http://www.maxmind.com/app/ip-location).
-
-There are some free databases among some commercial versions, the free databases can be found [here](http://geolite.maxmind.com/download/geoip/database/).
 
 
 ##Installation
