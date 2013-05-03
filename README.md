@@ -23,13 +23,9 @@ If you are willing to fix this but, please fork this project.
 
 ##Installation
 
-### for nodejs 0.10.x
+### for nodejs >= 0.8.x
 
     [sudo] npm install geoip [-g]
-
-### for nodejs 0.8.x
-
-    [sudo] npm install geoip@0.4.8 [-g]
 
 ### for nodejs 0.6.x
 
