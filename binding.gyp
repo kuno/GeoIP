@@ -16,15 +16,20 @@
       ],
       'link_settings': {
       'libraries': [
-       '-lGeoIP'
         ],
       },
       'include_dirs': [
-          '<(node_root_dir)/src',
-          '<(node_root_dir)/deps/geoip/libGeoIP'
+          'src',
+          'deps/GeoIP-1.5.0/libGeoIP'
+      ],
+      'dependencies': [
+        'deps/GeoIP-1.5.0/libgeoip.gypi:geoip'
       ],
       'conditions': [
-           # TODO
+        ['OS=="win"', {
+          'defines': [
+            ]
+        }]
       ]
     },
   ]

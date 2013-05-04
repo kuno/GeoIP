@@ -29,10 +29,10 @@ geoip::City::City() : db(NULL) {};
 
 geoip::City::~City() { if (db) {
   GeoIP_delete(db);
-  }
+}
 };
 
-Handle<Value> geoip::City::New(const Arguments& args)
+Handle<Value> geoip::City::New(const Arguments &args)
 {
   HandleScope scope;
 
@@ -46,7 +46,7 @@ Handle<Value> geoip::City::New(const Arguments& args)
   //file_str->WriteAscii(file_cstr);
   bool cache_on = args[1]->ToBoolean()->Value();
 
-  c->db = GeoIP_open(file_cstr, cache_on?GEOIP_MEMORY_CACHE:GEOIP_STANDARD);
+  c->db = GeoIP_open(file_cstr, cache_on ? GEOIP_MEMORY_CACHE : GEOIP_STANDARD);
 
   if (c->db != NULL) {
     c->db_edition = GeoIP_database_edition(c->db);
@@ -55,8 +55,7 @@ Handle<Value> geoip::City::New(const Arguments& args)
       c->Wrap(args.This());
       return scope.Close(args.This());
     } else {
-      GeoIP_delete(c->db);	// free()'s the gi reference & closes its fd
-      delete c->db;
+      GeoIP_delete(c->db);  // free()'s the gi reference & closes its fd
       return ThrowException(String::New("Error: Not valid city database"));
     }
   } else {
@@ -64,7 +63,7 @@ Handle<Value> geoip::City::New(const Arguments& args)
   }
 }
 
-Handle<Value> geoip::City::lookupSync(const Arguments &   args) {
+Handle<Value> geoip::City::lookupSync(const Arguments &args) {
   HandleScope scope;
 
   Local<String> host_str = args[0]->ToString();
@@ -85,9 +84,6 @@ Handle<Value> geoip::City::lookupSync(const Arguments &   args) {
   GeoIPRecord * record = GeoIP_record_by_ipnum(c->db, ipnum);
 
   if (record == NULL) {
-    delete record;
-    //GeoIPRecord_delete(record);
-
     return scope.Close(Null()); //return ThrowException(String::New("Error: Can not find match data"));
   }
 
@@ -146,18 +142,17 @@ Handle<Value> geoip::City::lookupSync(const Arguments &   args) {
   }
 
   if (record->country_code != NULL && record->region != NULL) {
-    const char * time_zone = GeoIP_time_zone_by_country_and_region(record->country_code, record->region);
+    const char *time_zone = GeoIP_time_zone_by_country_and_region(record->country_code, record->region);
     if(time_zone != NULL) {
       data->Set(String::NewSymbol("time_zone"), String::New(time_zone));
     }
   }
 
-  //GeoIPRecord_delete(record);
-  delete record;
+  GeoIPRecord_delete(record);
   return scope.Close(data);
 }
 
-Handle<Value> geoip::City::lookup(const Arguments & args)
+Handle<Value> geoip::City::lookup(const Arguments &args)
 {
   HandleScope scope;
 
@@ -184,7 +179,7 @@ Handle<Value> geoip::City::lookup(const Arguments & args)
   return scope.Close(Undefined());
 }
 
-void geoip::City::EIO_City(uv_work_t * req)
+void geoip::City::EIO_City(uv_work_t *req)
 {
   city_baton_t* baton = static_cast<city_baton_t *>(req->data);
 
@@ -195,7 +190,7 @@ void geoip::City::EIO_City(uv_work_t * req)
   }
 }
 
-void geoip::City::EIO_AfterCity(uv_work_t * req)
+void geoip::City::EIO_AfterCity(uv_work_t *req)
 {
   HandleScope scope;
 
@@ -225,7 +220,7 @@ void geoip::City::EIO_AfterCity(uv_work_t * req)
     }
 
     if (baton->record->city != NULL) {
-      char * name = _GeoIP_iso_8859_1__utf8(baton->record->city);
+      char *name = _GeoIP_iso_8859_1__utf8(baton->record->city);
 
       if (name) {
         data->Set(String::NewSymbol("city"), String::New(name));
@@ -286,19 +281,19 @@ void geoip::City::EIO_AfterCity(uv_work_t * req)
   }
 }
 
-Handle<Value> geoip::City::update(const Arguments & args) {
+Handle<Value> geoip::City::update(const Arguments &args) {
   Locker locke;
 
   HandleScope scope;
 
-  City * c = ObjectWrap::Unwrap<City>(args.This());
+  City *c = ObjectWrap::Unwrap<City>(args.This());
 
   String::Utf8Value file_str(args[0]->ToString());
-  const char * file_cstr = ToCString(file_str);
+  const char *file_cstr = ToCString(file_str);
 
   bool cache_on = args[1]->ToBoolean()->Value();
 
-  c->db = GeoIP_open(file_cstr, cache_on?GEOIP_MEMORY_CACHE:GEOIP_STANDARD);
+  c->db = GeoIP_open(file_cstr, cache_on ? GEOIP_MEMORY_CACHE : GEOIP_STANDARD);
 
   if (c->db != NULL) {
     c->db_edition = GeoIP_database_edition(c->db);
@@ -306,8 +301,7 @@ Handle<Value> geoip::City::update(const Arguments & args) {
         c->db_edition == GEOIP_CITY_EDITION_REV1) {
       return scope.Close(True());
     } else {
-      GeoIP_delete(c->db);	// free()'s the gi reference & closes its fd
-      delete c->db;
+      GeoIP_delete(c->db);  // free()'s the gi reference & closes its fd
       return scope.Close(ThrowException(String::New("Error: Not valid city database")));
     }
   } else {
@@ -318,8 +312,7 @@ Handle<Value> geoip::City::update(const Arguments & args) {
 }
 
 void geoip::City::close(const Arguments &args) {
-  City * c = ObjectWrap::Unwrap<geoip::City>(args.This());
-  GeoIP_delete(c->db);	// free()'s the gi reference & closes its fd
-  delete c->db;
-  HandleScope scope;	// Stick this down here since it seems to segfault when on top?
+  City *c = ObjectWrap::Unwrap<geoip::City>(args.This());
+  GeoIP_delete(c->db);  // free()'s the gi reference & closes its fd
+  HandleScope scope;  // Stick this down here since it seems to segfault when on top?
 }

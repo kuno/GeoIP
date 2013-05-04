@@ -16,7 +16,7 @@ namespace geoip {
     char file_cstr[file_str->Length()];
     file_str->WriteAscii(file_cstr);
 
-    GeoIP * db = GeoIP_open(file_cstr, GEOIP_STANDARD);
+    GeoIP *db = GeoIP_open(file_cstr, GEOIP_STANDARD);
 
     if (db != NULL) {
       int db_edition = GeoIP_database_edition(db);

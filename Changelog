@@ -109,4 +109,8 @@ v0.4.8, 2013-02-15
 1, fix missing city data when looking up some special ip in async mode.
 
 v0.4.9, 2013-03-12
-1, make compatible with node 0.10.0
+1, make compatible with node 0.10.0.
+
+V0.4.10, 2012-05-04
+1, Make package self-building, i.e not depending on external libgeoip any
+more.

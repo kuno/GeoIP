@@ -34,10 +34,10 @@ geoip::Region::~Region() {
   }
 };
 
-Handle<Value> geoip::Region::New(const Arguments& args)
+Handle<Value> geoip::Region::New(const Arguments &args)
 {
   HandleScope scope;
-  Region * r = new Region();
+  Region *r = new Region();
 
   String::Utf8Value file_str(args[0]->ToString());
   const char * file_cstr = ToCString(file_str);
@@ -46,7 +46,7 @@ Handle<Value> geoip::Region::New(const Arguments& args)
   // host_str->WriteAscii(host_cstr);
   bool cache_on = args[1]->ToBoolean()->Value();
 
-  r->db = GeoIP_open(file_cstr, cache_on?GEOIP_MEMORY_CACHE:GEOIP_STANDARD);
+  r->db = GeoIP_open(file_cstr, cache_on ? GEOIP_MEMORY_CACHE : GEOIP_STANDARD);
 
   if (r->db != NULL) {
     // Successfully opened the file, return 1 (true)
@@ -56,9 +56,8 @@ Handle<Value> geoip::Region::New(const Arguments& args)
       r->Wrap(args.This());
       return scope.Close(args.This());
     } else {
-      GeoIP_delete(r->db);	// free()'s the gi reference & closes its fd
-      delete r->db;
-      printf("edition is %d", r->db_edition);
+      GeoIP_delete(r->db);  // free()'s the gi reference & closes its fd
+      //printf("edition is %d", r->db_edition);
       return scope.Close(ThrowException(String::New("Error: Not valid region database")));
     }
   } else {
@@ -89,18 +88,18 @@ Handle<Value> geoip::Region::lookupSync(const Arguments &args) {
     GeoIPRegion_delete(region);
     return scope.Close(data);
   } else {
-    GeoIPRegion_delete(region);
+    //GeoIPRegion_delete(region);
     return scope.Close(ThrowException(String::New("Error: Can not find match data")));
   }
 }
 
-Handle<Value> geoip::Region::lookup(const Arguments& args)
+Handle<Value> geoip::Region::lookup(const Arguments &args)
 {
   HandleScope scope;
 
   REQ_FUN_ARG(1, cb);
 
-  Region * r = ObjectWrap::Unwrap<Region>(args.This());
+  Region *r = ObjectWrap::Unwrap<Region>(args.This());
   Local<String> host_str = args[0]->ToString();
   char host_cstr[host_str->Length()];
   host_str->WriteAscii(host_cstr);
@@ -133,7 +132,7 @@ void geoip::Region::EIO_AfterRegion(uv_work_t *req)
 {
   HandleScope scope;
 
-  region_baton_t * baton = static_cast<region_baton_t *>(req->data);
+  region_baton_t *baton = static_cast<region_baton_t *>(req->data);
 
   Handle<Value> argv[2];
 
@@ -167,14 +166,14 @@ Handle<Value> geoip::Region::update(const Arguments &args) {
 
   HandleScope scope;
 
-  Region* r = ObjectWrap::Unwrap<Region>(args.This());
+  Region *r = ObjectWrap::Unwrap<Region>(args.This());
 
   String::Utf8Value file_str(args[0]->ToString());
-  const char * file_cstr = ToCString(file_str);
+  const char *file_cstr = ToCString(file_str);
 
   bool cache_on = args[1]->ToBoolean()->Value();
 
-  r->db = GeoIP_open(file_cstr, cache_on?GEOIP_MEMORY_CACHE:GEOIP_STANDARD);
+  r->db = GeoIP_open(file_cstr, cache_on ? GEOIP_MEMORY_CACHE : GEOIP_STANDARD);
 
   if (r->db != NULL) {
     r->db_edition = GeoIP_database_edition(r->db);
@@ -182,8 +181,7 @@ Handle<Value> geoip::Region::update(const Arguments &args) {
         r->db_edition == GEOIP_REGION_EDITION_REV1) {
       return scope.Close(True());
     } else {
-      GeoIP_delete(r->db);	// free()'s the gi reference & closes its fd
-      delete r->db;
+      GeoIP_delete(r->db);  // free()'s the gi reference & closes its fd
       return scope.Close(ThrowException(String::New("Error: Not valid region database")));
     }
   } else {
@@ -193,9 +191,8 @@ Handle<Value> geoip::Region::update(const Arguments &args) {
  Unlocker unlocker;
 }
 
-void geoip::Region::close(const Arguments &args) {
+void geoip::Region::close(const Arguments& args) {
   Region * r = ObjectWrap::Unwrap<Region>(args.This());
-  GeoIP_delete(r->db);	// free()'s the gi reference & closes its fd
-  delete r->db;
-  HandleScope scope;	// Stick this down here since it seems to segfault when on top?
+  GeoIP_delete(r->db);  // free()'s the gi reference & closes its fd
+  HandleScope scope;  // Stick this down here since it seems to segfault when on top?
 }

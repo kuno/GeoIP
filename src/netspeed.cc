@@ -33,20 +33,20 @@ geoip::NetSpeed::~NetSpeed() {
   }
 };
 
-Handle<Value> geoip::NetSpeed::New(const Arguments& args)
+Handle<Value> geoip::NetSpeed::New(const Arguments &args)
 {
   HandleScope scope;
   NetSpeed *n = new NetSpeed();
 
   String::Utf8Value file_str(args[0]->ToString());
   const char * file_cstr = ToCString(file_str);
-  
+
   //Local<String> file_str = args[0]->ToString();
   //char file_cstr[file_str->Length()];
   //file_str->WriteAscii(file_cstr);
   bool cache_on = args[1]->ToBoolean()->Value();
 
-  n->db = GeoIP_open(file_cstr, cache_on?GEOIP_MEMORY_CACHE:GEOIP_STANDARD);
+  n->db = GeoIP_open(file_cstr, cache_on ? GEOIP_MEMORY_CACHE : GEOIP_STANDARD);
 
   if (n->db != NULL) {
     n->db_edition = GeoIP_database_edition(n->db);
@@ -54,8 +54,7 @@ Handle<Value> geoip::NetSpeed::New(const Arguments& args)
       n->Wrap(args.This());
       return scope.Close(args.This());
     } else {
-      GeoIP_delete(n->db);	// free()'s the gi reference & closes its fd
-      delete n->db;
+      GeoIP_delete(n->db);  // free()'s the gi reference & closes its fd
       return scope.Close(ThrowException(String::New("Error: Not valid netspeed database")));
     }
   } else {
@@ -66,7 +65,7 @@ Handle<Value> geoip::NetSpeed::New(const Arguments& args)
 Handle<Value> geoip::NetSpeed::lookupSync(const Arguments &args) {
   HandleScope scope;
 
-  NetSpeed * n = ObjectWrap::Unwrap<NetSpeed>(args.This());
+  NetSpeed *n = ObjectWrap::Unwrap<NetSpeed>(args.This());
 
   Local<String> host_str = args[0]->ToString();
   Local<String> data;
@@ -80,6 +79,7 @@ Handle<Value> geoip::NetSpeed::lookupSync(const Arguments &args) {
   }
 
   int netspeed = GeoIP_id_by_ipnum(n->db, ipnum);
+
   if (netspeed < 0) {
     return scope.Close(Null());
   } else if (netspeed == GEOIP_UNKNOWN_SPEED) {
@@ -91,16 +91,17 @@ Handle<Value> geoip::NetSpeed::lookupSync(const Arguments &args) {
   } else if (netspeed == GEOIP_CORPORATE_SPEED) {
     data = String::New("Corporate");
   }
+
   return scope.Close(data);
 }
 
-Handle<Value> geoip::NetSpeed::lookup(const Arguments& args)
+Handle<Value> geoip::NetSpeed::lookup(const Arguments &args)
 {
   HandleScope scope;
 
   REQ_FUN_ARG(1, cb);
 
-  NetSpeed * n = ObjectWrap::Unwrap<NetSpeed>(args.This());
+  NetSpeed *n = ObjectWrap::Unwrap<NetSpeed>(args.This());
   Local<String> host_str = args[0]->ToString();
   char host_cstr[host_str->Length()];
   host_str->WriteAscii(host_cstr);
@@ -174,22 +175,21 @@ Handle<Value> geoip::NetSpeed::update(const Arguments &args) {
 
   HandleScope scope;
 
-  NetSpeed* n = ObjectWrap::Unwrap<NetSpeed>(args.This());
+  NetSpeed *n = ObjectWrap::Unwrap<NetSpeed>(args.This());
 
   String::Utf8Value file_str(args[0]->ToString());
-  const char * file_cstr = ToCString(file_str);
+  const char *file_cstr = ToCString(file_str);
 
   bool cache_on = args[1]->ToBoolean()->Value();
 
-  n->db = GeoIP_open(file_cstr, cache_on?GEOIP_MEMORY_CACHE:GEOIP_STANDARD);
+  n->db = GeoIP_open(file_cstr, cache_on ? GEOIP_MEMORY_CACHE : GEOIP_STANDARD);
 
   if (n->db != NULL) {
     n->db_edition = GeoIP_database_edition(n->db);
     if (n->db_edition == GEOIP_NETSPEED_EDITION) {
       return scope.Close(True());
     } else {
-      GeoIP_delete(n->db);	// free()'s the gi reference & closes its fd
-      delete n->db;
+      GeoIP_delete(n->db);  // free()'s the gi reference & closes its fd
       return scope.Close(ThrowException(String::New("Error: Not valid netspeed database")));
     }
   } else {
@@ -200,8 +200,7 @@ Handle<Value> geoip::NetSpeed::update(const Arguments &args) {
 }
 
 void geoip::NetSpeed::close(const Arguments &args) {
-  NetSpeed* n = ObjectWrap::Unwrap<NetSpeed>(args.This());
-  GeoIP_delete(n->db);	// free()'s the gi reference & closes its fd
-  delete n->db;
-  HandleScope scope;	// Stick this down here since it seems to segfault when on top?
+  NetSpeed *n = ObjectWrap::Unwrap<NetSpeed>(args.This());
+  GeoIP_delete(n->db);  // free()'s the gi reference & closes its fd
+  HandleScope scope;  // Stick this down here since it seems to segfault when on top?
 }
