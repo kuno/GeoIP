@@ -74,6 +74,10 @@ namespace geoip {
           edition = String::New("netspeed");
           break;
 
+        case GEOIP_NETSPEED_EDITION_REV1:
+          edition = String::New("netspeed cellular");
+          break;
+
         case GEOIP_DOMAIN_EDITION:
           edition = String::New("domain");
           break;
