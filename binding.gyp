@@ -20,10 +20,10 @@
       },
       'include_dirs': [
           'src',
-          'deps/GeoIP-1.5.0/libGeoIP'
+          'deps/GeoIP-1.5.1/libGeoIP'
       ],
       'dependencies': [
-        'deps/GeoIP-1.5.0/libgeoip.gypi:geoip'
+        'deps/GeoIP-1.5.1/libgeoip.gypi:geoip'
       ],
       'conditions': [
         ['OS=="win"', {
