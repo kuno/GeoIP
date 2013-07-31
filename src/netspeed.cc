@@ -83,9 +83,9 @@ Handle<Value> geoip::NetSpeed::lookupSync(const Arguments &args) {
   if (netspeed < 0) {
     return scope.Close(Null());
   } else if (netspeed == GEOIP_UNKNOWN_SPEED) {
-    data = String::New("Uknown");
+    data = String::New("Unknown");
   } else if (netspeed == GEOIP_DIALUP_SPEED) {
-    data = String::New("Dailup");
+    data = String::New("Dialup");
   } else if (netspeed == GEOIP_CABLEDSL_SPEED) {
     data = String::New("CableDSL");
   } else if (netspeed == GEOIP_CORPORATE_SPEED) {
@@ -144,9 +144,9 @@ void geoip::NetSpeed::EIO_AfterNetSpeed(uv_work_t *req)
   } else {
     Local<String> data;
     if (baton->netspeed == GEOIP_UNKNOWN_SPEED) {
-      data = String::New("Uknown");
+      data = String::New("Unknown");
     } else if (baton->netspeed == GEOIP_DIALUP_SPEED) {
-      data = String::New("Dailup");
+      data = String::New("Dialup");
     } else if (baton->netspeed == GEOIP_CABLEDSL_SPEED) {
       data = String::New("CableDSL");
     } else if (baton->netspeed == GEOIP_CORPORATE_SPEED) {
