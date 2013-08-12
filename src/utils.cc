@@ -8,15 +8,16 @@
 #include "global.h"
 
 namespace geoip {
-  Handle<Value> check(const Arguments &args) {
-    HandleScope scope;
+  NAN_METHOD(check) {
+    NanScope();
 
     Local<String> edition;
-    Local<String> file_str = args[0]->ToString();
-    char file_cstr[file_str->Length()];
-    file_str->WriteAscii(file_cstr);
+    size_t bc;
+    char *file_cstr = NanFromV8String(args[0].As<Object>(), Nan::ASCII, &bc, true);
 
     GeoIP *db = GeoIP_open(file_cstr, GEOIP_STANDARD);
+
+    delete[] file_cstr;
 
     if (db != NULL) {
       int db_edition = GeoIP_database_edition(db);
@@ -89,10 +90,10 @@ namespace geoip {
       GeoIP_delete(db);
       db = NULL;
 
-      return scope.Close(edition);
+      NanReturnValue(edition);
     }
 
-    return ThrowException(String::New("Error: Cannot open database"));
+    return NanThrowError("Error: Cannot open database");
   }
 
 }

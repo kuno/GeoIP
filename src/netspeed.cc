@@ -11,18 +11,18 @@ Persistent<FunctionTemplate> geoip::NetSpeed::constructor_template;
 
 void geoip::NetSpeed::Init(Handle<Object> target)
 {
-  HandleScope scope;
+  NanScope();
 
   Local<FunctionTemplate> t = FunctionTemplate::New(New);
-  constructor_template = Persistent<FunctionTemplate>::New(t);
-  constructor_template->InstanceTemplate()->SetInternalFieldCount(1);
-  constructor_template->SetClassName(String::NewSymbol("geoip"));
+  NanAssignPersistent(FunctionTemplate, constructor_template, t);
+  t->InstanceTemplate()->SetInternalFieldCount(1);
+  t->SetClassName(String::NewSymbol("geoip"));
 
-  NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookup", lookup);
-  NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookupSync", lookupSync);
-  NODE_SET_PROTOTYPE_METHOD(constructor_template, "update", update);
-  //NODE_SET_PROTOTYPE_METHOD(constructor_template, "close", close);
-  target->Set(String::NewSymbol("NetSpeed"), constructor_template->GetFunction());
+  NODE_SET_PROTOTYPE_METHOD(t, "lookup", lookup);
+  NODE_SET_PROTOTYPE_METHOD(t, "lookupSync", lookupSync);
+  NODE_SET_PROTOTYPE_METHOD(t, "update", update);
+  NODE_SET_PROTOTYPE_METHOD(t, "close", close);
+  target->Set(String::NewSymbol("NetSpeed"), t->GetFunction());
 }
 
 geoip::NetSpeed::NetSpeed() : db(NULL) {};
@@ -33,9 +33,9 @@ geoip::NetSpeed::~NetSpeed() {
   }
 };
 
-Handle<Value> geoip::NetSpeed::New(const Arguments &args)
+NAN_METHOD(geoip::NetSpeed::New)
 {
-  HandleScope scope;
+  NanScope();
   NetSpeed *n = new NetSpeed();
 
   String::Utf8Value file_str(args[0]->ToString());
@@ -52,36 +52,36 @@ Handle<Value> geoip::NetSpeed::New(const Arguments &args)
     n->db_edition = GeoIP_database_edition(n->db);
     if (n->db_edition == GEOIP_NETSPEED_EDITION) {
       n->Wrap(args.This());
-      return scope.Close(args.This());
+      NanReturnValue(args.This());
     } else {
       GeoIP_delete(n->db);  // free()'s the gi reference & closes its fd
-      return scope.Close(ThrowException(String::New("Error: Not valid netspeed database")));
+      return NanThrowError("Error: Not valid netspeed database");
     }
   } else {
-    return scope.Close(ThrowException(String::New("Error: Cannot open database")));
+    return NanThrowError("Error: Cannot open database");
   }
 }
 
-Handle<Value> geoip::NetSpeed::lookupSync(const Arguments &args) {
-  HandleScope scope;
+NAN_METHOD(geoip::NetSpeed::lookupSync) {
+  NanScope();
 
   NetSpeed *n = ObjectWrap::Unwrap<NetSpeed>(args.This());
 
-  Local<String> host_str = args[0]->ToString();
   Local<String> data;
-  char host_cstr[host_str->Length()];
-  host_str->WriteAscii(host_cstr);
+  char *host_cstr = NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, true);
 
   uint32_t ipnum = _GeoIP_lookupaddress(host_cstr);
 
+  delete[] host_cstr;
+
   if (ipnum <= 0) {
-    return scope.Close(Null());
+    NanReturnValue(Null());
   }
 
   int netspeed = GeoIP_id_by_ipnum(n->db, ipnum);
 
   if (netspeed < 0) {
-    return scope.Close(Null());
+    NanReturnValue(Null());
   } else if (netspeed == GEOIP_UNKNOWN_SPEED) {
     data = String::New("Uknown");
   } else if (netspeed == GEOIP_DIALUP_SPEED) {
@@ -92,31 +92,31 @@ Handle<Value> geoip::NetSpeed::lookupSync(const Arguments &args) {
     data = String::New("Corporate");
   }
 
-  return scope.Close(data);
+  NanReturnValue(data);
 }
 
-Handle<Value> geoip::NetSpeed::lookup(const Arguments &args)
+NAN_METHOD(geoip::NetSpeed::lookup)
 {
-  HandleScope scope;
+  NanScope();
 
   REQ_FUN_ARG(1, cb);
 
   NetSpeed *n = ObjectWrap::Unwrap<NetSpeed>(args.This());
-  Local<String> host_str = args[0]->ToString();
-  char host_cstr[host_str->Length()];
-  host_str->WriteAscii(host_cstr);
+  char *host_cstr = NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, true);
 
   netspeed_baton_t *baton = new netspeed_baton_t();
   baton->n = n;
   baton->ipnum = _GeoIP_lookupaddress(host_cstr);
-  baton->cb = Persistent<Function>::New(cb);
+  NanAssignPersistent(Function, baton->cb, cb);
 
   uv_work_t *req = new uv_work_t;
   req->data = baton;
 
+  delete[] host_cstr;
+
   uv_queue_work(uv_default_loop(), req, EIO_NetSpeed, (uv_after_work_cb)EIO_AfterNetSpeed);
 
-  return scope.Close(Undefined());
+  NanReturnUndefined();
 }
 
 void geoip::NetSpeed::EIO_NetSpeed(uv_work_t *req)
@@ -132,7 +132,7 @@ void geoip::NetSpeed::EIO_NetSpeed(uv_work_t *req)
 
 void geoip::NetSpeed::EIO_AfterNetSpeed(uv_work_t *req)
 {
-  HandleScope scope;
+  NanScope();
 
   netspeed_baton_t *baton = static_cast<netspeed_baton_t *>(req->data);
 
@@ -158,10 +158,10 @@ void geoip::NetSpeed::EIO_AfterNetSpeed(uv_work_t *req)
   }
 
   TryCatch try_catch;
-  baton->cb->Call(Context::GetCurrent()->Global(), 2, argv);
+  NanPersistentToLocal(baton->cb)->Call(Context::GetCurrent()->Global(), 2, argv);
 
   // Cleanup
-  baton->cb.Dispose();
+  NanDispose(baton->cb);
   delete baton;
   delete req;
 
@@ -170,10 +170,10 @@ void geoip::NetSpeed::EIO_AfterNetSpeed(uv_work_t *req)
   }
 }
 
-Handle<Value> geoip::NetSpeed::update(const Arguments &args) {
-  Locker locker;
+NAN_METHOD(geoip::NetSpeed::update) {
+  NanLocker();
 
-  HandleScope scope;
+  NanScope();
 
   NetSpeed *n = ObjectWrap::Unwrap<NetSpeed>(args.This());
 
@@ -187,20 +187,19 @@ Handle<Value> geoip::NetSpeed::update(const Arguments &args) {
   if (n->db != NULL) {
     n->db_edition = GeoIP_database_edition(n->db);
     if (n->db_edition == GEOIP_NETSPEED_EDITION) {
-      return scope.Close(True());
+      NanReturnValue(True());
     } else {
       GeoIP_delete(n->db);  // free()'s the gi reference & closes its fd
-      return scope.Close(ThrowException(String::New("Error: Not valid netspeed database")));
+      return NanThrowError("Error: Not valid netspeed database");
     }
   } else {
-    return scope.Close(ThrowException(String::New("Error: Cannot open database")));
+    return NanThrowError("Error: Cannot open database");
   }
 
-  Unlocker unlocker;
+  NanUnlocker();
 }
 
-void geoip::NetSpeed::close(const Arguments &args) {
+NAN_METHOD(geoip::NetSpeed::close) {
   NetSpeed *n = ObjectWrap::Unwrap<NetSpeed>(args.This());
   GeoIP_delete(n->db);  // free()'s the gi reference & closes its fd
-  HandleScope scope;  // Stick this down here since it seems to segfault when on top?
 }

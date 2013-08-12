@@ -11,18 +11,18 @@ Persistent<FunctionTemplate> geoip::Country::constructor_template;
 
 void geoip::Country::Init(Handle<Object> target)
 {
-  HandleScope scope;
+  NanScope();
 
   Local<FunctionTemplate> t = FunctionTemplate::New(New);
-  constructor_template = Persistent<FunctionTemplate>::New(t);
-  constructor_template->InstanceTemplate()->SetInternalFieldCount(1);
-  constructor_template->SetClassName(String::NewSymbol("geoip"));
+  NanAssignPersistent(FunctionTemplate, constructor_template, t);
+  t->InstanceTemplate()->SetInternalFieldCount(1);
+  t->SetClassName(String::NewSymbol("geoip"));
 
-  NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookup", lookup);
-  NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookupSync", lookupSync);
-  NODE_SET_PROTOTYPE_METHOD(constructor_template, "update", update);
-  //NODE_SET_PROTOTYPE_METHOD(constructor_template, "close", close);
-  target->Set(String::NewSymbol("Country"), constructor_template->GetFunction());
+  NODE_SET_PROTOTYPE_METHOD(t, "lookup", lookup);
+  NODE_SET_PROTOTYPE_METHOD(t, "lookupSync", lookupSync);
+  NODE_SET_PROTOTYPE_METHOD(t, "update", update);
+  NODE_SET_PROTOTYPE_METHOD(t, "close", close);
+  target->Set(String::NewSymbol("Country"), t->GetFunction());
 }
 
 geoip::Country::Country() : db(NULL) {};
@@ -33,9 +33,9 @@ geoip::Country::~Country() {
   }
 };
 
-Handle<Value> geoip::Country::New(const Arguments& args)
+NAN_METHOD(geoip::Country::New)
 {
-  HandleScope scope;
+  NanScope();
 
   Country *c = new Country();
 
@@ -50,35 +50,32 @@ Handle<Value> geoip::Country::New(const Arguments& args)
     c->db_edition = GeoIP_database_edition(c->db);
     if (c->db_edition == GEOIP_COUNTRY_EDITION) {
       c->Wrap(args.This());
-      return scope.Close(args.This());
+      NanReturnValue(args.This());
     } else {
       GeoIP_delete(c->db);	// free()'s the gi reference & closes its fd
       delete c->db;
-      return scope.Close(ThrowException(String::New("Error: Not valid country database")));
+      return NanThrowError("Error: Not valid country database");
     }
   } else {
-    return scope.Close(ThrowException(String::New("Error: Cannot open database")));
+    return NanThrowError("Error: Cannot open database");
   }
 }
 
-Handle<Value> geoip::Country::lookupSync(const Arguments &args) {
-  HandleScope scope;
+NAN_METHOD(geoip::Country::lookupSync) {
+  NanScope();
 
   Country * c = ObjectWrap::Unwrap<Country>(args.This());
 
-  Local<String> host_str = args[0]->ToString();
   Local<Object> data = Object::New();
-  char host_cstr[host_str->Length()];
-  host_str->WriteAscii(host_cstr);
-
+  char *host_cstr = NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, true);
   uint32_t ipnum = _GeoIP_lookupaddress(host_cstr);
-
+  delete[] host_cstr;
   if (ipnum <= 0) {
-    return scope.Close(Null());
+    NanReturnValue(Null());
   } else {
     int country_id = GeoIP_id_by_ipnum(c->db, ipnum);
     if (country_id == 0) {
-      return scope.Close(Null());
+      NanReturnValue(Null());
     } else {
       char * name = _GeoIP_iso_8859_1__utf8(GeoIP_country_name[country_id]);
 
@@ -89,34 +86,33 @@ Handle<Value> geoip::Country::lookupSync(const Arguments &args) {
 
       free(name);
 
-      return scope.Close(data);
+      NanReturnValue(data);
     }
   }
 }
 
-Handle<Value> geoip::Country::lookup(const Arguments& args)
+NAN_METHOD(geoip::Country::lookup)
 {
-  HandleScope scope;
+  NanScope();
 
   REQ_FUN_ARG(1, cb);
 
   Country * c = ObjectWrap::Unwrap<Country>(args.This());
-  Local<String> host_str = args[0]->ToString();
-  char host_cstr[host_str->Length()];
-  host_str->WriteAscii(host_cstr);
+  char *host_cstr = NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, true);
 
   country_baton_t *baton = new country_baton_t();
 
   baton->c = c;
   baton->ipnum = _GeoIP_lookupaddress(host_cstr);
-  baton->cb = Persistent<Function>::New(cb);
+  delete[] host_cstr;
+  NanAssignPersistent(Function, baton->cb, cb);
 
   uv_work_t *req = new uv_work_t;
   req->data = baton;
 
   uv_queue_work(uv_default_loop(), req, EIO_Country, (uv_after_work_cb)EIO_AfterCountry);
 
-  return scope.Close(Undefined());
+  NanReturnUndefined();
 }
 
 void geoip::Country::EIO_Country(uv_work_t *req)
@@ -134,7 +130,7 @@ void geoip::Country::EIO_Country(uv_work_t *req)
 
 void geoip::Country::EIO_AfterCountry(uv_work_t *req)
 {
-  HandleScope scope;
+  NanScope();
 
   country_baton_t *baton = static_cast<country_baton_t *>(req->data);
 
@@ -160,10 +156,10 @@ void geoip::Country::EIO_AfterCountry(uv_work_t *req)
   }
 
   TryCatch try_catch;
-  baton->cb->Call(Context::GetCurrent()->Global(), 2, argv);
+  NanPersistentToLocal(baton->cb)->Call(Context::GetCurrent()->Global(), 2, argv);
 
   // Cleanup
-  baton->cb.Dispose();
+  NanDispose(baton->cb);
   delete baton;
   delete req;
 
@@ -172,10 +168,10 @@ void geoip::Country::EIO_AfterCountry(uv_work_t *req)
   }
 }
 
-Handle<Value> geoip::Country::update(const Arguments &args) {
-  Locker locker;
+NAN_METHOD(geoip::Country::update) {
+  NanLocker();
 
-  HandleScope scope;
+  NanScope();
 
   Country* c = ObjectWrap::Unwrap<Country>(args.This());
 
@@ -189,22 +185,21 @@ Handle<Value> geoip::Country::update(const Arguments &args) {
   if (c->db != NULL) {
     c->db_edition = GeoIP_database_edition(c->db);
     if (c->db_edition == GEOIP_COUNTRY_EDITION) {
-      return scope.Close(True());
+      NanReturnValue(True());
     } else {
       GeoIP_delete(c->db);  // free()'s the gi reference & closes its fd
       delete c->db;
-      return scope.Close(ThrowException(String::New("Error: Not valid country database")));
+      return NanThrowError("Error: Not valid country database");
     }
   } else {
-    return scope.Close(ThrowException(String::New("Error: Cannot open database")));
+    return NanThrowError("Error: Cannot open database");
   }
 
-  Unlocker unlocker;
+  NanUnlocker();
 }
 
-void geoip::Country::close(const Arguments &args) {
+NAN_METHOD(geoip::Country::close) {
   Country* c = ObjectWrap::Unwrap<Country>(args.This());
   GeoIP_delete(c->db);  // free()'s the gi reference & closes its fd
   delete c->db;
-  HandleScope scope;  // Stick this down here since it seems to segfault when on top?
 }

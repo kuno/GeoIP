@@ -17,7 +17,7 @@ using namespace node;
 
 namespace geoip {
 
-  Handle<Value> check(const Arguments &args);
+  NAN_METHOD(check);
 
 }
 
