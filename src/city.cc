@@ -67,15 +67,15 @@ NAN_METHOD(geoip::City::lookupSync) {
   NanScope();
 
   Local<Object> data = Object::New();
-  char *host_cstr = NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, true);
+  Local<String> host_str = args[0]->ToString();
+  char host_cstr[host_str->Length() + 1];
+  NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, host_cstr, host_str->Length() + 1, v8::String::HINT_MANY_WRITES_EXPECTED);
   City * c = ObjectWrap::Unwrap<geoip::City>(args.This());
 
   uint32_t ipnum = _GeoIP_lookupaddress(host_cstr);
 
   //printf("Ip is %s.\n", host_cstr);
   //printf("Ipnum is %d.", ipnum);
-
-  delete[] host_cstr;
 
   if (ipnum == 0) {
     NanReturnValue(Null());
@@ -159,7 +159,9 @@ NAN_METHOD(geoip::City::lookup)
   REQ_FUN_ARG(1, cb);
 
   City* c = ObjectWrap::Unwrap<geoip::City>(args.This());
-  char *host_cstr = NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, true);
+  Local<String> host_str = args[0]->ToString();
+  char host_cstr[host_str->Length() + 1];
+  NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, host_cstr, host_str->Length() + 1, v8::String::HINT_MANY_WRITES_EXPECTED);
 
   city_baton_t* baton = new city_baton_t();
   baton->c = c;
@@ -171,8 +173,6 @@ NAN_METHOD(geoip::City::lookup)
 
   //printf("Ip is %s.\n", host_cstr);
   //printf("Ipnum is %d.", baton->ipnum);
-
-  delete[] host_cstr;
 
   uv_queue_work(uv_default_loop(), req, EIO_City, (uv_after_work_cb)EIO_AfterCity);
 

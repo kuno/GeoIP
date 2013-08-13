@@ -12,12 +12,11 @@ namespace geoip {
     NanScope();
 
     Local<String> edition;
-    size_t bc;
-    char *file_cstr = NanFromV8String(args[0].As<Object>(), Nan::ASCII, &bc, true);
+    Local<String> file_str = args[0]->ToString();
+    char file_cstr[file_str->Length() + 1];
+    NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, file_cstr, file_str->Length() + 1, v8::String::HINT_MANY_WRITES_EXPECTED);
 
     GeoIP *db = GeoIP_open(file_cstr, GEOIP_STANDARD);
-
-    delete[] file_cstr;
 
     if (db != NULL) {
       int db_edition = GeoIP_database_edition(db);

@@ -67,9 +67,10 @@ NAN_METHOD(geoip::Country::lookupSync) {
   Country * c = ObjectWrap::Unwrap<Country>(args.This());
 
   Local<Object> data = Object::New();
-  char *host_cstr = NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, true);
+  Local<String> host_str = args[0]->ToString();
+  char host_cstr[host_str->Length() + 1];
+  NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, host_cstr, host_str->Length() + 1, v8::String::HINT_MANY_WRITES_EXPECTED);
   uint32_t ipnum = _GeoIP_lookupaddress(host_cstr);
-  delete[] host_cstr;
   if (ipnum <= 0) {
     NanReturnValue(Null());
   } else {
@@ -98,13 +99,14 @@ NAN_METHOD(geoip::Country::lookup)
   REQ_FUN_ARG(1, cb);
 
   Country * c = ObjectWrap::Unwrap<Country>(args.This());
-  char *host_cstr = NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, true);
+  Local<String> host_str = args[0]->ToString();
+  char host_cstr[host_str->Length() + 1];
+  NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, host_cstr, host_str->Length() + 1, v8::String::HINT_MANY_WRITES_EXPECTED);
 
   country_baton_t *baton = new country_baton_t();
 
   baton->c = c;
   baton->ipnum = _GeoIP_lookupaddress(host_cstr);
-  delete[] host_cstr;
   NanAssignPersistent(Function, baton->cb, cb);
 
   uv_work_t *req = new uv_work_t;

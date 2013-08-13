@@ -72,11 +72,11 @@ NAN_METHOD(geoip::Country6::lookupSync) {
   }
 
   Local<Object> data = Object::New();
-  char *host_cstr = NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, true);
+  Local<String> host_str = args[0]->ToString();
+  char host_cstr[host_str->Length() + 1];
+  NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, host_cstr, host_str->Length() + 1, v8::String::HINT_MANY_WRITES_EXPECTED);
 
   geoipv6_t ipnum_v6 = _GeoIP_lookupaddress_v6(host_cstr);
-
-  delete[] host_cstr;
 
   if (__GEOIP_V6_IS_NULL(ipnum_v6)) {
     NanReturnValue(Null());
@@ -112,14 +112,14 @@ NAN_METHOD(geoip::Country6::lookup)
     return NanThrowError("Error: Database is not country ipv6 edition");
   }
 
-  char *host_cstr = NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, true);
+  Local<String> host_str = args[0]->ToString();
+  char host_cstr[host_str->Length() + 1];
+  NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, host_cstr, host_str->Length() + 1, v8::String::HINT_MANY_WRITES_EXPECTED);
 
   country6_baton_t *baton = new country6_baton_t();
   baton->c = c;
   baton->ipnum_v6 = _GeoIP_lookupaddress_v6(host_cstr);
   NanAssignPersistent(Function, baton->cb, cb);
-
-  delete[] host_cstr;
 
   uv_work_t *req = new uv_work_t;
   req->data = baton;

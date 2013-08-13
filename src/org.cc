@@ -66,12 +66,12 @@ NAN_METHOD(geoip::Org::lookupSync) {
   NanScope();
 
   Local<Value> data;
-  char *host_cstr = NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, true);
+  Local<String> host_str = args[0]->ToString();
+  char host_cstr[host_str->Length() + 1];
+  NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, host_cstr, host_str->Length() + 1, v8::String::HINT_MANY_WRITES_EXPECTED);
   Org * o = ObjectWrap::Unwrap<geoip::Org>(args.This());
 
   uint32_t ipnum = _GeoIP_lookupaddress(host_cstr);
-
-  delete[] host_cstr;
 
   if (ipnum <= 0) {
     NanReturnValue(Null());
@@ -99,7 +99,9 @@ NAN_METHOD(geoip::Org::lookup)
   REQ_FUN_ARG(1, cb);
 
   Org *o = ObjectWrap::Unwrap<geoip::Org>(args.This());
-  char *host_cstr = NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, true);
+  Local<String> host_str = args[0]->ToString();
+  char host_cstr[host_str->Length() + 1];
+  NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, host_cstr, host_str->Length() + 1, v8::String::HINT_MANY_WRITES_EXPECTED);
 
   org_baton_t *baton = new org_baton_t();
   baton->o = o;
@@ -108,8 +110,6 @@ NAN_METHOD(geoip::Org::lookup)
 
   uv_work_t *req = new uv_work_t;
   req->data = baton;
-
-  delete[] host_cstr;
 
   uv_queue_work(uv_default_loop(), req, EIO_Org, (uv_after_work_cb)EIO_AfterOrg);
 

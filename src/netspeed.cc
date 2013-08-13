@@ -68,11 +68,11 @@ NAN_METHOD(geoip::NetSpeed::lookupSync) {
   NetSpeed *n = ObjectWrap::Unwrap<NetSpeed>(args.This());
 
   Local<String> data;
-  char *host_cstr = NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, true);
+  Local<String> host_str = args[0]->ToString();
+  char host_cstr[host_str->Length() + 1];
+  NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, host_cstr, host_str->Length() + 1, v8::String::HINT_MANY_WRITES_EXPECTED);
 
   uint32_t ipnum = _GeoIP_lookupaddress(host_cstr);
-
-  delete[] host_cstr;
 
   if (ipnum <= 0) {
     NanReturnValue(Null());
@@ -102,7 +102,9 @@ NAN_METHOD(geoip::NetSpeed::lookup)
   REQ_FUN_ARG(1, cb);
 
   NetSpeed *n = ObjectWrap::Unwrap<NetSpeed>(args.This());
-  char *host_cstr = NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, true);
+  Local<String> host_str = args[0]->ToString();
+  char host_cstr[host_str->Length() + 1];
+  NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, host_cstr, host_str->Length() + 1, v8::String::HINT_MANY_WRITES_EXPECTED);
 
   netspeed_baton_t *baton = new netspeed_baton_t();
   baton->n = n;
@@ -111,8 +113,6 @@ NAN_METHOD(geoip::NetSpeed::lookup)
 
   uv_work_t *req = new uv_work_t;
   req->data = baton;
-
-  delete[] host_cstr;
 
   uv_queue_work(uv_default_loop(), req, EIO_NetSpeed, (uv_after_work_cb)EIO_AfterNetSpeed);
 
