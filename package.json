@@ -19,6 +19,9 @@
       "James Taylor <jt@gosquared.com>",
       "Christopher Holt <cwholt@gmail.com>"
     ],
+    "dependencies": {
+      "nan": "~0.3.0"
+    },
     "devDependencies": {
       "mocha": "~1.7.0",
       "chai": "~1.7.0"
