@@ -50,7 +50,8 @@ NAN_METHOD(geoip::Org::New)
     o->db_edition = GeoIP_database_edition(o->db);
     if (o->db_edition == GEOIP_ORG_EDITION ||
         o->db_edition == GEOIP_ASNUM_EDITION ||
-        o->db_edition == GEOIP_ISP_EDITION) {
+        o->db_edition == GEOIP_ISP_EDITION ||
+        o->db_edition == GEOIP_NETSPEED_EDITION_REV1) {
       o->Wrap(args.This());
       NanReturnValue(args.This());
     } else {
