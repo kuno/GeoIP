@@ -16,7 +16,7 @@
 extern "C" {
   static void init(Handle<Object> target)
   {
-    HandleScope scope;
+    NanScope();
 
     // Initialize Modules
     geoip::NetSpeed::Init(target);
@@ -34,5 +34,5 @@ extern "C" {
     target->Set(String::NewSymbol("libgeoip"), String::New(GeoIP_lib_version()));
   }
 
-  NODE_MODULE(geoip, init);
+  NODE_MODULE(geoip, init)
 }
