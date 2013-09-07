@@ -11,18 +11,18 @@ Persistent<FunctionTemplate> geoip::City::constructor_template;
 
 void geoip::City::Init(Handle<Object> target)
 {
-  HandleScope scope;
+  NanScope();
 
   Local<FunctionTemplate> t = FunctionTemplate::New(New);
-  constructor_template = Persistent<FunctionTemplate>::New(t);
-  constructor_template->InstanceTemplate()->SetInternalFieldCount(1);
-  constructor_template->SetClassName(String::NewSymbol("geoip"));
+  NanAssignPersistent(FunctionTemplate, constructor_template, t);
+  t->InstanceTemplate()->SetInternalFieldCount(1);
+  t->SetClassName(String::NewSymbol("geoip"));
 
-  NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookup", lookup);
-  NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookupSync", lookupSync);
-  NODE_SET_PROTOTYPE_METHOD(constructor_template, "update", update);
-  //NODE_SET_PROTOTYPE_METHOD(constructor_template, "close", close);
-  target->Set(String::NewSymbol("City"), constructor_template->GetFunction());
+  NODE_SET_PROTOTYPE_METHOD(t, "lookup", lookup);
+  NODE_SET_PROTOTYPE_METHOD(t, "lookupSync", lookupSync);
+  NODE_SET_PROTOTYPE_METHOD(t, "update", update);
+  NODE_SET_PROTOTYPE_METHOD(t, "close", close);
+  target->Set(String::NewSymbol("City"), t->GetFunction());
 }
 
 geoip::City::City() : db(NULL) {};
@@ -32,9 +32,9 @@ geoip::City::~City() { if (db) {
 }
 };
 
-Handle<Value> geoip::City::New(const Arguments &args)
+NAN_METHOD(geoip::City::New)
 {
-  HandleScope scope;
+  NanScope();
 
   City *c = new City();
 
@@ -53,23 +53,23 @@ Handle<Value> geoip::City::New(const Arguments &args)
     if (c->db_edition == GEOIP_CITY_EDITION_REV0 ||
         c->db_edition == GEOIP_CITY_EDITION_REV1) {
       c->Wrap(args.This());
-      return scope.Close(args.This());
+      NanReturnValue(args.This());
     } else {
       GeoIP_delete(c->db);  // free()'s the gi reference & closes its fd
-      return ThrowException(String::New("Error: Not valid city database"));
+      return NanThrowError("Error: Not valid city database");
     }
   } else {
-    return ThrowException(String::New("Error: Cannot open database"));
+    return NanThrowError("Error: Cannot open database");
   }
 }
 
-Handle<Value> geoip::City::lookupSync(const Arguments &args) {
-  HandleScope scope;
+NAN_METHOD(geoip::City::lookupSync) {
+  NanScope();
 
-  Local<String> host_str = args[0]->ToString();
   Local<Object> data = Object::New();
-  char host_cstr[host_str->Length()];
-  host_str->WriteAscii(host_cstr);
+  Local<String> host_str = args[0]->ToString();
+  char host_cstr[host_str->Length() + 1];
+  NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, host_cstr, host_str->Length() + 1, v8::String::HINT_MANY_WRITES_EXPECTED);
   City * c = ObjectWrap::Unwrap<geoip::City>(args.This());
 
   uint32_t ipnum = _GeoIP_lookupaddress(host_cstr);
@@ -78,13 +78,13 @@ Handle<Value> geoip::City::lookupSync(const Arguments &args) {
   //printf("Ipnum is %d.", ipnum);
 
   if (ipnum == 0) {
-    return scope.Close(Null());
+    NanReturnValue(Null());
   }
 
   GeoIPRecord * record = GeoIP_record_by_ipnum(c->db, ipnum);
 
   if (record == NULL) {
-    return scope.Close(Null()); //return ThrowException(String::New("Error: Can not find match data"));
+    NanReturnValue(Null()); //return ThrowException(String::New("Error: Can not find match data"));
   }
 
   if (record->country_code != NULL) {
@@ -149,24 +149,24 @@ Handle<Value> geoip::City::lookupSync(const Arguments &args) {
   }
 
   GeoIPRecord_delete(record);
-  return scope.Close(data);
+  NanReturnValue(data);
 }
 
-Handle<Value> geoip::City::lookup(const Arguments &args)
+NAN_METHOD(geoip::City::lookup)
 {
-  HandleScope scope;
+  NanScope();
 
   REQ_FUN_ARG(1, cb);
 
   City* c = ObjectWrap::Unwrap<geoip::City>(args.This());
   Local<String> host_str = args[0]->ToString();
-  char host_cstr[host_str->Length()];
-  host_str->WriteAscii(host_cstr);
+  char host_cstr[host_str->Length() + 1];
+  NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, host_cstr, host_str->Length() + 1, v8::String::HINT_MANY_WRITES_EXPECTED);
 
   city_baton_t* baton = new city_baton_t();
   baton->c = c;
   baton->ipnum = _GeoIP_lookupaddress(host_cstr);
-  baton->cb = Persistent<Function>::New(cb);
+  NanAssignPersistent(Function, baton->cb, cb);
 
   uv_work_t *req = new uv_work_t;
   req->data = baton;
@@ -176,7 +176,7 @@ Handle<Value> geoip::City::lookup(const Arguments &args)
 
   uv_queue_work(uv_default_loop(), req, EIO_City, (uv_after_work_cb)EIO_AfterCity);
 
-  return scope.Close(Undefined());
+  NanReturnUndefined();
 }
 
 void geoip::City::EIO_City(uv_work_t *req)
@@ -192,7 +192,7 @@ void geoip::City::EIO_City(uv_work_t *req)
 
 void geoip::City::EIO_AfterCity(uv_work_t *req)
 {
-  HandleScope scope;
+  NanScope();
 
   city_baton_t * baton = static_cast<city_baton_t *>(req->data);
 
@@ -269,10 +269,10 @@ void geoip::City::EIO_AfterCity(uv_work_t *req)
   }
 
   TryCatch try_catch;
-  baton->cb->Call(Context::GetCurrent()->Global(), 2, argv);
+  NanPersistentToLocal(baton->cb)->Call(Context::GetCurrent()->Global(), 2, argv);
 
   // Cleanup
-  baton->cb.Dispose();
+  NanDispose(baton->cb);
   delete baton;
   delete req;
 
@@ -281,10 +281,10 @@ void geoip::City::EIO_AfterCity(uv_work_t *req)
   }
 }
 
-Handle<Value> geoip::City::update(const Arguments &args) {
-  Locker locke;
+NAN_METHOD(geoip::City::update) {
+  NanLocker();
 
-  HandleScope scope;
+  NanScope();
 
   City *c = ObjectWrap::Unwrap<City>(args.This());
 
@@ -299,20 +299,19 @@ Handle<Value> geoip::City::update(const Arguments &args) {
     c->db_edition = GeoIP_database_edition(c->db);
     if (c->db_edition == GEOIP_CITY_EDITION_REV0 ||
         c->db_edition == GEOIP_CITY_EDITION_REV1) {
-      return scope.Close(True());
+      NanReturnValue(True());
     } else {
       GeoIP_delete(c->db);  // free()'s the gi reference & closes its fd
-      return scope.Close(ThrowException(String::New("Error: Not valid city database")));
+      return NanThrowError("Error: Not valid city database");
     }
   } else {
-    return scope.Close(ThrowException(String::New("Error: Cannot open database")));
+    return NanThrowError("Error: Cannot open database");
   }
 
- Unlocker unlocker;
+ NanUnlocker();
 }
 
-void geoip::City::close(const Arguments &args) {
+NAN_METHOD(geoip::City::close) {
   City *c = ObjectWrap::Unwrap<geoip::City>(args.This());
   GeoIP_delete(c->db);  // free()'s the gi reference & closes its fd
-  HandleScope scope;  // Stick this down here since it seems to segfault when on top?
 }

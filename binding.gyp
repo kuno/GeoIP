@@ -20,7 +20,8 @@
       },
       'include_dirs': [
           'src',
-          'deps/GeoIP-1.5.1/libGeoIP'
+          'deps/GeoIP-1.5.1/libGeoIP',
+          "<!(node -p -e \"require('path').dirname(require.resolve('nan'))\")"
       ],
       'dependencies': [
         'deps/GeoIP-1.5.1/libgeoip.gypi:geoip'

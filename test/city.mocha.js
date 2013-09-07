@@ -13,7 +13,7 @@ var instance = new City(file, true);
 describe('City', function() {
   describe('Instance', function() {
     it('should be a object', function(done) {
-      instance.should.be.an('function');
+      instance.should.be.an('object');
       setTimeout(done, 1);
     });
 

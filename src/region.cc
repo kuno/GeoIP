@@ -12,18 +12,18 @@ Persistent<FunctionTemplate> geoip::Region::constructor_template;
 
 void geoip::Region::Init(Handle<Object> target)
 {
-  HandleScope scope;
+  NanScope();
 
   Local<FunctionTemplate> t = FunctionTemplate::New(New);
-  constructor_template = Persistent<FunctionTemplate>::New(t);
-  constructor_template->InstanceTemplate()->SetInternalFieldCount(1);
-  constructor_template->SetClassName(String::NewSymbol("geoip"));
+  NanAssignPersistent(FunctionTemplate, constructor_template, t);
+  t->InstanceTemplate()->SetInternalFieldCount(1);
+  t->SetClassName(String::NewSymbol("geoip"));
 
-  NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookup", lookup);
-  NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookupSync", lookupSync);
-  NODE_SET_PROTOTYPE_METHOD(constructor_template, "update", update);
-  //NODE_SET_PROTOTYPE_METHOD(constructor_template, "close", close);
-  target->Set(String::NewSymbol("Region"), constructor_template->GetFunction());
+  NODE_SET_PROTOTYPE_METHOD(t, "lookup", lookup);
+  NODE_SET_PROTOTYPE_METHOD(t, "lookupSync", lookupSync);
+  NODE_SET_PROTOTYPE_METHOD(t, "update", update);
+  NODE_SET_PROTOTYPE_METHOD(t, "close", close);
+  target->Set(String::NewSymbol("Region"), t->GetFunction());
 }
 
 geoip::Region::Region() : db(NULL) {};
@@ -34,16 +34,13 @@ geoip::Region::~Region() {
   }
 };
 
-Handle<Value> geoip::Region::New(const Arguments &args)
+NAN_METHOD(geoip::Region::New)
 {
-  HandleScope scope;
+  NanScope();
   Region *r = new Region();
 
   String::Utf8Value file_str(args[0]->ToString());
   const char * file_cstr = ToCString(file_str);
-  // Local<String> host_str = args[0]->ToString();
-  // char host_cstr[host_str->Length()];
-  // host_str->WriteAscii(host_cstr);
   bool cache_on = args[1]->ToBoolean()->Value();
 
   r->db = GeoIP_open(file_cstr, cache_on ? GEOIP_MEMORY_CACHE : GEOIP_STANDARD);
@@ -54,30 +51,30 @@ Handle<Value> geoip::Region::New(const Arguments &args)
     if (r->db_edition == GEOIP_REGION_EDITION_REV0 ||
         r->db_edition == GEOIP_REGION_EDITION_REV1) {
       r->Wrap(args.This());
-      return scope.Close(args.This());
+      NanReturnValue(args.This());
     } else {
       GeoIP_delete(r->db);  // free()'s the gi reference & closes its fd
       //printf("edition is %d", r->db_edition);
-      return scope.Close(ThrowException(String::New("Error: Not valid region database")));
+      return NanThrowError("Error: Not valid region database");
     }
   } else {
-    return scope.Close(ThrowException(String::New("Error: Cannot open database")));
+    return NanThrowError("Error: Cannot open database");
   }
 }
 
-Handle<Value> geoip::Region::lookupSync(const Arguments &args) {
-  HandleScope scope;
+NAN_METHOD(geoip::Region::lookupSync) {
+  NanScope();
 
-  Local<String> host_str = args[0]->ToString();
   Local<Object> data = Object::New();
-  char host_cstr[host_str->Length()];
-  host_str->WriteAscii(host_cstr);
+  Local<String> host_str = args[0]->ToString();
+  char host_cstr[host_str->Length() + 1];
+  NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, host_cstr, host_str->Length() + 1, v8::String::HINT_MANY_WRITES_EXPECTED);
   Region* r = ObjectWrap::Unwrap<Region>(args.This());
 
   uint32_t ipnum = _GeoIP_lookupaddress(host_cstr);
 
   if (ipnum <= 0) {
-    return scope.Close(Null());
+    NanReturnValue(Null());
   }
 
   GeoIPRegion *region = GeoIP_region_by_ipnum(r->db, ipnum);
@@ -86,35 +83,35 @@ Handle<Value> geoip::Region::lookupSync(const Arguments &args) {
     data->Set(String::NewSymbol("country_code"), String::New(region->country_code));
     data->Set(String::NewSymbol("region"), String::New(region->region));
     GeoIPRegion_delete(region);
-    return scope.Close(data);
+    NanReturnValue(data);
   } else {
     //GeoIPRegion_delete(region);
-    return scope.Close(ThrowException(String::New("Error: Can not find match data")));
+    return NanThrowError("Error: Can not find match data");
   }
 }
 
-Handle<Value> geoip::Region::lookup(const Arguments &args)
+NAN_METHOD(geoip::Region::lookup)
 {
-  HandleScope scope;
+  NanScope();
 
   REQ_FUN_ARG(1, cb);
 
   Region *r = ObjectWrap::Unwrap<Region>(args.This());
   Local<String> host_str = args[0]->ToString();
-  char host_cstr[host_str->Length()];
-  host_str->WriteAscii(host_cstr);
+  char host_cstr[host_str->Length() + 1];
+  NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, host_cstr, host_str->Length() + 1, v8::String::HINT_MANY_WRITES_EXPECTED);
 
   region_baton_t *baton = new region_baton_t();
   baton->r = r;
   baton->ipnum = _GeoIP_lookupaddress(host_cstr);
-  baton->cb = Persistent<Function>::New(cb);
+  NanAssignPersistent(Function, baton->cb, cb);
 
   uv_work_t *req = new uv_work_t;
   req->data = baton;
 
   uv_queue_work(uv_default_loop(), req, EIO_Region, (uv_after_work_cb)EIO_AfterRegion);
 
-  return scope.Close(Undefined());
+  NanReturnUndefined();
 }
 
 void geoip::Region::EIO_Region(uv_work_t *req)
@@ -130,7 +127,7 @@ void geoip::Region::EIO_Region(uv_work_t *req)
 
 void geoip::Region::EIO_AfterRegion(uv_work_t *req)
 {
-  HandleScope scope;
+  NanScope();
 
   region_baton_t *baton = static_cast<region_baton_t *>(req->data);
 
@@ -149,10 +146,10 @@ void geoip::Region::EIO_AfterRegion(uv_work_t *req)
   }
 
   TryCatch try_catch;
-  baton->cb->Call(Context::GetCurrent()->Global(), 2, argv);
+  NanPersistentToLocal(baton->cb)->Call(Context::GetCurrent()->Global(), 2, argv);
 
   // Cleanup
-  baton->cb.Dispose();
+  NanDispose(baton->cb);
   delete baton;
   delete req;
 
@@ -161,10 +158,10 @@ void geoip::Region::EIO_AfterRegion(uv_work_t *req)
   }
 }
 
-Handle<Value> geoip::Region::update(const Arguments &args) {
-  Locker locker;
+NAN_METHOD(geoip::Region::update) {
+  NanLocker();
 
-  HandleScope scope;
+  NanScope();
 
   Region *r = ObjectWrap::Unwrap<Region>(args.This());
 
@@ -179,20 +176,19 @@ Handle<Value> geoip::Region::update(const Arguments &args) {
     r->db_edition = GeoIP_database_edition(r->db);
     if (r->db_edition == GEOIP_REGION_EDITION_REV0 ||
         r->db_edition == GEOIP_REGION_EDITION_REV1) {
-      return scope.Close(True());
+      NanReturnValue(True());
     } else {
       GeoIP_delete(r->db);  // free()'s the gi reference & closes its fd
-      return scope.Close(ThrowException(String::New("Error: Not valid region database")));
+      return NanThrowError("Error: Not valid region database");
     }
   } else {
-    return scope.Close(ThrowException(String::New("Error: Cannot open database")));
+    return NanThrowError("Error: Cannot open database");
   }
 
- Unlocker unlocker;
+ NanUnlocker();
 }
 
-void geoip::Region::close(const Arguments& args) {
+NAN_METHOD(geoip::Region::close) {
   Region * r = ObjectWrap::Unwrap<Region>(args.This());
   GeoIP_delete(r->db);  // free()'s the gi reference & closes its fd
-  HandleScope scope;  // Stick this down here since it seems to segfault when on top?
 }

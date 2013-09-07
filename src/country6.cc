@@ -11,18 +11,18 @@ Persistent<FunctionTemplate> geoip::Country6::constructor_template;
 
 void geoip::Country6::Init(Handle<Object> target)
 {
-  HandleScope scope;
+  NanScope();
 
   Local<FunctionTemplate> t = FunctionTemplate::New(New);
-  constructor_template = Persistent<FunctionTemplate>::New(t);
-  constructor_template->InstanceTemplate()->SetInternalFieldCount(1);
-  constructor_template->SetClassName(String::NewSymbol("geoip"));
+  NanAssignPersistent(FunctionTemplate, constructor_template, t);
+  t->InstanceTemplate()->SetInternalFieldCount(1);
+  t->SetClassName(String::NewSymbol("geoip"));
 
-  NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookup", lookup);
-  NODE_SET_PROTOTYPE_METHOD(constructor_template, "lookupSync", lookupSync);
-  NODE_SET_PROTOTYPE_METHOD(constructor_template, "update", update);
-  //NODE_SET_PROTOTYPE_METHOD(constructor_template, "close", close);
-  target->Set(String::NewSymbol("Country6"), constructor_template->GetFunction());
+  NODE_SET_PROTOTYPE_METHOD(t, "lookup", lookup);
+  NODE_SET_PROTOTYPE_METHOD(t, "lookupSync", lookupSync);
+  NODE_SET_PROTOTYPE_METHOD(t, "update", update);
+  NODE_SET_PROTOTYPE_METHOD(t, "close", close);
+  target->Set(String::NewSymbol("Country6"), t->GetFunction());
 }
 
 geoip::Country6::Country6(): db(NULL) {};
@@ -33,9 +33,9 @@ geoip::Country6::~Country6() {
   }
 };
 
-Handle<Value> geoip::Country6::New(const Arguments& args)
+NAN_METHOD(geoip::Country6::New)
 {
-  HandleScope scope;
+  NanScope();
 
   Country6 *c = new Country6();
 
@@ -50,40 +50,40 @@ Handle<Value> geoip::Country6::New(const Arguments& args)
     c->db_edition = GeoIP_database_edition(c->db);
     if (c->db_edition == GEOIP_COUNTRY_EDITION_V6) {
       c->Wrap(args.This());
-      return scope.Close(args.This());
+      NanReturnValue(args.This());
     } else {
       GeoIP_delete(c->db);	// free()'s the gi reference & closes its fd
       delete c->db;
-      return scope.Close(ThrowException(String::New("Error: Not valid country database")));
+      return NanThrowError("Error: Not valid country database");
     }
   } else {
-    return scope.Close(ThrowException(String::New("Error: Cannot open database")));
+    return NanThrowError("Error: Cannot open database");
   }
 }
 
-Handle<Value> geoip::Country6::lookupSync(const Arguments &args) {
-  HandleScope scope;
+NAN_METHOD(geoip::Country6::lookupSync) {
+  NanScope();
 
   Country6 * c = ObjectWrap::Unwrap<Country6>(args.This());
 
   // Check if database is country ipv6 edition
   if (c->db_edition != GEOIP_COUNTRY_EDITION_V6) {
-    return scope.Close(ThrowException(String::New("Error: Database is not country ipv6 edition")));
+    return NanThrowError("Error: Database is not country ipv6 edition");
   }
 
-  Local<String> host_str = args[0]->ToString();
   Local<Object> data = Object::New();
-  char host_cstr[host_str->Length()];
-  host_str->WriteAscii(host_cstr);
+  Local<String> host_str = args[0]->ToString();
+  char host_cstr[host_str->Length() + 1];
+  NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, host_cstr, host_str->Length() + 1, v8::String::HINT_MANY_WRITES_EXPECTED);
 
   geoipv6_t ipnum_v6 = _GeoIP_lookupaddress_v6(host_cstr);
 
   if (__GEOIP_V6_IS_NULL(ipnum_v6)) {
-    return scope.Close(Null());
+    NanReturnValue(Null());
   } else {
     int country_id = GeoIP_id_by_ipnum_v6(c->db, ipnum_v6);
     if (country_id == 0) {
-      return scope.Close(Null());
+      NanReturnValue(Null());
     } else {
       char * name = _GeoIP_iso_8859_1__utf8(GeoIP_country_name[country_id]);
 
@@ -94,14 +94,14 @@ Handle<Value> geoip::Country6::lookupSync(const Arguments &args) {
 
       free(name);
 
-      return scope.Close(data);
+      NanReturnValue(data);
     }
   }
 }
 
-Handle<Value> geoip::Country6::lookup(const Arguments& args)
+NAN_METHOD(geoip::Country6::lookup)
 {
-  HandleScope scope;
+  NanScope();
 
   REQ_FUN_ARG(1, cb);
 
@@ -109,24 +109,24 @@ Handle<Value> geoip::Country6::lookup(const Arguments& args)
 
   // Check if database is country ipv6 edition
   if (c->db_edition != GEOIP_COUNTRY_EDITION_V6) {
-    return scope.Close(ThrowException(String::New("Error: Database is not country ipv6 edition")));
+    return NanThrowError("Error: Database is not country ipv6 edition");
   }
 
   Local<String> host_str = args[0]->ToString();
-  char host_cstr[host_str->Length()];
-  host_str->WriteAscii(host_cstr);
+  char host_cstr[host_str->Length() + 1];
+  NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, host_cstr, host_str->Length() + 1, v8::String::HINT_MANY_WRITES_EXPECTED);
 
   country6_baton_t *baton = new country6_baton_t();
   baton->c = c;
   baton->ipnum_v6 = _GeoIP_lookupaddress_v6(host_cstr);
-  baton->cb = Persistent<Function>::New(cb);
+  NanAssignPersistent(Function, baton->cb, cb);
 
   uv_work_t *req = new uv_work_t;
   req->data = baton;
 
   uv_queue_work(uv_default_loop(), req, EIO_Country, (uv_after_work_cb)EIO_AfterCountry);
 
-  return scope.Close(Undefined());
+  NanReturnUndefined();
 }
 
 void geoip::Country6::EIO_Country(uv_work_t *req)
@@ -146,7 +146,7 @@ void geoip::Country6::EIO_Country(uv_work_t *req)
 
 void geoip::Country6::EIO_AfterCountry(uv_work_t *req)
 {
-  HandleScope scope;
+  NanScope();
 
   country6_baton_t *baton = static_cast<country6_baton_t *>(req->data);
 
@@ -172,10 +172,10 @@ void geoip::Country6::EIO_AfterCountry(uv_work_t *req)
   }
 
   TryCatch try_catch;
-  baton->cb->Call(Context::GetCurrent()->Global(), 2, argv);
+  NanPersistentToLocal(baton->cb)->Call(Context::GetCurrent()->Global(), 2, argv);
 
   // Cleanup
-  baton->cb.Dispose();
+  NanDispose(baton->cb);
   delete baton;
   delete req;
 
@@ -184,10 +184,10 @@ void geoip::Country6::EIO_AfterCountry(uv_work_t *req)
   }
 }
 
-Handle<Value> geoip::Country6::update(const Arguments &args) {
-  Locker locker;
+NAN_METHOD(geoip::Country6::update) {
+  NanLocker();
 
-  HandleScope scope;
+  NanScope();
 
   Country6* c = ObjectWrap::Unwrap<Country6>(args.This());
 
@@ -201,22 +201,21 @@ Handle<Value> geoip::Country6::update(const Arguments &args) {
   if (c->db != NULL) {
     c->db_edition = GeoIP_database_edition(c->db);
     if (c->db_edition == GEOIP_COUNTRY_EDITION_V6) {
-      return scope.Close(True());
+      NanReturnValue(True());
     } else {
       GeoIP_delete(c->db);  // free()'s the gi reference & closes its fd
       delete c->db;
-      return scope.Close(ThrowException(String::New("Error: Not valid country database")));
+      return NanThrowError("Error: Not valid country database");
     }
   } else {
-    return scope.Close(ThrowException(String::New("Error: Cannot open database")));
+    return NanThrowError("Error: Cannot open database");
   }
 
- Unlocker unlocker;
+ NanUnlocker();
 }
 
-void geoip::Country6::close(const Arguments &args) {
+NAN_METHOD(geoip::Country6::close) {
   Country6 * c = ObjectWrap::Unwrap<Country6>(args.This());
   GeoIP_delete(c->db);  // free()'s the gi reference & closes its fd
   delete c->db;
-  HandleScope scope;  // Stick this down here since it seems to segfault when on top?
 }

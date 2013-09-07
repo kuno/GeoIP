@@ -13,7 +13,7 @@ var instance = new Country6(file, true);
 describe('Country6', function() {
   describe('Instance', function() {
     it('should be a object', function(done) {
-      instance.should.be.an('function');
+      instance.should.be.an('object');
       setTimeout(done, 1);
     });
 

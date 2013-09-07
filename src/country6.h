@@ -29,7 +29,7 @@ namespace geoip {
       static void EIO_AfterCountry(uv_work_t *req);
 
     protected:
-      static Handle<Value> New(const Arguments &args);
+      static NAN_METHOD(New);
 
     public:
       Country6();
@@ -38,13 +38,13 @@ namespace geoip {
 
       static void Init(Handle<Object> target);
 
-      static Handle<Value> lookupSync(const Arguments &args);
+      static NAN_METHOD(lookupSync);
 
-      static Handle<Value> lookup(const Arguments &args);
+      static NAN_METHOD(lookup);
 
-      static Handle<Value> update(const Arguments &args);
+      static NAN_METHOD(update);
 
-      static void close(const Arguments &args);
+      static NAN_METHOD(close);
   };
 }
 
