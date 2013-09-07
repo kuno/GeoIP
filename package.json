@@ -17,7 +17,8 @@
       "sajal <sajal@turbobytes.com>",
       "Chris O'Hara <cohara87@gmail.com>",
       "James Taylor <jt@gosquared.com>",
-      "Christopher Holt <cwholt@gmail.com>"
+      "Christopher Holt <cwholt@gmail.com>",
+      "Nicolas Fouché <nicolas.fouche@gmail.com>"
     ],
     "devDependencies": {
       "mocha": "~1.7.0",
