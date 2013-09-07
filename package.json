@@ -19,7 +19,8 @@
       "James Taylor <jt@gosquared.com>",
       "Christopher Holt <cwholt@gmail.com>",
       "Nicolas Fouché <nicolas.fouche@gmail.com>",
-      "King Koopa <bbyholm@abo.fi>"
+      "King Koopa <bbyholm@abo.fi>",
+      "Bernhard Valenti <bernhard@kargo.com>"
     ],
     "dependencies": {
       "nan": "~0.4.0"
