@@ -40,7 +40,7 @@ describe('Country', function() {
 
   describe('Synchrouns Lookup', function() {
     it('should can find location by domain', function(done) {
-      var data = instance.lookupSync('www.google.com');
+      var data = instance.lookupSync('www.163.com');
       data.should.be.a('object');
       setTimeout(done, 1);
     });
@@ -54,7 +54,7 @@ describe('Country', function() {
 
   describe('Asynchrouns Lookup', function() {
     it('should can find location by domain', function(done) {
-      instance.lookup('www.google.com', function(err, data) {
+      instance.lookup('www.163.com', function(err, data) {
         should.not.exist(err);
         should.exist(data);
         data.should.be.an('object');

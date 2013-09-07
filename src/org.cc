@@ -21,7 +21,7 @@ void geoip::Org::Init(Handle<Object> target)
   NODE_SET_PROTOTYPE_METHOD(t, "lookup", lookup);
   NODE_SET_PROTOTYPE_METHOD(t, "lookupSync", lookupSync);
   NODE_SET_PROTOTYPE_METHOD(t, "update", update);
-  NODE_SET_PROTOTYPE_METHOD(t, "close", close);
+  //NODE_SET_PROTOTYPE_METHOD(t, "close", close);
   target->Set(String::NewSymbol("Org"), t->GetFunction());
 }
 
