@@ -70,6 +70,16 @@ describe('Country', function() {
         setTimeout(done, 1);
       });
     });
+
+    it('lookupSync method should return the same result as lookup method', function(done) {
+      var country = instance.lookupSync('134.191.232.69');
+      instance.lookup('134.191.232.69', function (err, data) {
+        should.not.exist(err);
+        should.exist(data);
+        data.country_code.should.equal(country.country_code);
+        setTimeout(done, 1);
+      });
+    });
   });
 
   describe('Update database on the fly', function() {
