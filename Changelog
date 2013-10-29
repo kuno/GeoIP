@@ -111,6 +111,10 @@ v0.4.8, 2013-02-15
 v0.4.9, 2013-03-12
 1, make compatible with node 0.10.0.
 
-V0.4.10, 2012-05-04
+V0.4.10, 2013-05-04
 1, Make package self-building, i.e not depending on external libgeoip any
 more.
+
+V0.4.11, 2013-10-29
+1, Use nan to solved version dependency.
+2, Fix #60, Bug in the async country lookup method.
