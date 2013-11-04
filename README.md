@@ -1,5 +1,7 @@
 __GeoIP binding for nodejs__
-[![build status](https://secure.travis-ci.org/kuno/GeoIP.png)](http://travis-ci.org/kuno/GeoIP)
+
+[![Build status](https://secure.travis-ci.org/kuno/GeoIP.png)](http://travis-ci.org/kuno/GeoIP)
+[![Dependencies Status](https://david-dm.org/kuno/GeoIP.png)](https://david-dm.org/kuno/GeoIP)
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/kuno/geoip/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
 Get geolocation information based on domain or IP address.
