@@ -297,3 +297,7 @@ Asynchronous method:
           console.log(data);  // Maybe return 'unknow' or different from lookup method
         }
     });
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/kuno/geoip/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
