@@ -31,7 +31,6 @@ describe('Check database file type', function() {
   describe('../database/GeoIP.dat', function() {
     it('should equal to country', function(done) {
       var file = path.resolve(__dirname, '../database/GeoIP.dat');
-      console.log(file);
       var type = geoip.check(file);
 
       type.should.equal('country');
