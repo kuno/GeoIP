@@ -24,11 +24,11 @@
       "Pawel Maciejewski <fragphace@gmail.com>"
     ],
     "dependencies": {
-      "nan": "~0.4.0"
+      "nan": "~0.5.1"
     },
     "devDependencies": {
-      "mocha": "~1.7.0",
-      "chai": "~1.7.0"
+      "mocha": "~1.14.0",
+      "chai": "~1.8.1"
     },
   "repository":
     {
