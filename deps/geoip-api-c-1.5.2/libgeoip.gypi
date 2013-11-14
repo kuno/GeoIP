@@ -33,8 +33,8 @@
     'defines': [
       'PACKAGE_NAME="GeoIP"',
       'PACKAGE_TARNAME="GeoIP"',
-      'PACKAGE_VERSION="1.5.0"',
-      'PACKAGE_STRING="GeoIP 1.5.0"',
+      'PACKAGE_VERSION="1.5.2"',
+      'PACKAGE_STRING="GeoIP 1.5.2"',
       'PACKAGE_BUGREPORT="support@maxmind.com"',
       'PACKAGE_URL=""',
       'STDC_HEADERS=1',
