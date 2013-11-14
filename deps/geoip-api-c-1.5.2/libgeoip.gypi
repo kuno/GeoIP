@@ -53,7 +53,7 @@
       '_POSIX_PTHREAD_SEMANTICS=1',
       '_TANDEM_SOURCE=1',
       'PACKAGE="GeoIP"',
-      'VERSION="1.5.0"',
+      'VERSION="1.5.2"',
       'HAVE_DLFCN_H=1',
       'LT_OBJDIR=".libs/"',
       'HAVE_USHORT_TYPEDEF=1',
