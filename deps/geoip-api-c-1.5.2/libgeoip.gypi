@@ -97,7 +97,8 @@
       'libGeoIP/base64.c',
       'libGeoIP/md5.c',
       'libGeoIP/timeZone.c',
-      'libGeoIP/regionName.c'
+      'libGeoIP/regionName.c',
+      'libGeoIP/GeoIP_deprecated.c'
       ]
   }]
 }
