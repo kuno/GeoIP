@@ -118,3 +118,6 @@ more.
 V0.4.11, 2013-10-29
 1, Use nan to solved version dependency.
 2, Fix #60, Bug in the async country lookup method.
+
+v0.4.12, 2013-11-14
+1, Update geoip c api to v1.5.2.
