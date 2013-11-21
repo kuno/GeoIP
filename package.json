@@ -1,64 +1,67 @@
 {
-  "name":"geoip",
-  "description":"GeoIP binding for node",
-  "version":"0.4.13-dev",
-  "homepage":"http://github.com/kuno/GeoIP",
-  "author":"Guan 'kuno' Qing <neokuno at Gmail dot com>",
-  "contributors":
-    [
-      "Vladimir Dronnikov <dronnikov@gmail.com>",
-      "Konstantin Käfer <github@kkaefer.com>",
-      "Joe Vennix <joevennix@gmail.com>",
-      "artems <tema.semenov@gmail.com>",
-      "Sven Steinheißer <sven.steinheisser@googlemail.com>",
-      "James Taylor <jt@gosquared.com>",
-      "Robert Schultz <robert@cosmicrealms.com>",
-      "Tim Oxley <secoif@gmail.com>",
-      "sajal <sajal@turbobytes.com>",
-      "Chris O'Hara <cohara87@gmail.com>",
-      "James Taylor <jt@gosquared.com>",
-      "Christopher Holt <cwholt@gmail.com>",
-      "Nicolas Fouché <nicolas.fouche@gmail.com>",
-      "King Koopa <bbyholm@abo.fi>",
-      "Bernhard Valenti <bernhard@kargo.com>",
-      "Pawel Maciejewski <fragphace@gmail.com>"
-    ],
-    "dependencies": {
-      "nan": "~0.5.1"
-    },
-    "devDependencies": {
-      "mocha": "~1.14.0",
-      "chai": "~1.8.1"
-    },
-  "repository":
-    {
-      "type":"git",
-      "url":"git://github.com/kuno/GeoIP.git"
-    },
-  "keywords":["geoip", "geolocation"],
-  "bugs":
-    {
-      "mail":"neokuno@gmail.com",
-      "url":"http://github.com/kuno/GeoIP/issues"
-    },
-  "main":"index.js",
-  "directory":
-    { "src":"./src",
-      "test":"./test",
-      "misc":"./misc",
-      "sample":"./sample",
-      "benchmark":"./benchmark"
-    },
-  "engine":{"node": "~0.8.0", "npm": "1"},
-  "scripts":{
+  "name": "geoip",
+  "description": "GeoIP binding for node",
+  "version": "0.4.13-dev",
+  "homepage": "http://github.com/kuno/GeoIP",
+  "author": "Guan 'kuno' Qing <neokuno at Gmail dot com>",
+  "contributors": [
+    "Vladimir Dronnikov <dronnikov@gmail.com>",
+    "Konstantin Käfer <github@kkaefer.com>",
+    "Joe Vennix <joevennix@gmail.com>",
+    "artems <tema.semenov@gmail.com>",
+    "Sven Steinheißer <sven.steinheisser@googlemail.com>",
+    "James Taylor <jt@gosquared.com>",
+    "Robert Schultz <robert@cosmicrealms.com>",
+    "Tim Oxley <secoif@gmail.com>",
+    "sajal <sajal@turbobytes.com>",
+    "Chris O'Hara <cohara87@gmail.com>",
+    "James Taylor <jt@gosquared.com>",
+    "Christopher Holt <cwholt@gmail.com>",
+    "Nicolas Fouché <nicolas.fouche@gmail.com>",
+    "King Koopa <bbyholm@abo.fi>",
+    "Bernhard Valenti <bernhard@kargo.com>",
+    "Pawel Maciejewski <fragphace@gmail.com>"
+  ],
+  "dependencies": {
+    "nan": "~0.5.1"
+  },
+  "devDependencies": {
+    "mocha": "~1.14.0",
+    "chai": "~1.8.1",
+    "memwatch": "~0.2.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/kuno/GeoIP.git"
+  },
+  "keywords": [
+    "geoip",
+    "geolocation"
+  ],
+  "bugs": {
+    "mail": "neokuno@gmail.com",
+    "url": "http://github.com/kuno/GeoIP/issues"
+  },
+  "main": "index.js",
+  "directory": {
+    "src": "./src",
+    "test": "./test",
+    "misc": "./misc",
+    "sample": "./sample",
+    "benchmark": "./benchmark"
+  },
+  "engine": {
+    "node": "~0.8.0",
+    "npm": "1"
+  },
+  "scripts": {
     "build": "node-gyp clean configure build",
     "test": "./bootstrap.sh && ./node_modules/.bin/mocha ./test/*.mocha.js"
   },
-  "licences":
-    [
-      {
-        "type":"LGPL2.1",
-        "url": "http://www.gnu.org/licenses/lgpl-2.1.txt"
-      }
-    ]
+  "licences": [
+    {
+      "type": "LGPL2.1",
+      "url": "http://www.gnu.org/licenses/lgpl-2.1.txt"
+    }
+  ]
 }
