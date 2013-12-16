@@ -23,7 +23,8 @@
     "Pawel Maciejewski <fragphace@gmail.com>"
   ],
   "dependencies": {
-    "nan": "~0.6.0"
+    "nan": "~0.6.0",
+    "bindings": "~1.1.1"
   },
   "devDependencies": {
     "mocha": "~1.14.0",
