@@ -7,9 +7,9 @@
 #include "org.h"
 #include "global.h"
 
-Persistent<FunctionTemplate> geoip::Org::constructor_template;
+Persistent<FunctionTemplate> native::Org::constructor_template;
 
-void geoip::Org::Init(Handle<Object> target)
+void native::Org::Init(Handle<Object> target)
 {
   NanScope();
 
@@ -25,11 +25,11 @@ void geoip::Org::Init(Handle<Object> target)
   target->Set(String::NewSymbol("Org"), t->GetFunction());
 }
 
-geoip::Org::Org() {};
+native::Org::Org() {};
 
-geoip::Org::~Org() {};
+native::Org::~Org() {};
 
-NAN_METHOD(geoip::Org::New)
+NAN_METHOD(native::Org::New)
 {
   NanScope();
 
@@ -62,14 +62,14 @@ NAN_METHOD(geoip::Org::New)
   }
 }
 
-NAN_METHOD(geoip::Org::lookupSync) {
+NAN_METHOD(native::Org::lookupSync) {
   NanScope();
 
   Local<Value> data;
   Local<String> host_str = args[0]->ToString();
   char host_cstr[host_str->Length() + 1];
   NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, host_cstr, host_str->Length() + 1, v8::String::HINT_MANY_WRITES_EXPECTED);
-  Org * o = ObjectWrap::Unwrap<geoip::Org>(args.This());
+  Org * o = ObjectWrap::Unwrap<native::Org>(args.This());
 
   uint32_t ipnum = _GeoIP_lookupaddress(host_cstr);
 
@@ -92,13 +92,13 @@ NAN_METHOD(geoip::Org::lookupSync) {
   NanReturnValue(data);
 }
 
-NAN_METHOD(geoip::Org::lookup)
+NAN_METHOD(native::Org::lookup)
 {
   NanScope();
 
   REQ_FUN_ARG(1, cb);
 
-  Org *o = ObjectWrap::Unwrap<geoip::Org>(args.This());
+  Org *o = ObjectWrap::Unwrap<native::Org>(args.This());
   Local<String> host_str = args[0]->ToString();
   char host_cstr[host_str->Length() + 1];
   NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, host_cstr, host_str->Length() + 1, v8::String::HINT_MANY_WRITES_EXPECTED);
@@ -116,7 +116,7 @@ NAN_METHOD(geoip::Org::lookup)
   NanReturnUndefined();
 }
 
-void geoip::Org::EIO_Org(uv_work_t *req)
+void native::Org::EIO_Org(uv_work_t *req)
 {
   org_baton_t *baton = static_cast<org_baton_t *>(req->data);
 
@@ -127,7 +127,7 @@ void geoip::Org::EIO_Org(uv_work_t *req)
   baton->org = GeoIP_org_by_ipnum(baton->o->db, baton->ipnum);
 }
 
-void geoip::Org::EIO_AfterOrg(uv_work_t *req)
+void native::Org::EIO_AfterOrg(uv_work_t *req)
 {
   NanScope();
 
@@ -162,7 +162,7 @@ void geoip::Org::EIO_AfterOrg(uv_work_t *req)
   }
 }
 
-NAN_METHOD(geoip::Org::update) {
+NAN_METHOD(native::Org::update) {
   NanLocker();
 
   NanScope();
@@ -193,7 +193,7 @@ NAN_METHOD(geoip::Org::update) {
  NanUnlocker();
 }
 
-NAN_METHOD(geoip::Org::close) {
-  Org* o = ObjectWrap::Unwrap<geoip::Org>(args.This());
+NAN_METHOD(native::Org::close) {
+  Org* o = ObjectWrap::Unwrap<native::Org>(args.This());
   GeoIP_delete(o->db);  // free()'s the gi reference & closes its fd
 }

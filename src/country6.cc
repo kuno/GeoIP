@@ -7,9 +7,9 @@
 #include "country6.h"
 #include "global.h"
 
-Persistent<FunctionTemplate> geoip::Country6::constructor_template;
+Persistent<FunctionTemplate> native::Country6::constructor_template;
 
-void geoip::Country6::Init(Handle<Object> target)
+void native::Country6::Init(Handle<Object> target)
 {
   NanScope();
 
@@ -25,15 +25,15 @@ void geoip::Country6::Init(Handle<Object> target)
   target->Set(String::NewSymbol("Country6"), t->GetFunction());
 }
 
-geoip::Country6::Country6(): db(NULL) {};
+native::Country6::Country6(): db(NULL) {};
 
-geoip::Country6::~Country6() {
+native::Country6::~Country6() {
   if (db) {
     GeoIP_delete(db);
   }
 };
 
-NAN_METHOD(geoip::Country6::New)
+NAN_METHOD(native::Country6::New)
 {
   NanScope();
 
@@ -61,7 +61,7 @@ NAN_METHOD(geoip::Country6::New)
   }
 }
 
-NAN_METHOD(geoip::Country6::lookupSync) {
+NAN_METHOD(native::Country6::lookupSync) {
   NanScope();
 
   Country6 * c = ObjectWrap::Unwrap<Country6>(args.This());
@@ -99,7 +99,7 @@ NAN_METHOD(geoip::Country6::lookupSync) {
   }
 }
 
-NAN_METHOD(geoip::Country6::lookup)
+NAN_METHOD(native::Country6::lookup)
 {
   NanScope();
 
@@ -129,7 +129,7 @@ NAN_METHOD(geoip::Country6::lookup)
   NanReturnUndefined();
 }
 
-void geoip::Country6::EIO_Country(uv_work_t *req)
+void native::Country6::EIO_Country(uv_work_t *req)
 {
   //Locker locker();
 
@@ -144,7 +144,7 @@ void geoip::Country6::EIO_Country(uv_work_t *req)
   //Unlocker unlocker();
 }
 
-void geoip::Country6::EIO_AfterCountry(uv_work_t *req)
+void native::Country6::EIO_AfterCountry(uv_work_t *req)
 {
   NanScope();
 
@@ -184,7 +184,7 @@ void geoip::Country6::EIO_AfterCountry(uv_work_t *req)
   }
 }
 
-NAN_METHOD(geoip::Country6::update) {
+NAN_METHOD(native::Country6::update) {
   NanLocker();
 
   NanScope();
@@ -214,7 +214,7 @@ NAN_METHOD(geoip::Country6::update) {
  NanUnlocker();
 }
 
-NAN_METHOD(geoip::Country6::close) {
+NAN_METHOD(native::Country6::close) {
   Country6 * c = ObjectWrap::Unwrap<Country6>(args.This());
   GeoIP_delete(c->db);  // free()'s the gi reference & closes its fd
   delete c->db;

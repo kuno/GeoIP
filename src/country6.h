@@ -14,7 +14,7 @@
 using namespace v8;
 using namespace node;
 
-namespace geoip {
+namespace native {
   class Country6: ObjectWrap
   {
     private:
@@ -49,7 +49,7 @@ namespace geoip {
 }
 
 struct country6_baton_t {
-  geoip::Country6 *c;
+  native::Country6 *c;
   geoipv6_t ipnum_v6;
   int country_id;
   Persistent<Function> cb;

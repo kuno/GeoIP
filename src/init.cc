@@ -19,20 +19,19 @@ extern "C" {
     NanScope();
 
     // Initialize Modules
-    geoip::NetSpeed::Init(target);
-    geoip::Country6::Init(target);
-    geoip::Country::Init(target);
-    geoip::Region::Init(target);
-    geoip::City6::Init(target);
-    geoip::City::Init(target);
-    geoip::Org::Init(target);
+    native::NetSpeed::Init(target);
+    native::Country6::Init(target);
+    native::Country::Init(target);
+    native::Region::Init(target);
+    native::City6::Init(target);
+    native::City::Init(target);
+    native::Org::Init(target);
 
     // Utility memeber method
-    Local<FunctionTemplate> t = FunctionTemplate::New(geoip::check);
+    Local<FunctionTemplate> t = FunctionTemplate::New(native::check);
     target->Set(String::NewSymbol("check"), t->GetFunction());
-    //only works with libgeoip >= 1.4.7
     target->Set(String::NewSymbol("libgeoip"), String::New(GeoIP_lib_version()));
   }
 
-  NODE_MODULE(geoip, init)
+  NODE_MODULE(native, init)
 }

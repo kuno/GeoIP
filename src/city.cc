@@ -7,9 +7,9 @@
 #include "city.h"
 #include "global.h"
 
-Persistent<FunctionTemplate> geoip::City::constructor_template;
+Persistent<FunctionTemplate> native::City::constructor_template;
 
-void geoip::City::Init(Handle<Object> target)
+void native::City::Init(Handle<Object> target)
 {
   NanScope();
 
@@ -25,14 +25,14 @@ void geoip::City::Init(Handle<Object> target)
   target->Set(String::NewSymbol("City"), t->GetFunction());
 }
 
-geoip::City::City() : db(NULL) {};
+native::City::City() : db(NULL) {};
 
-geoip::City::~City() { if (db) {
+native::City::~City() { if (db) {
   GeoIP_delete(db);
 }
 };
 
-NAN_METHOD(geoip::City::New)
+NAN_METHOD(native::City::New)
 {
   NanScope();
 
@@ -63,14 +63,14 @@ NAN_METHOD(geoip::City::New)
   }
 }
 
-NAN_METHOD(geoip::City::lookupSync) {
+NAN_METHOD(native::City::lookupSync) {
   NanScope();
 
   Local<Object> data = Object::New();
   Local<String> host_str = args[0]->ToString();
   char host_cstr[host_str->Length() + 1];
   NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, host_cstr, host_str->Length() + 1, v8::String::HINT_MANY_WRITES_EXPECTED);
-  City * c = ObjectWrap::Unwrap<geoip::City>(args.This());
+  City * c = ObjectWrap::Unwrap<native::City>(args.This());
 
   uint32_t ipnum = _GeoIP_lookupaddress(host_cstr);
 
@@ -152,13 +152,13 @@ NAN_METHOD(geoip::City::lookupSync) {
   NanReturnValue(data);
 }
 
-NAN_METHOD(geoip::City::lookup)
+NAN_METHOD(native::City::lookup)
 {
   NanScope();
 
   REQ_FUN_ARG(1, cb);
 
-  City* c = ObjectWrap::Unwrap<geoip::City>(args.This());
+  City* c = ObjectWrap::Unwrap<native::City>(args.This());
   Local<String> host_str = args[0]->ToString();
   char host_cstr[host_str->Length() + 1];
   NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, host_cstr, host_str->Length() + 1, v8::String::HINT_MANY_WRITES_EXPECTED);
@@ -179,7 +179,7 @@ NAN_METHOD(geoip::City::lookup)
   NanReturnUndefined();
 }
 
-void geoip::City::EIO_City(uv_work_t *req)
+void native::City::EIO_City(uv_work_t *req)
 {
   city_baton_t* baton = static_cast<city_baton_t *>(req->data);
 
@@ -190,7 +190,7 @@ void geoip::City::EIO_City(uv_work_t *req)
   }
 }
 
-void geoip::City::EIO_AfterCity(uv_work_t *req)
+void native::City::EIO_AfterCity(uv_work_t *req)
 {
   NanScope();
 
@@ -281,7 +281,7 @@ void geoip::City::EIO_AfterCity(uv_work_t *req)
   }
 }
 
-NAN_METHOD(geoip::City::update) {
+NAN_METHOD(native::City::update) {
   NanLocker();
 
   NanScope();
@@ -311,7 +311,7 @@ NAN_METHOD(geoip::City::update) {
  NanUnlocker();
 }
 
-NAN_METHOD(geoip::City::close) {
-  City *c = ObjectWrap::Unwrap<geoip::City>(args.This());
+NAN_METHOD(native::City::close) {
+  City *c = ObjectWrap::Unwrap<native::City>(args.This());
   GeoIP_delete(c->db);  // free()'s the gi reference & closes its fd
 }

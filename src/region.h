@@ -14,7 +14,7 @@
 using namespace v8;
 using namespace node;
 
-namespace geoip {
+namespace native {
   class Region: ObjectWrap
   {
     private:
@@ -49,7 +49,7 @@ namespace geoip {
 
 }
 struct region_baton_t {
-  geoip::Region *r;
+  native::Region *r;
   int ipnum;  // uint32_t?
   GeoIPRegion *region;
   Persistent<Function> cb;

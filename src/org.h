@@ -14,7 +14,7 @@
 using namespace v8;
 using namespace node;
 
-namespace geoip {
+namespace native {
   class Org: ObjectWrap
   {
     private:
@@ -49,7 +49,7 @@ namespace geoip {
 }
 
 struct org_baton_t {
-  geoip::Org *o;
+  native::Org *o;
   int ipnum;  // uint32_t?
   char *org;
   Persistent<Function> cb;

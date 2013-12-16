@@ -14,7 +14,7 @@
 using namespace v8;
 using namespace node;
 
-namespace geoip {
+namespace native {
   class NetSpeed: ObjectWrap
   {
     private:
@@ -49,7 +49,7 @@ namespace geoip {
 }
 
 struct netspeed_baton_t {
-  geoip::NetSpeed *n;
+  native::NetSpeed *n;
   int ipnum;  // uint32_t?
   int netspeed;
   Persistent<Function> cb;
