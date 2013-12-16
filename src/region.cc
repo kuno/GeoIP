@@ -8,9 +8,9 @@
 #include "region.h"
 #include "global.h"
 
-Persistent<FunctionTemplate> geoip::Region::constructor_template;
+Persistent<FunctionTemplate> native::Region::constructor_template;
 
-void geoip::Region::Init(Handle<Object> target)
+void native::Region::Init(Handle<Object> target)
 {
   NanScope();
 
@@ -26,15 +26,15 @@ void geoip::Region::Init(Handle<Object> target)
   target->Set(String::NewSymbol("Region"), t->GetFunction());
 }
 
-geoip::Region::Region() : db(NULL) {};
+native::Region::Region() : db(NULL) {};
 
-geoip::Region::~Region() {
+native::Region::~Region() {
   if (db) {
     GeoIP_delete(db);
   }
 };
 
-NAN_METHOD(geoip::Region::New)
+NAN_METHOD(native::Region::New)
 {
   NanScope();
   Region *r = new Region();
@@ -62,7 +62,7 @@ NAN_METHOD(geoip::Region::New)
   }
 }
 
-NAN_METHOD(geoip::Region::lookupSync) {
+NAN_METHOD(native::Region::lookupSync) {
   NanScope();
 
   Local<Object> data = Object::New();
@@ -90,7 +90,7 @@ NAN_METHOD(geoip::Region::lookupSync) {
   }
 }
 
-NAN_METHOD(geoip::Region::lookup)
+NAN_METHOD(native::Region::lookup)
 {
   NanScope();
 
@@ -114,7 +114,7 @@ NAN_METHOD(geoip::Region::lookup)
   NanReturnUndefined();
 }
 
-void geoip::Region::EIO_Region(uv_work_t *req)
+void native::Region::EIO_Region(uv_work_t *req)
 {
   region_baton_t *baton = static_cast<region_baton_t *>(req->data);
 
@@ -125,7 +125,7 @@ void geoip::Region::EIO_Region(uv_work_t *req)
   }
 }
 
-void geoip::Region::EIO_AfterRegion(uv_work_t *req)
+void native::Region::EIO_AfterRegion(uv_work_t *req)
 {
   NanScope();
 
@@ -158,7 +158,7 @@ void geoip::Region::EIO_AfterRegion(uv_work_t *req)
   }
 }
 
-NAN_METHOD(geoip::Region::update) {
+NAN_METHOD(native::Region::update) {
   NanLocker();
 
   NanScope();
@@ -188,7 +188,7 @@ NAN_METHOD(geoip::Region::update) {
  NanUnlocker();
 }
 
-NAN_METHOD(geoip::Region::close) {
+NAN_METHOD(native::Region::close) {
   Region * r = ObjectWrap::Unwrap<Region>(args.This());
   GeoIP_delete(r->db);  // free()'s the gi reference & closes its fd
 }

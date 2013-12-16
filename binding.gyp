@@ -1,7 +1,7 @@
 {
   'targets': [
     {
-      'target_name': 'geoip',
+      'target_name': 'native',
       'sources': [
         'src/global.cc'
         , 'src/init.cc'
@@ -24,7 +24,7 @@
           "<!(node -p -e \"require('path').dirname(require.resolve('nan'))\")"
       ],
       'dependencies': [
-        'deps/geoip-api-c-1.5.2/libgeoip.gypi:geoip'
+        'deps/geoip-api-c-1.5.2/libgeoip.gypi:libgeoip'
       ],
       'conditions': [
         ['OS=="win"', {

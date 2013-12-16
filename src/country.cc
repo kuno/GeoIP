@@ -7,9 +7,9 @@
 #include "country.h"
 #include "global.h"
 
-Persistent<FunctionTemplate> geoip::Country::constructor_template;
+Persistent<FunctionTemplate> native::Country::constructor_template;
 
-void geoip::Country::Init(Handle<Object> target)
+void native::Country::Init(Handle<Object> target)
 {
   NanScope();
 
@@ -25,15 +25,15 @@ void geoip::Country::Init(Handle<Object> target)
   target->Set(String::NewSymbol("Country"), t->GetFunction());
 }
 
-geoip::Country::Country() : db(NULL) {};
+native::Country::Country() : db(NULL) {};
 
-geoip::Country::~Country() {
+native::Country::~Country() {
   if (db) {
     GeoIP_delete(db);
   }
 };
 
-NAN_METHOD(geoip::Country::New)
+NAN_METHOD(native::Country::New)
 {
   NanScope();
 
@@ -61,7 +61,7 @@ NAN_METHOD(geoip::Country::New)
   }
 }
 
-NAN_METHOD(geoip::Country::lookupSync) {
+NAN_METHOD(native::Country::lookupSync) {
   NanScope();
 
   Country * c = ObjectWrap::Unwrap<Country>(args.This());
@@ -92,7 +92,7 @@ NAN_METHOD(geoip::Country::lookupSync) {
   }
 }
 
-NAN_METHOD(geoip::Country::lookup)
+NAN_METHOD(native::Country::lookup)
 {
   NanScope();
 
@@ -117,7 +117,7 @@ NAN_METHOD(geoip::Country::lookup)
   NanReturnUndefined();
 }
 
-void geoip::Country::EIO_Country(uv_work_t *req)
+void native::Country::EIO_Country(uv_work_t *req)
 {
   country_baton_t *baton = static_cast<country_baton_t *>(req->data);
 
@@ -130,7 +130,7 @@ void geoip::Country::EIO_Country(uv_work_t *req)
   }
 }
 
-void geoip::Country::EIO_AfterCountry(uv_work_t *req)
+void native::Country::EIO_AfterCountry(uv_work_t *req)
 {
   NanScope();
 
@@ -170,7 +170,7 @@ void geoip::Country::EIO_AfterCountry(uv_work_t *req)
   }
 }
 
-NAN_METHOD(geoip::Country::update) {
+NAN_METHOD(native::Country::update) {
   NanLocker();
 
   NanScope();
@@ -200,7 +200,7 @@ NAN_METHOD(geoip::Country::update) {
   NanUnlocker();
 }
 
-NAN_METHOD(geoip::Country::close) {
+NAN_METHOD(native::Country::close) {
   Country* c = ObjectWrap::Unwrap<Country>(args.This());
   GeoIP_delete(c->db);  // free()'s the gi reference & closes its fd
   delete c->db;

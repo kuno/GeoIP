@@ -1,9 +1,9 @@
-var join  = require('path').join,
+var path  = require('path'),
     read  = require('fs').readFileSync;
 
-var binding = require(join(__dirname, 'build/Release/geoip.node'));
+var binding = require('bindings')('native.node');
 
-var version  = JSON.parse(read(join(__dirname, 'package.json'))).version;
+var version  = JSON.parse(read(path.resolve(__dirname, './package.json'))).version;
 
 // Classes
 exports.NetSpeed = binding.NetSpeed;

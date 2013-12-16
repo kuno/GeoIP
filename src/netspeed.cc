@@ -7,9 +7,9 @@
 #include "netspeed.h"
 #include "global.h"
 
-Persistent<FunctionTemplate> geoip::NetSpeed::constructor_template;
+Persistent<FunctionTemplate> native::NetSpeed::constructor_template;
 
-void geoip::NetSpeed::Init(Handle<Object> target)
+void native::NetSpeed::Init(Handle<Object> target)
 {
   NanScope();
 
@@ -25,15 +25,15 @@ void geoip::NetSpeed::Init(Handle<Object> target)
   target->Set(String::NewSymbol("NetSpeed"), t->GetFunction());
 }
 
-geoip::NetSpeed::NetSpeed() : db(NULL) {};
+native::NetSpeed::NetSpeed() : db(NULL) {};
 
-geoip::NetSpeed::~NetSpeed() {
+native::NetSpeed::~NetSpeed() {
   if (db) {
     GeoIP_delete(db);
   }
 };
 
-NAN_METHOD(geoip::NetSpeed::New)
+NAN_METHOD(native::NetSpeed::New)
 {
   NanScope();
   NetSpeed *n = new NetSpeed();
@@ -62,7 +62,7 @@ NAN_METHOD(geoip::NetSpeed::New)
   }
 }
 
-NAN_METHOD(geoip::NetSpeed::lookupSync) {
+NAN_METHOD(native::NetSpeed::lookupSync) {
   NanScope();
 
   NetSpeed *n = ObjectWrap::Unwrap<NetSpeed>(args.This());
@@ -95,7 +95,7 @@ NAN_METHOD(geoip::NetSpeed::lookupSync) {
   NanReturnValue(data);
 }
 
-NAN_METHOD(geoip::NetSpeed::lookup)
+NAN_METHOD(native::NetSpeed::lookup)
 {
   NanScope();
 
@@ -119,7 +119,7 @@ NAN_METHOD(geoip::NetSpeed::lookup)
   NanReturnUndefined();
 }
 
-void geoip::NetSpeed::EIO_NetSpeed(uv_work_t *req)
+void native::NetSpeed::EIO_NetSpeed(uv_work_t *req)
 {
   netspeed_baton_t *baton = static_cast<netspeed_baton_t *>(req->data);
 
@@ -130,7 +130,7 @@ void geoip::NetSpeed::EIO_NetSpeed(uv_work_t *req)
   }
 }
 
-void geoip::NetSpeed::EIO_AfterNetSpeed(uv_work_t *req)
+void native::NetSpeed::EIO_AfterNetSpeed(uv_work_t *req)
 {
   NanScope();
 
@@ -170,7 +170,7 @@ void geoip::NetSpeed::EIO_AfterNetSpeed(uv_work_t *req)
   }
 }
 
-NAN_METHOD(geoip::NetSpeed::update) {
+NAN_METHOD(native::NetSpeed::update) {
   NanLocker();
 
   NanScope();
@@ -199,7 +199,7 @@ NAN_METHOD(geoip::NetSpeed::update) {
   NanUnlocker();
 }
 
-NAN_METHOD(geoip::NetSpeed::close) {
+NAN_METHOD(native::NetSpeed::close) {
   NetSpeed *n = ObjectWrap::Unwrap<NetSpeed>(args.This());
   GeoIP_delete(n->db);  // free()'s the gi reference & closes its fd
 }

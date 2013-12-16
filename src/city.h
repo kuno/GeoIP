@@ -14,7 +14,7 @@
 using namespace v8;
 using namespace node;
 
-namespace geoip {
+namespace native {
   class City: ObjectWrap
   {
     private:
@@ -50,7 +50,7 @@ namespace geoip {
 }
 
 struct city_baton_t {
-  geoip::City *c;
+  native::City *c;
   GeoIPRecord *record;
   int ipnum;  // uint32_t?
   Persistent<Function> cb;

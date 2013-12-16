@@ -87,7 +87,7 @@
   },
 
   'targets': [{
-    'target_name': 'geoip',
+    'target_name': 'libgeoip',
     'product_prefix': 'lib',
     'type': 'static_library',
     'sources': [

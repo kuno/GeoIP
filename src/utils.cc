@@ -7,7 +7,7 @@
 #include "utils.h"
 #include "global.h"
 
-namespace geoip {
+namespace native {
   NAN_METHOD(check) {
     NanScope();
 

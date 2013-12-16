@@ -15,7 +15,7 @@
 using namespace v8;
 using namespace node;
 
-namespace geoip {
+namespace native {
 
   NAN_METHOD(check);
 
