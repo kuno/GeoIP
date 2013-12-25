@@ -29,8 +29,7 @@
   },
   "devDependencies": {
     "mocha": "~1.14.0",
-    "chai": "~1.8.1",
-    "memwatch": "~0.2.2"
+    "chai": "~1.8.1"
   },
   "repository": {
     "type": "git",
@@ -53,7 +52,7 @@
     "benchmark": "./benchmark"
   },
   "engine": {
-    "node": "~0.8.0",
+    "node": ">=0.8.0",
     "npm": "1"
   },
   "scripts": {
