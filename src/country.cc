@@ -13,7 +13,7 @@ void native::Country::Init(Handle<Object> target)
 {
   NanScope();
 
-  Local<FunctionTemplate> t = FunctionTemplate::New(New);
+  Local<FunctionTemplate> t = NanNewLocal<FunctionTemplate>(FunctionTemplate::New(New));
   NanAssignPersistent(FunctionTemplate, constructor_template, t);
   t->InstanceTemplate()->SetInternalFieldCount(1);
   t->SetClassName(String::NewSymbol("geoip"));
@@ -66,8 +66,8 @@ NAN_METHOD(native::Country::lookupSync) {
 
   Country * c = ObjectWrap::Unwrap<Country>(args.This());
 
-  Local<Object> data = Object::New();
-  Local<String> host_str = args[0]->ToString();
+  Local<Object> data = NanNewLocal<Object>(Object::New());
+  Local<String> host_str = NanNewLocal<String>(args[0]->ToString());
   char host_cstr[host_str->Length() + 1];
   NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, host_cstr, host_str->Length() + 1, v8::String::HINT_MANY_WRITES_EXPECTED);
   uint32_t ipnum = _GeoIP_lookupaddress(host_cstr);
@@ -99,7 +99,7 @@ NAN_METHOD(native::Country::lookup)
   REQ_FUN_ARG(1, cb);
 
   Country * c = ObjectWrap::Unwrap<Country>(args.This());
-  Local<String> host_str = args[0]->ToString();
+  Local<String> host_str = NanNewLocal<String>(args[0]->ToString());
   char host_cstr[host_str->Length() + 1];
   NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, host_cstr, host_str->Length() + 1, v8::String::HINT_MANY_WRITES_EXPECTED);
 
@@ -142,7 +142,7 @@ void native::Country::EIO_AfterCountry(uv_work_t *req)
     argv[0] = Exception::Error(String::New("Data not found"));
     argv[1] = Null();
   } else {
-    Local<Object> data = Object::New();
+    Local<Object> data = NanNewLocal<Object>(Object::New());
 
     char * name = _GeoIP_iso_8859_1__utf8(GeoIP_country_name[baton->country_id]);
 

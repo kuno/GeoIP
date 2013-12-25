@@ -28,7 +28,7 @@ extern "C" {
     native::Org::Init(target);
 
     // Utility memeber method
-    Local<FunctionTemplate> t = FunctionTemplate::New(native::check);
+    Local<FunctionTemplate> t = NanNewLocal<FunctionTemplate>(FunctionTemplate::New(native::check));
     target->Set(String::NewSymbol("check"), t->GetFunction());
     target->Set(String::NewSymbol("libgeoip"), String::New(GeoIP_lib_version()));
   }

@@ -74,6 +74,7 @@ describe('City', function() {
 
   describe('Update database on the fly', function() {
     it('should be ok', function(done) {
+      //expect(instance.update('/tmp')).to.throw(Error);
       instance.update(file).should.be.ok;
       setTimeout(done, 1);
     });

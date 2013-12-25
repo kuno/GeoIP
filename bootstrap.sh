@@ -8,6 +8,7 @@ ORG_DB="http://www.maxmind.com/sample/GeoIP-111_20030603.tar.gz"
 REGION_DB="http://www.maxmind.com/sample/GeoIPRegion-515_20050401.tar.gz"
 ASUM_DB="http://geolite.maxmind.com/download/geoip/database/asnum/GeoIPASNum.dat.gz"
 NETSPEED_DB="http://www.maxmind.com/sample/GeoIP-171_20040418.tar.gz"
+SPEEDCELL_DB="https://www.dropbox.com/s/7hv3rqzbw30th8y/GeoIP-177it_20120221.tar.gz"
 
 mkdir -p ./database || return 1
 cd ./database || return 1
@@ -60,6 +61,13 @@ if [ ! -e "GeoIP-171_20040418.dat" ]; then
     wget $NETSPEED_DB || return 1
     tar -xvf GeoIP-171_20040418.tar.gz
     mv GeoIP-171_20040418/*.dat .
+fi
+
+# Speedcell
+if [ ! -e "GeoIP-177it_20120221.tar.gz" ]; then
+    wget $SPEEDCELL_DB || return 1
+    tar -xvf GeoIP-177it_20120221.tar.gz
+    mv GeoIP-177it_20120221/*.dat .
 fi
 
 exit 0

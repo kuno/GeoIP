@@ -88,8 +88,8 @@ describe('Check database file type', function() {
     });
   });
 
-  describe('../database/GeoIPASNum.dat', function() {
-    it('should equal to asnum', function(done) {
+  describe('Type of of db ' + path.resolve(__dirname, '../database/GeoIPASNum.dat'), function() {
+    it('should be asnum', function(done) {
       var file = path.resolve(__dirname, '../database/GeoIPASNum.dat');
       var type = geoip.check(file);
 

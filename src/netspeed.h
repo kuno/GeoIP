@@ -15,8 +15,7 @@ using namespace v8;
 using namespace node;
 
 namespace native {
-  class NetSpeed: ObjectWrap
-  {
+  class NetSpeed: public ObjectWrap {
     private:
       GeoIP *db;
 

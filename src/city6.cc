@@ -13,7 +13,7 @@ void native::City6::Init(Handle<Object> target)
 {
   NanScope();
 
-  Local<FunctionTemplate> t = FunctionTemplate::New(New);
+  Local<FunctionTemplate> t = NanNewLocal<FunctionTemplate>(FunctionTemplate::New(New));
   NanAssignPersistent(FunctionTemplate, constructor_template, t);
   t->InstanceTemplate()->SetInternalFieldCount(2);
   t->SetClassName(String::NewSymbol("geoip"));
@@ -67,8 +67,8 @@ NAN_METHOD(native::City6::New)
 NAN_METHOD(native::City6::lookupSync) {
   NanScope();
 
-  Local<Object> data = Object::New();
-  Local<String> host_str = args[0]->ToString();
+  Local<Object> data = NanNewLocal<Object>(Object::New());
+  Local<String> host_str = NanNewLocal<String>(args[0]->ToString());
   char host_cstr[host_str->Length() + 1];
   NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, host_cstr, host_str->Length() + 1, v8::String::HINT_MANY_WRITES_EXPECTED);
   City6 * c = ObjectWrap::Unwrap<native::City6>(args.This());
@@ -157,7 +157,7 @@ NAN_METHOD(native::City6::lookup)
   REQ_FUN_ARG(1, cb);
 
   City6 *c = ObjectWrap::Unwrap<native::City6>(args.This());
-  Local<String> host_str = args[0]->ToString();
+  Local<String> host_str = NanNewLocal<String>(args[0]->ToString());
   char host_cstr[host_str->Length() + 1];
   NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, host_cstr, host_str->Length() + 1, v8::String::HINT_MANY_WRITES_EXPECTED);
 
@@ -197,7 +197,7 @@ void native::City6::EIO_AfterCity(uv_work_t *req)
     argv[0] = Exception::Error(String::New("Data not found"));
     argv[1] = Null();
   } else {
-    Local<Object> data = Object::New();
+    Local<Object> data = NanNewLocal<Object>(Object::New());
 
     if (baton->record->country_code != NULL) {
       data->Set(String::NewSymbol("country_code"), String::New(baton->record->country_code));

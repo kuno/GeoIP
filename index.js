@@ -14,6 +14,8 @@ exports.City6    = binding.City6;
 exports.City     = binding.City;
 exports.Org      = binding.Org;
 
+exports.City     = require('./lib/city');
+
 // Utilities
 exports.check    = binding.check;
 

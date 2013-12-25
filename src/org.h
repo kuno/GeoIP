@@ -15,8 +15,7 @@ using namespace v8;
 using namespace node;
 
 namespace native {
-  class Org: ObjectWrap
-  {
+  class Org: public ObjectWrap {
     private:
       GeoIP *db;
 
