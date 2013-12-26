@@ -17,23 +17,21 @@ using namespace node;
 namespace native {
   class City: public ObjectWrap {
     private:
+      explicit City();
+
+      ~City();
+         
       GeoIP *db;
 
       int db_edition;
 
       static Persistent<FunctionTemplate> constructor_template;
 
-    protected:
       static NAN_METHOD(New);
 
-    public:
-      City();
-
-      ~City();
-
-      static void Init(Handle<Object> target);
-
       static NAN_METHOD(lookupSync);
+    public:
+      static void Init(Handle<Object> exports);
 
   };
 }

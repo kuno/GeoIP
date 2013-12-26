@@ -13,25 +13,27 @@
 #include "org.h"
 #include "utils.h"
 
+using namespace native;
+
 extern "C" {
-  static void init(Handle<Object> target)
+  static void InitAll(Handle<Object> exports)
   {
     NanScope();
 
     // Initialize Modules
-    native::NetSpeed::Init(target);
-    native::Country6::Init(target);
-    native::Country::Init(target);
-    native::Region::Init(target);
-    native::City6::Init(target);
-    native::City::Init(target);
-    native::Org::Init(target);
+    NetSpeed::Init(exports);
+    Country6::Init(exports);
+    Country::Init(exports);
+    Region::Init(exports);
+    City6::Init(exports);
+    City::Init(exports);
+    Org::Init(exports);
 
     // Utility memeber method
-    Local<FunctionTemplate> t = NanNewLocal<FunctionTemplate>(FunctionTemplate::New(native::check));
-    target->Set(String::NewSymbol("check"), t->GetFunction());
-    target->Set(String::NewSymbol("libgeoip"), String::New(GeoIP_lib_version()));
+    Local<FunctionTemplate> tpl = NanNewLocal<FunctionTemplate>(FunctionTemplate::New(native::check));
+    exports->Set(String::NewSymbol("check"), tpl->GetFunction());
+    exports->Set(String::NewSymbol("libgeoip"), String::New(GeoIP_lib_version()));
   }
 
-  NODE_MODULE(native, init)
+  NODE_MODULE(native, InitAll)
 }

@@ -1,3 +1,10 @@
+var semver = require('semver');
+// memwatch only works with node 0.6.x ~ 0.10.x
+if (semver.gte(process.version, '0.6.0') && semver.lt(process.version, '0.11.0')) {
+    require('memwatch').on('leak', function(info) {
+    });
+}
+
 var path = require('path');
 var mocha = require('mocha');
 var chai = require('chai');
@@ -59,7 +66,7 @@ describe('Check database file type', function() {
   });
 
   describe('../database/GeoLiteCityv6.dat', function() {
-    it('should equal to city_v6', function(done) {
+    it('is city_v6 db', function(done) {
       var file = path.resolve(__dirname, '../database/GeoLiteCityv6.dat');
       var type = geoip.check(file);
 
@@ -69,7 +76,7 @@ describe('Check database file type', function() {
   });
 
   describe('../database/GeoIPRegion-515.dat', function() {
-    it('should equal to region', function(done) {
+    it('is region db', function(done) {
       var file = path.resolve(__dirname, '../database/GeoIPRegion-515.dat');
       var type = geoip.check(file);
 
@@ -78,8 +85,8 @@ describe('Check database file type', function() {
     });
   });
 
-  describe('../database/GeoIPOrg-111.dat', function() {
-    it('should equal to org', function(done) {
+  describe(path.resolve(__dirname, '../database/GeoIPOrg-111.dat'), function() {
+    it('is org db', function(done) {
       var file = path.resolve(__dirname, '../database/GeoIPOrg-111.dat');
       var type = geoip.check(file);
 
@@ -88,12 +95,22 @@ describe('Check database file type', function() {
     });
   });
 
-  describe('Type of of db ' + path.resolve(__dirname, '../database/GeoIPASNum.dat'), function() {
-    it('should be asnum', function(done) {
+  describe(path.resolve(__dirname, '../database/GeoIPASNum.dat'), function() {
+    it('is asnum db', function(done) {
       var file = path.resolve(__dirname, '../database/GeoIPASNum.dat');
       var type = geoip.check(file);
 
       type.should.equal('asnum');
+      setTimeout(done, 1);
+    });
+  });
+
+  describe(path.resolve(__dirname, '../database/GeoIPNetSpeedCell.dat'), function() {
+    it('is netspeed cellular db', function(done) {
+      var file = path.resolve(__dirname, '../database/GeoIPNetSpeedCell.dat');
+      var type = geoip.check(file);
+
+      type.should.equal('netspeed cellular');
       setTimeout(done, 1);
     });
   });

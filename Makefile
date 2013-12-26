@@ -1,7 +1,7 @@
 install:
-	@npm install 
-test: install rebuild bootstrap 
-	@NODE_ENV=test node_modules/.bin/mocha ./test/*.mocha.js
+	@npm install
+test: install rebuild bootstrap
+	@NODE_ENV=test DEBUG=debug node_modules/.bin/mocha ./test/*.mocha.js
 rebuild: install
 	@NODE_ENV=test node-gyp rebuild
 bootstrap: install

@@ -25,11 +25,13 @@
   "dependencies": {
     "nan": "~0.7.0",
     "bindings": "~1.1.1",
-    "debug": "~0.7.4"
+    "debug": "~0.7.4",
+    "memwatch": "~0.2.2"
   },
   "devDependencies": {
     "mocha": "~1.14.0",
-    "chai": "~1.8.1"
+    "chai": "~1.8.1",
+    "semver": "~2.2.1"
   },
   "repository": {
     "type": "git",

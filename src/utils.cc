@@ -12,7 +12,7 @@ namespace native {
     NanScope();
 
     Local<String> edition;
-    Local<String> file_str = args[0]->ToString();
+    Local<String> file_str = NanNewLocal<String>(args[0]->ToString());
     char file_cstr[file_str->Length() + 1];
     NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, file_cstr, file_str->Length() + 1, v8::String::HINT_MANY_WRITES_EXPECTED);
 

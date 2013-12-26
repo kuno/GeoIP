@@ -7,28 +7,31 @@
 #include "city.h"
 #include "global.h"
 
-Persistent<FunctionTemplate> native::City::constructor_template;
+using namespace native;
 
-void native::City::Init(Handle<Object> target) {
-  NanScope();
+City::City() : db(NULL) {};
 
-  Local<FunctionTemplate> t = NanNewLocal<FunctionTemplate>(FunctionTemplate::New(New));
-  NanAssignPersistent(FunctionTemplate, constructor_template, t);
-  t->InstanceTemplate()->SetInternalFieldCount(1);
-  t->SetClassName(String::NewSymbol("City"));
-
-  NODE_SET_PROTOTYPE_METHOD(t, "lookupSync", lookupSync);
-  target->Set(String::NewSymbol("City"), t->GetFunction());
-}
-
-native::City::City() : db(NULL) {};
-
-native::City::~City() { if (db) {
+City::~City() { if (db) {
   GeoIP_delete(db);
 }
 };
 
-NAN_METHOD(native::City::New) {
+Persistent<FunctionTemplate> City::constructor_template;
+
+void City::Init(Handle<Object> exports) {
+  NanScope();
+
+  Local<FunctionTemplate> tpl = NanNewLocal<FunctionTemplate>(FunctionTemplate::New(New));
+  NanAssignPersistent(FunctionTemplate, constructor_template, tpl);
+  tpl->InstanceTemplate()->SetInternalFieldCount(1);
+  tpl->SetClassName(String::NewSymbol("City"));
+
+  tpl->PrototypeTemplate()->Set(String::NewSymbol("lookupSync"),
+      FunctionTemplate::New(lookupSync)->GetFunction());
+  exports->Set(String::NewSymbol("City"), tpl->GetFunction());
+}
+
+NAN_METHOD(City::New) {
   NanScope();
 
   City * c = new City();
@@ -46,7 +49,7 @@ NAN_METHOD(native::City::New) {
       c->Wrap(args.This());
       NanReturnValue(args.This());
     } else {
-      GeoIP_delete(c->db);  // free()'s the gi reference & closes its fd
+      GeoIP_delete(c->db);  // free()'s the reference & closes its fd
       return NanThrowError("Error: Not valid city database");
     }
   } else {
@@ -54,10 +57,10 @@ NAN_METHOD(native::City::New) {
   }
 }
 
-NAN_METHOD(native::City::lookupSync) {
+NAN_METHOD(City::lookupSync) {
   NanScope();
 
-  City * c = ObjectWrap::Unwrap<native::City>(args.This());
+  City * c = ObjectWrap::Unwrap<City>(args.This());
 
   Local<Object> data = NanNewLocal<Object>(Object::New());
   Local<String> host_str = NanNewLocal<String>(args[0]->ToString());
@@ -79,7 +82,7 @@ NAN_METHOD(native::City::lookupSync) {
   GeoIPRecord * record = GeoIP_record_by_ipnum(c->db, ipnum);
 
   if (record == NULL) {
-    NanReturnValue(Null()); //return ThrowException(String::New("Error: Can not find match data"));
+    NanReturnValue(Null());
   }
 
   if (record->country_code != NULL) {
