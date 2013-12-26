@@ -20,7 +20,7 @@ namespace native {
       explicit City();
 
       ~City();
-         
+
       GeoIP *db;
 
       int db_edition;
