@@ -34,7 +34,7 @@ void City::Init(Handle<Object> exports) {
 NAN_METHOD(City::New) {
   NanScope();
 
-  City * c = new City();
+  City *c = new City();
 
   String::Utf8Value file_str(args[0]->ToString());
   const char * file_cstr = ToCString(file_str);
@@ -60,7 +60,7 @@ NAN_METHOD(City::New) {
 NAN_METHOD(City::lookupSync) {
   NanScope();
 
-  City * c = ObjectWrap::Unwrap<City>(args.This());
+  City *c = ObjectWrap::Unwrap<City>(args.This());
 
   Local<Object> data = NanNewLocal<Object>(Object::New());
   Local<String> host_str = NanNewLocal<String>(args[0]->ToString());
@@ -79,7 +79,7 @@ NAN_METHOD(City::lookupSync) {
     NanReturnValue(Null());
   }
 
-  GeoIPRecord * record = GeoIP_record_by_ipnum(c->db, ipnum);
+  GeoIPRecord *record = GeoIP_record_by_ipnum(c->db, ipnum);
 
   if (record == NULL) {
     NanReturnValue(Null());
@@ -102,7 +102,7 @@ NAN_METHOD(City::lookupSync) {
   }
 
   if (record->city != NULL) {
-    char * name = _GeoIP_iso_8859_1__utf8(record->city);
+    char *name = _GeoIP_iso_8859_1__utf8(record->city);
 
     if (name) {
       data->Set(String::NewSymbol("city"), String::New(name));

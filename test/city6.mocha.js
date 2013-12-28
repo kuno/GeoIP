@@ -1,3 +1,12 @@
+var warning = require('debug')('geoip:test:city6:warning');
+var semver = require('semver');
+// memwatch only works with node 0.6.x ~ 0.10.x
+if (semver.gte(process.version, '0.6.0') && semver.lt(process.version, '0.11.0')) {
+    require('memwatch').on('leak', function(info) {
+        warning('Memory leak detected: %j', info);
+    });
+}
+   
 var path = require('path');
 var mocha = require('mocha');
 var chai = require('chai');
@@ -31,11 +40,6 @@ describe('City6', function() {
       instance.update.should.be.a('function');
       setTimeout(done, 1);
     });
-
-    // it('should has a close method', function(done) {
-    //   instance.close.should.be.a('function');
-    //   setTimeout(done, 1);
-    // });
   });
 
   describe('Synchrouns Lookup', function() {

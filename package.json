@@ -58,8 +58,8 @@
     "npm": "1"
   },
   "scripts": {
-    "build": "node-gyp clean configure build",
-    "test": "./bootstrap.sh && ./node_modules/.bin/mocha ./test/*.mocha.js"
+    "build": "make rebuild",
+    "test": "make test"
   },
   "licences": [
     {

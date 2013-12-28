@@ -20,6 +20,7 @@ void native::NetSpeed::Init(Handle<Object> target)
 
   NODE_SET_PROTOTYPE_METHOD(t, "lookup", lookup);
   NODE_SET_PROTOTYPE_METHOD(t, "lookupSync", lookupSync);
+  NODE_SET_PROTOTYPE_METHOD(t, "lookupCellularSync", lookupCellularSync);
   NODE_SET_PROTOTYPE_METHOD(t, "update", update);
   //NODE_SET_PROTOTYPE_METHOD(t, "close", close);
   target->Set(String::NewSymbol("NetSpeed"), t->GetFunction());
@@ -50,7 +51,8 @@ NAN_METHOD(native::NetSpeed::New)
 
   if (n->db != NULL) {
     n->db_edition = GeoIP_database_edition(n->db);
-    if (n->db_edition == GEOIP_NETSPEED_EDITION) {
+    if (n->db_edition == GEOIP_NETSPEED_EDITION ||
+        n->db_edition == GEOIP_NETSPEED_EDITION_REV1) {
       n->Wrap(args.This());
       NanReturnValue(args.This());
     } else {
@@ -60,6 +62,27 @@ NAN_METHOD(native::NetSpeed::New)
   } else {
     return NanThrowError("Error: Cannot open database");
   }
+}
+
+NAN_METHOD(native::NetSpeed::lookupCellularSync) {
+  NanScope();
+
+  NetSpeed *n = ObjectWrap::Unwrap<NetSpeed>(args.This());
+
+  Local<String> data;
+  Local<String> host_str = args[0]->ToString();
+  char host_cstr[host_str->Length() + 1];
+  NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, host_cstr, host_str->Length() + 1, v8::String::HINT_MANY_WRITES_EXPECTED);
+
+  char* speed = GeoIP_name_by_addr(n->db, host_cstr);
+  if (speed == NULL) {
+    data = String::New("Unknown");
+  }
+  else {
+    data = String::New(speed);
+  }
+
+  NanReturnValue(data);
 }
 
 NAN_METHOD(native::NetSpeed::lookupSync) {

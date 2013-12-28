@@ -12,6 +12,7 @@
         , 'src/org.cc'
         , 'src/region.cc'
         , 'src/netspeed.cc'
+        , 'src/netspeedcell.cc'
         , 'src/utils.cc'
       ],
       'link_settings': {

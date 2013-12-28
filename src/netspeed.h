@@ -39,6 +39,8 @@ namespace native {
 
       static NAN_METHOD(lookupSync);
 
+      static NAN_METHOD(lookupCellularSync);
+
       static NAN_METHOD(lookup);
 
       static NAN_METHOD(update);

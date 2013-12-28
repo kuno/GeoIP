@@ -7,9 +7,11 @@
 #include "city6.h"
 #include "global.h"
 
-Persistent<FunctionTemplate> native::City6::constructor_template;
+using namespace native;
 
-void native::City6::Init(Handle<Object> target)
+Persistent<FunctionTemplate> City6::constructor_template;
+
+void City6::Init(Handle<Object> target)
 {
   NanScope();
 
@@ -25,15 +27,15 @@ void native::City6::Init(Handle<Object> target)
   target->Set(String::NewSymbol("City6"), t->GetFunction());
 }
 
-native::City6::City6() : db(NULL) {};
+City6::City6() : db(NULL) {};
 
-native::City6::~City6() {
+City6::~City6() {
   if (db) {
     GeoIP_delete(db);
   }
 };
 
-NAN_METHOD(native::City6::New)
+NAN_METHOD(City6::New)
 {
   NanScope();
 
@@ -64,14 +66,14 @@ NAN_METHOD(native::City6::New)
   }
 }
 
-NAN_METHOD(native::City6::lookupSync) {
+NAN_METHOD(City6::lookupSync) {
   NanScope();
 
   Local<Object> data = NanNewLocal<Object>(Object::New());
   Local<String> host_str = NanNewLocal<String>(args[0]->ToString());
   char host_cstr[host_str->Length() + 1];
   NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, host_cstr, host_str->Length() + 1, v8::String::HINT_MANY_WRITES_EXPECTED);
-  City6 * c = ObjectWrap::Unwrap<native::City6>(args.This());
+  City6 * c = ObjectWrap::Unwrap<City6>(args.This());
 
   geoipv6_t ipnum_v6 = _GeoIP_lookupaddress_v6(host_cstr);
 
@@ -150,13 +152,13 @@ NAN_METHOD(native::City6::lookupSync) {
   NanReturnValue(data);
 }
 
-NAN_METHOD(native::City6::lookup)
+NAN_METHOD(City6::lookup)
 {
   NanScope();
 
   REQ_FUN_ARG(1, cb);
 
-  City6 *c = ObjectWrap::Unwrap<native::City6>(args.This());
+  City6 *c = ObjectWrap::Unwrap<City6>(args.This());
   Local<String> host_str = NanNewLocal<String>(args[0]->ToString());
   char host_cstr[host_str->Length() + 1];
   NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, host_cstr, host_str->Length() + 1, v8::String::HINT_MANY_WRITES_EXPECTED);
@@ -174,7 +176,7 @@ NAN_METHOD(native::City6::lookup)
   NanReturnUndefined();
 }
 
-void native::City6::EIO_City(uv_work_t *req)
+void City6::EIO_City(uv_work_t *req)
 {
   city6_baton_t *baton = static_cast<city6_baton_t *>(req->data);
 
@@ -185,7 +187,7 @@ void native::City6::EIO_City(uv_work_t *req)
   }
 }
 
-void native::City6::EIO_AfterCity(uv_work_t *req)
+void City6::EIO_AfterCity(uv_work_t *req)
 {
   NanScope();
 
@@ -276,7 +278,7 @@ void native::City6::EIO_AfterCity(uv_work_t *req)
   }
 }
 
-NAN_METHOD(native::City6::update) {
+NAN_METHOD(City6::update) {
   NanLocker();
 
   NanScope();
@@ -306,7 +308,7 @@ NAN_METHOD(native::City6::update) {
   NanUnlocker();
 }
 
-NAN_METHOD(native::City6::close) {
-  City6 * c = ObjectWrap::Unwrap<native::City6>(args.This());
+NAN_METHOD(City6::close) {
+  City6 * c = ObjectWrap::Unwrap<City6>(args.This());
   GeoIP_delete(c->db);  // free()'s the gi reference & closes its fd
 }

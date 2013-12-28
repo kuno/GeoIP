@@ -1,11 +1,11 @@
- /*
+/*
  * GeoIP C library binding for nodejs
  *
  * Licensed under the GNU LGPL 2.1 license
  */
 
-#ifndef NODE_GEOIP_CITY_H
-#define NODE_GEOIP_CITY_H
+#ifndef NODE_GEOIP_NETSPEEDCELL_H
+#define NODE_GEOIP_NETSPEEDCELL_H
 
 #include <v8.h>
 #include <node.h>
@@ -15,28 +15,27 @@ using namespace v8;
 using namespace node;
 
 namespace native {
-  class City: public ObjectWrap {
+  class NetSpeedCell: public ObjectWrap {
     private:
-
-      explicit City();
-
-      ~City();
-
       GeoIP *db;
 
       int db_edition;
 
       static Persistent<FunctionTemplate> constructor_template;
 
+    protected:
       static NAN_METHOD(New);
 
-      static NAN_METHOD(lookupSync);
-
     public:
+      NetSpeedCell();
 
-      static void Init(Handle<Object> exports);
+      ~NetSpeedCell();
+
+      static void Init(Handle<Object> target);
+
+      static NAN_METHOD(lookupSync);
 
   };
 }
 
-#endif /* NODE_GEOIP_CITY_H */
+#endif /* NODE_GEOIP_NETSPEEDCELL_H */

@@ -1,7 +1,9 @@
+var warning = require('debug')('geoip:test:utils:warning');
 var semver = require('semver');
 // memwatch only works with node 0.6.x ~ 0.10.x
 if (semver.gte(process.version, '0.6.0') && semver.lt(process.version, '0.11.0')) {
     require('memwatch').on('leak', function(info) {
+        warning('Memory leak detected: %j', info);
     });
 }
 
@@ -15,7 +17,7 @@ var should = chai.should();
 var geoip = require('../index.js');
 
 describe('Check database file type', function() {
-  describe('../database/GeoIP-171_20040418.dat', function() {
+  describe(path.resolve(__dirname, '../database/GeoIP-171_20040418.dat'), function() {
     it('should equal to netspeed', function(done) {
       var file = path.resolve(__dirname, '../database/GeoIP-171_20040418.dat');
       var type = geoip.check(file);
@@ -25,7 +27,7 @@ describe('Check database file type', function() {
     });
   });
 
-  describe('../database/GeoIPASNum.dat', function() {
+  describe(path.resolve(__dirname, '../database/GeoIPASNum.dat'), function() {
     it('should equal to asnum', function(done) {
       var file = path.resolve(__dirname, '../database/GeoIPASNum.dat');
       var type = geoip.check(file);
@@ -35,7 +37,7 @@ describe('Check database file type', function() {
     });
   });
 
-  describe('../database/GeoIP.dat', function() {
+  describe(path.resolve(__dirname, '../database/GeoIP.dat'), function() {
     it('should equal to country', function(done) {
       var file = path.resolve(__dirname, '../database/GeoIP.dat');
       var type = geoip.check(file);
@@ -45,7 +47,7 @@ describe('Check database file type', function() {
     });
   });
 
-  describe('../database/GeoIPv6.dat', function() {
+  describe(path.resolve(__dirname, '../database/GeoIPv6.dat'), function() {
     it('should equal to country_v6', function(done) {
       var file = path.resolve(__dirname, '../database/GeoIPv6.dat');
       var type = geoip.check(file);
@@ -55,7 +57,7 @@ describe('Check database file type', function() {
     });
   });
 
-  describe('../database/GeoLiteCity.dat', function() {
+  describe(path.resolve(__dirname, '../database/GeoLiteCity.dat'), function() {
     it('should equal to city', function(done) {
       var file = path.resolve(__dirname, '../database/GeoLiteCity.dat');
       var type = geoip.check(file);
@@ -65,7 +67,7 @@ describe('Check database file type', function() {
     });
   });
 
-  describe('../database/GeoLiteCityv6.dat', function() {
+  describe(path.resolve(__dirname, '../database/GeoLiteCityv6.dat'), function() {
     it('is city_v6 db', function(done) {
       var file = path.resolve(__dirname, '../database/GeoLiteCityv6.dat');
       var type = geoip.check(file);
@@ -75,7 +77,7 @@ describe('Check database file type', function() {
     });
   });
 
-  describe('../database/GeoIPRegion-515.dat', function() {
+  describe(path.resolve(__dirname, '../database/GeoIPRegion-515.dat'), function() {
     it('is region db', function(done) {
       var file = path.resolve(__dirname, '../database/GeoIPRegion-515.dat');
       var type = geoip.check(file);

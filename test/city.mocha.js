@@ -1,8 +1,9 @@
+var warning = require('debug')('geoip:test:city:warning');
 var semver = require('semver');
 // memwatch only works with node 0.6.x ~ 0.10.x
 if (semver.gte(process.version, '0.6.0') && semver.lt(process.version, '0.11.0')) {
     require('memwatch').on('leak', function(info) {
-        console.log('=================================================================');
+        warning('Memory leak detected: %j', info);
     });
 }
 

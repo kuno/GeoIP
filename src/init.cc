@@ -4,6 +4,7 @@
  * Licensed under the GNU LGPL 2.1 license
  */
 
+#include "netspeedcell.h"
 #include "netspeed.h"
 #include "country6.h"
 #include "country.h"
@@ -16,11 +17,11 @@
 using namespace native;
 
 extern "C" {
-  static void InitAll(Handle<Object> exports)
-  {
+  static void InitAll(Handle<Object> exports) {
     NanScope();
 
     // Initialize Modules
+    NetSpeedCell::Init(exports);
     NetSpeed::Init(exports);
     Country6::Init(exports);
     Country::Init(exports);
