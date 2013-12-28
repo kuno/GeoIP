@@ -20,7 +20,8 @@
     "Nicolas Fouché <nicolas.fouche@gmail.com>",
     "King Koopa <bbyholm@abo.fi>",
     "Bernhard Valenti <bernhard@kargo.com>",
-    "Pawel Maciejewski <fragphace@gmail.com>"
+    "Pawel Maciejewski <fragphace@gmail.com>",
+    "Ilya Furman <smashlong@gmail.com>",
   ],
   "dependencies": {
     "nan": "~0.7.0",
