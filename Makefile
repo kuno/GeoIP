@@ -1,5 +1,3 @@
-test: install rebuild bootstrap
-	@NODE_ENV=test DEBUG=geoip:* node_modules/.bin/mocha ./test/*.mocha.js
 install: install_memwatch
 	@npm install
 install_memwatch:
@@ -10,5 +8,6 @@ bootstrap: install
 	@NODE_ENV=development sh ./cli/bootstrap.sh
 mem_test: install rebuild bootstrap
 	@NODE_ENV=test valgrind --leak-check=full ./test/memory_leak.js
-
-.PHONY: test install install_memwatch rebuild bootstrap
+test: install rebuild bootstrap
+	@NODE_ENV=test DEBUG=geoip:* node_modules/.bin/mocha ./test/*.mocha.js 
+.PHONY: install rebuild bootstrap test
