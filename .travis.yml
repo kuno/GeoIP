@@ -4,5 +4,7 @@ node_js:
   - "0.11"
 
 before_install:
+  - sudo rmdir /dev/shm
+  - sudo ln -Tsf /{run,dev}/shm
   - sudo apt-get update -qq
   - sudo apt-get install -qq wget gzip curl
