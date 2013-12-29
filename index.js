@@ -15,7 +15,7 @@ var version  = JSON.parse(read(path.resolve(__dirname, './package.json'))).versi
 //exports.Org      = binding.Org;
 
 // Libraries
-exports.NetSpeedCell = require('./lib/netspeedCell');
+exports.NetSpeedCell = require('./lib/netspeedcell');
 exports.NetSpeed     = require('./lib/netspeed');
 exports.Country6     = require('./lib/country6');
 exports.Country      = require('./lib/country');
