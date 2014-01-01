@@ -7,39 +7,38 @@
 #include "netspeedcell.h"
 #include "global.h"
 
-Persistent<FunctionTemplate> native::NetSpeedCell::constructor_template;
+using namespace native;
 
-void native::NetSpeedCell::Init(Handle<Object> target) {
-  NanScope();
+NetSpeedCell::NetSpeedCell() : db(NULL) {};
 
-  Local<FunctionTemplate> t = FunctionTemplate::New(New);
-  NanAssignPersistent(FunctionTemplate, constructor_template, t);
-  t->InstanceTemplate()->SetInternalFieldCount(1);
-  t->SetClassName(String::NewSymbol("NetSpeedCell"));
-
-  NODE_SET_PROTOTYPE_METHOD(t, "lookupSync", lookupSync);
-  target->Set(String::NewSymbol("NetSpeedCell"), t->GetFunction());
-}
-
-native::NetSpeedCell::NetSpeedCell() : db(NULL) {};
-
-native::NetSpeedCell::~NetSpeedCell() {
+NetSpeedCell::~NetSpeedCell() {
   if (db) {
     GeoIP_delete(db);
   }
 };
 
-NAN_METHOD(native::NetSpeedCell::New) {
+Persistent<FunctionTemplate> NetSpeedCell::constructor_template;
+
+void NetSpeedCell::Init(Handle<Object> exports) {
+ NanScope();
+
+  Local<FunctionTemplate> tpl = NanNewLocal<FunctionTemplate>(FunctionTemplate::New(New));
+  NanAssignPersistent(FunctionTemplate, constructor_template, tpl);
+  tpl->InstanceTemplate()->SetInternalFieldCount(1);
+  tpl->SetClassName(String::NewSymbol("NetSpeedCell"));
+
+  tpl->PrototypeTemplate()->Set(String::NewSymbol("lookupSync"),
+      FunctionTemplate::New(lookupSync)->GetFunction());
+  exports->Set(String::NewSymbol("NetSpeedCell"), tpl->GetFunction());
+}
+
+NAN_METHOD(NetSpeedCell::New) {
   NanScope();
 
   NetSpeedCell *n = new NetSpeedCell();
 
   String::Utf8Value file_str(args[0]->ToString());
-  const char * file_cstr = ToCString(file_str);
-
-  //Local<String> file_str = args[0]->ToString();
-  //char file_cstr[file_str->Length()];
-  //file_str->WriteAscii(file_cstr);
+  const char *file_cstr = ToCString(file_str);
   bool cache_on = args[1]->ToBoolean()->Value();
 
   n->db = GeoIP_open(file_cstr, cache_on ? GEOIP_MEMORY_CACHE : GEOIP_STANDARD);
@@ -50,7 +49,7 @@ NAN_METHOD(native::NetSpeedCell::New) {
       n->Wrap(args.This());
       NanReturnValue(args.This());
     } else {
-      GeoIP_delete(n->db);  // free()'s the gi reference & closes its fd
+      GeoIP_delete(n->db);  // free()'s the reference & closes fd
       return NanThrowError("Error: Not valid netspeed cell database");
     }
   } else {
@@ -58,17 +57,17 @@ NAN_METHOD(native::NetSpeedCell::New) {
   }
 }
 
-NAN_METHOD(native::NetSpeedCell::lookupSync) {
+NAN_METHOD(NetSpeedCell::lookupSync) {
   NanScope();
 
   NetSpeedCell *n = ObjectWrap::Unwrap<NetSpeedCell>(args.This());
 
-  Local<String> data;
+  Local<Value> data = NanNewLocal<Value>(Null());
   Local<String> host_str = NanNewLocal<String>(args[0]->ToString());
   char host_cstr[host_str->Length() + 1];
   NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, host_cstr, host_str->Length() + 1, v8::String::HINT_MANY_WRITES_EXPECTED);
 
-  char* speed = GeoIP_name_by_addr(n->db, host_cstr);
+  char *speed = GeoIP_name_by_addr(n->db, host_cstr);
   if (speed == NULL) {
     data = String::New("Unknown");
   }

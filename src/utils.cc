@@ -11,7 +11,7 @@ namespace native {
   NAN_METHOD(check) {
     NanScope();
 
-    Local<String> edition;
+    Local<Value> edition = NanNewLocal<Value>(Null());
     Local<String> file_str = NanNewLocal<String>(args[0]->ToString());
     char file_cstr[file_str->Length() + 1];
     NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, file_cstr, file_str->Length() + 1, v8::String::HINT_MANY_WRITES_EXPECTED);

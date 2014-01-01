@@ -17,41 +17,23 @@ using namespace node;
 namespace native {
   class Country6: public ObjectWrap {
     private:
+      explicit Country6();
+
+      ~Country6();
+
       GeoIP *db;
 
       int db_edition;
 
       static Persistent<FunctionTemplate> constructor_template;
 
-      static void EIO_Country(uv_work_t *req);
-
-      static void EIO_AfterCountry(uv_work_t *req);
-
-    protected:
       static NAN_METHOD(New);
-
-    public:
-      Country6();
-
-      ~Country6();
-
-      static void Init(Handle<Object> target);
 
       static NAN_METHOD(lookupSync);
 
-      static NAN_METHOD(lookup);
-
-      static NAN_METHOD(update);
-
-      static NAN_METHOD(close);
+    public:
+      static void Init(Handle<Object> exports);
   };
 }
-
-struct country6_baton_t {
-  native::Country6 *c;
-  geoipv6_t ipnum_v6;
-  int country_id;
-  Persistent<Function> cb;
-};
 
 #endif /* NODE_GEOIP_COUNTRY6_H */

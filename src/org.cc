@@ -7,40 +7,37 @@
 #include "org.h"
 #include "global.h"
 
-Persistent<FunctionTemplate> native::Org::constructor_template;
+using namespace native;
 
-void native::Org::Init(Handle<Object> target)
-{
+Org::Org() {};
+
+Org::~Org() { if (db) {
+  GeoIP_delete(db);
+}
+};
+
+Persistent<FunctionTemplate> Org::constructor_template;
+
+void Org::Init(Handle<Object> exports) {
   NanScope();
 
-  Local<FunctionTemplate> t = FunctionTemplate::New(New);
-  NanAssignPersistent(FunctionTemplate, constructor_template, t);
-  t->InstanceTemplate()->SetInternalFieldCount(1);
-  t->SetClassName(String::NewSymbol("geoip"));
+  Local<FunctionTemplate> tpl = NanNewLocal<FunctionTemplate>(FunctionTemplate::New(New));
+  NanAssignPersistent(FunctionTemplate, constructor_template, tpl);
+  tpl->InstanceTemplate()->SetInternalFieldCount(1);
+  tpl->SetClassName(String::NewSymbol("Org"));
 
-  NODE_SET_PROTOTYPE_METHOD(t, "lookup", lookup);
-  NODE_SET_PROTOTYPE_METHOD(t, "lookupSync", lookupSync);
-  NODE_SET_PROTOTYPE_METHOD(t, "update", update);
-  //NODE_SET_PROTOTYPE_METHOD(t, "close", close);
-  target->Set(String::NewSymbol("Org"), t->GetFunction());
+  tpl->PrototypeTemplate()->Set(String::NewSymbol("lookupSync"),
+      FunctionTemplate::New(lookupSync)->GetFunction());
+  exports->Set(String::NewSymbol("Org"), tpl->GetFunction());
 }
 
-native::Org::Org() {};
-
-native::Org::~Org() {};
-
-NAN_METHOD(native::Org::New)
-{
+NAN_METHOD(Org::New) {
   NanScope();
 
   Org *o = new Org();
 
   String::Utf8Value file_str(args[0]->ToString());
-  const char * file_cstr = ToCString(file_str);
-
-  //Local<String> path_str = args[0]->ToString();
-  //char path_cstr[path_str->Length()];
-  //path_str->WriteAscii(path_cstr);
+  const char *file_cstr = ToCString(file_str);
   bool cache_on = args[1]->ToBoolean()->Value();
 
   o->db = GeoIP_open(file_cstr, cache_on?GEOIP_MEMORY_CACHE:GEOIP_STANDARD);
@@ -54,7 +51,7 @@ NAN_METHOD(native::Org::New)
       o->Wrap(args.This());
       NanReturnValue(args.This());
     } else {
-      GeoIP_delete(o->db);  // free()'s the gi reference & closes its fd
+      GeoIP_delete(o->db);  // free()'s the reference & closes fd
       return NanThrowError("Error: Not valid org database");
     }
   } else {
@@ -62,14 +59,14 @@ NAN_METHOD(native::Org::New)
   }
 }
 
-NAN_METHOD(native::Org::lookupSync) {
+NAN_METHOD(Org::lookupSync) {
   NanScope();
 
-  Local<Value> data;
-  Local<String> host_str = args[0]->ToString();
+  Local<Value> data = NanNewLocal<Value>(Null());
+  Local<String> host_str = NanNewLocal<String>(args[0]->ToString());
   char host_cstr[host_str->Length() + 1];
   NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, host_cstr, host_str->Length() + 1, v8::String::HINT_MANY_WRITES_EXPECTED);
-  Org * o = ObjectWrap::Unwrap<native::Org>(args.This());
+  Org *o = ObjectWrap::Unwrap<Org>(args.This());
 
   uint32_t ipnum = _GeoIP_lookupaddress(host_cstr);
 
@@ -90,110 +87,4 @@ NAN_METHOD(native::Org::lookupSync) {
   free(name);
 
   NanReturnValue(data);
-}
-
-NAN_METHOD(native::Org::lookup)
-{
-  NanScope();
-
-  REQ_FUN_ARG(1, cb);
-
-  Org *o = ObjectWrap::Unwrap<native::Org>(args.This());
-  Local<String> host_str = args[0]->ToString();
-  char host_cstr[host_str->Length() + 1];
-  NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, host_cstr, host_str->Length() + 1, v8::String::HINT_MANY_WRITES_EXPECTED);
-
-  org_baton_t *baton = new org_baton_t();
-  baton->o = o;
-  baton->ipnum = _GeoIP_lookupaddress(host_cstr);
-  NanAssignPersistent(Function, baton->cb, cb);
-
-  uv_work_t *req = new uv_work_t;
-  req->data = baton;
-
-  uv_queue_work(uv_default_loop(), req, EIO_Org, (uv_after_work_cb)EIO_AfterOrg);
-
-  NanReturnUndefined();
-}
-
-void native::Org::EIO_Org(uv_work_t *req)
-{
-  org_baton_t *baton = static_cast<org_baton_t *>(req->data);
-
-  if (baton->ipnum <= 0) {
-    baton->org = NULL;
-  }
-
-  baton->org = GeoIP_org_by_ipnum(baton->o->db, baton->ipnum);
-}
-
-void native::Org::EIO_AfterOrg(uv_work_t *req)
-{
-  NanScope();
-
-  org_baton_t *baton = static_cast<org_baton_t *>(req->data);
-
-  Handle<Value> argv[2];
-
-  if (baton->org == NULL) {
-    argv[0] = Exception::Error(String::New("Data not found"));
-    argv[1] = Null();
-  } else {
-    char * name = _GeoIP_iso_8859_1__utf8(baton->org);
-
-    Local<String> data = String::New(name);
-
-    argv[0] = Null();
-    argv[1] = data;
-
-    free(name);
-  }
-
-  TryCatch try_catch;
-  NanPersistentToLocal(baton->cb)->Call(Context::GetCurrent()->Global(), 2, argv);
-
-  // Cleanup
-  NanDispose(baton->cb);
-  delete baton;
-  delete req;
-
-  if (try_catch.HasCaught()) {
-    FatalException(try_catch);
-  }
-}
-
-NAN_METHOD(native::Org::update) {
-  NanLocker();
-
-  NanScope();
-
-  Org *o = ObjectWrap::Unwrap<Org>(args.This());
-
-  String::Utf8Value file_str(args[0]->ToString());
-  const char *file_cstr = ToCString(file_str);
-
-  bool cache_on = args[1]->ToBoolean()->Value();
-
-  o->db = GeoIP_open(file_cstr, cache_on ? GEOIP_MEMORY_CACHE : GEOIP_STANDARD);
-
-  if (o->db != NULL) {
-    o->db_edition = GeoIP_database_edition(o->db);
-   if (o->db_edition == GEOIP_ORG_EDITION ||
-       o->db_edition == GEOIP_ASNUM_EDITION ||
-       o->db_edition == GEOIP_ISP_EDITION) {
-      NanReturnValue(True());
-    } else {
-      GeoIP_delete(o->db);  // free()'s the gi reference & closes its fd
-      return NanThrowError("Error: Not valid organization database");
-    }
-  } else {
-    return NanThrowError("Error: Cannot open database");
-  }
-
- NanUnlocker();
-}
-
-NAN_METHOD(native::Org::close) {
-  Org* o = ObjectWrap::Unwrap<native::Org>(args.This());
-  GeoIP_delete(o->db);  // free()'s the gi reference & closes its fd
 }

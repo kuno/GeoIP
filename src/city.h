@@ -17,7 +17,6 @@ using namespace node;
 namespace native {
   class City: public ObjectWrap {
     private:
-
       explicit City();
 
       ~City();
@@ -33,9 +32,7 @@ namespace native {
       static NAN_METHOD(lookupSync);
 
     public:
-
       static void Init(Handle<Object> exports);
-
   };
 }
 

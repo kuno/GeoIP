@@ -9,8 +9,7 @@
 
 Persistent<FunctionTemplate> native::NetSpeed::constructor_template;
 
-void native::NetSpeed::Init(Handle<Object> target)
-{
+void native::NetSpeed::Init(Handle<Object> target) {
   NanScope();
 
   Local<FunctionTemplate> t = FunctionTemplate::New(New);
@@ -34,8 +33,7 @@ native::NetSpeed::~NetSpeed() {
   }
 };
 
-NAN_METHOD(native::NetSpeed::New)
-{
+NAN_METHOD(native::NetSpeed::New) {
   NanScope();
   NetSpeed *n = new NetSpeed();
 
@@ -56,7 +54,7 @@ NAN_METHOD(native::NetSpeed::New)
       n->Wrap(args.This());
       NanReturnValue(args.This());
     } else {
-      GeoIP_delete(n->db);  // free()'s the gi reference & closes its fd
+      GeoIP_delete(n->db);  // free()'s the reference & closes fd
       return NanThrowError("Error: Not valid netspeed database");
     }
   } else {
@@ -69,8 +67,8 @@ NAN_METHOD(native::NetSpeed::lookupCellularSync) {
 
   NetSpeed *n = ObjectWrap::Unwrap<NetSpeed>(args.This());
 
-  Local<String> data;
-  Local<String> host_str = args[0]->ToString();
+  Local<Value> data = NanNewLocal<Value>(Null());
+  Local<String> host_str = NanNewLocal<String>(args[0]->ToString());
   char host_cstr[host_str->Length() + 1];
   NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, host_cstr, host_str->Length() + 1, v8::String::HINT_MANY_WRITES_EXPECTED);
 
@@ -90,8 +88,8 @@ NAN_METHOD(native::NetSpeed::lookupSync) {
 
   NetSpeed *n = ObjectWrap::Unwrap<NetSpeed>(args.This());
 
-  Local<String> data;
-  Local<String> host_str = args[0]->ToString();
+  Local<Value> data = NanNewLocal<Value>(Null());
+  Local<String> host_str = NanNewLocal<String>(args[0]->ToString());
   char host_cstr[host_str->Length() + 1];
   NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, host_cstr, host_str->Length() + 1, v8::String::HINT_MANY_WRITES_EXPECTED);
 
@@ -118,14 +116,13 @@ NAN_METHOD(native::NetSpeed::lookupSync) {
   NanReturnValue(data);
 }
 
-NAN_METHOD(native::NetSpeed::lookup)
-{
+NAN_METHOD(native::NetSpeed::lookup) {
   NanScope();
 
   REQ_FUN_ARG(1, cb);
 
   NetSpeed *n = ObjectWrap::Unwrap<NetSpeed>(args.This());
-  Local<String> host_str = args[0]->ToString();
+  Local<String> host_str = NanNewLocal<String>(args[0]->ToString());
   char host_cstr[host_str->Length() + 1];
   NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, host_cstr, host_str->Length() + 1, v8::String::HINT_MANY_WRITES_EXPECTED);
 
@@ -153,19 +150,18 @@ void native::NetSpeed::EIO_NetSpeed(uv_work_t *req)
   }
 }
 
-void native::NetSpeed::EIO_AfterNetSpeed(uv_work_t *req)
-{
+void native::NetSpeed::EIO_AfterNetSpeed(uv_work_t *req) {
   NanScope();
 
   netspeed_baton_t *baton = static_cast<netspeed_baton_t *>(req->data);
 
+  Local<Value> data = NanNewLocal<Value>(Null());
   Handle<Value> argv[2];
 
   if (baton->netspeed < 0) {
     argv[0] = Exception::Error(String::New("Data not found"));
     argv[1] = Null();
   } else {
-    Local<String> data;
     if (baton->netspeed == GEOIP_UNKNOWN_SPEED) {
       data = String::New("Unknown");
     } else if (baton->netspeed == GEOIP_DIALUP_SPEED) {
@@ -202,7 +198,6 @@ NAN_METHOD(native::NetSpeed::update) {
 
   String::Utf8Value file_str(args[0]->ToString());
   const char *file_cstr = ToCString(file_str);
-
   bool cache_on = args[1]->ToBoolean()->Value();
 
   n->db = GeoIP_open(file_cstr, cache_on ? GEOIP_MEMORY_CACHE : GEOIP_STANDARD);
@@ -212,7 +207,7 @@ NAN_METHOD(native::NetSpeed::update) {
     if (n->db_edition == GEOIP_NETSPEED_EDITION) {
       NanReturnValue(True());
     } else {
-      GeoIP_delete(n->db);  // free()'s the gi reference & closes its fd
+      GeoIP_delete(n->db);  // free()'s the reference & closes fd
       return NanThrowError("Error: Not valid netspeed database");
     }
   } else {

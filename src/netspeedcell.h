@@ -17,24 +17,22 @@ using namespace node;
 namespace native {
   class NetSpeedCell: public ObjectWrap {
     private:
+      explicit NetSpeedCell();
+
+      ~NetSpeedCell();
+
       GeoIP *db;
 
       int db_edition;
 
       static Persistent<FunctionTemplate> constructor_template;
 
-    protected:
       static NAN_METHOD(New);
-
-    public:
-      NetSpeedCell();
-
-      ~NetSpeedCell();
-
-      static void Init(Handle<Object> target);
 
       static NAN_METHOD(lookupSync);
 
+    public:
+      static void Init(Handle<Object> exports);
   };
 }
 

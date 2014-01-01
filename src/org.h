@@ -17,41 +17,23 @@ using namespace node;
 namespace native {
   class Org: public ObjectWrap {
     private:
+      explicit Org();
+
+      ~Org();
+
       GeoIP *db;
 
       int db_edition;
 
       static Persistent<FunctionTemplate> constructor_template;
 
-      static void EIO_Org(uv_work_t *req);
-
-      static void EIO_AfterOrg(uv_work_t *req);
-
-    protected:
       static NAN_METHOD(New);
-
-    public:
-      Org();
-
-      ~Org();
-
-      static void Init(Handle<Object> target);
 
       static NAN_METHOD(lookupSync);
 
-      static NAN_METHOD(lookup);
-
-      static NAN_METHOD(update);
-
-      static NAN_METHOD(close);
+    public:
+      static void Init(Handle<Object> exports);
   };
 }
-
-struct org_baton_t {
-  native::Org *o;
-  int ipnum;  // uint32_t?
-  char *org;
-  Persistent<Function> cb;
-};
 
 #endif /* NODE_GEOIP_ORG_H */
