@@ -2,6 +2,7 @@
 
 ### Check edition
 ```
+var geoip = require('geoip');
 var edition = geoip.check('/path/to/file');
 console.log(edition); // output 'country', 'city', 'org'... so on
 ```

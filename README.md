@@ -55,4 +55,4 @@ From v0.4.0, geoip need nodejs >= 0.4.0, if you want to use it on old nodejs, yo
 
 ##Usage
 
-See [useae doc](./USAGE.md).
+See [usage doc](./USAGE.md).
