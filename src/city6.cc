@@ -44,7 +44,7 @@ NAN_METHOD(City6::New) {
 
   c->db = GeoIP_open(file_cstr, cache_on ? GEOIP_MEMORY_CACHE : GEOIP_STANDARD);
 
-  if (c->db != NULL) {
+  if (c->db) {
     c->db_edition = GeoIP_database_edition(c->db);
     if (c->db_edition == GEOIP_CITY_EDITION_REV0_V6 ||
         c->db_edition == GEOIP_CITY_EDITION_REV1_V6) {
@@ -76,27 +76,27 @@ NAN_METHOD(City6::lookupSync) {
 
   GeoIPRecord *record = GeoIP_record_by_ipnum_v6(c->db, ipnum_v6);
 
-  if (record == NULL) {
+  if (!record) {
     NanReturnValue(Null());
   }
 
-  if (record->country_code != NULL) {
+  if (record->country_code) {
     data->Set(String::NewSymbol("country_code"), String::New(record->country_code));
   }
 
-  if (record->country_code3 != NULL) {
+  if (record->country_code3) {
     data->Set(String::NewSymbol("country_code3"), String::New(record->country_code3));
   }
 
-  if (record->country_name != NULL) {
+  if (record->country_name) {
     data->Set(String::NewSymbol("country_name"), String::New(record->country_name));
   }
 
-  if (record->region != NULL ) {
+  if (record->region) {
     data->Set(String::NewSymbol("region"), String::New(record->region));
   }
 
-  if (record->city != NULL) {
+  if (record->city) {
     char *name = _GeoIP_iso_8859_1__utf8(record->city);
 
     if (name) {
@@ -106,7 +106,7 @@ NAN_METHOD(City6::lookupSync) {
     free(name);
   }
 
-  if (record->postal_code != NULL) {
+  if (record->postal_code) {
     data->Set(String::NewSymbol("postal_code"), String::New(record->postal_code));
   }
 
@@ -118,25 +118,26 @@ NAN_METHOD(City6::lookupSync) {
     data->Set(String::NewSymbol("longitude"), Number::New(record->longitude));
   }
 
-  if (record->metro_code > 0 ) {
+  if (record->metro_code) {
     data->Set(String::NewSymbol("metro_code"), Number::New(record->metro_code));
   }
 
-  if (record->dma_code > 0 ) {
+  if (record->dma_code) {
     data->Set(String::NewSymbol("dma_code"), Number::New(record->dma_code));
   }
 
-  if (record->area_code > 0) {
+  if (record->area_code) {
     data->Set(String::NewSymbol("area_code"), Number::New(record->area_code));
   }
 
-  if (record->continent_code > 0) {
+  if (record->continent_code) {
     data->Set(String::NewSymbol("continent_code"), String::New(record->continent_code));
   }
 
-  if (record->country_code != NULL && record->region != NULL) {
+  if (record->country_code && record->region) {
     const char *time_zone = GeoIP_time_zone_by_country_and_region(record->country_code, record->region);
-    if(time_zone != NULL) {
+
+    if(time_zone) {
       data->Set(String::NewSymbol("time_zone"), String::New(time_zone));
     }
   }
