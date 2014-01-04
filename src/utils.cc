@@ -18,7 +18,7 @@ namespace native {
 
     GeoIP *db = GeoIP_open(file_cstr, GEOIP_STANDARD);
 
-    if (db != NULL) {
+    if (db) {
       int db_edition = GeoIP_database_edition(db);
 
       switch(db_edition) {

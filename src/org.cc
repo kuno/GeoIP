@@ -42,7 +42,7 @@ NAN_METHOD(Org::New) {
 
   o->db = GeoIP_open(file_cstr, cache_on?GEOIP_MEMORY_CACHE:GEOIP_STANDARD);
 
-  if (o->db != NULL) {
+  if (o->db) {
     // Successfully opened the file, return 1 (true)
     o->db_edition = GeoIP_database_edition(o->db);
     if (o->db_edition == GEOIP_ORG_EDITION ||
@@ -75,7 +75,7 @@ NAN_METHOD(Org::lookupSync) {
   }
 
   char *org = GeoIP_org_by_ipnum(o->db, ipnum);
-  if (org == NULL) {
+  if (!org) {
     NanReturnValue(Null());
   }
 

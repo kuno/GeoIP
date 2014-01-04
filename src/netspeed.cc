@@ -47,7 +47,7 @@ NAN_METHOD(native::NetSpeed::New) {
 
   n->db = GeoIP_open(file_cstr, cache_on ? GEOIP_MEMORY_CACHE : GEOIP_STANDARD);
 
-  if (n->db != NULL) {
+  if (n->db) {
     n->db_edition = GeoIP_database_edition(n->db);
     if (n->db_edition == GEOIP_NETSPEED_EDITION ||
         n->db_edition == GEOIP_NETSPEED_EDITION_REV1) {
@@ -72,8 +72,8 @@ NAN_METHOD(native::NetSpeed::lookupCellularSync) {
   char host_cstr[host_str->Length() + 1];
   NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, host_cstr, host_str->Length() + 1, v8::String::HINT_MANY_WRITES_EXPECTED);
 
-  char* speed = GeoIP_name_by_addr(n->db, host_cstr);
-  if (speed == NULL) {
+  char *speed = GeoIP_name_by_addr(n->db, host_cstr);
+  if (!speed) {
     data = String::New("Unknown");
   }
   else {
@@ -202,7 +202,7 @@ NAN_METHOD(native::NetSpeed::update) {
 
   n->db = GeoIP_open(file_cstr, cache_on ? GEOIP_MEMORY_CACHE : GEOIP_STANDARD);
 
-  if (n->db != NULL) {
+  if (n->db) {
     n->db_edition = GeoIP_database_edition(n->db);
     if (n->db_edition == GEOIP_NETSPEED_EDITION) {
       NanReturnValue(True());

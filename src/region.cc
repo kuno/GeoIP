@@ -43,7 +43,7 @@ NAN_METHOD(Region::New) {
 
   r->db = GeoIP_open(file_cstr, cache_on ? GEOIP_MEMORY_CACHE : GEOIP_STANDARD);
 
-  if (r->db != NULL) {
+  if (r->db) {
     // Successfully opened the file, return 1 (true)
     r->db_edition = GeoIP_database_edition(r->db);
     if (r->db_edition == GEOIP_REGION_EDITION_REV0 ||
@@ -77,7 +77,7 @@ NAN_METHOD(Region::lookupSync) {
 
   GeoIPRegion *region = GeoIP_region_by_ipnum(r->db, ipnum);
 
-  if (region != NULL) {
+  if (region) {
     data->Set(String::NewSymbol("country_code"), String::New(region->country_code));
     data->Set(String::NewSymbol("region"), String::New(region->region));
     GeoIPRegion_delete(region);

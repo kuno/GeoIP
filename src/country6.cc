@@ -43,7 +43,7 @@ NAN_METHOD(Country6::New) {
 
   c->db = GeoIP_open(file_cstr, cache_on?GEOIP_MEMORY_CACHE:GEOIP_STANDARD);
 
-  if (c->db != NULL) {
+  if (c->db) {
     c->db_edition = GeoIP_database_edition(c->db);
     if (c->db_edition == GEOIP_COUNTRY_EDITION_V6) {
       c->Wrap(args.This());
