@@ -24,7 +24,7 @@
     "Ilya Furman <smashlong@gmail.com>"
   ],
   "dependencies": {
-    "nan": "~0.7.0",
+    "nan": "~0.8.0",
     "bindings": "~1.1.1",
     "debug": "~0.7.4"
   },
