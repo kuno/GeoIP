@@ -157,3 +157,6 @@ more.
 3, Use node's dns module to resovle domain name (Ilya Furman).
 
 4, Add official support for netspeed cellular db (mcvella?).
+
+## v0.5.1, 2014-01-13
+1, Update libgeoip to v1.6.0.
