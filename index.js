@@ -23,4 +23,4 @@ exports.check    = binding.check;
 
 // Versions
 exports.version  = 'v' + version;
-exports.libgeoip = 'v' + binding.libgeoip; // only works on libgeoip >= 1.4.7
+exports.libgeoip = 'v' + binding.libgeoip;
