@@ -17,43 +17,24 @@ using namespace node;
 namespace native {
   class NetSpeed: public ObjectWrap {
     private:
-      GeoIP *db;
+        explicit NetSpeed();
 
-      int db_edition;
+        ~NetSpeed();
 
-      static Persistent<FunctionTemplate> constructor_template;
+        GeoIP *db;
 
-      static void EIO_NetSpeed(uv_work_t *req);
+        int db_edition;
 
-      static void EIO_AfterNetSpeed(uv_work_t *req);
+        static Persistent<FunctionTemplate> constructor_template;
 
-    protected:
-      static NAN_METHOD(New);
+        static NAN_METHOD(New);
+
+        static NAN_METHOD(lookupSync);
 
     public:
-      NetSpeed();
+        static void Init(Handle<Object> exports);
 
-      ~NetSpeed();
-
-      static void Init(Handle<Object> target);
-
-      static NAN_METHOD(lookupSync);
-
-      static NAN_METHOD(lookupCellularSync);
-
-      static NAN_METHOD(lookup);
-
-      static NAN_METHOD(update);
-
-      static NAN_METHOD(close);
   };
 }
-
-struct netspeed_baton_t {
-  native::NetSpeed *n;
-  int ipnum;  // uint32_t?
-  int netspeed;
-  Persistent<Function> cb;
-};
 
 #endif /* NODE_GEOIP_NETSPEED_H */
