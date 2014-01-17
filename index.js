@@ -6,13 +6,7 @@ var binding = require('bindings')('native.node');
 var version  = JSON.parse(read(path.resolve(__dirname, './package.json'))).version;
 
 // Native classes
-//exports.NetSpeed = binding.NetSpeed;
-//exports.Country6 = binding.Country6;
-//exports.Country  = binding.Country;
-//exports.Region   = binding.Region;
-//exports.City6    = binding.City6;
-//exports.City     = binding.City;
-//exports.Org      = binding.Org;
+exports.native = binding;
 
 // Libraries
 exports.NetSpeedCell = require('./lib/netspeedcell');
