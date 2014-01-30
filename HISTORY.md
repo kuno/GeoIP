@@ -160,3 +160,8 @@ more.
 
 ## v0.5.1, 2014-01-13
 1, Update libgeoip to v1.6.0.
+
+## v0.5.2, 2014-01-30
+1, Migrate all c++ code to new pattern.
+2, Reserved sample of legacy c++  code.
+3, Happy Chinese new year 2014 :)
