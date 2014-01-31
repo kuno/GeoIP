@@ -21,7 +21,8 @@
     "King Koopa <bbyholm@abo.fi>",
     "Bernhard Valenti <bernhard@kargo.com>",
     "Pawel Maciejewski <fragphace@gmail.com>",
-    "Ilya Furman <smashlong@gmail.com>"
+    "Ilya Furman <smashlong@gmail.com>",
+    "William Cummings <will@wpc.io>"
   ],
   "dependencies": {
     "nan": "~0.8.0",
