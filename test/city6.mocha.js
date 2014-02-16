@@ -43,6 +43,15 @@ describe('City6', function() {
   });
 
   describe('Synchrouns Lookup', function() {
+    it('should throw error when input is not a string', function(done) {
+        try {
+            instance.lookupSync(null);
+        } catch(err) {
+            should.exist(err);
+            setTimeout(done, 1);
+        }
+    });
+
     it('should can find location by domain', function(done) {
       var data = instance.lookupSync('www.google.com');
       data.should.be.a('object');
@@ -57,6 +66,13 @@ describe('City6', function() {
   });
 
   describe('Asynchrouns Lookup', function() {
+    it('should return error when input is not a string', function(done) {
+        instance.lookup(null, function(err, data) {
+            should.exist(err);
+            setTimeout(done, 1);
+        });
+    });
+
     it('should can find location by domain', function(done) {
       instance.lookup('www.google.com', function(err, data) {
         should.not.exist(err);

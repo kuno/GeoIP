@@ -42,6 +42,15 @@ describe('NetSpeedCell', function() {
   });
 
   describe('Synchrouns Lookup', function() {
+    it('should throw error when input is not a string', function(done) {
+        try {
+            instance.lookupSync(null);
+        } catch(err) {
+            should.exist(err);
+            setTimeout(done, 1);
+        }
+    });
+
     it.skip('should can find speed by domain', function(done) {
       var data = instance.lookupSync('www.163.com');
       data.should.be.a('string');
@@ -57,6 +66,13 @@ describe('NetSpeedCell', function() {
   });
 
   describe('Asynchrouns Lookup', function() {
+   it('should return error when input is not a string', function(done) {
+        instance.lookup(null, function(err, data) {
+            should.exist(err);
+            setTimeout(done, 1);
+        });
+    });
+
     it.skip('should can find speed by domain', function(done) {
       instance.lookup('www.163.com', function(err, data) {
         should.not.exist(err);

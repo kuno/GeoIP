@@ -40,14 +40,18 @@ describe('Region', function() {
       instance.update.should.be.a('function');
       setTimeout(done, 1);
     });
-
-    // it('should has a close method', function(done) {
-    //   instance.close.should.be.a('function');
-    //   setTimeout(done, 1);
-    // });
   });
 
   describe('Synchrouns Lookup', function() {
+    it('should throw error when input is not a string', function(done) {
+        try {
+            instance.lookupSync(null);
+        } catch(err) {
+            should.exist(err);
+            setTimeout(done, 1);
+        }
+    });
+
     it('should can find location by domain', function(done) {
       var data = instance.lookupSync('www.163.com');
       data.should.be.a('object');
@@ -62,6 +66,13 @@ describe('Region', function() {
   });
 
   describe('Asynchrouns Lookup', function() {
+    it('should return error when input is not a string', function(done) {
+        instance.lookup(null, function(err, data) {
+            should.exist(err);
+            setTimeout(done, 1);
+        });
+    });
+
     it('should can find location by domain', function(done) {
       instance.lookup('www.163.com', function(err, data) {
         should.not.exist(err);
