@@ -8,6 +8,14 @@
 #include "global.h"
 
 namespace native {
+  NAN_METHOD(isString) {
+    NanScope();
+
+    Local<Boolean> result = NanNewLocal<Boolean>(args[0].As<Object>()->IsString() ? True() : False());
+
+    NanReturnValue(result);
+  }
+
   NAN_METHOD(check) {
     NanScope();
 

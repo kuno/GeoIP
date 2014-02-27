@@ -31,8 +31,10 @@ extern "C" {
     Org::Init(exports);
 
     // Utility memeber method
-    Local<FunctionTemplate> tpl = NanNewLocal<FunctionTemplate>(FunctionTemplate::New(native::check));
-    exports->Set(String::NewSymbol("check"), tpl->GetFunction());
+    Local<FunctionTemplate> check = NanNewLocal<FunctionTemplate>(FunctionTemplate::New(native::check));
+    Local<FunctionTemplate> isString = NanNewLocal<FunctionTemplate>(FunctionTemplate::New(native::isString));
+    exports->Set(String::NewSymbol("check"), check->GetFunction());
+    exports->Set(String::NewSymbol("isString"), isString->GetFunction());
     exports->Set(String::NewSymbol("libgeoip"), String::New(GeoIP_lib_version()));
   }
 

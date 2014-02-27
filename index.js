@@ -20,6 +20,7 @@ exports.Org          = require('./lib/org');
 
 // Utilities
 exports.check    = binding.check;
+exports.isString    = binding.isString;
 
 // Versions
 exports.version  = 'v' + version;

@@ -19,7 +19,8 @@ namespace native {
 
   NAN_METHOD(check);
 
+  NAN_METHOD(isString);
+
 }
 
 #endif /* GEOIP_UTILS_H */
-
