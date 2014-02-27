@@ -22,7 +22,8 @@
     "Bernhard Valenti <bernhard@kargo.com>",
     "Pawel Maciejewski <fragphace@gmail.com>",
     "Ilya Furman <smashlong@gmail.com>",
-    "William Cummings <will@wpc.io>"
+    "William Cummings <will@wpc.io>",
+    "Nicolas Fouché <nicolas.fouche@gmail.com>"
   ],
   "dependencies": {
     "nan": "~0.8.0",
