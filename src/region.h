@@ -27,10 +27,6 @@ namespace native {
 
       static Persistent<FunctionTemplate> constructor_template;
 
-      static void EIO_Region(uv_work_t *req);
-
-      static void EIO_AfterRegion(uv_work_t *req);
-
       static NAN_METHOD(New);
 
       static NAN_METHOD(lookupSync);
