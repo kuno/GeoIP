@@ -19,9 +19,17 @@ exports.City         = require('./lib/city');
 exports.Org          = require('./lib/org');
 
 // Utilities
-exports.check    = binding.check;
+exports.check       = binding.check;
 exports.isString    = binding.isString;
+exports.utils       = {
+    check: binding.check,
+    isString: binding.isString
+}
 
 // Versions
 exports.version  = 'v' + version;
 exports.libgeoip = 'v' + binding.libgeoip;
+exports.Versions = {
+    'geoip': version,
+    'libgeoip': binding.libgeoip
+};

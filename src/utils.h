@@ -16,11 +16,12 @@ using namespace v8;
 using namespace node;
 
 namespace native {
+    namespace utils {
 
-  NAN_METHOD(check);
+        NAN_METHOD(check);
 
-  NAN_METHOD(isString);
-
+        NAN_METHOD(isString);
+    }
 }
 
 #endif /* GEOIP_UTILS_H */

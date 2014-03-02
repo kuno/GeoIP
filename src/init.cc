@@ -31,10 +31,12 @@ extern "C" {
     Org::Init(exports);
 
     // Utility memeber method
-    Local<FunctionTemplate> check = NanNewLocal<FunctionTemplate>(FunctionTemplate::New(native::check));
-    Local<FunctionTemplate> isString = NanNewLocal<FunctionTemplate>(FunctionTemplate::New(native::isString));
+    Local<FunctionTemplate> check = NanNewLocal<FunctionTemplate>(FunctionTemplate::New(utils::check));
+    Local<FunctionTemplate> isString = NanNewLocal<FunctionTemplate>(FunctionTemplate::New(utils::isString));
     exports->Set(String::NewSymbol("check"), check->GetFunction());
     exports->Set(String::NewSymbol("isString"), isString->GetFunction());
+
+    // Meta infomation
     exports->Set(String::NewSymbol("libgeoip"), String::New(GeoIP_lib_version()));
   }
 
