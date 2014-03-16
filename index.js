@@ -29,7 +29,7 @@ exports.utils       = {
 // Versions
 exports.version  = 'v' + version;
 exports.libgeoip = 'v' + binding.libgeoip;
-exports.Versions = {
+exports.versions = {
     'geoip': version,
     'libgeoip': binding.libgeoip
 };

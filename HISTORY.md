@@ -167,3 +167,8 @@ more.
 2, Reserved sample of legacy c++  code.
 
 3, Happy Chinese new year 2014 : )
+
+## v0.5.3, 2014-03-16
+1, Fixed issue #67.
+
+2, Exposed utils and versions global properties.
