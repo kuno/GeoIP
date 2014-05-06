@@ -23,14 +23,14 @@ Persistent<FunctionTemplate> Region::constructor_template;
 void Region::Init(Handle<Object> exports) {
   NanScope();
 
-  Local<FunctionTemplate> tpl = NanNewLocal<FunctionTemplate>(FunctionTemplate::New(New));
-  NanAssignPersistent(FunctionTemplate, constructor_template, tpl);
+  Local<FunctionTemplate> tpl = NanNew<FunctionTemplate>(New);
+  NanAssignPersistent(constructor_template, tpl);
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
-  tpl->SetClassName(String::NewSymbol("Region"));
+  tpl->SetClassName(NanSymbol("Region"));
 
-  tpl->PrototypeTemplate()->Set(String::NewSymbol("lookupSync"),
-      FunctionTemplate::New(lookupSync)->GetFunction());
-  exports->Set(String::NewSymbol("Region"), tpl->GetFunction()); 
+  tpl->PrototypeTemplate()->Set(NanSymbol("lookupSync"),
+      NanNew<FunctionTemplate>(lookupSync)->GetFunction());
+  exports->Set(NanSymbol("Region"), tpl->GetFunction());
 }
 
 NAN_METHOD(Region::New) {
@@ -63,23 +63,25 @@ NAN_METHOD(Region::New) {
 NAN_METHOD(Region::lookupSync) {
   NanScope();
 
-  Local<Object> data = NanNewLocal<Object>(Object::New());
-  Local<String> host_str = NanNewLocal<String>(args[0]->ToString());
-  char host_cstr[host_str->Length() + 1];
-  NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, host_cstr, host_str->Length() + 1, v8::String::HINT_MANY_WRITES_EXPECTED);
+  Local<Object> data = NanNew<Object>();
+  Local<String> host_str = args[0]->ToString();
+  size_t size = host_str->Length() + 1;
+  char host_cstr[size];
+  size_t bc;
+  NanCString(args[0], &bc, host_cstr, size);
   Region *r = ObjectWrap::Unwrap<Region>(args.This());
 
   uint32_t ipnum = _GeoIP_lookupaddress(host_cstr);
 
   if (ipnum <= 0) {
-    NanReturnValue(Null());
+    NanReturnValue(NanNull());
   }
 
   GeoIPRegion *region = GeoIP_region_by_ipnum(r->db, ipnum);
 
   if (region) {
-    data->Set(String::NewSymbol("country_code"), String::New(region->country_code));
-    data->Set(String::NewSymbol("region"), String::New(region->region));
+    data->Set(NanSymbol("country_code"), NanNew<String>(region->country_code));
+    data->Set(NanSymbol("region"), NanNew<String>(region->region));
     GeoIPRegion_delete(region);
     NanReturnValue(data);
   } else {

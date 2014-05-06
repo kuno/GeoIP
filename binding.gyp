@@ -22,7 +22,7 @@
       'include_dirs': [
           'src',
           'deps/geoip-api-c-1.6.0/libGeoIP',
-          "<!(node -p -e \"require('path').dirname(require.resolve('nan'))\")"
+          "<!(node -e \"require('nan')\")"
       ],
       'dependencies': [
         'deps/geoip-api-c-1.6.0/libgeoip.gypi:libgeoip'

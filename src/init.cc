@@ -31,13 +31,13 @@ extern "C" {
     Org::Init(exports);
 
     // Utility memeber method
-    Local<FunctionTemplate> check = NanNewLocal<FunctionTemplate>(FunctionTemplate::New(utils::check));
-    Local<FunctionTemplate> isString = NanNewLocal<FunctionTemplate>(FunctionTemplate::New(utils::isString));
-    exports->Set(String::NewSymbol("check"), check->GetFunction());
-    exports->Set(String::NewSymbol("isString"), isString->GetFunction());
+    Local<FunctionTemplate> check = NanNew<FunctionTemplate>(utils::check);
+    Local<FunctionTemplate> isString = NanNew<FunctionTemplate>(utils::isString);
+    exports->Set(NanSymbol("check"), check->GetFunction());
+    exports->Set(NanSymbol("isString"), isString->GetFunction());
 
     // Meta infomation
-    exports->Set(String::NewSymbol("libgeoip"), String::New(GeoIP_lib_version()));
+    exports->Set(NanSymbol("libgeoip"), NanNew<String>(GeoIP_lib_version()));
   }
 
   NODE_MODULE(native, InitAll)

@@ -21,14 +21,14 @@ Persistent<FunctionTemplate> City::constructor_template;
 void City::Init(Handle<Object> exports) {
   NanScope();
 
-  Local<FunctionTemplate> tpl = NanNewLocal<FunctionTemplate>(FunctionTemplate::New(New));
-  NanAssignPersistent(FunctionTemplate, constructor_template, tpl);
+  Local<FunctionTemplate> tpl = NanNew<FunctionTemplate>(New);
+  NanAssignPersistent(constructor_template, tpl);
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
-  tpl->SetClassName(String::NewSymbol("City"));
+  tpl->SetClassName(NanSymbol("City"));
 
-  tpl->PrototypeTemplate()->Set(String::NewSymbol("lookupSync"),
-      FunctionTemplate::New(lookupSync)->GetFunction());
-  exports->Set(String::NewSymbol("City"), tpl->GetFunction());
+  tpl->PrototypeTemplate()->Set(NanSymbol("lookupSync"),
+      NanNew<FunctionTemplate>(lookupSync)->GetFunction());
+  exports->Set(NanSymbol("City"), tpl->GetFunction());
 }
 
 NAN_METHOD(City::New) {
@@ -62,13 +62,12 @@ NAN_METHOD(City::lookupSync) {
 
   City *c = ObjectWrap::Unwrap<City>(args.This());
 
-  Local<Object> data = NanNewLocal<Object>(Object::New());
-  Local<String> host_str = NanNewLocal<String>(args[0]->ToString());
-
-  char host_cstr[host_str->Length() + 1];
-  NanFromV8String(args[0].As<Object>(), Nan::ASCII,
-          NULL, host_cstr, host_str->Length() + 1,
-          v8::String::HINT_MANY_WRITES_EXPECTED);
+  Local<Object> data = NanNew<Object>();
+  Local<String> host_str = args[0]->ToString();
+  size_t size = host_str->Length() + 1;
+  char host_cstr[size];
+  size_t bc;
+  NanCString(args[0], &bc, host_cstr, size);
 
   uint32_t ipnum = _GeoIP_lookupaddress(host_cstr);
 
@@ -76,74 +75,74 @@ NAN_METHOD(City::lookupSync) {
   //printf("Ipnum is %d.", ipnum);
 
   if (ipnum == 0) {
-    NanReturnValue(Null());
+    NanReturnValue(NanNull());
   }
 
   GeoIPRecord *record = GeoIP_record_by_ipnum(c->db, ipnum);
 
   if (!record) {
-    NanReturnValue(Null());
+    NanReturnValue(NanNull());
   }
 
   if (record->country_code) {
-    data->Set(String::NewSymbol("country_code"), String::New(record->country_code));
+    data->Set(NanSymbol("country_code"), NanNew<String>(record->country_code));
   }
 
   if (record->country_code3) {
-    data->Set(String::NewSymbol("country_code3"), String::New(record->country_code3));
+    data->Set(NanSymbol("country_code3"), NanNew<String>(record->country_code3));
   }
 
   if (record->country_name) {
-    data->Set(String::NewSymbol("country_name"), String::New(record->country_name));
+    data->Set(NanSymbol("country_name"), NanNew<String>(record->country_name));
   }
 
   if (record->region) {
-    data->Set(String::NewSymbol("region"), String::New(record->region));
+    data->Set(NanSymbol("region"), NanNew<String>(record->region));
   }
 
   if (record->city) {
     char *name = _GeoIP_iso_8859_1__utf8(record->city);
 
     if (name) {
-      data->Set(String::NewSymbol("city"), String::New(name));
+      data->Set(NanSymbol("city"), NanNew<String>(name));
     }
 
     free(name);
   }
 
   if (record->postal_code) {
-    data->Set(String::NewSymbol("postal_code"), String::New(record->postal_code));
+    data->Set(NanSymbol("postal_code"), NanNew<String>(record->postal_code));
   }
 
   if (record->latitude >= -90 && record->latitude <= 90) {
-    data->Set(String::NewSymbol("latitude"), Number::New(record->latitude));
+    data->Set(NanSymbol("latitude"), NanNew<Number>(record->latitude));
   }
 
   if (record->longitude >= -180 && record->longitude <= 180) {
-    data->Set(String::NewSymbol("longitude"), Number::New(record->longitude));
+    data->Set(NanSymbol("longitude"), NanNew<Number>(record->longitude));
   }
 
   if (record->metro_code) {
-    data->Set(String::NewSymbol("metro_code"), Number::New(record->metro_code));
+    data->Set(NanSymbol("metro_code"), NanNew<Number>(record->metro_code));
   }
 
   if (record->dma_code) {
-    data->Set(String::NewSymbol("dma_code"), Number::New(record->dma_code));
+    data->Set(NanSymbol("dma_code"), NanNew<Number>(record->dma_code));
   }
 
   if (record->area_code) {
-    data->Set(String::NewSymbol("area_code"), Number::New(record->area_code));
+    data->Set(NanSymbol("area_code"), NanNew<Number>(record->area_code));
   }
 
   if (record->continent_code) {
-    data->Set(String::NewSymbol("continent_code"), String::New(record->continent_code));
+    data->Set(NanSymbol("continent_code"), NanNew<String>(record->continent_code));
   }
 
   if (record->country_code && record->region) {
     const char *time_zone = GeoIP_time_zone_by_country_and_region(record->country_code, record->region);
 
     if(time_zone) {
-      data->Set(String::NewSymbol("time_zone"), String::New(time_zone));
+      data->Set(NanSymbol("time_zone"), NanNew<String>(time_zone));
     }
   }
 

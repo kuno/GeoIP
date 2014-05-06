@@ -18,7 +18,7 @@
     "James Taylor <jt@gosquared.com>",
     "Christopher Holt <cwholt@gmail.com>",
     "Nicolas Fouché <nicolas.fouche@gmail.com>",
-    "King Koopa <bbyholm@abo.fi>",
+    "Benjamin Byholm <bbyholm@abo.fi>",
     "Bernhard Valenti <bernhard@kargo.com>",
     "Pawel Maciejewski <fragphace@gmail.com>",
     "Ilya Furman <smashlong@gmail.com>",
@@ -26,7 +26,7 @@
     "Nicolas Fouché <nicolas.fouche@gmail.com>"
   ],
   "dependencies": {
-    "nan": "~0.8.0",
+    "nan": "~1.0.0",
     "bindings": "~1.1.1",
     "debug": "~0.7.4",
     "is-object": "~0.1.2"

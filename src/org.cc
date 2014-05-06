@@ -21,14 +21,14 @@ Persistent<FunctionTemplate> Org::constructor_template;
 void Org::Init(Handle<Object> exports) {
   NanScope();
 
-  Local<FunctionTemplate> tpl = NanNewLocal<FunctionTemplate>(FunctionTemplate::New(New));
-  NanAssignPersistent(FunctionTemplate, constructor_template, tpl);
+  Local<FunctionTemplate> tpl = NanNew<FunctionTemplate>(New);
+  NanAssignPersistent(constructor_template, tpl);
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
-  tpl->SetClassName(String::NewSymbol("Org"));
+  tpl->SetClassName(NanSymbol("Org"));
 
-  tpl->PrototypeTemplate()->Set(String::NewSymbol("lookupSync"),
-      FunctionTemplate::New(lookupSync)->GetFunction());
-  exports->Set(String::NewSymbol("Org"), tpl->GetFunction());
+  tpl->PrototypeTemplate()->Set(NanSymbol("lookupSync"),
+      NanNew<FunctionTemplate>(lookupSync)->GetFunction());
+  exports->Set(NanSymbol("Org"), tpl->GetFunction());
 }
 
 NAN_METHOD(Org::New) {
@@ -62,26 +62,28 @@ NAN_METHOD(Org::New) {
 NAN_METHOD(Org::lookupSync) {
   NanScope();
 
-  Local<Value> data = NanNewLocal<Value>(Null());
-  Local<String> host_str = NanNewLocal<String>(args[0]->ToString());
-  char host_cstr[host_str->Length() + 1];
-  NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, host_cstr, host_str->Length() + 1, v8::String::HINT_MANY_WRITES_EXPECTED);
+  Local<Value> data = NanNew(NanNull());
+  Local<String> host_str = args[0]->ToString();
+  size_t size = host_str->Length() + 1;
+  char host_cstr[size];
+  size_t bc;
+  NanCString(args[0], &bc, host_cstr, size);
   Org *o = ObjectWrap::Unwrap<Org>(args.This());
 
   uint32_t ipnum = _GeoIP_lookupaddress(host_cstr);
 
   if (ipnum <= 0) {
-    NanReturnValue(Null());
+    NanReturnValue(NanNull());
   }
 
   char *org = GeoIP_org_by_ipnum(o->db, ipnum);
   if (!org) {
-    NanReturnValue(Null());
+    NanReturnValue(NanNull());
   }
 
   char *name = _GeoIP_iso_8859_1__utf8(org);
 
-  data = String::New(name);
+  data = NanNew<String>(name);
 
   free(org);
   free(name);
