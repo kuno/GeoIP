@@ -22,14 +22,14 @@ Persistent<FunctionTemplate> NetSpeed::constructor_template;
 void NetSpeed::Init(Handle<Object> exports) {
     NanScope();
 
-    Local<FunctionTemplate> tpl = NanNewLocal<FunctionTemplate>(FunctionTemplate::New(New));
-    NanAssignPersistent(FunctionTemplate, constructor_template, tpl);
+    Local<FunctionTemplate> tpl = NanNew<FunctionTemplate>(New);
+    NanAssignPersistent(constructor_template, tpl);
     tpl->InstanceTemplate()->SetInternalFieldCount(1);
-    tpl->SetClassName(String::NewSymbol("NetSpeed"));
+    tpl->SetClassName(NanSymbol("NetSpeed"));
 
-    tpl->PrototypeTemplate()->Set(String::NewSymbol("lookupSync"),
-            FunctionTemplate::New(lookupSync)->GetFunction());
-    exports->Set(String::NewSymbol("NetSpeed"), tpl->GetFunction());
+    tpl->PrototypeTemplate()->Set(NanSymbol("lookupSync"),
+            NanNew<FunctionTemplate>(lookupSync)->GetFunction());
+    exports->Set(NanSymbol("NetSpeed"), tpl->GetFunction());
 }
 
 NAN_METHOD(NetSpeed::New) {
@@ -64,29 +64,31 @@ NAN_METHOD(NetSpeed::lookupSync) {
 
     NetSpeed *n = ObjectWrap::Unwrap<NetSpeed>(args.This());
 
-    Local<Value> data = NanNewLocal<Value>(Null());
-    Local<String> host_str = NanNewLocal<String>(args[0]->ToString());
-    char host_cstr[host_str->Length() + 1];
-    NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, host_cstr, host_str->Length() + 1, v8::String::HINT_MANY_WRITES_EXPECTED);
+    Local<Value> data = NanNew(NanNull());
+    Local<String> host_str = args[0]->ToString();
+    size_t size = host_str->Length() + 1;
+    char host_cstr[size];
+    size_t bc;
+    NanCString(args[0], &bc, host_cstr, size);
 
     uint32_t ipnum = _GeoIP_lookupaddress(host_cstr);
 
     if (ipnum <= 0) {
-        NanReturnValue(Null());
+        NanReturnValue(NanNull());
     }
 
     int netspeed = GeoIP_id_by_ipnum(n->db, ipnum);
 
     if (netspeed < 0) {
-        NanReturnValue(Null());
+        NanReturnValue(NanNull());
     } else if (netspeed == GEOIP_UNKNOWN_SPEED) {
-        data = String::New("Unknown");
+        data = NanNew<String>("Unknown");
     } else if (netspeed == GEOIP_DIALUP_SPEED) {
-        data = String::New("Dialup");
+        data = NanNew<String>("Dialup");
     } else if (netspeed == GEOIP_CABLEDSL_SPEED) {
-        data = String::New("CableDSL");
+        data = NanNew<String>("CableDSL");
     } else if (netspeed == GEOIP_CORPORATE_SPEED) {
-        data = String::New("Corporate");
+        data = NanNew<String>("Corporate");
     }
 
     NanReturnValue(data);

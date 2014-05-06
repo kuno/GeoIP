@@ -12,7 +12,7 @@ namespace native {
         NAN_METHOD(isString) {
             NanScope();
 
-            Local<Boolean> result = NanNewLocal<Boolean>(args[0].As<Object>()->IsString() ? True() : False());
+            Local<Boolean> result = NanNew(args[0].As<Object>()->IsString() ? NanTrue() : NanFalse());
 
             NanReturnValue(result);
         }
@@ -20,10 +20,12 @@ namespace native {
         NAN_METHOD(check) {
             NanScope();
 
-            Local<Value> edition = NanNewLocal<Value>(Null());
-            Local<String> file_str = NanNewLocal<String>(args[0]->ToString());
-            char file_cstr[file_str->Length() + 1];
-            NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, file_cstr, file_str->Length() + 1, v8::String::HINT_MANY_WRITES_EXPECTED);
+            Local<Value> edition = NanNew(NanNull());
+            Local<String> file_str = args[0]->ToString();
+            size_t size = file_str->Length() + 1;
+            char file_cstr[size];
+            size_t bc;
+            NanCString(args[0], &bc, file_cstr, size);
 
             GeoIP *db = GeoIP_open(file_cstr, GEOIP_STANDARD);
 
@@ -32,67 +34,67 @@ namespace native {
 
                 switch(db_edition) {
                     case GEOIP_COUNTRY_EDITION:
-                        edition = String::New("country");
+                        edition = NanNew<String>("country");
                         break;
 
                     case GEOIP_COUNTRY_EDITION_V6:
-                        edition = String::New("country_v6");
+                        edition = NanNew<String>("country_v6");
                         break;
 
                     case GEOIP_CITY_EDITION_REV0:
-                        edition = String::New("city");
+                        edition = NanNew<String>("city");
                         break;
 
                     case GEOIP_CITY_EDITION_REV1:
-                        edition = String::New("city");
+                        edition = NanNew<String>("city");
                         break;
 
                     case GEOIP_CITY_EDITION_REV0_V6:
-                        edition = String::New("city_v6");
+                        edition = NanNew<String>("city_v6");
                         break;
 
                     case GEOIP_CITY_EDITION_REV1_V6:
-                        edition = String::New("city_v6");
+                        edition = NanNew<String>("city_v6");
                         break;
 
                     case GEOIP_REGION_EDITION_REV0:
-                        edition = String::New("region");
+                        edition = NanNew<String>("region");
                         break;
 
                     case GEOIP_REGION_EDITION_REV1:
-                        edition = String::New("region");
+                        edition = NanNew<String>("region");
                         break;
 
                     case GEOIP_ORG_EDITION:
-                        edition = String::New("org");
+                        edition = NanNew<String>("org");
                         break;
 
                     case GEOIP_ISP_EDITION:
-                        edition = String::New("isp");
+                        edition = NanNew<String>("isp");
                         break;
 
                     case GEOIP_ASNUM_EDITION:
-                        edition = String::New("asnum");
+                        edition = NanNew<String>("asnum");
                         break;
 
                     case GEOIP_PROXY_EDITION:
-                        edition = String::New("proxy");
+                        edition = NanNew<String>("proxy");
                         break;
 
                     case GEOIP_NETSPEED_EDITION:
-                        edition = String::New("netspeed");
+                        edition = NanNew<String>("netspeed");
                         break;
 
                     case GEOIP_NETSPEED_EDITION_REV1:
-                        edition = String::New("netspeed cellular");
+                        edition = NanNew<String>("netspeed cellular");
                         break;
 
                     case GEOIP_DOMAIN_EDITION:
-                        edition = String::New("domain");
+                        edition = NanNew<String>("domain");
                         break;
 
                     default:
-                        edition = String::New("unknown");
+                        edition = NanNew<String>("unknown");
                 }
 
                 GeoIP_delete(db);
