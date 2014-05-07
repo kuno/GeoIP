@@ -172,3 +172,6 @@ more.
 1, Fixed issue #67.
 
 2, Exposed utils and versions global properties.
+
+## v0.5.4, 2014-05-07
+1, Make compatible with nodejs v0.11.13 (Benjamin Byholm).
