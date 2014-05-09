@@ -3,7 +3,7 @@ install: install_memwatch
 install_memwatch:
 	@NODE_ENV=development bash ./cli/install_memwatch.sh
 rebuild: install
-	@NODE_ENV=development node-gyp rebuild
+	@NODE_ENV=development ./node_modules/.bin/node-pre-gyp clean rebuild
 bootstrap: install
 	@NODE_ENV=development sh ./cli/bootstrap.sh
 mem_test: install rebuild bootstrap

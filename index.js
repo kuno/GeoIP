@@ -1,9 +1,9 @@
 var path  = require('path'),
     read  = require('fs').readFileSync;
 
-var binding = require('bindings')('native.node');
-
 var version  = JSON.parse(read(path.resolve(__dirname, './package.json'))).version;
+
+var binding = require('./lib/native');
 
 // Native classes
 exports.native = binding;

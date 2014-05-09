@@ -34,5 +34,16 @@
         }]
       ]
     },
+    {
+      "target_name": "action_after_build",
+      "type": "none",
+      "dependencies": [ "native" ],
+      "copies": [
+        {
+          "files": [ "<(PRODUCT_DIR)/native.node" ],
+          "destination": "./lib/binding/"
+        }
+      ]
+    }
   ]
 }
