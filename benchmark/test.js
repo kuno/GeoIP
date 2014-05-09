@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 var assert = require('assert');
-var binding = require('../build/default/geoip.node');
+var binding = require('../lib/native');
 var util = require('util');
 var Test = binding.Test;
 var c = new Test('../database/GeoLiteCity.dat', true);

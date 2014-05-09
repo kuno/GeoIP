@@ -26,15 +26,17 @@
     "Nicolas Fouché <nicolas.fouche@gmail.com>"
   ],
   "dependencies": {
-    "bindings": "~1.2.0",
     "debug": "~0.8.1",
     "is-object": "~0.1.2",
-    "nan": "~1.0.0"
+    "nan": "~1.0.0",
+    "node-pre-gyp": "0.5.x"
   },
+  "bundledDependencies":["node-pre-gyp"],
   "devDependencies": {
     "mocha": "~1.14.0",
     "chai": "~1.8.1",
-    "semver": "~2.2.1"
+    "semver": "~2.2.1",
+    "aws-sdk": "~2.0.0-rc.15"
   },
   "repository": {
     "type": "git",
@@ -62,6 +64,7 @@
     "npm": "1"
   },
   "scripts": {
+    "install": "node-pre-gyp install --fallback-to-build",
     "build": "make rebuild",
     "test": "make test"
   },
@@ -70,5 +73,12 @@
       "type": "LGPL2.1",
       "url": "http://www.gnu.org/licenses/lgpl-2.1.txt"
     }
-  ]
+  ],
+  "binary": {
+    "module_name" : "native",
+    "module_path" : "./lib/binding/",
+    "host"        : "https://mapbox-node-binary.s3.amazonaws.com",
+    "remote_path" : "./{module_name}/v{version}",
+    "package_name": "{node_abi}-{platform}-{arch}.tar.gz"
+  }
 }
