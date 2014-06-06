@@ -1,7 +1,7 @@
 {
   "name": "geoip",
   "description": "GeoIP binding for node",
-  "version": "0.5.5-dev",
+  "version": "0.5.4",
   "homepage": "http://github.com/kuno/GeoIP",
   "author": "Guan 'kuno' Qing <neokuno at Gmail dot com>",
   "contributors": [
@@ -27,9 +27,9 @@
   ],
   "dependencies": {
     "bindings": "~1.2.0",
-    "debug": "~0.8.1",
+    "debug": "~1.0.0",
     "is-object": "~0.1.2",
-    "nan": "~1.0.0"
+    "nan": "~1.2.0"
   },
   "devDependencies": {
     "mocha": "~1.14.0",
