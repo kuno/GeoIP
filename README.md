@@ -9,7 +9,7 @@ Get geolocation information based on domain or IP address.
 
 **Limitations**
 
-Since this module required to compile geoip c library during the installtion, due to the difficulty that compile this c library on windows, currenlty, __this module can not be used on windows, yet.__
+Since this module required to compile geoip c library during the installtion, due to the difficulty of compilifa this c library on windows, currenlty, __this module can not be used on windows, yet.__
 
 I recommend that choosing  a pure javascript implementation instead, [`node-geoip`](https://github.com/bluesmoon/node-geoip) maybe your best candicate.
 
