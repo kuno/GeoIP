@@ -57,6 +57,7 @@
     "sample": "./sample",
     "benchmark": "./benchmark"
   },
+  "os": ["linux", "macos"],
   "engine": {
     "node": ">=0.8.0",
     "npm": "1"
