@@ -176,5 +176,8 @@ more.
 ## v0.5.4, 2014-05-07
 1, Make compatible with nodejs v0.11.13 (Benjamin Byholm).
 
-## v0.5.5, 2-14-07-23
+## v0.5.5, 2014-07-23
 1, Update libgeoip to 1.6.2.
+
+## v0.5.6, 2014-11-13
+1, Update dependencies. 
