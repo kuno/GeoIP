@@ -180,4 +180,7 @@ more.
 1, Update libgeoip to 1.6.2.
 
 ## v0.5.6, 2014-11-13
-1, Update dependencies. 
+1, Update dependencies.
+
+## v0.5.7, 2014-11-14
+1, Re-publish to instead v0.5.6 on npm registry.
