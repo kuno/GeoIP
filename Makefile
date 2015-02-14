@@ -1,4 +1,4 @@
-install:
+install: install_memwatch
 	@npm install
 install_memwatch:
 	@NODE_ENV=development bash ./cli/install_memwatch.sh
@@ -9,5 +9,5 @@ bootstrap: install
 mem_test: install rebuild bootstrap
 	@NODE_ENV=test valgrind --leak-check=full ./test/memory_leak.js
 test: install rebuild bootstrap
-	@NODE_ENV=test DEBUG=geoip:* node_modules/.bin/mocha ./test/*.mocha.js 
+	@NODE_ENV=test DEBUG=geoip:* node_modules/.bin/mocha ./test/*.mocha.js
 .PHONY: install rebuild bootstrap test
