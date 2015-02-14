@@ -184,3 +184,12 @@ more.
 
 ## v0.5.7, 2014-11-14
 1, Re-publish to instead v0.5.6 on npm registry.
+
+## v.0.5.8, 2015-02-14
+1, Make sure compatible with iojs
+
+2, Update libgeoip to 1.6.4
+
+3, Update various npm dependencies
+
+4, Disable memwatch
