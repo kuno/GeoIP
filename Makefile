@@ -1,4 +1,4 @@
-install: install_memwatch
+install:
 	@npm install
 install_memwatch:
 	@NODE_ENV=development bash ./cli/install_memwatch.sh
