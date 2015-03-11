@@ -1,3 +1,14 @@
+1.6.5 2015-02-25
+
+* A segmentation fault in `geoiplookup` was fixed when the utility was passed
+  an invalid database. (Reported in Red Hat bug #1180874.)
+* Additional validation was added for validation of the size used in the
+  creation of the index cache. (Based on discussion in Red Hat bug #832913.)
+* Changed the code to only look up country codes by using functions which
+  ensure that we do not try to look past the end of an array. (Reported by
+  Ivan Sorokin. GitHub #53)
+
+
 1.6.4 2015-01-12
 
 * Update Fips codes (Boris Zentner)
