@@ -23,7 +23,8 @@
     "Pawel Maciejewski <fragphace@gmail.com>",
     "Ilya Furman <smashlong@gmail.com>",
     "William Cummings <will@wpc.io>",
-    "Nicolas Fouché <nicolas.fouche@gmail.com>"
+    "Nicolas Fouché <nicolas.fouche@gmail.com>",
+    "Rémy Coutable <remy@rymai.me>"
   ],
   "dependencies": {
     "bindings": "~1.2.1",
