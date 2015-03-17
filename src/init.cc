@@ -33,11 +33,11 @@ extern "C" {
     // Utility memeber method
     Local<FunctionTemplate> check = NanNew<FunctionTemplate>(utils::check);
     Local<FunctionTemplate> isString = NanNew<FunctionTemplate>(utils::isString);
-    exports->Set(NanSymbol("check"), check->GetFunction());
-    exports->Set(NanSymbol("isString"), isString->GetFunction());
+    exports->Set(NanNew<String>("check"), check->GetFunction());
+    exports->Set(NanNew<String>("isString"), isString->GetFunction());
 
     // Meta infomation
-    exports->Set(NanSymbol("libgeoip"), NanNew<String>(GeoIP_lib_version()));
+    exports->Set(NanNew<String>("libgeoip"), NanNew<String>(GeoIP_lib_version()));
   }
 
   NODE_MODULE(native, InitAll)

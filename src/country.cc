@@ -25,11 +25,11 @@ void Country::Init(Handle<Object> exports) {
   Local<FunctionTemplate> tpl = NanNew<FunctionTemplate>(New);
   NanAssignPersistent(constructor_template, tpl);
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
-  tpl->SetClassName(NanSymbol("Country"));
+  tpl->SetClassName(NanNew<String>("Country"));
 
-  tpl->PrototypeTemplate()->Set(NanSymbol("lookupSync"),
+  tpl->PrototypeTemplate()->Set(NanNew<String>("lookupSync"),
       NanNew<FunctionTemplate>(lookupSync)->GetFunction());
-  exports->Set(NanSymbol("Country"), tpl->GetFunction());
+  exports->Set(NanNew<String>("Country"), tpl->GetFunction());
 }
 
 
@@ -82,10 +82,10 @@ NAN_METHOD(Country::lookupSync) {
     } else {
       char *name = _GeoIP_iso_8859_1__utf8(GeoIP_country_name[country_id]);
 
-      data->Set(NanSymbol("country_name"), NanNew<String>(name));
-      data->Set(NanSymbol("country_code"), NanNew<String>(GeoIP_country_code[country_id]));
-      data->Set(NanSymbol("country_code3"), NanNew<String>(GeoIP_country_code3[country_id]));
-      data->Set(NanSymbol("continent_code"), NanNew<String>(GeoIP_country_continent[country_id]));
+      data->Set(NanNew<String>("country_name"), NanNew<String>(name));
+      data->Set(NanNew<String>("country_code"), NanNew<String>(GeoIP_country_code[country_id]));
+      data->Set(NanNew<String>("country_code3"), NanNew<String>(GeoIP_country_code3[country_id]));
+      data->Set(NanNew<String>("continent_code"), NanNew<String>(GeoIP_country_continent[country_id]));
 
       free(name);
 

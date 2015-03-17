@@ -26,11 +26,11 @@ void Region::Init(Handle<Object> exports) {
   Local<FunctionTemplate> tpl = NanNew<FunctionTemplate>(New);
   NanAssignPersistent(constructor_template, tpl);
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
-  tpl->SetClassName(NanSymbol("Region"));
+  tpl->SetClassName(NanNew<String>("Region"));
 
-  tpl->PrototypeTemplate()->Set(NanSymbol("lookupSync"),
+  tpl->PrototypeTemplate()->Set(NanNew<String>("lookupSync"),
       NanNew<FunctionTemplate>(lookupSync)->GetFunction());
-  exports->Set(NanSymbol("Region"), tpl->GetFunction());
+  exports->Set(NanNew<String>("Region"), tpl->GetFunction());
 }
 
 NAN_METHOD(Region::New) {
@@ -80,8 +80,8 @@ NAN_METHOD(Region::lookupSync) {
   GeoIPRegion *region = GeoIP_region_by_ipnum(r->db, ipnum);
 
   if (region) {
-    data->Set(NanSymbol("country_code"), NanNew<String>(region->country_code));
-    data->Set(NanSymbol("region"), NanNew<String>(region->region));
+    data->Set(NanNew<String>("country_code"), NanNew<String>(region->country_code));
+    data->Set(NanNew<String>("region"), NanNew<String>(region->region));
     GeoIPRegion_delete(region);
     NanReturnValue(data);
   } else {

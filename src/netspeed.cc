@@ -25,11 +25,11 @@ void NetSpeed::Init(Handle<Object> exports) {
     Local<FunctionTemplate> tpl = NanNew<FunctionTemplate>(New);
     NanAssignPersistent(constructor_template, tpl);
     tpl->InstanceTemplate()->SetInternalFieldCount(1);
-    tpl->SetClassName(NanSymbol("NetSpeed"));
+    tpl->SetClassName(NanNew<String>("NetSpeed"));
 
-    tpl->PrototypeTemplate()->Set(NanSymbol("lookupSync"),
+    tpl->PrototypeTemplate()->Set(NanNew<String>("lookupSync"),
             NanNew<FunctionTemplate>(lookupSync)->GetFunction());
-    exports->Set(NanSymbol("NetSpeed"), tpl->GetFunction());
+    exports->Set(NanNew<String>("NetSpeed"), tpl->GetFunction());
 }
 
 NAN_METHOD(NetSpeed::New) {
