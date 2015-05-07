@@ -87,7 +87,7 @@ describe('NetSpeedCell', function() {
                     should.not.exist(err);
                     should.exist(data);
                     data.should.be.an('string');
-                    data.should.equal("Dialup");
+                    data.should.equal("Cable/DSL");
                     setTimeout(done, 1);
                 });
             });

@@ -63,17 +63,14 @@ NAN_METHOD(NetSpeedCell::lookupSync) {
   NetSpeedCell *n = ObjectWrap::Unwrap<NetSpeedCell>(args.This());
 
   Local<Value> data = NanNew(NanNull());
-  Local<String> host_str = args[0]->ToString();
-  size_t size = host_str->Length() + 1;
-  char host_cstr[size];
-  size_t bc;
-  NanCString(args[0], &bc, host_cstr, size);
 
-  char *speed = GeoIP_name_by_addr(n->db, host_cstr);
+  static NanUtf8String *host_cstr = new NanUtf8String(args[0]);
+
+  char *speed = GeoIP_name_by_addr(n->db, **host_cstr);
+
   if (!speed) {
     data = NanNew<String>("Unknown");
-  }
-  else {
+  } else {
     data = NanNew<String>(speed);
   }
 

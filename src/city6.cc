@@ -63,14 +63,10 @@ NAN_METHOD(City6::lookupSync) {
   NanScope();
 
   Local<Object> data = NanNew<Object>();
-  Local<String> host_str = args[0]->ToString();
-  size_t size = host_str->Length() + 1;
-  char host_cstr[size];
-  size_t bc;
-  NanCString(args[0], &bc, host_cstr, size);
   City6 *c = ObjectWrap::Unwrap<City6>(args.This());
 
-  geoipv6_t ipnum_v6 = _GeoIP_lookupaddress_v6(host_cstr);
+  static NanUtf8String *host_cstr = new NanUtf8String(args[0]);
+  geoipv6_t ipnum_v6 = _GeoIP_lookupaddress_v6(**host_cstr);
 
   if (__GEOIP_V6_IS_NULL(ipnum_v6)) {
     NanReturnValue(NanNull());
