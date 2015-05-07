@@ -1,7 +1,7 @@
 {
   "name": "geoip",
   "description": "GeoIP binding for node",
-  "version": "0.5.9-dev",
+  "version": "0.5.9",
   "homepage": "http://github.com/kuno/GeoIP",
   "author": "Guan 'kuno' Qing <neokuno at Gmail dot com>",
   "contributors": [
@@ -24,7 +24,8 @@
     "Ilya Furman <smashlong@gmail.com>",
     "William Cummings <will@wpc.io>",
     "Nicolas Fouché <nicolas.fouche@gmail.com>",
-    "Rémy Coutable <remy@rymai.me>"
+    "Rémy Coutable <remy@rymai.me>",
+    "Ilkka Myller <ilkka@myller.com>"
   ],
   "dependencies": {
     "bindings": "~1.2.1",
