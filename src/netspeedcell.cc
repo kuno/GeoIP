@@ -17,62 +17,58 @@ NetSpeedCell::~NetSpeedCell() {
   }
 };
 
-Persistent<FunctionTemplate> NetSpeedCell::constructor_template;
+Nan::Persistent<FunctionTemplate> NetSpeedCell::constructor_template;
 
-void NetSpeedCell::Init(Handle<Object> exports) {
- NanScope();
+NAN_MODULE_INIT(NetSpeedCell::Init) {
+ Nan::HandleScope scope;
 
-  Local<FunctionTemplate> tpl = NanNew<FunctionTemplate>(New);
-  NanAssignPersistent(constructor_template, tpl);
+  Local<FunctionTemplate> tpl = Nan::New<FunctionTemplate>(New);
+  constructor_template.Reset(tpl);
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
-  tpl->SetClassName(NanNew<String>("NetSpeedCell"));
+  tpl->SetClassName(Nan::New<String>("NetSpeedCell").ToLocalChecked());
 
-  tpl->PrototypeTemplate()->Set(NanNew<String>("lookupSync"),
-      NanNew<FunctionTemplate>(lookupSync)->GetFunction());
-  exports->Set(NanNew<String>("NetSpeedCell"), tpl->GetFunction());
+  Nan::SetPrototypeTemplate(tpl, "lookupSync",
+      Nan::GetFunction(Nan::New<FunctionTemplate>(lookupSync)).ToLocalChecked());
+  Nan::Set(target, Nan::New<String>("NetSpeedCell").ToLocalChecked(), Nan::GetFunction(tpl).ToLocalChecked());
 }
 
 NAN_METHOD(NetSpeedCell::New) {
-  NanScope();
-
   NetSpeedCell *n = new NetSpeedCell();
 
-  String::Utf8Value file_str(args[0]->ToString());
+  Nan::Utf8String file_str(info[0]->ToString());
   const char *file_cstr = ToCString(file_str);
-  bool cache_on = args[1]->ToBoolean()->Value();
+  bool cache_on = info[1]->ToBoolean()->Value();
 
   n->db = GeoIP_open(file_cstr, cache_on ? GEOIP_MEMORY_CACHE : GEOIP_STANDARD);
 
   if (n->db) {
     n->db_edition = GeoIP_database_edition(n->db);
     if (n->db_edition == GEOIP_NETSPEED_EDITION_REV1) {
-      n->Wrap(args.This());
-      NanReturnValue(args.This());
+      n->Wrap(info.This());
+      info.GetReturnValue().Set(info.This());
     } else {
       GeoIP_delete(n->db);  // free()'s the reference & closes fd
-      return NanThrowError("Error: Not valid netspeed cell database");
+      return Nan::ThrowError("Error: Not valid netspeed cell database");
     }
   } else {
-    return NanThrowError("Error: Cannot open database");
+    return Nan::ThrowError("Error: Cannot open database");
   }
 }
 
 NAN_METHOD(NetSpeedCell::lookupSync) {
-  NanScope();
+  NetSpeedCell *n = Nan::ObjectWrap::Unwrap<NetSpeedCell>(info.This());
 
-  NetSpeedCell *n = ObjectWrap::Unwrap<NetSpeedCell>(args.This());
+  Local<Value> data = Nan::New(Nan::Null());
 
-  Local<Value> data = NanNew(NanNull());
-
-  static NanUtf8String *host_cstr = new NanUtf8String(args[0]);
+  static Nan::Utf8String *host_cstr = new Nan::Utf8String(info[0]);
 
   char *speed = GeoIP_name_by_addr(n->db, **host_cstr);
 
   if (!speed) {
-    data = NanNew<String>("Unknown");
+    data = Nan::New<String>("Unknown").ToLocalChecked();
   } else {
-    data = NanNew<String>(speed);
+    data = Nan::New<String>(speed).ToLocalChecked();
   }
 
-  NanReturnValue(data);
+  info.GetReturnValue().Set(data);
 }
