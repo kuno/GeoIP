@@ -68,15 +68,15 @@ NAN_METHOD(Country6::lookupSync) {
 
   Local<Object> data = Nan::New<Object>();
 
-  static Nan::Utf8String *host_cstr = new Nan::Utf8String(info[0]);
-  geoipv6_t ipnum_v6 = _GeoIP_lookupaddress_v6(**host_cstr);
+  Nan::Utf8String host_cstr(info[0]);
+  geoipv6_t ipnum_v6 = _GeoIP_lookupaddress_v6(*host_cstr);
 
   if (__GEOIP_V6_IS_NULL(ipnum_v6)) {
-    info.GetReturnValue().Set(Nan::Null());
+    info.GetReturnValue().SetNull();
   } else {
     int country_id = GeoIP_id_by_ipnum_v6(c->db, ipnum_v6);
     if (country_id == 0) {
-      info.GetReturnValue().Set(Nan::Null());
+      info.GetReturnValue().SetNull();
     } else {
       char *name = _GeoIP_iso_8859_1__utf8(GeoIP_country_name[country_id]);
 

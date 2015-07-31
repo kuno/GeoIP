@@ -64,11 +64,11 @@ NAN_METHOD(Region::lookupSync) {
   Local<Object> data = Nan::New<Object>();
   Region *r = Nan::ObjectWrap::Unwrap<Region>(info.This());
 
-  static Nan::Utf8String *host_cstr = new Nan::Utf8String(info[0]);
-  uint32_t ipnum = _GeoIP_lookupaddress(**host_cstr);
+  Nan::Utf8String host_cstr(info[0]);
+  uint32_t ipnum = _GeoIP_lookupaddress(*host_cstr);
 
   if (ipnum <= 0) {
-    info.GetReturnValue().Set(Nan::Null());
+    info.GetReturnValue().SetNull();
   }
 
   GeoIPRegion *region = GeoIP_region_by_ipnum(r->db, ipnum);
