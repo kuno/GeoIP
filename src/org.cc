@@ -16,29 +16,28 @@ Org::~Org() { if (db) {
 }
 };
 
-Persistent<FunctionTemplate> Org::constructor_template;
+Nan::Persistent<FunctionTemplate> Org::constructor_template;
 
-void Org::Init(Handle<Object> exports) {
-  NanScope();
+NAN_MODULE_INIT(Org::Init) {
+  Nan::HandleScope scope;
 
-  Local<FunctionTemplate> tpl = NanNew<FunctionTemplate>(New);
-  NanAssignPersistent(constructor_template, tpl);
+  Local<FunctionTemplate> tpl = Nan::New<FunctionTemplate>(New);
+  constructor_template.Reset(tpl);
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
-  tpl->SetClassName(NanNew<String>("Org"));
+  tpl->SetClassName(Nan::New<String>("Org").ToLocalChecked());
 
-  tpl->PrototypeTemplate()->Set(NanNew<String>("lookupSync"),
-      NanNew<FunctionTemplate>(lookupSync)->GetFunction());
-  exports->Set(NanNew<String>("Org"), tpl->GetFunction());
+  Nan::SetPrototypeTemplate(tpl, "lookupSync",
+      Nan::GetFunction(Nan::New<FunctionTemplate>(lookupSync)).ToLocalChecked());
+  Nan::Set(target, Nan::New<String>("Org").ToLocalChecked(), Nan::GetFunction(tpl).ToLocalChecked());
 }
 
 NAN_METHOD(Org::New) {
-  NanScope();
 
   Org *o = new Org();
 
-  String::Utf8Value file_str(args[0]->ToString());
+  Nan::Utf8String file_str(info[0]->ToString());
   const char *file_cstr = ToCString(file_str);
-  bool cache_on = args[1]->ToBoolean()->Value();
+  bool cache_on = info[1]->ToBoolean()->Value();
 
   o->db = GeoIP_open(file_cstr, cache_on?GEOIP_MEMORY_CACHE:GEOIP_STANDARD);
 
@@ -48,41 +47,40 @@ NAN_METHOD(Org::New) {
     if (o->db_edition == GEOIP_ORG_EDITION ||
         o->db_edition == GEOIP_ASNUM_EDITION ||
         o->db_edition == GEOIP_ISP_EDITION) {
-      o->Wrap(args.This());
-      NanReturnValue(args.This());
+      o->Wrap(info.This());
+      info.GetReturnValue().Set(info.This());
     } else {
       GeoIP_delete(o->db);  // free()'s the reference & closes fd
-      return NanThrowError("Error: Not valid org database");
+      return Nan::ThrowError("Error: Not valid org database");
     }
   } else {
-    return NanThrowError("Error: Cannot open database");
+    return Nan::ThrowError("Error: Cannot open database");
   }
 }
 
 NAN_METHOD(Org::lookupSync) {
-  NanScope();
 
-  Local<Value> data = NanNew(NanNull());
-  Org *o = ObjectWrap::Unwrap<Org>(args.This());
+  Local<Value> data = Nan::New(Nan::Null());
+  Org *o = Nan::ObjectWrap::Unwrap<Org>(info.This());
 
-  static NanUtf8String *host_cstr = new NanUtf8String(args[0]);
-  uint32_t ipnum = _GeoIP_lookupaddress(**host_cstr);
+  Nan::Utf8String host_cstr(info[0]);
+  uint32_t ipnum = _GeoIP_lookupaddress(*host_cstr);
 
   if (ipnum <= 0) {
-    NanReturnValue(NanNull());
+    info.GetReturnValue().SetNull();
   }
 
   char *org = GeoIP_org_by_ipnum(o->db, ipnum);
   if (!org) {
-    NanReturnValue(NanNull());
+    info.GetReturnValue().Set(Nan::Null());
   }
 
   char *name = _GeoIP_iso_8859_1__utf8(org);
 
-  data = NanNew<String>(name);
+  data = Nan::New<String>(name).ToLocalChecked();
 
   free(org);
   free(name);
 
-  NanReturnValue(data);
+  info.GetReturnValue().Set(data);
 }

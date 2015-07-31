@@ -15,7 +15,7 @@ using namespace v8;
 using namespace node;
 
 namespace native {
-  class Country6: public ObjectWrap {
+  class Country6: public Nan::ObjectWrap {
     private:
       explicit Country6();
 
@@ -25,14 +25,14 @@ namespace native {
 
       int db_edition;
 
-      static Persistent<FunctionTemplate> constructor_template;
+      static Nan::Persistent<FunctionTemplate> constructor_template;
 
       static NAN_METHOD(New);
 
       static NAN_METHOD(lookupSync);
 
     public:
-      static void Init(Handle<Object> exports);
+      static NAN_MODULE_INIT(Init);
   };
 }
 

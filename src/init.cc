@@ -17,27 +17,27 @@
 using namespace native;
 
 extern "C" {
-  static void InitAll(Handle<Object> exports) {
-    NanScope();
+  static NAN_MODULE_INIT(InitAll) {
+    Nan::HandleScope scope;
 
     // Initialize Modules
-    NetSpeedCell::Init(exports);
-    NetSpeed::Init(exports);
-    Country6::Init(exports);
-    Country::Init(exports);
-    Region::Init(exports);
-    City6::Init(exports);
-    City::Init(exports);
-    Org::Init(exports);
+    NetSpeedCell::Init(target);
+    NetSpeed::Init(target);
+    Country6::Init(target);
+    Country::Init(target);
+    Region::Init(target);
+    City6::Init(target);
+    City::Init(target);
+    Org::Init(target);
 
     // Utility memeber method
-    Local<FunctionTemplate> check = NanNew<FunctionTemplate>(utils::check);
-    Local<FunctionTemplate> isString = NanNew<FunctionTemplate>(utils::isString);
-    exports->Set(NanNew<String>("check"), check->GetFunction());
-    exports->Set(NanNew<String>("isString"), isString->GetFunction());
+    Local<FunctionTemplate> check = Nan::New<FunctionTemplate>(utils::check);
+    Local<FunctionTemplate> isString = Nan::New<FunctionTemplate>(utils::isString);
+    Nan::Set(target, Nan::New<String>("check").ToLocalChecked(), Nan::GetFunction(check).ToLocalChecked());
+    Nan::Set(target, Nan::New<String>("isString").ToLocalChecked(), Nan::GetFunction(isString).ToLocalChecked());
 
     // Meta infomation
-    exports->Set(NanNew<String>("libgeoip"), NanNew<String>(GeoIP_lib_version()));
+    Nan::Set(target, Nan::New<String>("libgeoip").ToLocalChecked(), Nan::New<String>(GeoIP_lib_version()).ToLocalChecked());
   }
 
   NODE_MODULE(native, InitAll)
