@@ -1,4 +1,4 @@
-__GeoIP binding for nodejs__
+__GeoIP binding for nodejs(>=0.10) and iojs__
 
 [![NPM version](https://badge.fury.io/js/geoip.png)](http://badge.fury.io/js/geoip)
 [![Build status](https://secure.travis-ci.org/kuno/GeoIP.png)](http://travis-ci.org/kuno/GeoIP)
@@ -36,25 +36,9 @@ Since I am not a user of any product/service of maxmind, if you require this pac
 
 ##Installation
 
-### for nodejs >= 0.8.x
-
-    [sudo] npm install geoip [-g]
-
-### for nodejs 0.6.x
-
-    [sudo] npm install geoip@0.4.5 [-g]
-
-### for nodejs 0.4.x
-
-    [sudo] npm install geoip@0.4.4 [-g]
-
-### for nodejs older than 0.4.0
-
-From v0.4.0, geoip need nodejs >= 0.4.0, if you want to use it on old nodejs, you can:
-
-    npm install geoip@0.3.4-1
-
-
+```bash
+[sudo] npm install geoip [-g]
+```
 ##Usage
 
 See [usage doc](./USAGE.md).
