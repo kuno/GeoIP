@@ -18,28 +18,29 @@ Region::~Region() {
   }
 };
 
-Persistent<FunctionTemplate> Region::constructor_template;
+Nan::Persistent<v8::Function> Region::constructor;
 
-void Region::Init(Handle<Object> exports) {
+void Region::Init(v8::Local<v8::Object> exports) {
   Nan::HandleScope scope;
 
-  Local<FunctionTemplate> tpl = Nan::New<FunctionTemplate>(New);
-  NanAssignPersistent(constructor_template, tpl);
+  v8::Local<v8::FunctionTemplate> tpl = Nan::New<v8::FunctionTemplate>(New);
+  tpl->SetClassName(Nan::New("Region").ToLocalChecked());
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
-  tpl->SetClassName(Nan::New<String>("Region"));
 
-  tpl->PrototypeTemplate()->Set(Nan::New<String>("lookupSync"),
-      Nan::New<FunctionTemplate>(lookupSync)->GetFunction());
-  exports->Set(Nan::New<String>("Region"), tpl->GetFunction());
+  tpl->PrototypeTemplate()->Set(Nan::New("lookupSync").ToLocalChecked(),
+      Nan::New<v8::FunctionTemplate>(lookupSync)->GetFunction());
+
+  constructor.Reset(tpl->GetFunction());
+  exports->Set(Nan::New("Region").ToLocalChecked(), tpl->GetFunction());
 }
 
 NAN_METHOD(Region::New) {
   Nan::HandleScope scope;
   Region *r = new Region();
 
-  String::Utf8Value file_str(args[0]->ToString());
+  String::Utf8Value file_str(info[0]->ToString());
   const char * file_cstr = ToCString(file_str);
-  bool cache_on = args[1]->ToBoolean()->Value();
+  bool cache_on = info[1]->ToBoolean()->Value();
 
   r->db = GeoIP_open(file_cstr, cache_on ? GEOIP_MEMORY_CACHE : GEOIP_STANDARD);
 
@@ -48,15 +49,15 @@ NAN_METHOD(Region::New) {
     r->db_edition = GeoIP_database_edition(r->db);
     if (r->db_edition == GEOIP_REGION_EDITION_REV0 ||
         r->db_edition == GEOIP_REGION_EDITION_REV1) {
-      r->Wrap(args.This());
-      NanReturnValue(args.This());
+      r->Wrap(info.This());
+      info.GetReturnValue().Set(info.This());
     } else {
       GeoIP_delete(r->db);  // free()'s the reference & closes fd
       //printf("edition is %d", r->db_edition);
-      return NanThrowError("Error: Not valid region database");
+      return Nan::ThrowError("Error: Not valid region database");
     }
   } else {
-    return NanThrowError("Error: Cannot open database");
+    return Nan::ThrowError("Error: Cannot open database");
   }
 }
 
@@ -64,24 +65,26 @@ NAN_METHOD(Region::lookupSync) {
   Nan::HandleScope scope;
 
   Local<Object> data = Nan::New<Object>();
-  Region *r = ObjectWrap::Unwrap<Region>(args.This());
+  Region *r = ObjectWrap::Unwrap<Region>(info.This());
 
-  static NanUtf8String *host_cstr = new NanUtf8String(args[0]);
+  static Nan::Utf8String *host_cstr = new Nan::Utf8String(info[0]);
   uint32_t ipnum = _GeoIP_lookupaddress(**host_cstr);
 
   if (ipnum <= 0) {
-    NanReturnValue(NanNull());
+    info.GetReturnValue().Set(Nan::Null());
   }
 
   GeoIPRegion *region = GeoIP_region_by_ipnum(r->db, ipnum);
 
   if (region) {
-    data->Set(Nan::New<String>("country_code"), Nan::New<String>(region->country_code));
-    data->Set(Nan::New<String>("region"), Nan::New<String>(region->region));
+    data->Set(Nan::New<String>("country_code").ToLocalChecked(),
+      Nan::New<String>(region->country_code).ToLocalChecked());
+    data->Set(Nan::New<String>("region").ToLocalChecked(),
+      Nan::New<String>(region->region).ToLocalChecked());
     GeoIPRegion_delete(region);
-    NanReturnValue(data);
+    info.GetReturnValue().Set(data);
   } else {
     //GeoIPRegion_delete(region);
-    return NanThrowError("Error: Can not find match data");
+    return Nan::ThrowError("Error: Can not find match data");
   }
 }

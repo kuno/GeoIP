@@ -17,8 +17,6 @@ Country::~Country() {
   }
 };
 
-//Persistent<FunctionTemplate> Country::constructor_template;
-
 Nan::Persistent<v8::Function> Country::constructor;
 
 void Country::Init(v8::Local<v8::Object> exports) {
@@ -28,22 +26,14 @@ void Country::Init(v8::Local<v8::Object> exports) {
   tpl->SetClassName(Nan::New("Country").ToLocalChecked());
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
 
-  //NanAssignPersistent(constructor_template, tpl);
-  //tpl->InstanceTemplate()->SetInternalFieldCount(1);
-  //tpl->SetClassName(Nan::New<String>("Country"));
-
   tpl->PrototypeTemplate()->Set(Nan::New("lookupSync").ToLocalChecked(),
       Nan::New<v8::FunctionTemplate>(lookupSync)->GetFunction());
 
   constructor.Reset(tpl->GetFunction());
   exports->Set(Nan::New("Country").ToLocalChecked(), tpl->GetFunction());
-
-  //tpl->PrototypeTemplate()->Set(Nan::New<String>("lookupSync"),
-  //    Nan::New<FunctionTemplate>(lookupSync)->GetFunction());
-  //exports->Set(Nan::New<String>("Country"), tpl->GetFunction());
 }
 
-void Country::New(const Nan::FunctionCallbackInfo<v8::Value>& info) {
+NAN_METHOD(Country::New) {
   Nan::HandleScope scope;
 
   Country *c = new Country();
@@ -69,13 +59,13 @@ void Country::New(const Nan::FunctionCallbackInfo<v8::Value>& info) {
   }
 }
 
-void Country::lookupSync(const Nan::FunctionCallbackInfo<v8::Value>& info) {
+NAN_METHOD(Country::lookupSync) {
   Nan::HandleScope scope;
 
   Country *c = ObjectWrap::Unwrap<Country>(info.This());
 
-  //Local<Object> data = Nan::New<Object>();
-  v8::Local<v8::Object> data = Nan::New<v8::Object>();
+  Local<Object> data = Nan::New<Object>();
+  //v8::Local<v8::Object> data = Nan::New<v8::Object>();
 
   static Nan::Utf8String *host_cstr = new Nan::Utf8String(info[0]);
   uint32_t ipnum = _GeoIP_lookupaddress(**host_cstr);

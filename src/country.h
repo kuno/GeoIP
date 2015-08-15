@@ -27,9 +27,9 @@ namespace native {
 
       static Nan::Persistent<v8::Function> constructor;
 
-      static void New(const Nan::FunctionCallbackInfo<v8::Value>& info);
+      static NAN_METHOD(New);
 
-      static void lookupSync(const Nan::FunctionCallbackInfo<v8::Value>& info);
+      static NAN_METHOD(lookupSync);
 
     public:
       static void Init(v8::Local<v8::Object> exports);
