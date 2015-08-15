@@ -25,6 +25,17 @@ static geoipv6_t IPV6_NULL;
 
 #if defined(_WIN32)
 #include <io.h>
+
+#ifdef _MSC_VER
+#  if _MSC_VER < 1900 // VS 2015 supports snprintf
+#    define snprintf _snprintf
+#  endif
+#  if _MSC_VER >= 1400 // VS 2005+ deprecates fileno, lseek and read
+#    define fileno _fileno
+#    define read _read
+#    define lseek _lseek
+#  endif
+#endif
 #else
 #include <unistd.h>
 #include <netdb.h>
@@ -1060,7 +1071,7 @@ static void _setup_segments(GeoIP * gi)
 }
 
 static
-int _check_mtime(GeoIP *gi)
+void _check_mtime(GeoIP *gi)
 {
     struct stat buf;
     ssize_t idx_size;
@@ -1077,9 +1088,15 @@ int _check_mtime(GeoIP *gi)
 #if !defined(_WIN32)
         /* stat only has second granularity, so don't
          * call it more than once a second */
-        gettimeofday(&t, NULL);
+        if (0 != gettimeofday(&t, NULL)) {
+            DEBUG_MSGF(gi->flags,
+                       "Error calling gettimeofday: %s\n",
+                       strerror(errno));
+            return;
+        }
+
         if (t.tv_sec == gi->last_mtime_check) {
-            return 0;
+            return;
         }
         gi->last_mtime_check = t.tv_sec;
 
@@ -1090,7 +1107,7 @@ int _check_mtime(GeoIP *gi)
         GetSystemTimeAsFileTime(&ft);
         t = FILETIME_TO_USEC(ft) / 1000 / 1000;
         if (t == gi->last_mtime_check) {
-            return 0;
+            return;
         }
         gi->last_mtime_check = t;
 
@@ -1120,7 +1137,7 @@ int _check_mtime(GeoIP *gi)
                             DEBUG_MSGF(gi->flags,
                                        "Out of memory when reloading %s\n",
                                        gi->file_path);
-                            return -1;
+                            return;
                         }
                     }
                 }
@@ -1131,7 +1148,7 @@ int _check_mtime(GeoIP *gi)
                     DEBUG_MSGF(gi->flags,
                                "Error Opening file %s when reloading\n",
                                gi->file_path);
-                    return -1;
+                    return;
                 }
                 gi->mtime = buf.st_mtime;
                 gi->size = buf.st_size;
@@ -1141,7 +1158,7 @@ int _check_mtime(GeoIP *gi)
                     DEBUG_MSGF(gi->flags,
                                "GEOIP_MMAP_CACHE is not supported on WIN32\n");
                     gi->cache = 0;
-                    return -1;
+                    return;
 #else
                     gi->cache =
                         mmap(NULL, buf.st_size, PROT_READ, MAP_PRIVATE, fileno(
@@ -1153,7 +1170,7 @@ int _check_mtime(GeoIP *gi)
                                    gi->file_path);
 
                         gi->cache = NULL;
-                        return -1;
+                        return;
                     }
 #endif
                 } else if (gi->flags & GEOIP_MEMORY_CACHE) {
@@ -1162,7 +1179,7 @@ int _check_mtime(GeoIP *gi)
                         DEBUG_MSGF(gi->flags,
                                    "Error reading file %s when reloading\n",
                                    gi->file_path);
-                        return -1;
+                        return;
                     }
                 }
 
@@ -1174,14 +1191,14 @@ int _check_mtime(GeoIP *gi)
                 if (gi->databaseSegments == NULL) {
                     DEBUG_MSGF(gi->flags, "Error reading file %s -- corrupt\n",
                                gi->file_path);
-                    return -1;
+                    return;
                 }
 
                 idx_size = get_index_size(gi, &buf);
                 if (idx_size < 0) {
                     DEBUG_MSGF(gi->flags, "Error file %s -- corrupt\n",
                                gi->file_path);
-                    return -1;
+                    return;
                 }
 
                 if (gi->flags & GEOIP_INDEX_CACHE) {
@@ -1194,14 +1211,14 @@ int _check_mtime(GeoIP *gi)
                                 gi->flags,
                                 "Error reading file %s where reloading\n",
                                 gi->file_path);
-                            return -1;
+                            return;
                         }
                     }
                 }
             }
         }
     }
-    return 0;
+    return;
 }
 
 #define ADDR_STR_LEN (8 * 4 + 7 + 1)
@@ -1575,6 +1592,9 @@ GeoIP * GeoIP_open(const char * filename, int flags)
     } else {
         gi->index_cache = NULL;
     }
+
+    gi->last_mtime_check = 0;
+
     return gi;
 }
 
@@ -2678,4 +2698,3 @@ int GeoIP_cleanup(void)
 
     return result;
 }
-

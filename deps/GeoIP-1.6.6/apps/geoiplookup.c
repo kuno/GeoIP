@@ -290,7 +290,7 @@ void geoiplookup(GeoIP * gi, char *hostname, int i)
             }
         }else if (GEOIP_COUNTRY_EDITION == i) {
             country_id = GeoIP_id_by_ipnum(gi, ipnum);
-            if (country_id < 0 || country_id >= (int) GeoIP_num_countries()) {
+            if (country_id < 0 || country_id >= (int)GeoIP_num_countries()) {
                 printf("%s: Invalid database\n", GeoIPDBDescription[i]);
                 return;
             }

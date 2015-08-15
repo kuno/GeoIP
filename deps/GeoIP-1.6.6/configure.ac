@@ -1,7 +1,7 @@
 dnl AM_CONFIG_HEADER(config.h)
 
 AC_PREREQ([2.65])
-AC_INIT([GeoIP], [1.6.5],[support@maxmind.com],[GeoIP])
+AC_INIT([GeoIP], [1.6.6],[support@maxmind.com],[GeoIP])
 AC_CONFIG_AUX_DIR([.])
 AC_CONFIG_SRCDIR([libGeoIP/GeoIP.c])
 AC_CONFIG_MACRO_DIR([m4])

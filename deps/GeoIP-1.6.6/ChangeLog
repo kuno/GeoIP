@@ -1,3 +1,17 @@
+1.6.6 2015-07-28
+
+* Replaced usage of deprecated fileno, read, and lseek on Visual Studio 2005+
+  with their ISO C++ conformant replacements. (Fix by ClaudiuHKS. GitHub #55.)
+* A warning about using a double as a float was fixed. (Fix by ClaudiuHKS.
+  GitHub #56.)
+* Fixed segfault when doing a lookup on an empty database. (Fix by NesoK.
+  GitHub #62.)
+* Fixed a memcheck error from valgrind in the `_check_mtime`
+  function. (Reported by yurivct. GitHub #60.)
+* Fixed `_check_mtime` to check the return value of `gettimeofday` rather than
+  just assuming it worked.
+
+
 1.6.5 2015-02-25
 
 * A segmentation fault in `geoiplookup` was fixed when the utility was passed

@@ -350,7 +350,7 @@ SUBDIRS = \
 
 pkgconfigdir = $(libdir)/pkgconfig/
 nodist_pkgconfig_DATA = geoip.pc
-EXTRA_DIST = NEWS.md README.md README.OSX bootstrap GeoIP.spec GeoIP.spec.in Makefile.vc get_ver.awk geoip.ico geoip.pc.in data/GeoIP.dat
+EXTRA_DIST = LICENSE NEWS.md README.md README.OSX bootstrap GeoIP.spec GeoIP.spec.in Makefile.vc get_ver.awk geoip.ico geoip.pc.in data/GeoIP.dat
 all: all-recursive
 
 .SUFFIXES:

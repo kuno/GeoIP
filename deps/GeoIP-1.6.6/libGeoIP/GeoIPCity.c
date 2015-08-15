@@ -29,6 +29,12 @@
 #else
 #include <windows.h>
 #include <winsock.h>
+
+#if defined(_MSC_VER) && _MSC_VER >= 1400 // VS 2005+ deprecates fileno, lseek and read
+#  define fileno _fileno
+#  define read _read
+#  define lseek _lseek
+#endif
 #endif
 #include <sys/types.h>  /* For uint32_t */
 #ifdef HAVE_STDINT_H
@@ -90,6 +96,10 @@ _extract_record(GeoIP * gi, unsigned int seek_record, int *next_record_ptr)
             return NULL;
         }
     }else {
+        if (gi->size <= record_pointer) {
+            /* such record does not exists in the cache */
+            return NULL;
+        }
         record_buf = gi->cache + (long)record_pointer;
     }
 
@@ -140,14 +150,14 @@ _extract_record(GeoIP * gi, unsigned int seek_record, int *next_record_ptr)
     for (j = 0; j < 3; ++j) {
         latitude += (record_buf[j] << (j * 8));
     }
-    record->latitude = latitude / 10000 - 180;
+    record->latitude = (float)(latitude / 10000 - 180);
     record_buf += 3;
 
     /* get longitude */
     for (j = 0; j < 3; ++j) {
         longitude += (record_buf[j] << (j * 8));
     }
-    record->longitude = longitude / 10000 - 180;
+    record->longitude = (float)(longitude / 10000 - 180);
 
     /*
      * get area code and metro code for post April 2002 databases and for US

@@ -21,11 +21,11 @@
       },
       'include_dirs': [
           'src',
-          'deps/GeoIP-1.6.5/libGeoIP',
+          'deps/GeoIP-1.6.6/libGeoIP',
           "<!(node -e \"require('nan')\")"
       ],
       'dependencies': [
-        'deps/GeoIP-1.6.5/libgeoip.gypi:libgeoip'
+        'deps/GeoIP-1.6.6/libgeoip.gypi:libgeoip'
       ],
       'conditions': [
         ['OS=="win"', {
