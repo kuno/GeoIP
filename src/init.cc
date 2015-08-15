@@ -4,40 +4,47 @@
  * Licensed under the GNU LGPL 2.1 license
  */
 
-#include "netspeedcell.h"
-#include "netspeed.h"
-#include "country6.h"
+//#include "netspeedcell.h"
+//#include "netspeed.h"
+//#include "country6.h"
 #include "country.h"
-#include "region.h"
-#include "city6.h"
-#include "city.h"
-#include "org.h"
+//#include "region.h"
+//#include "city6.h"
+//#include "city.h"
+//#include "org.h"
 #include "utils.h"
 
 using namespace native;
 
 extern "C" {
-  static void InitAll(Handle<Object> exports) {
-    NanScope();
+  static void InitAll(v8::Local<v8::Object> exports, v8::Local<v8::Object> module) {
+    Nan::HandleScope scope;
 
     // Initialize Modules
-    NetSpeedCell::Init(exports);
-    NetSpeed::Init(exports);
-    Country6::Init(exports);
+    //NetSpeedCell::Init(exports);
+    //NetSpeed::Init(exports);
+    //Country6::Init(exports);
     Country::Init(exports);
-    Region::Init(exports);
-    City6::Init(exports);
-    City::Init(exports);
-    Org::Init(exports);
+    //Region::Init(exports);
+    //City6::Init(exports);
+    //City::Init(exports);
+    //Org::Init(exports);
 
     // Utility memeber method
-    Local<FunctionTemplate> check = NanNew<FunctionTemplate>(utils::check);
-    Local<FunctionTemplate> isString = NanNew<FunctionTemplate>(utils::isString);
-    exports->Set(NanNew<String>("check"), check->GetFunction());
-    exports->Set(NanNew<String>("isString"), isString->GetFunction());
+    v8::Local<FunctionTemplate> check = Nan::New<v8::FunctionTemplate>(utils::check);
+    v8::Local<FunctionTemplate> isString = Nan::New<v8::FunctionTemplate>(utils::isString);
+    //exports->Set(Nan::New("check"), check->GetFunction());
+    //exports->Set(Nan::New("isString"), isString->GetFunction());
 
     // Meta infomation
-    exports->Set(NanNew<String>("libgeoip"), NanNew<String>(GeoIP_lib_version()));
+    //exports->Set(Nan::New("libgeoip"), Nan::New<String>(GeoIP_lib_version()));
+
+    exports->Set(Nan::New("check").ToLocalChecked(), check->GetFunction());
+    exports->Set(Nan::New("isString").ToLocalChecked(), isString->GetFunction());
+    exports->Set(Nan::New("libgeoip").ToLocalChecked(),
+        Nan::New(GeoIP_lib_version()).ToLocalChecked());
+
+
   }
 
   NODE_MODULE(native, InitAll)

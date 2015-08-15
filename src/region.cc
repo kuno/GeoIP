@@ -21,20 +21,20 @@ Region::~Region() {
 Persistent<FunctionTemplate> Region::constructor_template;
 
 void Region::Init(Handle<Object> exports) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  Local<FunctionTemplate> tpl = NanNew<FunctionTemplate>(New);
+  Local<FunctionTemplate> tpl = Nan::New<FunctionTemplate>(New);
   NanAssignPersistent(constructor_template, tpl);
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
-  tpl->SetClassName(NanNew<String>("Region"));
+  tpl->SetClassName(Nan::New<String>("Region"));
 
-  tpl->PrototypeTemplate()->Set(NanNew<String>("lookupSync"),
-      NanNew<FunctionTemplate>(lookupSync)->GetFunction());
-  exports->Set(NanNew<String>("Region"), tpl->GetFunction());
+  tpl->PrototypeTemplate()->Set(Nan::New<String>("lookupSync"),
+      Nan::New<FunctionTemplate>(lookupSync)->GetFunction());
+  exports->Set(Nan::New<String>("Region"), tpl->GetFunction());
 }
 
 NAN_METHOD(Region::New) {
-  NanScope();
+  Nan::HandleScope scope;
   Region *r = new Region();
 
   String::Utf8Value file_str(args[0]->ToString());
@@ -61,9 +61,9 @@ NAN_METHOD(Region::New) {
 }
 
 NAN_METHOD(Region::lookupSync) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  Local<Object> data = NanNew<Object>();
+  Local<Object> data = Nan::New<Object>();
   Region *r = ObjectWrap::Unwrap<Region>(args.This());
 
   static NanUtf8String *host_cstr = new NanUtf8String(args[0]);
@@ -76,8 +76,8 @@ NAN_METHOD(Region::lookupSync) {
   GeoIPRegion *region = GeoIP_region_by_ipnum(r->db, ipnum);
 
   if (region) {
-    data->Set(NanNew<String>("country_code"), NanNew<String>(region->country_code));
-    data->Set(NanNew<String>("region"), NanNew<String>(region->region));
+    data->Set(Nan::New<String>("country_code"), Nan::New<String>(region->country_code));
+    data->Set(Nan::New<String>("region"), Nan::New<String>(region->region));
     GeoIPRegion_delete(region);
     NanReturnValue(data);
   } else {

@@ -20,20 +20,20 @@ NetSpeed::~NetSpeed() {
 Persistent<FunctionTemplate> NetSpeed::constructor_template;
 
 void NetSpeed::Init(Handle<Object> exports) {
-    NanScope();
+    Nan::HandleScope scope;
 
-    Local<FunctionTemplate> tpl = NanNew<FunctionTemplate>(New);
+    Local<FunctionTemplate> tpl = Nan::New<FunctionTemplate>(New);
     NanAssignPersistent(constructor_template, tpl);
     tpl->InstanceTemplate()->SetInternalFieldCount(1);
-    tpl->SetClassName(NanNew<String>("NetSpeed"));
+    tpl->SetClassName(Nan::New<String>("NetSpeed"));
 
-    tpl->PrototypeTemplate()->Set(NanNew<String>("lookupSync"),
-            NanNew<FunctionTemplate>(lookupSync)->GetFunction());
-    exports->Set(NanNew<String>("NetSpeed"), tpl->GetFunction());
+    tpl->PrototypeTemplate()->Set(Nan::New<String>("lookupSync"),
+            Nan::New<FunctionTemplate>(lookupSync)->GetFunction());
+    exports->Set(Nan::New<String>("NetSpeed"), tpl->GetFunction());
 }
 
 NAN_METHOD(NetSpeed::New) {
-    NanScope();
+    Nan::HandleScope scope;
 
     NetSpeed *n = new NetSpeed();
 
@@ -60,11 +60,11 @@ NAN_METHOD(NetSpeed::New) {
 
 
 NAN_METHOD(NetSpeed::lookupSync) {
-    NanScope();
+    Nan::HandleScope scope;
 
     NetSpeed *n = ObjectWrap::Unwrap<NetSpeed>(args.This());
 
-    Local<Value> data = NanNew(NanNull());
+    Local<Value> data = Nan::New(NanNull());
     
     static NanUtf8String *host_cstr = new NanUtf8String(args[0]);
     uint32_t ipnum = _GeoIP_lookupaddress(**host_cstr);
@@ -78,13 +78,13 @@ NAN_METHOD(NetSpeed::lookupSync) {
     if (netspeed < 0) {
         NanReturnValue(NanNull());
     } else if (netspeed == GEOIP_UNKNOWN_SPEED) {
-        data = NanNew<String>("Unknown");
+        data = Nan::New<String>("Unknown");
     } else if (netspeed == GEOIP_DIALUP_SPEED) {
-        data = NanNew<String>("Dialup");
+        data = Nan::New<String>("Dialup");
     } else if (netspeed == GEOIP_CABLEDSL_SPEED) {
-        data = NanNew<String>("CableDSL");
+        data = Nan::New<String>("CableDSL");
     } else if (netspeed == GEOIP_CORPORATE_SPEED) {
-        data = NanNew<String>("Corporate");
+        data = Nan::New<String>("Corporate");
     }
 
     NanReturnValue(data);

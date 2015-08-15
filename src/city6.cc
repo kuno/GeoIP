@@ -21,20 +21,20 @@ City6::~City6() {
 Persistent<FunctionTemplate> City6::constructor_template;
 
 void City6::Init(Handle<Object> exports) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  Local<FunctionTemplate> tpl = NanNew<FunctionTemplate>(New);
+  Local<FunctionTemplate> tpl = Nan::New<FunctionTemplate>(New);
   NanAssignPersistent(constructor_template, tpl);
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
-  tpl->SetClassName(NanNew<String>("City6"));
+  tpl->SetClassName(Nan::New<String>("City6"));
 
-  tpl->PrototypeTemplate()->Set(NanNew<String>("lookupSync"),
-      NanNew<FunctionTemplate>(lookupSync)->GetFunction());
-  exports->Set(NanNew<String>("City6"), tpl->GetFunction());
+  tpl->PrototypeTemplate()->Set(Nan::New<String>("lookupSync"),
+      Nan::New<FunctionTemplate>(lookupSync)->GetFunction());
+  exports->Set(Nan::New<String>("City6"), tpl->GetFunction());
 }
 
 NAN_METHOD(City6::New) {
-  NanScope();
+  Nan::HandleScope scope;
 
   City6 *c = new City6();
 
@@ -60,9 +60,9 @@ NAN_METHOD(City6::New) {
 }
 
 NAN_METHOD(City6::lookupSync) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  Local<Object> data = NanNew<Object>();
+  Local<Object> data = Nan::New<Object>();
   City6 *c = ObjectWrap::Unwrap<City6>(args.This());
 
   static NanUtf8String *host_cstr = new NanUtf8String(args[0]);
@@ -79,64 +79,64 @@ NAN_METHOD(City6::lookupSync) {
   }
 
   if (record->country_code) {
-    data->Set(NanNew<String>("country_code"), NanNew<String>(record->country_code));
+    data->Set(Nan::New<String>("country_code"), Nan::New<String>(record->country_code));
   }
 
   if (record->country_code3) {
-    data->Set(NanNew<String>("country_code3"), NanNew<String>(record->country_code3));
+    data->Set(Nan::New<String>("country_code3"), Nan::New<String>(record->country_code3));
   }
 
   if (record->country_name) {
-    data->Set(NanNew<String>("country_name"), NanNew<String>(record->country_name));
+    data->Set(Nan::New<String>("country_name"), Nan::New<String>(record->country_name));
   }
 
   if (record->region) {
-    data->Set(NanNew<String>("region"), NanNew<String>(record->region));
+    data->Set(Nan::New<String>("region"), Nan::New<String>(record->region));
   }
 
   if (record->city) {
     char *name = _GeoIP_iso_8859_1__utf8(record->city);
 
     if (name) {
-      data->Set(NanNew<String>("city"), NanNew<String>(name));
+      data->Set(Nan::New<String>("city"), Nan::New<String>(name));
     }
 
     free(name);
   }
 
   if (record->postal_code) {
-    data->Set(NanNew<String>("postal_code"), NanNew<String>(record->postal_code));
+    data->Set(Nan::New<String>("postal_code"), Nan::New<String>(record->postal_code));
   }
 
   if (record->latitude >= -90 && record->latitude <= 90) {
-    data->Set(NanNew<String>("latitude"), NanNew<Number>(record->latitude));
+    data->Set(Nan::New<String>("latitude"), Nan::New<Number>(record->latitude));
   }
 
   if (record->longitude >= -180 && record->longitude <= 180) {
-    data->Set(NanNew<String>("longitude"), NanNew<Number>(record->longitude));
+    data->Set(Nan::New<String>("longitude"), Nan::New<Number>(record->longitude));
   }
 
   if (record->metro_code) {
-    data->Set(NanNew<String>("metro_code"), NanNew<Number>(record->metro_code));
+    data->Set(Nan::New<String>("metro_code"), Nan::New<Number>(record->metro_code));
   }
 
   if (record->dma_code) {
-    data->Set(NanNew<String>("dma_code"), NanNew<Number>(record->dma_code));
+    data->Set(Nan::New<String>("dma_code"), Nan::New<Number>(record->dma_code));
   }
 
   if (record->area_code) {
-    data->Set(NanNew<String>("area_code"), NanNew<Number>(record->area_code));
+    data->Set(Nan::New<String>("area_code"), Nan::New<Number>(record->area_code));
   }
 
   if (record->continent_code) {
-    data->Set(NanNew<String>("continent_code"), NanNew<String>(record->continent_code));
+    data->Set(Nan::New<String>("continent_code"), Nan::New<String>(record->continent_code));
   }
 
   if (record->country_code && record->region) {
     const char *time_zone = GeoIP_time_zone_by_country_and_region(record->country_code, record->region);
 
     if(time_zone) {
-      data->Set(NanNew<String>("time_zone"), NanNew<String>(time_zone));
+      data->Set(Nan::New<String>("time_zone"), Nan::New<String>(time_zone));
     }
   }
 

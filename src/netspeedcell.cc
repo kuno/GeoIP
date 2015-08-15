@@ -20,20 +20,20 @@ NetSpeedCell::~NetSpeedCell() {
 Persistent<FunctionTemplate> NetSpeedCell::constructor_template;
 
 void NetSpeedCell::Init(Handle<Object> exports) {
- NanScope();
+ Nan::HandleScope scope;
 
-  Local<FunctionTemplate> tpl = NanNew<FunctionTemplate>(New);
+  Local<FunctionTemplate> tpl = Nan::New<FunctionTemplate>(New);
   NanAssignPersistent(constructor_template, tpl);
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
-  tpl->SetClassName(NanNew<String>("NetSpeedCell"));
+  tpl->SetClassName(Nan::New<String>("NetSpeedCell"));
 
-  tpl->PrototypeTemplate()->Set(NanNew<String>("lookupSync"),
-      NanNew<FunctionTemplate>(lookupSync)->GetFunction());
-  exports->Set(NanNew<String>("NetSpeedCell"), tpl->GetFunction());
+  tpl->PrototypeTemplate()->Set(Nan::New<String>("lookupSync"),
+      Nan::New<FunctionTemplate>(lookupSync)->GetFunction());
+  exports->Set(Nan::New<String>("NetSpeedCell"), tpl->GetFunction());
 }
 
 NAN_METHOD(NetSpeedCell::New) {
-  NanScope();
+  Nan::HandleScope scope;
 
   NetSpeedCell *n = new NetSpeedCell();
 
@@ -58,20 +58,20 @@ NAN_METHOD(NetSpeedCell::New) {
 }
 
 NAN_METHOD(NetSpeedCell::lookupSync) {
-  NanScope();
+  Nan::HandleScope scope;
 
   NetSpeedCell *n = ObjectWrap::Unwrap<NetSpeedCell>(args.This());
 
-  Local<Value> data = NanNew(NanNull());
+  Local<Value> data = Nan::New(NanNull());
 
   static NanUtf8String *host_cstr = new NanUtf8String(args[0]);
 
   char *speed = GeoIP_name_by_addr(n->db, **host_cstr);
 
   if (!speed) {
-    data = NanNew<String>("Unknown");
+    data = Nan::New<String>("Unknown");
   } else {
-    data = NanNew<String>(speed);
+    data = Nan::New<String>(speed);
   }
 
   NanReturnValue(data);

@@ -19,20 +19,20 @@ Org::~Org() { if (db) {
 Persistent<FunctionTemplate> Org::constructor_template;
 
 void Org::Init(Handle<Object> exports) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  Local<FunctionTemplate> tpl = NanNew<FunctionTemplate>(New);
+  Local<FunctionTemplate> tpl = Nan::New<FunctionTemplate>(New);
   NanAssignPersistent(constructor_template, tpl);
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
-  tpl->SetClassName(NanNew<String>("Org"));
+  tpl->SetClassName(Nan::New<String>("Org"));
 
-  tpl->PrototypeTemplate()->Set(NanNew<String>("lookupSync"),
-      NanNew<FunctionTemplate>(lookupSync)->GetFunction());
-  exports->Set(NanNew<String>("Org"), tpl->GetFunction());
+  tpl->PrototypeTemplate()->Set(Nan::New<String>("lookupSync"),
+      Nan::New<FunctionTemplate>(lookupSync)->GetFunction());
+  exports->Set(Nan::New<String>("Org"), tpl->GetFunction());
 }
 
 NAN_METHOD(Org::New) {
-  NanScope();
+  Nan::HandleScope scope;
 
   Org *o = new Org();
 
@@ -60,9 +60,9 @@ NAN_METHOD(Org::New) {
 }
 
 NAN_METHOD(Org::lookupSync) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  Local<Value> data = NanNew(NanNull());
+  Local<Value> data = Nan::New(NanNull());
   Org *o = ObjectWrap::Unwrap<Org>(args.This());
 
   static NanUtf8String *host_cstr = new NanUtf8String(args[0]);
@@ -79,7 +79,7 @@ NAN_METHOD(Org::lookupSync) {
 
   char *name = _GeoIP_iso_8859_1__utf8(org);
 
-  data = NanNew<String>(name);
+  data = Nan::New<String>(name);
 
   free(org);
   free(name);

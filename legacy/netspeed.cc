@@ -10,7 +10,7 @@
 Persistent<FunctionTemplate> native::NetSpeed::constructor_template;
 
 void native::NetSpeed::Init(Handle<Object> target) {
-  NanScope();
+  Nan::HandleScope scope;
 
   Local<FunctionTemplate> t = FunctionTemplate::New(New);
   NanAssignPersistent(FunctionTemplate, constructor_template, t);
@@ -34,7 +34,7 @@ native::NetSpeed::~NetSpeed() {
 };
 
 NAN_METHOD(native::NetSpeed::New) {
-  NanScope();
+  Nan::HandleScope scope;
   NetSpeed *n = new NetSpeed();
 
   String::Utf8Value file_str(args[0]->ToString());
@@ -63,12 +63,12 @@ NAN_METHOD(native::NetSpeed::New) {
 }
 
 NAN_METHOD(native::NetSpeed::lookupCellularSync) {
-  NanScope();
+  Nan::HandleScope scope;
 
   NetSpeed *n = ObjectWrap::Unwrap<NetSpeed>(args.This());
 
-  Local<Value> data = NanNewLocal<Value>(Null());
-  Local<String> host_str = NanNewLocal<String>(args[0]->ToString());
+  Local<Value> data = Nan::NewLocal<Value>(Null());
+  Local<String> host_str = Nan::NewLocal<String>(args[0]->ToString());
   char host_cstr[host_str->Length() + 1];
   NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, host_cstr, host_str->Length() + 1, v8::String::HINT_MANY_WRITES_EXPECTED);
 
@@ -84,12 +84,12 @@ NAN_METHOD(native::NetSpeed::lookupCellularSync) {
 }
 
 NAN_METHOD(native::NetSpeed::lookupSync) {
-  NanScope();
+  Nan::HandleScope scope;
 
   NetSpeed *n = ObjectWrap::Unwrap<NetSpeed>(args.This());
 
-  Local<Value> data = NanNewLocal<Value>(Null());
-  Local<String> host_str = NanNewLocal<String>(args[0]->ToString());
+  Local<Value> data = Nan::NewLocal<Value>(Null());
+  Local<String> host_str = Nan::NewLocal<String>(args[0]->ToString());
   char host_cstr[host_str->Length() + 1];
   NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, host_cstr, host_str->Length() + 1, v8::String::HINT_MANY_WRITES_EXPECTED);
 
@@ -117,12 +117,12 @@ NAN_METHOD(native::NetSpeed::lookupSync) {
 }
 
 NAN_METHOD(native::NetSpeed::lookup) {
-  NanScope();
+  Nan::HandleScope scope;
 
   REQ_FUN_ARG(1, cb);
 
   NetSpeed *n = ObjectWrap::Unwrap<NetSpeed>(args.This());
-  Local<String> host_str = NanNewLocal<String>(args[0]->ToString());
+  Local<String> host_str = Nan::NewLocal<String>(args[0]->ToString());
   char host_cstr[host_str->Length() + 1];
   NanFromV8String(args[0].As<Object>(), Nan::ASCII, NULL, host_cstr, host_str->Length() + 1, v8::String::HINT_MANY_WRITES_EXPECTED);
 
@@ -151,11 +151,11 @@ void native::NetSpeed::EIO_NetSpeed(uv_work_t *req)
 }
 
 void native::NetSpeed::EIO_AfterNetSpeed(uv_work_t *req) {
-  NanScope();
+  Nan::HandleScope scope;
 
   netspeed_baton_t *baton = static_cast<netspeed_baton_t *>(req->data);
 
-  Local<Value> data = NanNewLocal<Value>(Null());
+  Local<Value> data = Nan::NewLocal<Value>(Null());
   Handle<Value> argv[2];
 
   if (baton->netspeed < 0) {
@@ -192,7 +192,7 @@ void native::NetSpeed::EIO_AfterNetSpeed(uv_work_t *req) {
 NAN_METHOD(native::NetSpeed::update) {
   NanLocker();
 
-  NanScope();
+  Nan::HandleScope scope;
 
   NetSpeed *n = ObjectWrap::Unwrap<NetSpeed>(args.This());
 
