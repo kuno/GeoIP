@@ -102,9 +102,9 @@ namespace native {
                 db = NULL;
 
                 info.GetReturnValue().Set(edition);
+            } else {
+              return Nan::ThrowError("Error: Cannot open database");
             }
-
-            return Nan::ThrowError("Error: Cannot open database");
         }
     }
 }
