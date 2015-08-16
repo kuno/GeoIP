@@ -5,18 +5,17 @@ node_js:
   - "0.12"
   - "iojs"
 
-sudo: false
+before_install:
+  - sudo rm -rf /dev/shm
+  - sudo ln -Tsf /{run,dev}/shm
+  - sudo apt-get update -qq
+  - sudo apt-get install -qq wget gzip curl
 
-#before_install:
-#  - sudo rm -rf /dev/shm
-#  - sudo ln -Tsf /{run,dev}/shm
-#  - sudo apt-get update -qq
-#  - sudo apt-get install -qq wget gzip curl
-
-#
-addons:
-  apt:
-    packages:
-    - wget
-    - gzip
-    - curl
+# New docker container based tests
+#sudo: false
+#addons:
+#  apt:
+#    packages:
+#    - wget
+#    - gzip
+#    - curl
