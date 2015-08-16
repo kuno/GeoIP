@@ -51,6 +51,7 @@
     "mail": "neokuno@gmail.com",
     "url": "http://github.com/kuno/GeoIP/issues"
   },
+  "license": "LGPL-2.1",
   "main": "index.js",
   "directory": {
     "src": "./src",
