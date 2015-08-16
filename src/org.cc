@@ -63,7 +63,7 @@ NAN_METHOD(Org::New) {
 NAN_METHOD(Org::lookupSync) {
   Nan::HandleScope scope;
 
-  Local<Value> data = Nan::New(Nan::Null());
+  //Local<Value> data = Nan::New(Nan::Null());
   //Local<String> host_str = info[0]->ToString();
   //size_t size = host_str->Length() + 1;
   //char host_cstr[size];
@@ -85,7 +85,7 @@ NAN_METHOD(Org::lookupSync) {
 
   char *name = _GeoIP_iso_8859_1__utf8(org);
 
-  data = Nan::New<String>(name).ToLocalChecked();
+  Local<Value> data = Nan::New<String>(name).ToLocalChecked();
 
   free(org);
   free(name);
