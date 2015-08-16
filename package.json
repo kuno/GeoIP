@@ -36,7 +36,7 @@
   "devDependencies": {
     "chai": "~1.8.1",
     "mocha": "~1.14.0",
-    "pangyp": "^2.3.0",
+    "pangyp": "~2.3.0",
     "semver": "~2.2.1"
   },
   "repository": {
