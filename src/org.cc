@@ -29,7 +29,7 @@ void Org::Init(v8::Local<v8::Object> exports) {
       Nan::New<v8::FunctionTemplate>(lookupSync)->GetFunction());
 
   constructor.Reset(tpl->GetFunction());
-  exports->Set(Nan::New("Org").ToLocalChecked(), tpl->GetFunction());;
+  exports->Set(Nan::New("Org").ToLocalChecked(), tpl->GetFunction());;;
 }
 
 NAN_METHOD(Org::New) {
@@ -63,10 +63,15 @@ NAN_METHOD(Org::New) {
 NAN_METHOD(Org::lookupSync) {
   Nan::HandleScope scope;
 
+  Local<Value> data = Nan::New(Nan::Null());
+  //Local<String> host_str = info[0]->ToString();
+  //size_t size = host_str->Length() + 1;
+  //char host_cstr[size];
+  //size_t bc;
+  //NanCString(info[0], &bc, host_cstr, size);
   Org *o = ObjectWrap::Unwrap<Org>(info.This());
+  Nan::Utf8String host_cstr(info[0]->ToString());
 
-  //static Nan::Utf8String *host_cstr = new Nan::Utf8String(info[0]);
-  Nan::Utf8String host_cstr(info[0]);
   uint32_t ipnum = _GeoIP_lookupaddress(*host_cstr);
 
   if (ipnum <= 0) {
@@ -78,13 +83,12 @@ NAN_METHOD(Org::lookupSync) {
     info.GetReturnValue().SetNull();
   }
 
-  //char *name = _GeoIP_iso_8859_1__utf8(org);
+  char *name = _GeoIP_iso_8859_1__utf8(org);
 
-  //data = Nan::New<String>(_GeoIP_iso_8859_1__utf8(org)).ToLocalChecked();
+  data = Nan::New<String>(name).ToLocalChecked();
 
   free(org);
-  //free(name);
+  free(name);
 
-  info.GetReturnValue().Set(
-    Nan::New<String>(_GeoIP_iso_8859_1__utf8(org)).ToLocalChecked());
+  info.GetReturnValue().Set(data);
 }
