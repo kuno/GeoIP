@@ -63,9 +63,9 @@ NAN_METHOD(NetSpeedCell::lookupSync) {
 
   NetSpeedCell *n = ObjectWrap::Unwrap<NetSpeedCell>(info.This());
 
-  static Nan::Utf8String *host_cstr = new Nan::Utf8String(info[0]);
-
-  char *speed = GeoIP_name_by_addr(n->db, **host_cstr);
+  //static Nan::Utf8String *host_cstr = new Nan::Utf8String(info[0]);
+  Nan::Utf8String host_cstr(info[0]);
+  char *speed = GeoIP_name_by_addr(n->db, *host_cstr);
 
   if (!speed) {
     info.GetReturnValue().Set(Nan::New<String>("Unknown").ToLocalChecked());

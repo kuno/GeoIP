@@ -65,17 +65,18 @@ NAN_METHOD(NetSpeed::lookupSync) {
 
     NetSpeed *n = ObjectWrap::Unwrap<NetSpeed>(info.This());
 
-    static Nan::Utf8String *host_cstr = new Nan::Utf8String(info[0]);
-    uint32_t ipnum = _GeoIP_lookupaddress(**host_cstr);
+    //static Nan::Utf8String *host_cstr = new Nan::Utf8String(info[0]);
+    Nan::Utf8String host_cstr(info[0]);
+    uint32_t ipnum = _GeoIP_lookupaddress(*host_cstr);
 
     if (ipnum <= 0) {
-        info.GetReturnValue().Set(Nan::Null());
+        info.GetReturnValue().SetNull();
     }
 
     int netspeed = GeoIP_id_by_ipnum(n->db, ipnum);
 
     if (netspeed < 0) {
-        info.GetReturnValue().Set(Nan::Null());
+        info.GetReturnValue().SetNull();
     } else if (netspeed == GEOIP_UNKNOWN_SPEED) {
         info.GetReturnValue().Set(Nan::New<String>("Unknown").ToLocalChecked());
     } else if (netspeed == GEOIP_DIALUP_SPEED) {
