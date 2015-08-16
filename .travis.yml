@@ -7,8 +7,16 @@ node_js:
 
 sudo: false
 
-before_install:
-  - rm -rf /dev/shm
-  - ln -Tsf /{run,dev}/shm
-  - apt-get update -qq
-  - apt-get install -qq wget gzip curl
+#before_install:
+#  - sudo rm -rf /dev/shm
+#  - sudo ln -Tsf /{run,dev}/shm
+#  - sudo apt-get update -qq
+#  - sudo apt-get install -qq wget gzip curl
+
+#
+addons:
+  apt:
+    packages:
+    - wget
+    - gzip
+    - curl
