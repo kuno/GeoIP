@@ -31,7 +31,18 @@
         ['OS=="win"', {
           'defines': [
             '_WIN32=1'
-            ]
+            ],
+            'msvs_settings': {
+            'VCCLCompilerTool': {
+              'ExceptionHandling': 1,
+              'AdditionalOptions': [
+                '/EHsc' # ExceptionHandling=1 is not enough
+              ]
+            }
+          },
+          'libraries': [
+            '-lWs2_32.lib',
+          ]
         }]
       ]
     },
