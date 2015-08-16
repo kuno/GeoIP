@@ -17,29 +17,30 @@ NetSpeed::~NetSpeed() {
     }
 };
 
-Persistent<FunctionTemplate> NetSpeed::constructor_template;
+Nan::Persistent<v8::Function> NetSpeed::constructor;
 
-void NetSpeed::Init(Handle<Object> exports) {
-    NanScope();
+void NetSpeed::Init(v8::Local<v8::Object> exports) {
+    Nan::HandleScope scope;
 
-    Local<FunctionTemplate> tpl = NanNew<FunctionTemplate>(New);
-    NanAssignPersistent(constructor_template, tpl);
+    v8::Local<v8::FunctionTemplate> tpl = Nan::New<v8::FunctionTemplate>(New);
+    tpl->SetClassName(Nan::New("NetSpeed").ToLocalChecked());
     tpl->InstanceTemplate()->SetInternalFieldCount(1);
-    tpl->SetClassName(NanNew<String>("NetSpeed"));
 
-    tpl->PrototypeTemplate()->Set(NanNew<String>("lookupSync"),
-            NanNew<FunctionTemplate>(lookupSync)->GetFunction());
-    exports->Set(NanNew<String>("NetSpeed"), tpl->GetFunction());
+    tpl->PrototypeTemplate()->Set(Nan::New("lookupSync").ToLocalChecked(),
+        Nan::New<v8::FunctionTemplate>(lookupSync)->GetFunction());
+
+    constructor.Reset(tpl->GetFunction());
+    exports->Set(Nan::New("NetSpeed").ToLocalChecked(), tpl->GetFunction());
 }
 
 NAN_METHOD(NetSpeed::New) {
-    NanScope();
+    Nan::HandleScope scope;
 
     NetSpeed *n = new NetSpeed();
 
-    String::Utf8Value file_str(args[0]->ToString());
+    String::Utf8Value file_str(info[0]->ToString());
     const char * file_cstr = ToCString(file_str);
-    bool cache_on = args[1]->ToBoolean()->Value();
+    bool cache_on = info[1]->ToBoolean()->Value();
 
     n->db = GeoIP_open(file_cstr, cache_on ? GEOIP_MEMORY_CACHE : GEOIP_STANDARD);
 
@@ -47,45 +48,41 @@ NAN_METHOD(NetSpeed::New) {
         n->db_edition = GeoIP_database_edition(n->db);
         if (n->db_edition == GEOIP_NETSPEED_EDITION ||
                 n->db_edition == GEOIP_NETSPEED_EDITION_REV1) {
-            n->Wrap(args.This());
-            NanReturnValue(args.This());
+            n->Wrap(info.This());
+            info.GetReturnValue().Set(info.This());
         } else {
             GeoIP_delete(n->db);  // free()'s the reference & closes fd
-            return NanThrowError("Error: Not valid netspeed database");
+            return Nan::ThrowError("Error: Not valid netspeed database");
         }
     } else {
-        return NanThrowError("Error: Cannot open database");
+        return Nan::ThrowError("Error: Cannot open database");
     }
 }
 
 
 NAN_METHOD(NetSpeed::lookupSync) {
-    NanScope();
+    Nan::HandleScope scope;
 
-    NetSpeed *n = ObjectWrap::Unwrap<NetSpeed>(args.This());
+    NetSpeed *n = ObjectWrap::Unwrap<NetSpeed>(info.This());
 
-    Local<Value> data = NanNew(NanNull());
-    
-    static NanUtf8String *host_cstr = new NanUtf8String(args[0]);
+    static Nan::Utf8String *host_cstr = new Nan::Utf8String(info[0]);
     uint32_t ipnum = _GeoIP_lookupaddress(**host_cstr);
 
     if (ipnum <= 0) {
-        NanReturnValue(NanNull());
+        info.GetReturnValue().Set(Nan::Null());
     }
 
     int netspeed = GeoIP_id_by_ipnum(n->db, ipnum);
 
     if (netspeed < 0) {
-        NanReturnValue(NanNull());
+        info.GetReturnValue().Set(Nan::Null());
     } else if (netspeed == GEOIP_UNKNOWN_SPEED) {
-        data = NanNew<String>("Unknown");
+        info.GetReturnValue().Set(Nan::New<String>("Unknown").ToLocalChecked());
     } else if (netspeed == GEOIP_DIALUP_SPEED) {
-        data = NanNew<String>("Dialup");
+        info.GetReturnValue().Set(Nan::New<String>("Dialup").ToLocalChecked());
     } else if (netspeed == GEOIP_CABLEDSL_SPEED) {
-        data = NanNew<String>("CableDSL");
+        info.GetReturnValue().Set(Nan::New<String>("CableDSL").ToLocalChecked());
     } else if (netspeed == GEOIP_CORPORATE_SPEED) {
-        data = NanNew<String>("Corporate");
+        info.GetReturnValue().Set(Nan::New<String>("Corporate").ToLocalChecked());
     }
-
-    NanReturnValue(data);
 }

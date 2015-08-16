@@ -31,11 +31,12 @@
     "bindings": "~1.2.1",
     "debug": "~2.2.0",
     "is-object": "~1.0.1",
-    "nan": "~1.9.0"
+    "nan": "~2.0.5"
   },
   "devDependencies": {
-    "mocha": "~1.14.0",
     "chai": "~1.8.1",
+    "mocha": "~1.14.0",
+    "pangyp": "^2.3.0",
     "semver": "~2.2.1"
   },
   "repository": {
@@ -59,7 +60,10 @@
     "sample": "./sample",
     "benchmark": "./benchmark"
   },
-  "os": ["linux", "darwin"],
+  "os": [
+    "linux",
+    "darwin"
+  ],
   "engine": {
     "node": ">=0.8.0",
     "npm": "1"

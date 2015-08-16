@@ -10,23 +10,24 @@
 namespace native {
     namespace utils {
         NAN_METHOD(isString) {
-            NanScope();
+            Nan::HandleScope scope;
 
-            Local<Boolean> result = NanNew(args[0].As<Object>()->IsString() ? NanTrue() : NanFalse());
+            //Local<Boolean> result = Nan::New(info[0].As<Object>()->IsString() ? Nan::True() : Nan::False());
 
-            NanReturnValue(result);
+            info.GetReturnValue().Set(info[0].As<Object>()->IsString() ? Nan::True() : Nan::False());
         }
 
         NAN_METHOD(check) {
-            NanScope();
+            Nan::HandleScope scope;
 
-            Local<Value> edition = NanNew(NanNull());
-            Local<String> file_str = args[0]->ToString();
-            size_t size = file_str->Length() + 1;
-            char file_cstr[size];
-            size_t bc;
-            NanCString(args[0], &bc, file_cstr, size);
+            //Local<Value> edition = Nan::New(Nan::Null());
+            String::Utf8Value file_str(info[0]->ToString());
+            //size_t size = file_str->Length() + 1;
+            //char file_cstr[size];
+            //size_t bc;
+            //NanCString(info[0], &bc, file_cstr, size);
 
+            const char * file_cstr = ToCString(file_str);
             GeoIP *db = GeoIP_open(file_cstr, GEOIP_STANDARD);
 
             if (db) {
@@ -34,76 +35,75 @@ namespace native {
 
                 switch(db_edition) {
                     case GEOIP_COUNTRY_EDITION:
-                        edition = NanNew<String>("country");
+                        info.GetReturnValue().Set(Nan::New<String>("country").ToLocalChecked());
                         break;
 
                     case GEOIP_COUNTRY_EDITION_V6:
-                        edition = NanNew<String>("country_v6");
+                        info.GetReturnValue().Set(Nan::New<String>("country_v6").ToLocalChecked());
                         break;
 
                     case GEOIP_CITY_EDITION_REV0:
-                        edition = NanNew<String>("city");
+                        info.GetReturnValue().Set(Nan::New<String>("city").ToLocalChecked());
                         break;
 
                     case GEOIP_CITY_EDITION_REV1:
-                        edition = NanNew<String>("city");
+                        info.GetReturnValue().Set(Nan::New<String>("city").ToLocalChecked());
                         break;
 
                     case GEOIP_CITY_EDITION_REV0_V6:
-                        edition = NanNew<String>("city_v6");
+                        info.GetReturnValue().Set(Nan::New<String>("city_v6").ToLocalChecked());
                         break;
 
                     case GEOIP_CITY_EDITION_REV1_V6:
-                        edition = NanNew<String>("city_v6");
+                        info.GetReturnValue().Set(Nan::New<String>("city_v6").ToLocalChecked());
                         break;
 
                     case GEOIP_REGION_EDITION_REV0:
-                        edition = NanNew<String>("region");
+                        info.GetReturnValue().Set(Nan::New<String>("region").ToLocalChecked());
                         break;
 
                     case GEOIP_REGION_EDITION_REV1:
-                        edition = NanNew<String>("region");
+                        info.GetReturnValue().Set(Nan::New<String>("region").ToLocalChecked());
                         break;
 
                     case GEOIP_ORG_EDITION:
-                        edition = NanNew<String>("org");
+                        info.GetReturnValue().Set(Nan::New<String>("org").ToLocalChecked());
                         break;
 
                     case GEOIP_ISP_EDITION:
-                        edition = NanNew<String>("isp");
+                        info.GetReturnValue().Set(Nan::New<String>("isp").ToLocalChecked());
                         break;
 
                     case GEOIP_ASNUM_EDITION:
-                        edition = NanNew<String>("asnum");
+                        info.GetReturnValue().Set(Nan::New<String>("asnum").ToLocalChecked());
                         break;
 
                     case GEOIP_PROXY_EDITION:
-                        edition = NanNew<String>("proxy");
+                        info.GetReturnValue().Set(Nan::New<String>("proxy").ToLocalChecked());
                         break;
 
                     case GEOIP_NETSPEED_EDITION:
-                        edition = NanNew<String>("netspeed");
+                        info.GetReturnValue().Set(Nan::New<String>("netspeed").ToLocalChecked());
                         break;
 
                     case GEOIP_NETSPEED_EDITION_REV1:
-                        edition = NanNew<String>("netspeed cellular");
+                        info.GetReturnValue().Set(Nan::New<String>("netspeed cellular").ToLocalChecked());
                         break;
 
                     case GEOIP_DOMAIN_EDITION:
-                        edition = NanNew<String>("domain");
+                        info.GetReturnValue().Set(Nan::New<String>("domain").ToLocalChecked());
                         break;
 
                     default:
-                        edition = NanNew<String>("unknown");
+                        info.GetReturnValue().Set(Nan::New<String>("unknown").ToLocalChecked());
                 }
 
                 GeoIP_delete(db);
                 db = NULL;
 
-                NanReturnValue(edition);
+            } else {
+              return Nan::ThrowError("Error: Cannot open database");
             }
-
-            return NanThrowError("Error: Cannot open database");
         }
     }
 }

@@ -25,14 +25,14 @@ namespace native {
 
       int db_edition;
 
-      static Persistent<FunctionTemplate> constructor_template;
+      static Nan::Persistent<v8::Function> constructor;
 
       static NAN_METHOD(New);
 
       static NAN_METHOD(lookupSync);
 
     public:
-      static void Init(Handle<Object> exports);
+      static void Init(v8::Local<v8::Object> exports);
   };
 
 }

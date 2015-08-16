@@ -14,7 +14,7 @@ var geoip = require('geoip');
 var Country = geoip.Country;
 var country = new Country('/path/to/GeoIP.dat');
 
-// Synchronous method(the recommended way):
+// Synchronous method:
 var country_obj = country.lookupSync('8.8.8.8');
 
 console.log(country_obj);
