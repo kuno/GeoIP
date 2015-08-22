@@ -197,12 +197,12 @@ more.
 ## v0.5.9, 2015-05-07
 1, Release for iojs 2.0.0
 
-## v0.5.10, 2015-08-16
-1, Deprecated support for nodejs 0.8.x
+~~## v0.5.10, 2015-08-16~~
+~~1, Deprecated support for nodejs 0.8.x~~
 
-2, Update libgeoip to v1.6.6
+~~2, Update libgeoip to v1.6.6~~
 
-3, Update nan to v2.0.5
+~~3, Update nan to v2.0.5~~
 
-## v0.5.11, 2015-08-16
-1, Fixed segmentation fault on org module
+~~## v0.5.11, 2015-08-16~~
+~~1, Fixed segmentation fult on org module~~
