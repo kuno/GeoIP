@@ -1,4 +1,4 @@
 --require chai
 --reporter spec
---timeout 20000
+--timeout 30000
 --slow 600
