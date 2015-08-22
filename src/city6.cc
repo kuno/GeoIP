@@ -66,9 +66,9 @@ NAN_METHOD(City6::lookupSync) {
   Local<Object> data = Nan::New<Object>();
   City6 *c = ObjectWrap::Unwrap<City6>(info.This());
 
-  //static Nan::Utf8String *host_cstr = new Nan::Utf8String(info[0]);
-  Nan::Utf8String host_cstr(info[0]);
-  geoipv6_t ipnum_v6 = _GeoIP_lookupaddress_v6(*host_cstr);
+  static Nan::Utf8String *host_cstr = new Nan::Utf8String(info[0]);
+  //Nan::Utf8String host_cstr(info[0]);
+  geoipv6_t ipnum_v6 = _GeoIP_lookupaddress_v6(**host_cstr);
 
   if (__GEOIP_V6_IS_NULL(ipnum_v6)) {
     info.GetReturnValue().SetNull();

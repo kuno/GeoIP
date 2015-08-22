@@ -70,9 +70,10 @@ NAN_METHOD(Org::lookupSync) {
   //size_t bc;
   //NanCString(info[0], &bc, host_cstr, size);
   Org *o = ObjectWrap::Unwrap<Org>(info.This());
-  Nan::Utf8String host_cstr(info[0]->ToString());
+  //Nan::Utf8String host_cstr(info[0]->ToString());
+  static Nan::Utf8String *host_cstr = new Nan::Utf8String(info[0]);
 
-  uint32_t ipnum = _GeoIP_lookupaddress(*host_cstr);
+  uint32_t ipnum = _GeoIP_lookupaddress(**host_cstr);
 
   if (ipnum <= 0) {
     info.GetReturnValue().SetNull();

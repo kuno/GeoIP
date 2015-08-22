@@ -161,6 +161,7 @@ extern "C" GEOIP_API const char * GeoIP_lib_version(void); // requried libgeoip 
 extern "C" GeoIPRecord * GeoIP_record_by_addr (GeoIP * gi, const char * addr);
 extern "C" GeoIPRecord * GeoIP_record_by_name (GeoIP * gi, const char * host);
 
+extern "C" GeoIPRecord * GeoIP_record_by_ipnum(GeoIP * gi, unsigned long ipnum);
 extern "C" GeoIPRecord * GeoIP_record_by_ipnum_v6 (GeoIP* gi, geoipv6_t ipnum);
 
 #ifdef __cplusplus

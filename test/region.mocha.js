@@ -1,5 +1,6 @@
 var warning = require('debug')('geoip:test:region:warning');
 var semver = require('semver');
+var randomip = require('random-ip');
 // memwatch only works with node 0.6.x ~ 0.10.x
 if (semver.gte(process.version, '0.6.0') && semver.lt(process.version, '0.11.0')) {
     require('memwatch').on('leak', function(info) {
@@ -90,6 +91,18 @@ describe('Region', function() {
                     setTimeout(done, 1);
                 });
             });
+        });
+
+        describe('Test random IPs', function() {
+          it('should not crash for 100000 v4 IPs', function (done) {
+            for (var i = 0; i < 100000; ++i) {
+              var ip = randomip('0.0.0.0', 0);
+              //console.log(ip);
+              var addr = instance.lookupSync(ip);
+              //console.log(addr);
+            }
+              setTimeout(done, 1);
+          });
         });
 
         describe('Update database on the fly', function() {

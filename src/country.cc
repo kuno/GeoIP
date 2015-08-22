@@ -65,11 +65,10 @@ NAN_METHOD(Country::lookupSync) {
   Country *c = ObjectWrap::Unwrap<Country>(info.This());
 
   Local<Object> data = Nan::New<Object>();
-  //v8::Local<v8::Object> data = Nan::New<v8::Object>();
 
-  //static Nan::Utf8String *host_cstr = new Nan::Utf8String(info[0]);
-  Nan::Utf8String host_cstr(info[0]);
-  uint32_t ipnum = _GeoIP_lookupaddress(*host_cstr);
+  static Nan::Utf8String *host_cstr = new Nan::Utf8String(info[0]);
+  //Nan::Utf8String host_cstr(info[0]);
+  uint32_t ipnum = _GeoIP_lookupaddress(**host_cstr);
 
   if (ipnum <= 0) {
     info.GetReturnValue().SetNull();
