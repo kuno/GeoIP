@@ -94,8 +94,8 @@ describe('City6', function() {
         });
 
         describe('Test random IPs', function() {
-          it('should not crash for 1000 v6 IPs', function (done) {
-            for (var i = 0; i < 1000; ++i) {
+          it('should not crash for 2000 v6 IPs', function (done) {
+            for (var i = 0; i < 2000; ++i) {
               var ip = randomip(':', 0);
               //console.log(ip);
               var addr = instance.lookupSync(ip);
