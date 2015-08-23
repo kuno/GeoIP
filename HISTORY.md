@@ -206,3 +206,12 @@ more.
 
 ~~## v0.5.11, 2015-08-16~~
 ~~1, Fixed segmentation fult on org module~~
+
+## v0.6.0, 2015-08-23
+1, Update libgeoip to v1.6.6
+
+2, Update nan to v2.0.5
+
+3, Deprecated support for nodejs 0.8.x
+
+4, I want a bigger versining number
