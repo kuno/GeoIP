@@ -65,9 +65,10 @@ NAN_METHOD(NetSpeed::lookupSync) {
 
     NetSpeed *n = ObjectWrap::Unwrap<NetSpeed>(info.This());
 
-    static Nan::Utf8String *host_cstr = new Nan::Utf8String(info[0]);
-    //Nan::Utf8String host_cstr(info[0]);
-    uint32_t ipnum = _GeoIP_lookupaddress(**host_cstr);
+    //static Nan::Utf8String *host_cstr = new Nan::Utf8String(info[0]);
+    Nan::Utf8String host_cstr(info[0]);
+    //uint32_t ipnum = _GeoIP_lookupaddress(**host_cstr);
+    uint32_t ipnum = _GeoIP_lookupaddress(*host_cstr);
 
     if (ipnum <= 0) {
         info.GetReturnValue().SetNull();
