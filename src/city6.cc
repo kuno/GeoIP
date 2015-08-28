@@ -80,6 +80,7 @@ NAN_METHOD(City6::lookupSync) {
 
   if (!record) {
     info.GetReturnValue().SetNull();
+    return;
   }
 
   if (record->country_code) {
