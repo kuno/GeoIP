@@ -35,10 +35,10 @@
     "pangyp": "~2.3.0"
   },
   "devDependencies": {
-    "chai": "~1.8.1",
-    "mocha": "~1.14.0",
+    "chai": "~3.2.0",
+    "mocha": "~2.2.5",
     "random-ip": "0.0.1",
-    "semver": "~2.2.1"
+    "semver": "~5.0.1"
   },
   "repository": {
     "type": "git",
