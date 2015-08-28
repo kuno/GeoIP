@@ -64,10 +64,12 @@ NAN_METHOD(City::lookupSync) {
   City *c = ObjectWrap::Unwrap<City>(info.This());
 
   Local<Object> data = Nan::New<Object>();
-  static Nan::Utf8String *host_cstr = new Nan::Utf8String(info[0]);
+  //static Nan::Utf8String *host_cstr = new Nan::Utf8String(info[0]);
+  Nan::Utf8String host_cstr(info[0]);
   //printf("\nHost CStr is %s.\n", **host_cstr);
 
-  uint32_t ipnum = _GeoIP_lookupaddress(**host_cstr);
+  //uint32_t ipnum = _GeoIP_lookupaddress(**host_cstr);
+  uint32_t ipnum = _GeoIP_lookupaddress(*host_cstr);
   //printf("Ipnum is %d.", ipnum);
 
   if (ipnum == 0) {
@@ -78,6 +80,7 @@ NAN_METHOD(City::lookupSync) {
 
   if (!record) {
     info.GetReturnValue().SetNull();
+    return;
   }
 
   if (record->country_code) {
