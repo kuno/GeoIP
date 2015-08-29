@@ -215,3 +215,10 @@ more.
 3, Deprecated support for nodejs 0.8.x
 
 4, I want a bigger versining number
+
+## v0.6.1, 2015-08-29
+1, Fixed lookupSync bug (Dan Kang)
+
+2, Fix: segmentation fault (Dan Kang)
+
+3, Imporved tests on Travis-CI
