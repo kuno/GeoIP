@@ -62,6 +62,14 @@ describe('Country', function() {
             it('should can find location by ip address', function(done) {
                 var data = instance.lookupSync('8.8.8.8');
                 data.should.be.a('object');
+                data.country_code.should.equals('US');
+                setTimeout(done, 1);
+            });
+
+            it('should can find location by ip address', function(done) {
+                var data = instance.lookupSync('168.126.63.1');
+                data.should.be.a('object');
+                data.country_code.should.equals('KR');
                 setTimeout(done, 1);
             });
         });
