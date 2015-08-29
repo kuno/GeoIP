@@ -25,7 +25,8 @@
     "William Cummings <will@wpc.io>",
     "Nicolas Fouché <nicolas.fouche@gmail.com>",
     "Rémy Coutable <remy@rymai.me>",
-    "Ilkka Myller <ilkka@myller.com>"
+    "Ilkka Myller <ilkka@myller.com>",
+    "Dan Kang <dann.kang@gmail.com>"
   ],
   "dependencies": {
     "bindings": "~1.2.1",
