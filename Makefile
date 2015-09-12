@@ -1,9 +1,9 @@
-install: install_memwatch
+install: nodejs
 	@npm install
 iojs:
 	@NODE_ENV=development bash ./cli/iojs.sh
-install_memwatch:
-	@NODE_ENV=development bash ./cli/install_memwatch.sh
+nodejs:
+	@NODE_ENV=development bash ./cli/nodejs.sh
 rebuild: iojs install
 	@NODE_ENV=development ./node_modules/.bin/pangyp rebuild --verbose
 bootstrap: install
