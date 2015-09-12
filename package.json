@@ -33,7 +33,8 @@
     "debug": "~2.2.0",
     "is-object": "~1.0.1",
     "nan": "~2.0.9",
-    "pangyp": "~2.3.0"
+    "pangyp": "~2.3.0",
+    "node-gyp": "^3.0.2"
   },
   "devDependencies": {
     "chai": "~3.2.0",
@@ -74,6 +75,5 @@
   "scripts": {
     "build": "make rebuild",
     "test": "make test"
-  },
-  "license": "LGPL-2.1"
+  }
 }
