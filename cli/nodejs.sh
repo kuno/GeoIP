@@ -18,5 +18,5 @@ fi
 # development files
 if [[ ! -e "$HOME/.node-gyp/${NODE_VERSION}/common.gypi" ]]; then
     echo "Going to fetch development files"
-    node-gyp install ${NODE_VERSION}
+    node ./node_modules/.bin/pangyp install ${NODE_VERSION};
 fi
