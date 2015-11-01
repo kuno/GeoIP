@@ -1,4 +1,4 @@
-check_PROGRAMS = test-geoip
+check_PROGRAMS = test-geoip test-geoip-invalid-file
 
 noinst_PROGRAMS = benchmark test-geoip-region test-geoip-city test-geoip-org test-geoip-domain test-geoip-asnum test-geoip-isp test-geoip-netspeed
 
@@ -9,12 +9,14 @@ EXTRA_PROGRAMS = benchmark \
                  test-geoip-domain \
 		 test-geoip-asnum \
 		 test-geoip-isp \
-		 test-geoip-netspeed 
+		 test-geoip-netspeed
 
 LDADD = $(top_builddir)/libGeoIP/libGeoIP.la
 AM_CPPFLAGS = -I$(top_srcdir)/libGeoIP -DSRCDIR=\"$(top_srcdir)\" -Wall
 
 test_geoip_SOURCES = test-geoip.c
+
+test_geoip_invalid_file_SOURCES = test-geoip-invalid-file.c
 
 test_geoip_region_SOURCES = test-geoip-region.c
 
@@ -32,5 +34,5 @@ test_geoip_city_SOURCES = test-geoip-city.c
 
 benchmark_SOURCES = benchmark.c
 
-EXTRA_DIST = Makefile.vc city_test.txt country_test.txt country_test2.txt country_test_name.txt region_test.txt 
-TESTS = test-geoip
+EXTRA_DIST = Makefile.vc city_test.txt country_test.txt country_test2.txt country_test_name.txt region_test.txt
+TESTS = test-geoip test-geoip-invalid-file

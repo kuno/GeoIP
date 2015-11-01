@@ -1,7 +1,7 @@
 dnl AM_CONFIG_HEADER(config.h)
 
 AC_PREREQ([2.65])
-AC_INIT([GeoIP], [1.6.6],[support@maxmind.com],[GeoIP])
+AC_INIT([GeoIP], [1.6.7],[support@maxmind.com],[GeoIP])
 AC_CONFIG_AUX_DIR([.])
 AC_CONFIG_SRCDIR([libGeoIP/GeoIP.c])
 AC_CONFIG_MACRO_DIR([m4])
@@ -60,7 +60,8 @@ AS_IF([test "x$enable_data_files" != xno],
 
 case $host_os in
     mingw* )
-        LDFLAGS="$LDFLAGS -lwsock32 -lws2_32"
+        # To do: Check for and add -Wl,--high-entropy-va if it's supported.
+        LDFLAGS="$LDFLAGS -lwsock32 -lws2_32 -Wl,--dynamicbase -Wl,--nxcompat"
         ;;
 esac
 

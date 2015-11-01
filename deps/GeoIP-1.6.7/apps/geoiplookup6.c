@@ -150,7 +150,6 @@ geoiplookup(GeoIP * gi, char *hostname, int i)
                 printf("%s: IP Address not found\n", GeoIPDBDescription[i]);
             }else {
                 printf("%s: %s\n", GeoIPDBDescription[i], asnum_name);
-                //  _say_range_by_ip(gi, ipnum);
             }
         }else if (GEOIP_CITY_EDITION_REV0_V6 == i) {
             gir = GeoIP_record_by_ipnum_v6(gi, ipnum);

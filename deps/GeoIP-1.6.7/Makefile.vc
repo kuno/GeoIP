@@ -12,7 +12,7 @@ GEOIPDATADIR="C:\\Windows\\SYSTEM32"
 #
 # System inc, lib, and bin directories
 !ifndef INSTDIR
-INSTDIR="C:\GeoIP-1.4.5"
+INSTDIR="C:\GeoIP"
 !endif
 
 # Location where GeoIP.lib should be installed my "make install"
@@ -78,7 +78,7 @@ install: $(GEOIP_LIB) app_progs
    cd ..
 
 clean:
-   del $(LIB_DIR)\*.obj $(LIB_DIR)\*.lib
+   del $(LIB_DIR)\*.obj $(LIB_DIR)\*.lib $(LIB_DIR)\*.dll
    del $(APP_DIR)\*.obj $(APP_DIR)\*.exe
    del $(TEST_DIR)\*.obj $(TEST_DIR)\*.exe
 

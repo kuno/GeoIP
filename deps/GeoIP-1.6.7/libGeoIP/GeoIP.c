@@ -872,7 +872,7 @@ char * _GeoIP_iso_8859_1__utf8(const char * iso)
     if (p) {
         while ( ( c = *iso++ ) ) {
             if (c < 0) {
-                k = 0xc2;
+                k = (char) 0xc2;
                 if (c >= -64) {
                     k++;
                 }
@@ -959,7 +959,7 @@ static void _setup_segments(GeoIP * gi)
     int i, j, segment_record_length;
     unsigned char delim[3];
     unsigned char buf[LARGE_SEGMENT_RECORD_LENGTH];
-    ssize_t silence _UNUSED;
+
     int fno = fileno(gi->GeoIPDatabase);
 
     gi->databaseSegments = NULL;
@@ -971,9 +971,13 @@ static void _setup_segments(GeoIP * gi)
         return;
     }
     for (i = 0; i < STRUCTURE_INFO_MAX_SIZE; i++) {
-        silence = read(fno, delim, 3);
+        if (read(fno, delim, 3) != 3) {
+            return;
+        }
         if (delim[0] == 255 && delim[1] == 255 && delim[2] == 255) {
-            silence = read(fno, &gi->databaseType, 1 );
+            if (read(fno, &gi->databaseType, 1) != 1) {
+                return;
+            }
             if (gi->databaseType >= 106) {
                 /* backwards compatibility with databases from April 2003 and earlier */
                 gi->databaseType -= 105;
@@ -1027,7 +1031,12 @@ static void _setup_segments(GeoIP * gi)
                 gi->databaseSegments[0] = 0;
                 segment_record_length = SEGMENT_RECORD_LENGTH;
 
-                silence = read(fno, buf, segment_record_length );
+                if (read(fno, buf,
+                         segment_record_length) != segment_record_length) {
+                    free(gi->databaseSegments);
+                    gi->databaseSegments = NULL;
+                    return;
+                }
                 for (j = 0; j < segment_record_length; j++) {
                     gi->databaseSegments[0] += (buf[j] << (j * 8));
                 }
@@ -1206,7 +1215,7 @@ void _check_mtime(GeoIP *gi)
                         gi->index_cache, sizeof(unsigned char) * idx_size );
                     if (gi->index_cache != NULL) {
                         if (pread(fileno(gi->GeoIPDatabase), gi->index_cache,
-                                  idx_size, 0 ) != idx_size) {
+                                  idx_size, 0) != idx_size) {
                             DEBUG_MSGF(
                                 gi->flags,
                                 "Error reading file %s where reloading\n",
@@ -1234,22 +1243,31 @@ unsigned int _GeoIP_seek_record_v6_gl(GeoIP *gi, geoipv6_t ipnum,
 
     const unsigned char * p;
     int j;
-    ssize_t silence _UNUSED;
     int fno = fileno(gi->GeoIPDatabase);
+
+    unsigned int record_pair_length = gi->record_length * 2;
+
     _check_mtime(gi);
     if (GeoIP_teredo(gi) ) {
         __GEOIP_PREPARE_TEREDO(&ipnum);
     }
     for (depth = 127; depth >= 0; depth--) {
+        unsigned int byte_offset = record_pair_length * offset;
+        if (byte_offset > gi->size - record_pair_length) {
+            /* The pointer is invalid */
+            break;
+        }
         if (gi->cache == NULL && gi->index_cache == NULL) {
             /* read from disk */
-            silence = pread(fno, stack_buffer, gi->record_length * 2,
-                            (long)gi->record_length * 2 * offset );
+            if (pread(fno, stack_buffer, record_pair_length,
+                      (long)byte_offset) != record_pair_length) {
+                break;
+            }
         } else if (gi->index_cache == NULL) {
             /* simply point to record in memory */
-            buf = gi->cache + (long)gi->record_length * 2 * offset;
+            buf = gi->cache + (long)byte_offset;
         } else {
-            buf = gi->index_cache + (long)gi->record_length * 2 * offset;
+            buf = gi->index_cache + (long)byte_offset;
         }
 
         if (GEOIP_CHKBIT_V6(depth, ipnum.s6_addr )) {
@@ -1325,22 +1343,31 @@ unsigned int _GeoIP_seek_record_gl(GeoIP *gi, unsigned long ipnum,
     unsigned char stack_buffer[2 * MAX_RECORD_LENGTH];
     const unsigned char *buf = (gi->cache == NULL) ? stack_buffer : NULL;
     unsigned int offset = 0;
-    ssize_t silence _UNUSED;
 
     const unsigned char * p;
     int j;
     int fno = fileno(gi->GeoIPDatabase);
+
+    unsigned int record_pair_length = gi->record_length * 2;
+
     _check_mtime(gi);
     for (depth = 31; depth >= 0; depth--) {
+        unsigned int byte_offset = record_pair_length * offset;
+        if (byte_offset > gi->size - record_pair_length) {
+            /* The pointer is invalid */
+            break;
+        }
         if (gi->cache == NULL && gi->index_cache == NULL) {
             /* read from disk */
-            silence = pread(fno, stack_buffer, gi->record_length * 2,
-                            gi->record_length * 2 * offset);
+            if (pread(fno, stack_buffer, record_pair_length,
+                      byte_offset) != record_pair_length) {
+                break;
+            }
         } else if (gi->index_cache == NULL) {
             /* simply point to record in memory */
-            buf = gi->cache + (long)gi->record_length * 2 * offset;
+            buf = gi->cache + (long)byte_offset;
         } else {
-            buf = gi->index_cache + (long)gi->record_length * 2 * offset;
+            buf = gi->index_cache + (long)byte_offset;
         }
 
         if (ipnum & (1 << depth)) {
@@ -1508,9 +1535,10 @@ GeoIP * GeoIP_open(const char * filename, int flags)
         free(gi);
         return NULL;
     }
+
+    gi->size = buf.st_size;
     if (flags & (GEOIP_MEMORY_CACHE | GEOIP_MMAP_CACHE) ) {
         gi->mtime = buf.st_mtime;
-        gi->size = buf.st_size;
 
         /* MMAP added my Peter Shipley */
         if (flags & GEOIP_MMAP_CACHE) {
@@ -1999,7 +2027,7 @@ char *GeoIP_database_info(GeoIP * gi)
     unsigned char buf[3];
     char *retval;
     int hasStructureInfo = 0;
-    ssize_t silence _UNUSED;
+
     int fno;
 
     if (gi == NULL) {
@@ -2015,7 +2043,9 @@ char *GeoIP_database_info(GeoIP * gi)
 
     /* first get past the database structure information */
     for (i = 0; i < STRUCTURE_INFO_MAX_SIZE; i++) {
-        silence = read(fno, buf, 3 );
+        if (read(fno, buf, 3 ) != 3) {
+            return NULL;
+        }
         if (buf[0] == 255 && buf[1] == 255 && buf[2] == 255) {
             hasStructureInfo = 1;
             break;
@@ -2036,13 +2066,17 @@ char *GeoIP_database_info(GeoIP * gi)
     }
 
     for (i = 0; i < DATABASE_INFO_MAX_SIZE; i++) {
-        silence = read(fno, buf, 3 );
+        if (read(fno, buf, 3 ) != 3) {
+            return NULL;
+        }
         if (buf[0] == 0 && buf[1] == 0 && buf[2] == 0) {
             retval = malloc(sizeof(char) * (i + 1));
             if (retval == NULL) {
                 return NULL;
             }
-            silence = read(fno, retval, i);
+            if (read(fno, retval, i) != i) {
+                return NULL;
+            }
             retval[i] = '\0';
             return retval;
         }
@@ -2310,7 +2344,6 @@ char *_get_name_gl(GeoIP * gi, unsigned long ipnum, GeoIPLookup * gl)
     char * org_buf, * buf_pointer;
     int record_pointer;
     size_t len;
-    ssize_t silence _UNUSED;
 
     if (gi->databaseType != GEOIP_ORG_EDITION &&
         gi->databaseType != GEOIP_ISP_EDITION &&
@@ -2341,9 +2374,10 @@ char *_get_name_gl(GeoIP * gi, unsigned long ipnum, GeoIPLookup * gl)
                      (2 * gi->record_length - 1) * gi->databaseSegments[0];
 
     if (gi->cache == NULL) {
-        silence = pread(fileno(
-                            gi->GeoIPDatabase), buf, MAX_ORG_RECORD_LENGTH,
-                        record_pointer);
+        if (pread(fileno(gi->GeoIPDatabase), buf, MAX_ORG_RECORD_LENGTH,
+                  record_pointer) == -1) {
+            return NULL;
+        }
         if (gi->charset == GEOIP_CHARSET_UTF8) {
             org_buf = _GeoIP_iso_8859_1__utf8( (const char * )buf );
         } else {
@@ -2372,7 +2406,6 @@ char *_get_name_v6_gl(GeoIP * gi, geoipv6_t ipnum, GeoIPLookup * gl)
     char * org_buf, * buf_pointer;
     int record_pointer;
     size_t len;
-    ssize_t silence _UNUSED;
 
     if (
         gi->databaseType != GEOIP_ORG_EDITION_V6 &&
@@ -2400,9 +2433,10 @@ char *_get_name_v6_gl(GeoIP * gi, geoipv6_t ipnum, GeoIPLookup * gl)
                      (2 * gi->record_length - 1) * gi->databaseSegments[0];
 
     if (gi->cache == NULL) {
-        silence = pread(fileno(
-                            gi->GeoIPDatabase), buf, MAX_ORG_RECORD_LENGTH,
-                        record_pointer);
+        if (pread(fileno(gi->GeoIPDatabase), buf, MAX_ORG_RECORD_LENGTH,
+                  record_pointer) == -1) {
+            return NULL;
+        }
         buf[MAX_ORG_RECORD_LENGTH] = 0;
         if (gi->charset == GEOIP_CHARSET_UTF8) {
             org_buf = _GeoIP_iso_8859_1__utf8( (const char * )buf );

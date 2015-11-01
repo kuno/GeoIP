@@ -1,3 +1,17 @@
+1.6.7 2015-10-30
+
+* Fixed a MSVC parser stack overflow when parsing `regionName.c` and
+ `timeZone.c`. Fix by elliotlo. GitHub #64.
+* Updated region codes and timezones.
+* When using `GEOIP_MEMORY_CACHE` with an invalid database file, the search
+  tree traversal could attempt to read memory outside of the memory allocated
+  for the memory cache, resulting in a segmentation fault. A check was added
+  to ensure that the traversal code does not try to read beyond the end of the
+  file, whether in memory, memory mapped, or on disk.
+* Previously the return values from file reads were ignored. We now check
+  these values to ensure that there were no errors.
+
+
 1.6.6 2015-07-28
 
 * Replaced usage of deprecated fileno, read, and lseek on Visual Studio 2005+

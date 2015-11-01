@@ -89,7 +89,7 @@ _extract_record(GeoIP * gi, unsigned int seek_record, int *next_record_ptr)
         bytes_read = pread(fileno(
                                gi->GeoIPDatabase), record_buf,
                            FULL_RECORD_LENGTH, record_pointer);
-        if (bytes_read == 0) {
+        if (bytes_read <= 0) {
             /* eof or other error */
             free(begin_record_buf);
             free(record);
