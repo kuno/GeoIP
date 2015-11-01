@@ -7,7 +7,7 @@ echo "Node Version ${NODE_VERSION}"
 echo '#######'
 
 # memwatch
-if [[ `echo $NODE_VERSION | grep -i "^0.12.*"` ]] || [[ `echo $NODE_VERSION | grep -i "^4.*.*"` ]]; then
+if [[ `echo $NODE_VERSION | grep -i "^0.12.*"` ]] || [[ `echo $NODE_VERSION | grep -i "^[1-9]*.*.*"` ]]; then
     echo "Going to uninstall memwatch"
     npm remove memwatch
 else # 0.6.* ~ 0.11.*
