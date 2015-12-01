@@ -65,6 +65,7 @@
   },
   "os": [
     "linux",
+    "openbsd",
     "darwin"
   ],
   "engines": {
