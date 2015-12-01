@@ -10,8 +10,10 @@ ASUM_DB="http://geolite.maxmind.com/download/geoip/database/asnum/GeoIPASNum.dat
 NETSPEED_DB="http://www.maxmind.com/sample/GeoIP-171_20040418.tar.gz"
 SPEEDCELL_DB="https://www.dropbox.com/s/7hv3rqzbw30th8y/GeoIP-177it_20120221.tar.gz"
 
-if [ -z $FETCH_CMD ]; then
+if [ ! -z $FETCH_CMD ]; then
     FETCH_CMD=$FETCH_CMD
+else
+    FETCH_CMD=wget
 fi
 
 mkdir -p ./database || return 1
