@@ -27,7 +27,7 @@ Fortunately, the number of leaked bytes is not huge, and you wont new a object v
 If you are willing to fix this but, please fork this project.
 
 ###Need support special database?
-Corrently, this package supports the most common databases from MaxMind.
+Currently, this package supports the most common databases from MaxMind.
 
 But, it still a lot of special databases out there.
 
