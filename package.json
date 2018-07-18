@@ -73,6 +73,6 @@
   },
   "scripts": {
     "build": "make rebuild",
-    "test": "make test"
+    "test": "node-gyp rebuild && mocha test/*.mocha.js"
   }
 }
