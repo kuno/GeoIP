@@ -17,16 +17,6 @@ var should = chai.should();
 var geoip = require('../index.js');
 
 describe('Check database file type', function() {
-    describe(path.resolve(__dirname, '../database/GeoIP-171_20040418.dat'), function() {
-        it('is netspeed db', function(done) {
-            var file = path.resolve(__dirname, '../database/GeoIP-171_20040418.dat');
-            var type = geoip.check(file);
-
-            type.should.equal('netspeed');
-            setTimeout(done, 1);
-        });
-    });
-
     describe(path.resolve(__dirname, '../database/GeoIPASNum.dat'), function() {
         it('is asnum db', function(done) {
             var file = path.resolve(__dirname, '../database/GeoIPASNum.dat');
@@ -73,16 +63,6 @@ describe('Check database file type', function() {
             var type = geoip.check(file);
 
             type.should.equal('city_v6');
-            setTimeout(done, 1);
-        });
-    });
-
-    describe(path.resolve(__dirname, '../database/GeoIPRegion-515.dat'), function() {
-        it('is region db', function(done) {
-            var file = path.resolve(__dirname, '../database/GeoIPRegion-515.dat');
-            var type = geoip.check(file);
-
-            type.should.equal('region');
             setTimeout(done, 1);
         });
     });
