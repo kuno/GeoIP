@@ -27,7 +27,7 @@ void Country6::Init(v8::Local<v8::Object> exports) {
     tpl->InstanceTemplate()->SetInternalFieldCount(1);
 
     tpl->PrototypeTemplate()->Set(Nan::New("lookupSync").ToLocalChecked(),
-        Nan::New<v8::FunctionTemplate>(lookupSync)->GetFunction());
+                                  Nan::New<v8::FunctionTemplate>(lookupSync));
 
     constructor.Reset(tpl->GetFunction());
     exports->Set(Nan::New("Country6").ToLocalChecked(), tpl->GetFunction());
@@ -38,8 +38,7 @@ NAN_METHOD(Country6::New) {
 
   Country6 *c = new Country6();
 
-  String::Utf8Value file_str(info[0]->ToString());
-  const char * file_cstr = ToCString(file_str);
+  const char * file_cstr = *Nan::Utf8String(info[0]->ToString());
   bool cache_on = info[1]->ToBoolean()->Value();
 
   c->db = GeoIP_open(file_cstr, cache_on?GEOIP_MEMORY_CACHE:GEOIP_STANDARD);

@@ -21,13 +21,13 @@ namespace native {
             Nan::HandleScope scope;
 
             //Local<Value> edition = Nan::New(Nan::Null());
-            String::Utf8Value file_str(info[0]->ToString());
             //size_t size = file_str->Length() + 1;
             //char file_cstr[size];
             //size_t bc;
             //NanCString(info[0], &bc, file_cstr, size);
 
-            const char * file_cstr = ToCString(file_str);
+            const char * file_cstr = *Nan::Utf8String(info[0]->ToString());
+
             GeoIP *db = GeoIP_open(file_cstr, GEOIP_STANDARD);
 
             if (db) {
